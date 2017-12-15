@@ -1,2 +1,2 @@
-# ShellBoost-Samples
+# ShellBoost Samples
 This repository contains ShellBoost samples
