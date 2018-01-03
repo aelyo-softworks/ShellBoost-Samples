@@ -1,0 +1,29 @@
+﻿<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://schemas.microsoft.com/windows/2006/propertydescription"
+        schemaVersion="1.0" >
+  <propertyDescriptionList publisher="Aelyo" product="ShellBoost.Samples.RegistryFolder">
+    <propertyDescription name="ShellBoost.Samples.RegistryFolder.Type" formatID="{13b7e702-e1e2-4813-b244-8288c82d74c2}" propID="3">
+      <description>The registry value type.</description>
+      <searchInfo isColumn="true" />
+      <typeInfo type="String" isViewable="true" isQueryable="true" />
+      <labelInfo label="Type" />
+      <!--<displayInfo displayType="Enumerated">
+        <editControl control="DropList" />
+        <enumeratedList>
+          <enum value="REG_SZ" text="REG_SZ" />
+          <enum value="REG_MULTI_SZ" text="REG_MULTI_SZ" />
+          <enum value="REG_EXPAND_SZ" text="REG_EXPAND_SZ" />
+          <enum value="REG_DWORD" text="REG_DWORD" />
+          <enum value="REG_BINARY" text="REG_BINARY" />
+          <enum value="REG_QWORD" text="REG_QWORD" />
+        </enumeratedList>
+      </displayInfo>-->
+    </propertyDescription>
+    <propertyDescription name="ShellBoost.Samples.RegistryFolder.Data" formatID="{13b7e702-e1e2-4813-b244-8288c82d74c2}" propID="4">
+      <description>The registry value data.</description>
+      <searchInfo isColumn="true" />
+      <typeInfo type="String" isViewable="true" isQueryable="true" />
+      <labelInfo label="Data" />
+    </propertyDescription>
+  </propertyDescriptionList>
+</schema>

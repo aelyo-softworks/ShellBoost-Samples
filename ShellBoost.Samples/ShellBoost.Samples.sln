@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.Overview", "ShellBoost.Samples.Overview\ShellBoost.Samples.Overview.csproj", "{7B86E302-0061-463C-AEE9-98D136B29D5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.RegistryFolder", "ShellBoost.Samples.RegistryFolder\ShellBoost.Samples.RegistryFolder.csproj", "{1239CE18-0F83-4A2D-B859-0D6BE275D280}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B86E302-0061-463C-AEE9-98D136B29D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B86E302-0061-463C-AEE9-98D136B29D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B86E302-0061-463C-AEE9-98D136B29D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B86E302-0061-463C-AEE9-98D136B29D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1239CE18-0F83-4A2D-B859-0D6BE275D280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1239CE18-0F83-4A2D-B859-0D6BE275D280}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1239CE18-0F83-4A2D-B859-0D6BE275D280}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1239CE18-0F83-4A2D-B859-0D6BE275D280}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80AA895E-69FB-4AD1-9432-1EF384B18AE4}
+	EndGlobalSection
+EndGlobal
