@@ -18,6 +18,7 @@ namespace ShellBoost.Samples.RegistryFolder
             Console.WriteLine("   '2' Register the native proxy.");
             Console.WriteLine("   '3' Run this sample (the native proxy will need to be registered somehow for Explorer to display something).");
             Console.WriteLine("   '4' Unregister the native proxy.");
+            Console.WriteLine("   '5' Restart Explorer.");
             Console.WriteLine();
             Console.WriteLine("   Any other key will exit.");
             Console.WriteLine();
@@ -41,6 +42,20 @@ namespace ShellBoost.Samples.RegistryFolder
                 case '4':
                     ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
                     Console.WriteLine("Unregistered");
+                    break;
+
+                case '5':
+                    var rm = new RestartManager();
+                    rm.RestartExplorerProcesses((state) =>
+                    {
+                        Console.WriteLine("Explorer was stopped. Press any key to restart it ...");
+                        Console.ReadKey(true);
+                    }, false, out Exception error);
+
+                    if (error != null)
+                    {
+                        Console.WriteLine("An error has occurred in restart manager: " + error);
+                    }
                     break;
             }
         }

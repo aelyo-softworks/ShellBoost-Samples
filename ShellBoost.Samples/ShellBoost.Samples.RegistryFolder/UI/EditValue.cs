@@ -22,9 +22,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
 
         public bool LoadEditor(RegistryHive hive, string path, string name)
         {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
-
+            // path is null means it's a base key
             // name can be null
 
             object value = null;
@@ -32,7 +30,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
             {
                 if (bk != null)
                 {
-                    using (var key = bk.OpenSubKey(path, false))
+                    using (var key = !string.IsNullOrEmpty(path) ? bk.OpenSubKey(path, false) : bk)
                     {
                         if (key != null)
                         {

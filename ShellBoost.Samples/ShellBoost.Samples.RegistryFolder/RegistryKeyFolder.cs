@@ -92,8 +92,8 @@ namespace ShellBoost.Samples.RegistryFolder
             var bp = BaseParent;
             var bk = RegistryKey.OpenBaseKey(bp.Hive, RegistryView.Default);
             string path = Path;
-            if (path == null)
-                return bk; // note: can't be writable
+            if (string.IsNullOrEmpty(path))
+                return bk; // always writable
 
             var key = bk.OpenSubKey(path, writable);
             bk.Close();
@@ -164,7 +164,7 @@ namespace ShellBoost.Samples.RegistryFolder
                 case MenuCommand.Modify:
                     if (e.Items.Count == 1) // we only support modification of one value at a time
                     {
-                        using (var form = new EditValue()) // because of async + await, Dispose will happen in continuing task
+                        using (var form = new EditValue()) // note because of async + await, Dispose will happen in continuing task
                         {
                             var valueItem = (RegistryValueItem)e.Items[0];
                             form.LoadEditor(BaseParent.Hive, Path, valueItem.KeyName);
@@ -287,8 +287,20 @@ namespace ShellBoost.Samples.RegistryFolder
             {
                 if (key != null)
                 {
-                    key.DeleteValue(e.Item.DisplayName, false);
-                    e.HResult = ShellUtilities.S_OK;
+                    string keyName = ((RegistryValueItem)e.Item).KeyName;
+                    key.DeleteValue(keyName, false);
+
+                    // deleting the default value will in fact unset its value, so we don't want explorer to remove the item visually
+                    if (string.IsNullOrEmpty(keyName))
+                    {
+                        const int COPYENGINE_E_USER_CANCELLED = unchecked((int)0x80270000);
+                        e.HResult = COPYENGINE_E_USER_CANCELLED;
+                        e.Item.NotifyUpdate();
+                    }
+                    else
+                    {
+                        e.HResult = ShellUtilities.S_OK;
+                    }
                 }
             }
         }
@@ -344,6 +356,7 @@ namespace ShellBoost.Samples.RegistryFolder
             }
         }
 
+        // Note: there's no easier way to rename a key
         // https://msdn.microsoft.com/en-us/library/cc512138.aspx
         [DllImport("ntdll.dll")]
         private static extern int NtRenameKey(SafeRegistryHandle hKey, [MarshalAs(UnmanagedType.LPWStr)] string newname);
