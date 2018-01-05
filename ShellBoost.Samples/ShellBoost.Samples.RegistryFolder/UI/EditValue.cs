@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using ShellBoost.Core;
 
 namespace ShellBoost.Samples.RegistryFolder.UI
 {
@@ -13,12 +14,23 @@ namespace ShellBoost.Samples.RegistryFolder.UI
         public EditValue()
         {
             InitializeComponent();
-            Icon = Icon.ExtractAssociatedIcon(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "regedit.exe"));
+            Icon = Icon.ExtractAssociatedIcon(ShellFolderServer.LoadedNativeDllPath);
         }
 
         public string Path { get; private set; }
         public RegistryHive Hive { get; private set; }
         public object NewValue { get; private set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            Icon?.Dispose();
+            base.Dispose(disposing);
+        }
 
         public bool LoadEditor(RegistryHive hive, string path, string name)
         {
@@ -81,7 +93,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
 
             Path = path;
             Hive = hive;
-            TextBoxValueName.Text = name;
+            TextBoxValueName.Text = name ?? RegistryDefaultValueItem.DefaultName;
             ((IEditValueControl)_editor).Value = value;
             return true;
         }

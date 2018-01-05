@@ -18,7 +18,8 @@ namespace ShellBoost.Samples.RegistryFolder
             Console.WriteLine("   '2' Register the native proxy.");
             Console.WriteLine("   '3' Run this sample (the native proxy will need to be registered somehow for Explorer to display something).");
             Console.WriteLine("   '4' Unregister the native proxy.");
-            Console.WriteLine("   '5' Restart Explorer.");
+            Console.WriteLine("   '5' Restart Windows Explorer.");
+            Console.WriteLine("   '6' Register Custom Properties for this sample." + (DiagnosticsInformation.GetTokenElevationType() == TokenElevationType.Full ? string.Empty : " You need to restart as admin."));
             Console.WriteLine();
             Console.WriteLine("   Any other key will exit.");
             Console.WriteLine();
@@ -57,6 +58,20 @@ namespace ShellBoost.Samples.RegistryFolder
                         Console.WriteLine("An error has occurred in restart manager: " + error);
                     }
                     break;
+
+                case '6':
+                    string location = new ShellFolderConfiguration().ExtractAssemblyResource(typeof(Program).Namespace + ".Resources.RegistryFolder.propdesc");
+                    try
+                    {
+                        PropertySystem.RegisterPropertySchema(location);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Properties cannot be registered: " + e.Message);
+                        break;
+                    }
+                    Console.WriteLine("Properties are registered. Schema location: " + location);
+                    break;
             }
         }
 
@@ -72,13 +87,6 @@ namespace ShellBoost.Samples.RegistryFolder
 #if DEBUG
                 config.Logger = new ConsoleLogger { AddThreadId = true };
 #endif
-
-                if (DiagnosticsInformation.GetTokenElevationType() == TokenElevationType.Full)
-                {
-                    string location = config.ExtractAssemblyResource(typeof(Program).Namespace + ".Resources.RegistryFolder.propdesc");
-                    PropertySystem.RegisterPropertySchema(location);
-                    Console.WriteLine("Properties are registered. Schema location: " + location);
-                }
 
                 server.Start(config);
                 Console.WriteLine("Started listening on proxy id " + server.ProxyId + ". Press ESC key to stop serving folders.");
