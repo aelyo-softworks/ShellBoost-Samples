@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsPropertySystem;
@@ -77,6 +78,10 @@ namespace ShellBoost.Samples.RegistryFolder
 
         static void Run(bool register)
         {
+            // we may display some UI, let's do like regular winforms apps do
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             using (var server = new RegistryShellFolderServer())
             {
                 var config = new ShellFolderConfiguration();
@@ -89,6 +94,7 @@ namespace ShellBoost.Samples.RegistryFolder
 #endif
 
                 server.Start(config);
+                Console.WriteLine("Folder class id " + server.FolderId);
                 Console.WriteLine("Started listening on proxy id " + server.ProxyId + ". Press ESC key to stop serving folders.");
                 Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
                 do
