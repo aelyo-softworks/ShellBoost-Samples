@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Threading;
+using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.WebFolder
@@ -27,6 +29,17 @@ namespace ShellBoost.Samples.WebFolder
             _nicon.ContextMenu.MenuItems.Add("Quit", Close);
             _nicon.Visible = true;
             _nicon.DoubleClick += Show;
+
+            Restart.IsEnabled = IntPtr.Size == (Environment.Is64BitOperatingSystem ? 8 : 4);
+            if (!Restart.IsEnabled)
+            {
+                Restart.ToolTip = "Windows Explorer on this machine can only be restarted from a " + (Environment.Is64BitOperatingSystem ? "64" : "32") + "-bit process.";
+            }
+
+            TB.Text = "ShellBoost Samples - Copyright © 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved." + Environment.NewLine + Environment.NewLine;
+            TB.Text += "Web Drive Folder - " + (IntPtr.Size == 8 ? "64" : "32") + "bit - V" + Assembly.GetExecutingAssembly().GetInformationalVersion() + Environment.NewLine;
+            AppendText("Server waiting for requests...");
+            AppendText();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -94,6 +107,45 @@ namespace ShellBoost.Samples.WebFolder
             Show();
             WindowState = WindowState.Normal;
             Activate();
+        }
+
+        public void AppendText() => AppendText(null);
+        public void AppendText(string text)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                TB.Text += Environment.NewLine;
+                if (text != null)
+                {
+                    TB.Text += DateTime.Now + ": " + text;
+                }
+            });
+        }
+
+        private void Quit_Click(object sender, RoutedEventArgs e) => Close(null, null);
+
+        private void Restart_Click(object sender, RoutedEventArgs e)
+        {
+            var rm = new RestartManager();
+            rm.RestartExplorerProcesses((state) =>
+            {
+                AppendText("Windows Explorer was stopped...");
+            }, false, out Exception error);
+            AppendText("Windows Explorer was restarted...");
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            ShellFolderServer.RegisterNativeDll(RegistrationMode.User);
+            ShellUtilities.RefreshShellViews();
+            AppendText("Native proxy was registered to HKCU.");
+        }
+
+        private void Unregister_Click(object sender, RoutedEventArgs e)
+        {
+            ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
+            ShellUtilities.RefreshShellViews();
+            AppendText("Native proxy was unregistered from HKCU.");
         }
     }
 }
