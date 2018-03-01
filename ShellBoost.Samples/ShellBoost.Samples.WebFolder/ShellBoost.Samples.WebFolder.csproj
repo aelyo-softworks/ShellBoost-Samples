@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SETUPOPTIONS_DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -63,11 +63,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\DriveApi.cs" />
-    <Compile Include="Api\DriveItem.cs" />
-    <Compile Include="Api\DriveItemType.cs" />
-    <Compile Include="Folder\DriveFolder.cs" />
-    <Compile Include="Folder\WebFolderServer.cs" />
+    <Compile Include="Api\Api.cs" />
+    <Compile Include="Api\Item.cs" />
+    <Compile Include="Api\ItemType.cs" />
+    <Compile Include="Folder\RootWebShellFolder.cs" />
+    <Compile Include="Folder\WebShellFolder.cs" />
+    <Compile Include="Folder\WebShellFolderServer.cs" />
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,6 +89,7 @@
     <Compile Include="ErrorBox.xaml.cs">
       <DependentUpon>ErrorBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Folder\WebShellItem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

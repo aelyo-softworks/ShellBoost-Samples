@@ -1,23 +1,35 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
+using ShellBoost.Samples.WebFolder.Folder;
 
 namespace ShellBoost.Samples.WebFolder
 {
     public partial class MainWindow : Window
     {
         private HwndSource _source;
+        private Thread _serverThread;
+        private AutoResetEvent _serverStopEvent;
         private System.Windows.Forms.NotifyIcon _nicon = new System.Windows.Forms.NotifyIcon();
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Open.IsEnabled = false;
+
+            _serverStopEvent = new AutoResetEvent(false);
+            _serverThread = new Thread(WebDriveThread);
+            _serverThread.IsBackground = true;
+            _serverThread.Start();
 
             // NOTE: icon resource must be named same as namespace + icon
             Icon = AppParameters.IconSource;
@@ -38,7 +50,6 @@ namespace ShellBoost.Samples.WebFolder
 
             TB.Text = "ShellBoost Samples - Copyright © 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved." + Environment.NewLine + Environment.NewLine;
             TB.Text += "Web Drive Folder - " + (IntPtr.Size == 8 ? "64" : "32") + "bit - V" + Assembly.GetExecutingAssembly().GetInformationalVersion() + Environment.NewLine;
-            AppendText("Server waiting for requests...");
             AppendText();
         }
 
@@ -65,9 +76,56 @@ namespace ShellBoost.Samples.WebFolder
             });
         }
 
+        private void WebDriveThread(object state)
+        {
+            using (var server = new WebShellFolderServer())
+            {
+                var config = new ShellFolderConfiguration();
+                config.Logger = new Logger(this);
+
+                server.Start(config);
+                AppendText("Started listening on proxy id " + ShellFolderServer.ProxyId);
+
+                if (ShellFolderServer.LocationFolderId != Guid.Empty)
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        Open.IsEnabled = true;
+                    });
+                }
+                _serverStopEvent.WaitOne();
+            }
+        }
+
+        private class Logger : ILogger
+        {
+            private MainWindow _window;
+
+            public Logger(MainWindow window)
+            {
+                _window = window;
+            }
+
+            public void Log(TraceLevel level, object value, string methodName)
+            {
+                _window.AppendText("[" + level + "]" + methodName + ": " + value);
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            if (_serverStopEvent != null)
+            {
+                _serverStopEvent.Set();
+                _serverStopEvent.Dispose();
+            }
+
+            var thread = _serverThread;
+            if (thread != null)
+            {
+                thread.Join(1000);
+            }
             _nicon?.Dispose();
         }
 
@@ -112,12 +170,17 @@ namespace ShellBoost.Samples.WebFolder
         public void AppendText() => AppendText(null);
         public void AppendText(string text)
         {
+            if (text != null)
+            {
+                text = DateTime.Now + "[" + Thread.CurrentThread.ManagedThreadId + "]: " + text;
+            }
+
             Dispatcher.BeginInvoke(() =>
             {
                 TB.Text += Environment.NewLine;
                 if (text != null)
                 {
-                    TB.Text += DateTime.Now + ": " + text;
+                    TB.Text += text;
                 }
             });
         }
@@ -126,12 +189,15 @@ namespace ShellBoost.Samples.WebFolder
 
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
-            var rm = new RestartManager();
-            rm.RestartExplorerProcesses((state) =>
+            ThreadPool.QueueUserWorkItem((state) =>
             {
-                AppendText("Windows Explorer was stopped...");
-            }, false, out Exception error);
-            AppendText("Windows Explorer was restarted...");
+                var rm = new RestartManager();
+                rm.RestartExplorerProcesses((s) =>
+                {
+                    AppendText("Windows Explorer was stopped...");
+                }, false, out Exception error);
+                AppendText("Windows Explorer was restarted...");
+            });
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -146,6 +212,18 @@ namespace ShellBoost.Samples.WebFolder
             ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
             ShellUtilities.RefreshShellViews();
             AppendText("Native proxy was unregistered from HKCU.");
+        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            var id = ShellFolderServer.LocationFolderId;
+            var kn = KnownFolder.Get(id);
+            var idl = kn.GetIdList(Core.WindowsShell.KNOWN_FOLDER_FLAG.KF_FLAG_DEFAULT);
+
+            dynamic window = new ShellUtilities.ShellBrowserWindow();
+            ShellUtilities.CoAllowSetForegroundWindow(window);
+            window.Visible = true;
+            window.Navigate2(idl.Data);
         }
     }
 }

@@ -1,0 +1,5 @@
+<root>
+	<element name="test element">
+		<childElement />
+	</element>
+</root>

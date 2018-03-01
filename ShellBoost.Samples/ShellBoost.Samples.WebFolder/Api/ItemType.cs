@@ -1,6 +1,6 @@
 ﻿namespace ShellBoost.Samples.WebFolder.Api
 {
-    public enum DriveItemType
+    public enum ItemType
     {
         Item,
         Folder,

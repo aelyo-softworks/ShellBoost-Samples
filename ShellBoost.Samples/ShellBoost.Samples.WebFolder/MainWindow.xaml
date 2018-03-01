@@ -20,11 +20,12 @@
             </StackPanel.Resources>
             <Button Name="Register" Click="Register_Click" ToolTip="Press this button to register the ShellBoost native proxy or register it.">Register Proxy</Button>
             <Button Name="Unregister" Click="Unregister_Click" ToolTip="Press this button to unregister the ShellBoost native proxy.">Unregister Proxy</Button>
-            <Button Name="Restart" Click="Restart_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Press this button to restart Windows Explorer. This may be needed in rare situations.">Restart Windows Explorer</Button>
+            <Button Name="Open" Click="Open_Click" ToolTip="Press this button to open the Shell Extension in Windows Explorer.">Open Extension's Location</Button>
+            <Button Name="Restart" Click="Restart_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Press this button to restart Windows Explorer. This may be needed in rare situations.">Restart Explorer</Button>
             <Button Name="Quit" Click="Quit_Click" ToolTip="Quit this application. Using the Close button will minimize it an place it in the Shell's notification area.">Quit</Button>
         </StackPanel>
-        
-        <TextBox Margin="5" Padding="5" Grid.Row="1" Name="TB" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Lucida Console" FontSize="10" ScrollViewer.VerticalScrollBarVisibility="Visible">
+
+        <TextBox Margin="5" Padding="5" Grid.Row="1" Name="TB" IsReadOnly="True" FontFamily="Lucida Console" FontSize="10" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
         </TextBox>
     </Grid>

@@ -57,7 +57,7 @@ namespace ShellBoost.Samples.Overview
                 config.Logger = new Core.Utilities.ConsoleLogger();
 #endif
                 server.Start(config);
-                Console.WriteLine("Started listening on proxy id " + server.ProxyId + ". Press ESC key to stop serving folders.");
+                Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
                 Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
                 while (Console.ReadKey(true).Key != ConsoleKey.Escape)
                 {
