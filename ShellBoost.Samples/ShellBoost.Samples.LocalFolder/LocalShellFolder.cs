@@ -1,75 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using ShellBoost.Core;
 using ShellBoost.Core.WindowsShell;
+using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.LocalFolder
 {
     public class LocalShellFolder : ShellFolder
     {
         public LocalShellFolder(ShellFolder parent, DirectoryInfo info)
-            : base(parent, info)
+            : base(parent, info) // there is a specific overload for DirectoryInfo
         {
-            //CanCopy = true;
-            //CanDelete = true;
-            //CanLink = true;
-            //CanMove = true;
-            //CanPaste = true;
-            //CanRename = true;
+            CanCopy = true;
+            CanDelete = true;
+            CanLink = true;
+            CanMove = true;
+            CanPaste = true;
+            CanRename = true;
             Info = info;
-            //DisplayName = info.Name;
-            //ItemType = info.Extension;
-            //DateModified = info.LastWriteTime;
-            //DateCreated = info.CreationTime;
+            SetPropertyValue(Props.System.NewMenuAllowedTypes, ".txt");
+            SetPropertyValue(Props.System.NewMenuPreferredTypes, ".txt");
         }
 
         public DirectoryInfo Info { get; }
 
-        // same function used for all folders, including root folder
-        public static IEnumerable<FileSystemInfo> EnumFileSystemInfos(DirectoryInfo info, bool includeFolders, bool includeItems)
+        // we export this as internal so the roo folder shares this behavior
+        internal static IEnumerable<FileSystemInfo> EnumerateFileSystemItems(DirectoryInfo info, string searchPattern)
         {
-            // for demonstration purpose, we filter any item with "hidden" in the name
-            return RawEnumFileSystemInfos(info, includeFolders, includeItems).Where(i => i.Name.IndexOf("hidden", StringComparison.OrdinalIgnoreCase) < 0);
-        }
-
-        public static IEnumerable<FileSystemInfo> RawEnumFileSystemInfos(DirectoryInfo info, bool includeFolders, bool includeItems)
-        {
-            if (includeFolders && includeItems)
-                return info.EnumerateFileSystemInfos();
-
-            if (includeFolders)
-                return info.EnumerateDirectories();
-
-            return info.EnumerateFiles();
-        }
-
-        public static IEnumerable<ShellItem> EnumItems(SHCONTF options, ShellFolder parent, DirectoryInfo info)
-        {
-            if (parent == null)
-                throw new ArgumentNullException(nameof(parent));
-
-            foreach (var item in EnumFileSystemInfos(info, options.HasFlag(SHCONTF.SHCONTF_FOLDERS), options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS)))
+            // for demonstration purpose, we hide any file or directory that has "hidden" in its name
+            foreach (var child in info.EnumerateFileSystemInfos(searchPattern))
             {
-                if (item is DirectoryInfo di)
-                {
-                    yield return new LocalShellFolder(parent, di);
-                }
-                else
-                {
-                    if (string.Compare(item.Extension, ".xml", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        yield return new XmlLocalShellFolder(parent, (FileInfo)item);
-                    }
-                    else
-                    {
-                        yield return new LocalShellItem(parent, (FileInfo)item);
-                    }
-                }
+                if (child.Name.IndexOf("hidden", StringComparison.OrdinalIgnoreCase) >= 0)
+                    continue;
+
+                yield return child;
             }
         }
 
-        public override IEnumerable<ShellItem> EnumItems(SHCONTF options) => EnumItems(options, this, Info);
+        protected override IEnumerable<FileSystemInfo> EnumerateFileSystemInfos(DirectoryInfo info, SHCONTF options, string searchPattern)
+        {
+            return EnumerateFileSystemItems(info, searchPattern);
+        }
+
+        protected override ShellItem CreateFileSystemFolder(DirectoryInfo info)
+        {
+            return new LocalShellFolder(this, info);
+        }
+
+        protected override ShellItem CreateFileSystemItem(FileInfo info)
+        {
+            // for demonstration purpose, we handle XML files like they were folder over their elements
+            if (string.Compare(info.Extension, ".xml", StringComparison.OrdinalIgnoreCase) == 0)
+                return new XmlLocalShellFolder(this, info);
+
+            return new LocalShellItem(this, info);
+        }
+
+        protected override void MergeContextMenu(ShellFolder folder, IReadOnlyList<ShellItem> items, ShellMenu existingMenu, ShellMenu appendMenu)
+        {
+            if (folder == null)
+                throw new ArgumentNullException(nameof(folder));
+
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            if (appendMenu == null)
+                throw new ArgumentNullException(nameof(appendMenu));
+
+            appendMenu.Items.Add(new ShellMenuItem(appendMenu) { IsTopNew = true });
+        }
     }
 }

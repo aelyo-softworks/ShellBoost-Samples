@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryInfo.cs" />
     <Compile Include="LocalShellFolder.cs" />
     <Compile Include="LocalShellFolderServer.cs" />
     <Compile Include="LocalShellItem.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="XmlLocalShellFolder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Another Folder\Hidden document.txt">
+    <Content Include="Data\Another Folder\You should not see this hidden document.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Another Folder\Non ASCII document name é à %40 %25 µ è.txt">
