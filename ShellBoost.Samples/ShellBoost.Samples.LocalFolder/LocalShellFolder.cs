@@ -68,7 +68,7 @@ namespace ShellBoost.Samples.LocalFolder
             if (appendMenu == null)
                 throw new ArgumentNullException(nameof(appendMenu));
 
-            appendMenu.Items.Add(new ShellMenuItem(appendMenu) { IsTopNew = true });
+            appendMenu.Items.Add(new ShellMenuItem(appendMenu) { TopNewMenuPlaceHolderPath = Info.FullName });
         }
     }
 }
