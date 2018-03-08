@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionaryInfo.cs" />
     <Compile Include="LocalShellFolder.cs" />
     <Compile Include="LocalShellFolderServer.cs" />
     <Compile Include="LocalShellItem.cs" />

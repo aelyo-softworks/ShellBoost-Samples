@@ -46,7 +46,13 @@ namespace ShellBoost.Samples.LocalFolder
 
         static void Run(bool register)
         {
-            using (var server = new LocalShellFolderServer(new DirectoryInfo(Path.GetFullPath("Data"))))
+            var info = new DirectoryInfo(Path.GetFullPath("Data"));
+            if (!info.Exists)
+            {
+                info.Create();
+            }
+
+            using (var server = new LocalShellFolderServer(info))
             {
                 var config = new ShellFolderConfiguration();
                 if (register)
@@ -60,9 +66,18 @@ namespace ShellBoost.Samples.LocalFolder
                 server.Start(config);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
                 Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
-                while (Console.ReadKey(true).Key != ConsoleKey.Escape)
+                do
                 {
+                    var key = Console.ReadKey(true);
+                    if (key.Key == ConsoleKey.Escape)
+                        break;
+
+                    if (key.Key == ConsoleKey.C)
+                    {
+                        Console.Clear();
+                    }
                 }
+                while (true);
                 Console.WriteLine("Stopped");
             }
         }
