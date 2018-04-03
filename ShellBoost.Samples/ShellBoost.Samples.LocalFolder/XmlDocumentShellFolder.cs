@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using ShellBoost.Core;
 using ShellBoost.Core.WindowsShell;
 
 namespace ShellBoost.Samples.LocalFolder
 {
-    public class XmlLocalShellFolder : ShellFolder
+    public class XmlDocumentShellFolder : ShellFolder
     {
-        public XmlLocalShellFolder(ShellFolder parent, FileInfo info)
+        public XmlDocumentShellFolder(ShellFolder parent, FileInfo info)
             : base(parent, new StringKeyShellItemId(info.Name))
         {
             Info = info;

@@ -44,9 +44,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IconValue.cs" />
     <Compile Include="LocalShellFolder.cs" />
     <Compile Include="LocalShellFolderServer.cs" />
     <Compile Include="LocalShellItem.cs" />
@@ -54,8 +56,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RootFolder.cs" />
     <Compile Include="XmlAttributeShellItem.cs" />
+    <Compile Include="XmlDocumentShellFolder.cs" />
     <Compile Include="XmlElementShellFolder.cs" />
-    <Compile Include="XmlLocalShellFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Another Folder\You should not see this hidden document.txt">
@@ -76,6 +78,9 @@
     <Content Include="Data\One Folder\Text Document.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\One Folder\This file should display Icon as an error.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShellBoost.Core.dll" />
     <Content Include="ShellBoost.d63d2a2ff5f144c4b8442675be8f4a91.x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -92,6 +97,7 @@
     <None Include="Data\One Folder\Rich Text Document.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Resources\LocalFolder.propdesc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using ShellBoost.Core;
 using ShellBoost.Core.WindowsPropertySystem;
-using ShellBoost.Core.WindowsShell;
 using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.LocalFolder
@@ -18,6 +17,25 @@ namespace ShellBoost.Samples.LocalFolder
             CanPaste = true;
             CanRename = true;
             Info = info;
+
+            var ms = new MemoryPropertyStore();
+            ms.SetValue(Props.System.PropList.StatusIcons, "prop:" + LocalShellFolder.IconProperty.CanonicalName);
+            ms.SetValue(Props.System.PropList.StatusIconsDisplayFlag, (uint)2);
+
+            if (info.Name.Contains("error"))
+            {
+                ms.SetValue(LocalShellFolder.IconProperty, IconValue.Error);
+            }
+            else if (info.Name.Contains("warn"))
+            {
+                ms.SetValue(LocalShellFolder.IconProperty, IconValue.Warning);
+            }
+            else
+            {
+                ms.SetValue(LocalShellFolder.IconProperty, IconValue.Ok);
+            }
+
+            SetPropertyValue(LocalShellFolder.IconUIProperty, ms);
         }
 
         public FileInfo Info { get; }

@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using ShellBoost.Core;
+using ShellBoost.Core.Utilities;
+using ShellBoost.Core.WindowsPropertySystem;
 using ShellBoost.Core.WindowsShell;
-using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.LocalFolder
 {
     public class LocalShellFolder : ShellFolder
     {
+        // Declared in LocalFolder.propdesc schema file. This file must be registered once. Check Program.cs.
+        public static readonly PropertyDescription IconUIProperty = PropertySystem.GetPropertyDescription("ShellBoost.Samples.LocalFolder.IconUI", true);
+        public static readonly PropertyDescription IconProperty = PropertySystem.GetPropertyDescription("ShellBoost.Samples.LocalFolder.Icon", true);
+
         public LocalShellFolder(ShellFolder parent, DirectoryInfo info)
             : base(parent, info) // there is a specific overload for DirectoryInfo
         {
@@ -19,8 +26,7 @@ namespace ShellBoost.Samples.LocalFolder
             CanPaste = true;
             CanRename = true;
             Info = info;
-            SetPropertyValue(Props.System.NewMenuAllowedTypes, ".txt");
-            SetPropertyValue(Props.System.NewMenuPreferredTypes, ".txt");
+            AddColumn(IconUIProperty);
         }
 
         public DirectoryInfo Info { get; }
@@ -52,23 +58,75 @@ namespace ShellBoost.Samples.LocalFolder
         {
             // for demonstration purpose, we handle XML files like they were folder over their elements
             if (string.Compare(info.Extension, ".xml", StringComparison.OrdinalIgnoreCase) == 0)
-                return new XmlLocalShellFolder(this, info);
+                return new XmlDocumentShellFolder(this, info);
 
             return new LocalShellItem(this, info);
         }
 
-        protected override void MergeContextMenu(ShellFolder folder, IReadOnlyList<ShellItem> items, ShellMenu existingMenu, ShellMenu appendMenu)
+        private List<string> GetPaths(DragDropTargetEventArgs e)
         {
-            if (folder == null)
-                throw new ArgumentNullException(nameof(folder));
+            var list = new List<string>();
+            var idls = e.DataObject[ShellDataObjectFormat.CFSTR_SHELLIDLIST]?.ConvertedData as IEnumerable<ShellItemIdList>;
+            if (idls != null)
+            {
+                foreach (var idl in idls)
+                {
+                    string path;
+                    var item = Root.GetItem(idl);
+                    if (item != null)
+                    {
+                        // this comes from ourselves
+                        path = item.FileSystemPath;
+                    }
+                    else
+                    {
+                        // check it's a file system pidl
+                        path = idl.GetFileSystemPath();
+                    }
 
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                    if (path != null)
+                    {
+                        list.Add(path);
+                    }
+                }
+            }
+            return list;
+        }
 
-            if (appendMenu == null)
-                throw new ArgumentNullException(nameof(appendMenu));
+        protected override void OnDragDropTarget(DragDropTargetEventArgs e)
+        {
+            e.HResult = ShellUtilities.S_OK;
+            var paths = GetPaths(e);
+            if (paths.Count > 0)
+            {
+                e.Effect = DragDropEffects.All;
+            }
 
-            appendMenu.Items.Add(new ShellMenuItem(appendMenu) { TopNewMenuPlaceHolderPath = Info.FullName });
+            if (e.Type == DragDropTargetEventType.Drop)
+            {
+                // file operation events need an STA thread
+                WindowsUtilities.DoModelessAsync(() =>
+                {
+                    using (var fo = new FileOperation(true))
+                    {
+                        fo.PostCopyItem += (sender, e2) =>
+                        {
+                            // we could add some logic here
+                        };
+
+                        if (paths.Count == 1)
+                        {
+                            fo.CopyItem(paths[0], FileSystemPath, null);
+                        }
+                        else
+                        {
+                            fo.CopyItems(paths, FileSystemPath);
+                        }
+                        fo.SetOperationFlags(FOF.FOF_ALLOWUNDO | FOF.FOF_NOCONFIRMMKDIR | FOF.FOF_RENAMEONCOLLISION);
+                        fo.PerformOperations();
+                    }
+                });
+            }
         }
     }
 }

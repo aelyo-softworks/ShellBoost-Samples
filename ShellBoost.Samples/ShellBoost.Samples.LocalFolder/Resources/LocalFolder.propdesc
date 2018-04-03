@@ -1,0 +1,42 @@
+﻿<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/windows/2006/propertydescription" schemaVersion="1.0" >
+	<propertyDescriptionList publisher="Aelyo" product="ShellBoost.Samples.RegistryFolder">
+		<propertyDescription name="ShellBoost.Samples.LocalFolder.IconUI" formatID="{d9f69df5-01ef-4838-acb7-055012a678ca}" propID="3">
+			<searchInfo reIndexPatterns="" processReIndexPatternsImmediately="true" inInvertedIndex="false" isColumn="false">
+			</searchInfo>
+			<typeInfo type="Blob" isInnate="true" isViewable="true">
+			</typeInfo>
+			<labelInfo label="Icon">
+			</labelInfo>
+			<displayInfo defaultColumnWidth="10">
+				<drawControl control="IconList">
+				</drawControl>
+			</displayInfo>
+		</propertyDescription>
+		<propertyDescription name="ShellBoost.Samples.LocalFolder.Icon" formatID="{d9f69df5-01ef-4838-acb7-055012a678ca}" propID="4">
+			<searchInfo reIndexPatterns="" processReIndexPatternsImmediately="true" inInvertedIndex="false" isColumn="false">
+			</searchInfo>
+			<typeInfo type="UInt32" isInnate="true" groupingRange="Enumerated" isViewable="true">
+			</typeInfo>
+			<displayInfo displayType="Enumerated">
+				<enumeratedList>
+					<enum name="None" value="0" text="">
+					</enum>
+					<enum name="Ok" value="1" text="Ok">
+						<image res="%systemroot%\system32\imageres.dll,-1405">
+						</image>
+					</enum>
+					<enum name="Error" value="2" text="Error">
+						<image res="%systemroot%\system32\imageres.dll,-1402">
+						</image>
+					</enum>
+					<enum name="Warning" value="3" text="Warning">
+						<image res="%systemroot%\system32\imageres.dll,-1403">
+						</image>
+					</enum>
+				</enumeratedList>
+			</displayInfo>
+			<labelInfo label="Icon UI">
+			</labelInfo>
+		</propertyDescription>
+	</propertyDescriptionList>
+</schema>
