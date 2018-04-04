@@ -16,5 +16,6 @@ namespace ShellBoost.Samples.WebFolder.Api
         public long Length { get; set; }
         public DateTime CreationTimeUtc { get; set; }
         public DateTime LastWriteTimeUtc { get; set; }
+        public string ContentETag { get; set; }
     }
 }

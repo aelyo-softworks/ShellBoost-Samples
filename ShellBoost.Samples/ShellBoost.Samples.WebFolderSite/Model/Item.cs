@@ -59,6 +59,7 @@ namespace ShellBoost.Samples.WebFolderSite.Model
         public long Length { get; private set; }
         public DateTime CreationTimeUtc { get; private set; }
         public DateTime LastWriteTimeUtc { get; private set; }
+        public string ContentETag => Length.ToString() + LastWriteTimeUtc.Ticks; // this will change when the content change. it could be enhanced, but this is a sample.
 
         public virtual void Update(Item item)
         {

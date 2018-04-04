@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using ShellBoost.Core;
 using ShellBoost.Samples.WebFolder.Api;
-using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.WebFolder.Folder
 {

@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xml" />
@@ -63,10 +64,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\Api.cs" />
+    <Compile Include="Api\WebFolderApi.cs" />
     <Compile Include="Api\Item.cs" />
     <Compile Include="Api\ItemType.cs" />
     <Compile Include="Folder\RootWebShellFolder.cs" />
+    <Compile Include="Folder\WebShellContent.cs" />
     <Compile Include="Folder\WebShellFolder.cs" />
     <Compile Include="Folder\WebShellFolderServer.cs" />
     <Page Include="App.xaml">

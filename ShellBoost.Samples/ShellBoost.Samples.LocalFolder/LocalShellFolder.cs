@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
@@ -44,15 +43,9 @@ namespace ShellBoost.Samples.LocalFolder
             }
         }
 
-        protected override IEnumerable<FileSystemInfo> EnumerateFileSystemInfos(DirectoryInfo info, SHCONTF options, string searchPattern)
-        {
-            return EnumerateFileSystemItems(info, searchPattern);
-        }
+        protected override IEnumerable<FileSystemInfo> EnumerateFileSystemInfos(DirectoryInfo info, SHCONTF options, string searchPattern) => EnumerateFileSystemItems(info, searchPattern);
 
-        protected override ShellItem CreateFileSystemFolder(DirectoryInfo info)
-        {
-            return new LocalShellFolder(this, info);
-        }
+        protected override ShellItem CreateFileSystemFolder(DirectoryInfo info) => new LocalShellFolder(this, info);
 
         protected override ShellItem CreateFileSystemItem(FileInfo info)
         {
@@ -66,8 +59,7 @@ namespace ShellBoost.Samples.LocalFolder
         private List<string> GetPaths(DragDropTargetEventArgs e)
         {
             var list = new List<string>();
-            var idls = e.DataObject[ShellDataObjectFormat.CFSTR_SHELLIDLIST]?.ConvertedData as IEnumerable<ShellItemIdList>;
-            if (idls != null)
+            if (e.DataObject[ShellDataObjectFormat.CFSTR_SHELLIDLIST]?.ConvertedData is IEnumerable<ShellItemIdList> idls)
             {
                 foreach (var idl in idls)
                 {

@@ -57,7 +57,7 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
 
         [Route("api/drive/{id}/content")]
         [HttpGet]
-        public IHttpActionResult Download(Guid id)
+        public IHttpActionResult Download(Guid id, string contentETag)
         {
             var item = Drive.Root.GetItem(id);
             if (item == null)
@@ -65,6 +65,9 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
 
             if (item.Type == ItemType.Folder)
                 return StatusCode(HttpStatusCode.NoContent);
+
+            if (item.ContentETag == contentETag)
+                return StatusCode(HttpStatusCode.NotModified);
 
             return new FileResult(item.FullPath);
         }

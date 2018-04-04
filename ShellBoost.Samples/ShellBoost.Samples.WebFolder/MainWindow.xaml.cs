@@ -3,12 +3,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
+using ShellBoost.Samples.WebFolder.Api;
 using ShellBoost.Samples.WebFolder.Folder;
 
 namespace ShellBoost.Samples.WebFolder
@@ -51,6 +53,25 @@ namespace ShellBoost.Samples.WebFolder
             TB.Text = "ShellBoost Samples - Copyright © 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved." + Environment.NewLine + Environment.NewLine;
             TB.Text += "Web Drive Folder - " + (IntPtr.Size == 8 ? "64" : "32") + "bit - V" + Assembly.GetExecutingAssembly().GetInformationalVersion() + Environment.NewLine;
             AppendText();
+
+            Task.Run(async () => await PingServer());
+        }
+
+        private async Task PingServer()
+        {
+            // get root
+            try
+            {
+                var item = await WebFolderApi.GetItemAsync(Guid.Empty);
+                if (item != null)
+                {
+                    AppendText("Server at " + WebFolderApi.ApiBaseUrl + " was successfully pinged.");
+                }
+            }
+            catch (Exception e)
+            {
+                AppendText("Server at " + WebFolderApi.ApiBaseUrl + " can't be pinged (Error: " + e.Message + "). Please make sure the WebFolderSite web site is started.");
+            }
         }
 
         protected override void OnSourceInitialized(EventArgs e)

@@ -81,7 +81,7 @@
   <ItemGroup>
     <Content Include="Default.html" />
     <Content Include="Global.asax" />
-    <Content Include="favicon.ico" />
+    <Resource Include="favicon.ico" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

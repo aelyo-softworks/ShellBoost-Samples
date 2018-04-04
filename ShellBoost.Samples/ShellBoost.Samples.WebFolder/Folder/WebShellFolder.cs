@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShellBoost.Core;
 using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
@@ -26,17 +27,23 @@ namespace ShellBoost.Samples.WebFolder.Folder
 
         public Item Folder { get; }
 
-        // same function used for all folders, including root folder
-        public static Item[] EnumItems(Guid itemId, bool includeFolders, bool includeItems)
+        public static async Task<Item[]> EnumItemsAsync(Guid itemId, bool includeFolders, bool includeItems)
         {
             if (includeFolders && includeItems)
-                return Api.Api.GetChildren(itemId);
+                return await WebFolderApi.GetChildrenAsync(itemId);
 
             if (includeFolders)
-                return Api.Api.GetFolders(itemId);
+                return await WebFolderApi.GetFoldersAsync(itemId);
 
-            return Api.Api.GetItems(itemId);
+            return await WebFolderApi.GetItemsAsync(itemId);
         }
+
+        // same function used for all folders, including root folder
+        public static Item[] EnumItems(Guid itemId, bool includeFolders, bool includeItems) =>
+            Task.Run(async () =>
+            {
+                return await EnumItemsAsync(itemId, includeFolders, includeItems);
+            }).Result;
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {

@@ -5,28 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShellBoost.Samples.WebFolder"
         mc:Ignorable="d"
-        Title="ShellBoost WebFolder Sample" Height="350" Width="600" WindowStartupLocation="CenterScreen">
+        Title="ShellBoost WebFolder Sample - Server" Height="350" Width="600" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel.Resources>
+        <WrapPanel Orientation="Horizontal">
+            <WrapPanel.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Margin" Value="5" />
-                    <Setter Property="Padding" Value="10,0,10,0" />
+                    <Setter Property="Padding" Value="10,5,10,5" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Background" Value="SkyBlue" />
                 </Style>
-            </StackPanel.Resources>
+            </WrapPanel.Resources>
             <Button Name="Register" Click="Register_Click" ToolTip="Press this button to register the ShellBoost native proxy or register it.">Register Proxy</Button>
             <Button Name="Unregister" Click="Unregister_Click" ToolTip="Press this button to unregister the ShellBoost native proxy.">Unregister Proxy</Button>
             <Button Name="Open" Click="Open_Click" ToolTip="Press this button to open the Shell Extension in Windows Explorer.">Open Extension's Location</Button>
             <Button Name="Restart" Click="Restart_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Press this button to restart Windows Explorer. This may be needed in rare situations.">Restart Explorer</Button>
             <Button Name="Quit" Click="Quit_Click" ToolTip="Quit this application. Using the Close button will minimize it an place it in the Shell's notification area.">Quit</Button>
-        </StackPanel>
-
-        <TextBox Margin="5" Padding="5" Grid.Row="1" Name="TB" IsReadOnly="True" FontFamily="Lucida Console" FontSize="10" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-
-        </TextBox>
+        </WrapPanel>
+        <TextBox Margin="5" BorderBrush="Transparent" Padding="5" Name="TB" IsReadOnly="True" FontFamily="Lucida Console"  FontSize="10" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
     </Grid>
 </Window>
