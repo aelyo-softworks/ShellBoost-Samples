@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ShellBoost.Samples.WebFolder.Api
 {
@@ -17,5 +18,7 @@ namespace ShellBoost.Samples.WebFolder.Api
         public DateTime CreationTimeUtc { get; set; }
         public DateTime LastWriteTimeUtc { get; set; }
         public string ContentETag { get; set; }
+
+        public string DownloadContent() => Task.Run(async () => await WebFolderApi.DownloadContentToFileAsync(Id, ContentETag)).Result;
     }
 }

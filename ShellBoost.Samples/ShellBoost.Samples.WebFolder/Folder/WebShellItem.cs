@@ -24,5 +24,14 @@ namespace ShellBoost.Samples.WebFolder.Folder
         }
 
         public Item Item { get; }
+
+        public override ShellContent GetContent()
+        {
+            var path = Item.DownloadContent();
+            if (path == null)
+                return null;
+
+            return new FileShellContent(path);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using ShellBoost.Core;
 using ShellBoost.Core.WindowsShell;
@@ -23,6 +24,7 @@ namespace ShellBoost.Samples.WebFolder.Folder
             DateCreated = folder.CreationTimeUtc.ToLocalTime();
             Folder = folder;
             DisplayName = folder.Name;
+            AddNewMenuTemplatePath = Path.GetTempPath();
         }
 
         public Item Folder { get; }

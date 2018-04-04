@@ -203,6 +203,7 @@ namespace ShellBoost.Samples.WebFolder
                 {
                     TB.Text += text;
                 }
+                //TB.ScrollToEnd();
             });
         }
 
@@ -246,5 +247,7 @@ namespace ShellBoost.Samples.WebFolder
             window.Visible = true;
             window.Navigate2(idl.Data);
         }
+
+        private void Clear_Click(object sender, RoutedEventArgs e) => TB.Clear();
     }
 }

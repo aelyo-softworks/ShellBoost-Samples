@@ -26,6 +26,12 @@
             <Button Name="Restart" Click="Restart_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Press this button to restart Windows Explorer. This may be needed in rare situations.">Restart Explorer</Button>
             <Button Name="Quit" Click="Quit_Click" ToolTip="Quit this application. Using the Close button will minimize it an place it in the Shell's notification area.">Quit</Button>
         </WrapPanel>
-        <TextBox Margin="5" BorderBrush="Transparent" Padding="5" Name="TB" IsReadOnly="True" FontFamily="Lucida Console"  FontSize="10" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        <TextBox Margin="5" BorderBrush="Transparent" Padding="5" Name="TB" IsReadOnly="True" FontFamily="Lucida Console"  FontSize="10" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="Clear" Header="Clear" Click="Clear_Click" />
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
     </Grid>
 </Window>

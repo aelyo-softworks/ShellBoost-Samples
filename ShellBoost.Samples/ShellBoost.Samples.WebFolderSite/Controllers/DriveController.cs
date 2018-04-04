@@ -57,7 +57,7 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
 
         [Route("api/drive/{id}/content")]
         [HttpGet]
-        public IHttpActionResult Download(Guid id, string contentETag)
+        public IHttpActionResult Download(Guid id, string contentETag = null)
         {
             var item = Drive.Root.GetItem(id);
             if (item == null)
