@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -69,7 +68,14 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
             if (item.ContentETag == contentETag)
                 return StatusCode(HttpStatusCode.NotModified);
 
-            return new FileResult(item.FullPath);
+            return new PushStreamResult(async (stream) =>
+            {
+                using (var file = item.ContentOpenRead())
+                {
+                    await file.CopyToAsync(stream).ConfigureAwait(false);
+                }
+                stream.Close();
+            }, item.Name);
         }
 
         [Route("api/drive")]
@@ -98,9 +104,9 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
 
             using (var stream = await Request.Content.ReadAsStreamAsync())
             {
-                using (var file = File.OpenWrite(item.FullPath))
+                using (var file = item.ContentOpenWrite())
                 {
-                    await stream.CopyToAsync(file);
+                    await stream.CopyToAsync(file).ConfigureAwait(false);
                     return Ok();
                 }
             }

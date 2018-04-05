@@ -37,12 +37,16 @@ namespace ShellBoost.Samples.WebFolderSite.Model
                 if (!Directory.Exists(dir))
                     yield break;
 
+                Item item;
                 foreach (var file in Directory.EnumerateFiles(dir, "*." + Id.ToString("N") + ".*"))
                 {
-                    var item = new Item();
+                    item = new Item();
                     item.FullPath = file;
                     yield return item;
                 }
+
+                // for demonstration purpose, every folder contains a special file
+                yield return new TimeItem();
             }
         }
 

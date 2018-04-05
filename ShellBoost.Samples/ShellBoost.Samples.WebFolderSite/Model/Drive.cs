@@ -53,6 +53,9 @@ namespace ShellBoost.Samples.WebFolderSite.Model
             if (id == Guid.Empty)
                 return RootFolder;
 
+            if (id == TimeItem.TimeItemId)
+                return new TimeItem();
+
             string dir = Path.GetDirectoryName(RootFolder.FullPath);
             if (!Directory.Exists(dir))
                 return null;

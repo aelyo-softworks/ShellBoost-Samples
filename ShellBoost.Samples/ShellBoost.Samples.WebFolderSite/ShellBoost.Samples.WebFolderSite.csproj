@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -87,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Controllers\DriveController.cs" />
     <Compile Include="Controllers\FileResult.cs" />
+    <Compile Include="Controllers\PushStreamResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -94,6 +96,7 @@
     <Compile Include="Model\Folder.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\ItemType.cs" />
+    <Compile Include="Model\TimeItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

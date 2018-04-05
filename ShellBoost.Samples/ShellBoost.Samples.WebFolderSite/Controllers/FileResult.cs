@@ -39,7 +39,7 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
             }
         }
 
-        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken) => Task.Run(() =>
+        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StreamContent(File.OpenRead(FilePath));
@@ -55,7 +55,7 @@ namespace ShellBoost.Samples.WebFolderSite.Controllers
                 }
             }
 
-            return response;
-        }, cancellationToken);
+            return Task.FromResult(response);
+        }
     }
 }

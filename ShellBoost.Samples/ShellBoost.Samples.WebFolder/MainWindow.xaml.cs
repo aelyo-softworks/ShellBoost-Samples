@@ -70,7 +70,7 @@ namespace ShellBoost.Samples.WebFolder
             }
             catch (Exception e)
             {
-                AppendText("Server at " + WebFolderApi.ApiBaseUrl + " can't be pinged (Error: " + e.Message + "). Please make sure the WebFolderSite web site is started.");
+                AppendText("Server at " + WebFolderApi.ApiBaseUrl + " can't be pinged (Error: '" + e.Message + "'). Please make sure the WebFolderSite web site is started.");
             }
         }
 
@@ -99,23 +99,36 @@ namespace ShellBoost.Samples.WebFolder
 
         private void WebDriveThread(object state)
         {
-            using (var server = new WebShellFolderServer())
+            do
             {
-                var config = new ShellFolderConfiguration();
-                config.Logger = new Logger(this);
-
-                server.Start(config);
-                AppendText("Started listening on proxy id " + ShellFolderServer.ProxyId);
-
-                if (ShellFolderServer.LocationFolderId != Guid.Empty)
+                try
                 {
-                    Dispatcher.BeginInvoke(() =>
+                    using (var server = new WebShellFolderServer())
                     {
-                        Open.IsEnabled = true;
-                    });
+                        var config = new ShellFolderConfiguration();
+                        config.Logger = new Logger(this);
+
+                        server.Start(config);
+                        AppendText("Started listening on proxy id " + ShellFolderServer.ProxyId);
+
+                        if (ShellFolderServer.LocationFolderId != Guid.Empty)
+                        {
+                            Dispatcher.BeginInvoke(() =>
+                            {
+                                Open.IsEnabled = true;
+                            });
+                        }
+                        _serverStopEvent.WaitOne();
+                        return;
+                    }
                 }
-                _serverStopEvent.WaitOne();
+                catch (Exception e)
+                {
+                    AppendText(e.Message);
+                    Thread.Sleep(1000);
+                }
             }
+            while (true);
         }
 
         private class Logger : ILogger

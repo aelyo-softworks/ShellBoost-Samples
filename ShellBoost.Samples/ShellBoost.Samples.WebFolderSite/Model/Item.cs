@@ -59,7 +59,10 @@ namespace ShellBoost.Samples.WebFolderSite.Model
         public long Length { get; private set; }
         public DateTime CreationTimeUtc { get; private set; }
         public DateTime LastWriteTimeUtc { get; private set; }
-        public string ContentETag => Length.ToString() + LastWriteTimeUtc.Ticks; // this will change when the content change. it could be enhanced, but this is a sample.
+        public virtual string ContentETag => Length.ToString() + LastWriteTimeUtc.Ticks; // this will change when the content change. it could be enhanced, but this is a sample.
+
+        public virtual Stream ContentOpenRead() => File.OpenRead(FullPath);
+        public virtual Stream ContentOpenWrite() => File.OpenWrite(FullPath);
 
         public virtual void Update(Item item)
         {

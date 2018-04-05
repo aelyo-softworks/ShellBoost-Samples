@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using ShellBoost.Core;
+using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
 
@@ -24,7 +24,6 @@ namespace ShellBoost.Samples.WebFolder.Folder
             DateCreated = folder.CreationTimeUtc.ToLocalTime();
             Folder = folder;
             DisplayName = folder.Name;
-            AddNewMenuTemplatePath = Path.GetTempPath();
         }
 
         public Item Folder { get; }
@@ -60,6 +59,14 @@ namespace ShellBoost.Samples.WebFolder.Folder
                     yield return new WebShellItem(this, item);
                 }
             }
+        }
+
+        protected override void MergeContextMenu(ShellFolder folder, IReadOnlyList<ShellItem> items, ShellMenu existingMenu, ShellMenu appendMenu)
+        {
+            // because we don't rely on file system, we won't have the "new" menu automatically set for us
+            // so we must build one, from the standard one
+            // fortunately, there is a helper for that
+            appendMenu.MergeNewMenu();
         }
     }
 }
