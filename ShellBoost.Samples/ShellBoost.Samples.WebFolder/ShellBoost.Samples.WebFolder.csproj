@@ -110,6 +110,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ShellBoost.Core.dll" />
+    <Resource Include="ShellBoost.Core.xml" />
     <Resource Include="ShellBoost.Samples.WebFolder.ico" />
   </ItemGroup>
   <ItemGroup>

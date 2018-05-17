@@ -94,7 +94,7 @@ namespace ShellBoost.Samples.LocalFolder
                 e.Effect = DragDropEffects.All;
             }
 
-            if (e.Type == DragDropTargetEventType.Drop)
+            if (e.Type == DragDropTargetEventType.DragDrop)
             {
                 // file operation events need an STA thread
                 WindowsUtilities.DoModelessAsync(() =>
