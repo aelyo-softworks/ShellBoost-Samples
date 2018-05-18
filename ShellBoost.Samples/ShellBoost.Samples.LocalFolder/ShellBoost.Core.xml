@@ -758,6 +758,14 @@
             <param name="context">The operation context.</param>
             <param name="path">The directory path.</param>
         </member>
+        <member name="M:ShellBoost.Core.IRemoteFileSystem.TryGetPropertyValue(System.String,System.Object@)">
+            <summary>
+            Gets a property value by its name. This provides a simple extension mechanism to the Remote File System implementation.
+            </summary>
+            <param name="name">The property name.</param>
+            <param name="value">The value.</param>
+            <returns><c>true</c> if the property was read, <c>false</c> otherwise.</returns>
+        </member>
         <member name="T:ShellBoost.Core.IRemoteResource">
             <summary>
             Defines a remote resource. A resource is a file or a directory.
@@ -7071,6 +7079,60 @@
             </summary>
             <param name="urls">The urls.</param>
             <returns>A string representing the combination of urls.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFilePath(System.String)">
+            <summary>
+            Converts a text into a valid file path.
+            </summary>
+            <param name="filePath">The file name.</param>
+            <returns>A valid file name.</returns>
+            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFilePath(System.String,System.String,System.String)">
+            <summary>
+            Converts a text into a valid file path.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="reservedNameFormat">The reserved format to use for reserved names. If null '_{0}_' will be used.</param>
+            <param name="reservedCharFormat">The reserved format to use for reserved characters. If null '_x{0}_%' will be used.</param>
+            <returns>A valid file name.</returns>
+            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFileName(System.String)">
+            <summary>
+            Converts a text into a valid file name.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <returns>
+            A valid file name.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">fileName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFileName(System.String,System.String,System.String)">
+            <summary>
+            Converts a text into a valid file name.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <param name="reservedNameFormat">The reserved format to use for reserved names. If null '_{0}_' will be used.</param>
+            <param name="reservedCharFormat">The reserved format to use for reserved characters. If null '_x{0}_' will be used.</param>
+            <returns>A valid file name.</returns>
+            <exception cref="T:System.ArgumentNullException">fileName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathHasInvalidChars(System.String)">
+            <summary>
+            Determines if the specified path has invalid chars.
+            </summary>
+            <param name="path">The input path. If null, true will be returned.</param>
+            <returns>true if the path has invalid chars; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsValidFileName(System.String)">
+            <summary>
+            Determines whether the specified text represents a valid file name.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <returns>
+            	<c>true</c> if the specified text represents a valid file name; otherwise, <c>false</c>.
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.KnownFolder">
             <summary>

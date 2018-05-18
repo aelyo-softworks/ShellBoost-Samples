@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShellBoost.Core;
-using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
 
