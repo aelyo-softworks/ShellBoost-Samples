@@ -1217,6 +1217,29 @@
             </summary>
             <value><c>true</c> if the show as group context menu must be hidden; otherwise, <c>false</c>.</value>
         </member>
+        <member name="T:ShellBoost.Core.OnDemandSynchronizerEventArgs">
+            <summary>
+            Provides data for the Synchronizing event of OnDemandSynchronizer.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizerEventArgs.Type">
+            <summary>
+            Gets the event type.
+            </summary>
+            <value>The event type.</value>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizerEventArgs.Input">
+            <summary>
+            Gets input parameters.
+            </summary>
+            <value>The input parameters.</value>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizerEventArgs.Output">
+            <summary>
+            Gets the output parameters.
+            </summary>
+            <value>The output parameters.</value>
+        </member>
         <member name="T:ShellBoost.Core.OnDemandSynchronizer">
             <summary>
             A utility class that supports on-demand file synchronization with a remote file system.
@@ -1228,6 +1251,11 @@
             <b>Windows 10, version 1709 or higher is needed</b>.
             </summary>
             <value><c>true</c> if on-demand file synchronization is supported; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="E:ShellBoost.Core.OnDemandSynchronizer.Synchronizing">
+            <summary>
+            Occurs when synchronization happens.
+            </summary>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.#ctor(System.String,ShellBoost.Core.IRemoteFileSystem)">
             <summary>
@@ -1277,6 +1305,13 @@
             Gets or sets the synchronize period in millisecond. If it's set to zero, the synchronization process will stop.
             </summary>
             <value>The synchronize period.</value>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.OnSynchronizing(System.Object,ShellBoost.Core.OnDemandSynchronizerEventArgs)">
+            <summary>
+            Handles the Synchronizing event.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.OnDemandSynchronizerEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.FetchData(System.String,System.Int64,System.Int64,System.IO.Stream)">
             <summary>
@@ -1416,6 +1451,13 @@
             <param name="localPath">The local path.</param>
             <exception cref="T:System.ArgumentNullException">localPath is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.EnumerateLocalResources(System.String)">
+            <summary>
+            Enumerates local resources, files and directories.
+            </summary>
+            <param name="localDirectoryPath">The local directory path.</param>
+            <returns>A list of local resources</returns>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.UploadLocalResources(System.String,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.OnDemandSynchronizer.LocalResource})">
             <summary>
             Uploads local resources in a specified directory.
@@ -1424,6 +1466,15 @@
             <param name="remotes">The list of corresponding remote resources.</param>
             <exception cref="T:System.ArgumentNullException">remotes is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.EnumerateRemoteResources(ShellBoost.Core.RemoteOperationContext,System.String)">
+            <summary>
+            Enumerates remote resources.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <returns>A list of remote resources.</returns>
+            <exception cref="T:System.ArgumentNullException">context is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateRemoteResourcesLocally(System.String,System.Boolean@)">
             <summary>
@@ -1673,6 +1724,121 @@
             <returns>An instance of the LastSyncState type or null if no state was saved.</returns>
             <exception cref="T:System.ArgumentNullException">directoryPath is null.</exception>
             <exception cref="T:System.ArgumentException">directoryPath is not rooted.</exception>
+        </member>
+        <member name="T:ShellBoost.Core.OnDemandSynchronizerEventType">
+            <summary>
+            Defines the Synchronizing event type.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.Unspecified">
+            <summary>
+            Don't use.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.ChangedTimer">
+            <summary>
+            The synchronization timer has changed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.Synchronizing">
+            <summary>
+            A path is being synchronized.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.Synchronized">
+            <summary>
+            A path has been synchronized.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.DeletingLocalResource">
+            <summary>
+            A local resource is being deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.DeletedLocalResource">
+            <summary>
+            A local resource has been deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UploadLocalResource">
+            <summary>
+            Initiate a local resource upload.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UploadingLocalResource">
+            <summary>
+            A local resource is being uploaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UploadedLocalResource">
+            <summary>
+            A local resource has been uploaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.DeletingRemoteResource">
+            <summary>
+            A local resource is being deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.DeletedRemoteResource">
+            <summary>
+            A local resource has been deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemUploadingResource">
+            <summary>
+            A remote resource is being uploaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemUploadedResource">
+            <summary>
+            A remote resource has been uploaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemCreatingDirectory">
+            <summary>
+            A remote directory is being created.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemCreatedDirectory">
+            <summary>
+            A remote directory has been created.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemDeletingResource">
+            <summary>
+            A remote resource is being deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemDeletedResource">
+            <summary>
+            A remote resource has been deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemDownloadingResource">
+            <summary>
+            A remote resource is being downloaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemDownloadedResource">
+            <summary>
+            A remote resource has ben downloaded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UpdateOnDemand">
+            <summary>
+            Determines if on-demand file must be updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.FetchingData">
+            <summary>
+            A local file data is being fetched.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.FetchedData">
+            <summary>
+            A local file data has been fetched.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.PropertyStore">
             <summary>
