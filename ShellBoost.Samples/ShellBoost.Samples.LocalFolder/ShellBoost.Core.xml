@@ -1300,6 +1300,12 @@
             </summary>
             <value><c>true</c> if the server will be updated; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.IsSynchronizing">
+            <summary>
+            Gets or sets a value indicating whether this instance is synchronizing files.
+            </summary>
+            <value><c>true</c> if this instance is synchronizing files; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncPeriod">
             <summary>
             Gets or sets the synchronize period in millisecond. If it's set to zero, the synchronization process will stop.
@@ -1738,6 +1744,16 @@
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.ChangedTimer">
             <summary>
             The synchronization timer has changed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.SynchronizingAll">
+            <summary>
+            All files are being synchronized.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.SynchronizedAll">
+            <summary>
+            All files have been synchronized.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.Synchronizing">
