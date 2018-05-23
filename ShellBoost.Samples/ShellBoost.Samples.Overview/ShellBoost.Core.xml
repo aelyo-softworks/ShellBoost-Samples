@@ -2855,9 +2855,21 @@
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.FolderId">
             <summary>
-            Gets the Shell Namespace Extension identifier.
+            Gets the Shell Namespace Extension folder identifier.
             </summary>
             <value>The folder identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension location folder absolute parsing path.
+            </summary>
+            <value>The location folder absolute parsing path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.FolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension folder absolute parsing path.
+            </summary>
+            <value>The folder absolute parsing path.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderId">
             <summary>
@@ -7826,6 +7838,11 @@
             The Windows E_ACCESSDENIED error value (0x80070005).
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Utilities.ShellUtilities.E_NOTFOUND">
+            <summary>
+            The Windows E_NOTFOUND error value (0x80070490).
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.Utilities.ShellUtilities.E_FAIL">
             <summary>
             The Windows E_FAIL error value (0x80004005).
@@ -7916,6 +7933,40 @@
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>An instance of the ShellItemIdList type.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnumerateItems(System.String)">
+            <summary>
+            Enumerates child items of a given shell item.
+            </summary>
+            <param name="path">The parent path.</param>
+            <returns>A list of child PIDLs.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnumerateItems(System.String,System.Boolean)">
+            <summary>
+            Enumerates child items of a given shell item.
+            </summary>
+            <param name="path">The parent path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>A list of child PIDLs.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnumerateItems(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Enumerates child items of a given shell item.
+            </summary>
+            <param name="idl">The parent PIDL.</param>
+            <returns>A list of child PIDLs.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnumerateItems(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+            <summary>
+            Enumerates child items of a given shell item.
+            </summary>
+            <param name="idl">The parent PIDL.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>A list of child PIDLs.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetPath(ShellBoost.Core.ShellItemIdList)">
             <summary>
