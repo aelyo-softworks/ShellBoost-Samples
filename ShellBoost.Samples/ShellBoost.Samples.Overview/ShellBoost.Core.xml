@@ -1388,12 +1388,11 @@
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.GetIdentity(System.String,ShellBoost.Core.IRemoteResource)">
             <summary>
-            Gets the identity of a remote resource.
+            Gets the identity of a remote resource, or the local file if the resources has not yet been created.
             </summary>
             <param name="localRelativeDirectoryPath">The local relative directory path.</param>
             <param name="resource">The resource.</param>
             <returns>An array of bytes that represents the remote resource identity</returns>
-            <exception cref="T:System.ArgumentNullException">resource is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateOnDemand(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
             <summary>
@@ -7599,6 +7598,14 @@
             <param name="resource">The remote resource.</param>
             <returns>The remote resource ETAG.</returns>
             <exception cref="T:System.ArgumentNullException">resource is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OnDemandExtensions.GetEtag(System.IO.FileInfo)">
+            <summary>
+            Gets a file ETAG.
+            </summary>
+            <param name="file">The file.</param>
+            <returns>The remote resource ETAG.</returns>
+            <exception cref="T:System.ArgumentNullException">file is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.PostFileTransferEventArgs">
             <summary>
