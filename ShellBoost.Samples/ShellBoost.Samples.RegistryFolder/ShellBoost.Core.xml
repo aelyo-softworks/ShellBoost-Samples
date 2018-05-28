@@ -1294,11 +1294,11 @@
             </summary>
             <value>The synchronizable attributes.</value>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandSynchronizer.UpdateServer">
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteFileSystem">
             <summary>
-            Gets or sets a value indicating whether the server will be updated or not. The default value is true.
+            Gets or sets a value indicating whether the remote file system will be updated or not. The default value is true.
             </summary>
-            <value><c>true</c> if the server will be updated; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if the remote file system will be updated; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.IsSynchronizing">
             <summary>
@@ -1394,13 +1394,24 @@
             <param name="resource">The resource.</param>
             <returns>An array of bytes that represents the remote resource identity</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateOnDemand(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteResource(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
             <summary>
-            Determines if an on-demand local resource (file or directory) should be updated.
+            Determines if a remote resource should be updated from a local one.
             </summary>
             <param name="info">The file system information.</param>
             <param name="resource">The resource.</param>
-            <returns><c>true</c> if the local resource must be updated, <c>false</c> otherwise.</returns>
+            <returns><c>true</c> if the remote resource must be updated, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">info is null
+            or
+            resource is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateOnDemand(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
+            <summary>
+            Determines if an on-demand local resource (file or directory) should be updated from the remote file system.
+            </summary>
+            <param name="info">The file system information.</param>
+            <param name="resource">The resource.</param>
+            <returns><c>true</c> if the local file or directory must be updated, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">info is null
             or
             resource is null.</exception>
@@ -1843,6 +1854,11 @@
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UpdateOnDemand">
             <summary>
             Determines if on-demand file must be updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UpdateRemoteResource">
+            <summary>
+            Determines if the remote resource corresponding to a local file must be updated.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.FetchingData">
