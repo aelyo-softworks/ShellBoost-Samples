@@ -1034,20 +1034,26 @@
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.MemoryShellContent"/> class.
             </summary>
-            <param name="text">The text.</param>
+            <param name="text">The input text.</param>
         </member>
         <member name="M:ShellBoost.Core.MemoryShellContent.#ctor(System.String,System.Text.Encoding)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.MemoryShellContent"/> class.
             </summary>
-            <param name="text">The text.</param>
-            <param name="encoding">The encoding.</param>
+            <param name="text">The input text.</param>
+            <param name="encoding">The text encoding.</param>
         </member>
         <member name="M:ShellBoost.Core.MemoryShellContent.#ctor(System.Byte[])">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.MemoryShellContent"/> class.
             </summary>
-            <param name="bytes">The bytes.</param>
+            <param name="bytes">An input array of bytes.</param>
+        </member>
+        <member name="M:ShellBoost.Core.MemoryShellContent.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.MemoryShellContent"/> class.
+            </summary>
+            <param name="stream">An input stream.</param>
         </member>
         <member name="P:ShellBoost.Core.MemoryShellContent.Length">
             <summary>
@@ -3580,6 +3586,12 @@
             </summary>
             <value><c>true</c> if this instance can be moved; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellItem.HasPropertySheet">
+            <summary>
+            Gets or sets a value indicating whether this instance supports the property sheet.
+            </summary>
+            <value><c>true</c> if this instance supports the property sheet; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ShellBoost.Core.ShellItem.IsDropTarget">
             <summary>
             Gets or sets a value indicating whether this instance is a drop target.
@@ -4769,7 +4781,9 @@
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ShellOperation.RenameItem">
+            <summary>
             A Shell Item is renamed.
+            </summary>
         </member>
         <member name="F:ShellBoost.Core.ShellOperation.MoveItem">
             <summary>

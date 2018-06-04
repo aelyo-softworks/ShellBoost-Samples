@@ -65,7 +65,15 @@ namespace ShellBoost.Samples.WebFolder.Folder
             // because we don't rely on file system, we won't have the "new" menu automatically set for us
             // so we must build one, from the standard one
             // fortunately, there is a helper for that
+            appendMenu.AddInvokeItemHandler(OnShellMenuItemInvoke);
             appendMenu.MergeNewMenu();
+
+            // once the new menu has been merged, remember what Id corresponds to what type of item and use that in the OnShellMenuItemInvoke method
+        }
+
+        private void OnShellMenuItemInvoke(object sender, ShellMenuInvokeEventArgs e)
+        {
+            // TODO: get the clicked Id from the e argument and handle the item creation
         }
     }
 }
