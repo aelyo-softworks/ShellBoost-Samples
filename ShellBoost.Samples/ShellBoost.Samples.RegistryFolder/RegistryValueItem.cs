@@ -14,6 +14,7 @@ namespace ShellBoost.Samples.RegistryFolder
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
+            CanCopy = true; // support copy operations
             CanDelete = true;
             CanRename = true;
             KeyName = name;
@@ -106,6 +107,9 @@ namespace ShellBoost.Samples.RegistryFolder
                 return string.Format("{0}", data);
             }
         }
+
+        // this content will be used for copy operations also
+        public override ShellContent GetContent() => new MemoryShellContent(Data?.ToString());
 
         public override bool TryGetPropertyValue(PropertyKey key, out object value)
         {
