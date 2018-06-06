@@ -13,6 +13,7 @@ namespace ShellBoost.Samples.FolderService
             InitializeComponent();
         }
 
+        // this is only for console testing (note: the application must be of Console type, not Windows)
         internal void TestStartupAndStop(string[] args)
         {
             OnStart(args);
