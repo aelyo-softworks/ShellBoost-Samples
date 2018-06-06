@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.WebFolde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.LocalFolder", "ShellBoost.Samples.LocalFolder\ShellBoost.Samples.LocalFolder.csproj", "{701FCAAC-38A3-4EDD-B869-CB5D94200FDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.FolderService", "ShellBoost.Samples.FolderService\ShellBoost.Samples.FolderService.csproj", "{71D62CDC-75C9-4F2C-A481-943960018EDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{701FCAAC-38A3-4EDD-B869-CB5D94200FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{701FCAAC-38A3-4EDD-B869-CB5D94200FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{701FCAAC-38A3-4EDD-B869-CB5D94200FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71D62CDC-75C9-4F2C-A481-943960018EDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D62CDC-75C9-4F2C-A481-943960018EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D62CDC-75C9-4F2C-A481-943960018EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D62CDC-75C9-4F2C-A481-943960018EDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

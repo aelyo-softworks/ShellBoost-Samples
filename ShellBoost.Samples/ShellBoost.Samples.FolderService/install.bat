@@ -1,0 +1,1 @@
+installutil ShellBoost.Samples.FolderService.exe

@@ -510,7 +510,7 @@
             </summary>
             <param name="array">An array of bytes.</param>
             <param name="count">The maximum number of bytes to be read from the current content.</param>
-            <returns>System.Int32.</returns>
+            <returns>The number of bytes read.</returns>
         </member>
         <member name="M:ShellBoost.Core.FileShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
             <summary>
@@ -1086,7 +1086,7 @@
             </summary>
             <param name="array">An array of bytes.</param>
             <param name="count">The maximum number of bytes to be read from the current content.</param>
-            <returns>System.Int32.</returns>
+            <returns>The number of bytes read.</returns>
         </member>
         <member name="T:ShellBoost.Core.NotifyEventArgs">
             <summary>
@@ -2286,7 +2286,7 @@
             </summary>
             <param name="array">An array of bytes.</param>
             <param name="count">The maximum number of bytes to be read from the current content.</param>
-            <returns>System.Int32.</returns>
+            <returns>The number of bytes read.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
             <summary>
@@ -2295,6 +2295,31 @@
             <param name="offset">A byte offset relative to the origin parameter.</param>
             <param name="origin">A value indicating the reference point used to obtain the new position.</param>
             <returns>The new position within the current stream or null if this information is unknown.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.ShellContext">
+            <summary>
+            Defines the current Windows Shell context of the calling client.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShellContext.Current">
+            <summary>
+            Gets the current context.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShellContext.IsEmpty">
+            <summary>
+            Gets a value that indicates whether this context is empty.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShellContext.ClientPrincipalName">
+            <summary>
+            Gets the client's principal name. May be null.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShellContext.ClientProcessId">
+            <summary>
+             Gets the client's process identifier. May be 0.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.ShellDataObject">
             <summary>
@@ -3019,11 +3044,19 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
             <summary>
-            Logs the value with a specified trace level.
+            Logs the value with a specified trace level. This method does nothing by default and must be overriden.
             </summary>
             <param name="level">The trace level.</param>
             <param name="value">The value.</param>
             <param name="methodName">The calling method name.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.Trace(System.Diagnostics.TraceLevel,System.String)">
+            <summary>
+            Sends a string value trace using ETW, with the specified level.
+            The ETW provider guid is given in the TraceId static property of this class.
+            </summary>
+            <param name="level">The trace level.</param>
+            <param name="value">The value to trace.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.Start">
             <summary>
@@ -4168,13 +4201,13 @@
             <summary>
             Gets the file system path, if this instances represents a Shell Item that defines a file system path.
             </summary>
-            <returns>System.String.</returns>
+            <returns>A string.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetPath">
             <summary>
             Gets the path.
             </summary>
-            <returns>System.String.</returns>
+            <returns>A string.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetName(ShellBoost.Core.WindowsShell.SIGDN)">
             <summary>
@@ -5373,7 +5406,7 @@
             <param name="name">The name.</param>
             <param name="defaultValue">The default value.</param>
             <param name="conversionType">Type of the conversion.</param>
-            <returns>System.Object.</returns>
+            <returns>The argument value.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.CommandLine.GetArgument(System.String,System.Object,System.Type,System.IFormatProvider)">
             <summary>
@@ -6069,7 +6102,7 @@
             Converts to hexadecimal representation.
             </summary>
             <param name="i">The input.</param>
-            <returns>System.String.</returns>
+            <returns>An hexadecimal string.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.Extensions.ToHex(System.Int64)">
             <summary>
@@ -9409,7 +9442,7 @@
             <summary>
             Gets the type of the virtual machine.
             </summary>
-            <returns>System.String.</returns>
+            <returns>A string.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.DiagnosticsInformation.Serialize(System.Reflection.Assembly)">
             <summary>
@@ -11590,7 +11623,7 @@
             Gets the a string that represents the view flags. See Windows Property System's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb761436.aspx">IPropertySystem::GetPropertyDescriptionListFromString method</see> for more information.
             </summary>
             <param name="flags">The flags.</param>
-            <returns>System.String.</returns>
+            <returns>A string.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.ToString">
             <summary>
@@ -11782,7 +11815,7 @@
             Formats the property key as "{Guid value} identifier", like "{F29F85E0-4FF9-1068-AB91-08002B27B3D9} 2" for example.
             See also the <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762085.aspx">PSPropertyKeyFromString function</see>.
             </summary>
-            <returns>System.String.</returns>
+            <returns>A string.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyKey.ToString">
             <summary>
