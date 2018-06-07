@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -81,6 +82,9 @@
     <Content Include="Data\One Folder\This file should display Icon as an error.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\Attribute.ico" />
+    <EmbeddedResource Include="Resources\ErrorOverlay.ico" />
+    <EmbeddedResource Include="Resources\WarningOverlay.ico" />
     <Content Include="ShellBoost.Core.dll" />
     <Content Include="ShellBoost.Core.xml" />
     <Content Include="ShellBoost.d63d2a2ff5f144c4b8442675be8f4a91.x64.dll">

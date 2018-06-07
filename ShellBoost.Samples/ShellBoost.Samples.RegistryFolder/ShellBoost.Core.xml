@@ -1888,17 +1888,11 @@
             </summary>
             <value>The association elements property key.</value>
         </member>
-        <member name="P:ShellBoost.Core.PropertyStore.OverlayIndex">
+        <member name="P:ShellBoost.Core.PropertyStore.OverlayIconLocation">
             <summary>
-            Gets the index of the overlay ShellBoost specific property key.
+            Gets the overlay icon location ShellBoost specific property key.
             </summary>
-            <value>The index of the overlay property key.</value>
-        </member>
-        <member name="P:ShellBoost.Core.PropertyStore.OverlayIconIndex">
-            <summary>
-            Gets the index of the overlay icon ShellBoost specific property key.
-            </summary>
-            <value>The index of the overlay icon property key.</value>
+            <value>The overlay icon location property key.</value>
         </member>
         <member name="P:ShellBoost.Core.PropertyStore.PropSheetClsid">
             <summary>
@@ -2737,6 +2731,12 @@
             </summary>
             <value>The native ShellBoost proxy assembly path.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellFolderConfiguration.ImpersonateClient">
+            <summary>
+            Gets or sets a value indicating whether the Windows Shell client is impersonated in the ShellBoost server.
+            </summary>
+            <value><c>true</c> if the Windows Shell client is impersonated; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.NativeDllRegistration">
             <summary>
             Gets or sets the native ShellBoost proxy registration mode.
@@ -2916,6 +2916,11 @@
             Gets the Shell Namespace Extension folder absolute parsing path.
             </summary>
             <value>The folder absolute parsing path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.IsImpersonatingClient">
+            <summary>
+            Gets a value indicating if ShellBoost is configured to impersonate the Windows Shell user.
+            </summary>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderId">
             <summary>
@@ -6620,6 +6625,31 @@
             </summary>
             <value>The work so far.</value>
         </member>
+        <member name="T:ShellBoost.Core.Utilities.IconInformation">
+            <summary>
+            Defines a class that contains icon additional information. It's assigned to a Bitmap.Tag property by the IconUtilities methods.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconInformation.Id">
+            <summary>
+            Gets the icon identifier.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconInformation.Index">
+            <summary>
+            Gets the icon index.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconInformation.GroupId">
+            <summary>
+            Gets the icon group identifier.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconInformation.GroupIndex">
+            <summary>
+            Gets the icon group index.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.IconMode">
             <summary>
             Define the Icon mode. This is equivalent to most values of Windows Shell <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762179.aspx">SHGFI_* attributes</see>.
@@ -6659,6 +6689,208 @@
             <summary>
             Causes the function to retrieve the file's small icon.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.IconUtilities">
+            <summary>
+            Defines a set of Icon utilities.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.IconUtilities.FileExtension">
+            <summary>
+            Defines the standard icon file extension (.ico).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.IconUtilities.MaxIconSize">
+            <summary>
+            Defines the maximum size for an icon in the Windows Shell.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsDll(System.String,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Writes a .ICO file (possibly containing multiple sizes) into a Win32 resource-only .DLL file. The output icon format is always PNG / ARGB (32-bit).
+            </summary>
+            <param name="icoFilePath">The input .ICO file path.</param>
+            <param name="filePath">The target .DLL file path.</param>
+            <param name="resourceId">The Win32 resource identifier.</param>
+            <param name="language">The language. Use 1033 for en-US.</param>
+            <param name="deleteExisting">If set to <c>true</c> the target.DLL path will always be overwritten; otherwise, existing icons will be preserved.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsDll(System.Reflection.Assembly,System.String,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Writes a .NET .ICO embedded resource (possibly containing multiple sizes) into a Win32 resource-only .DLL file. The output format is always PNG / ARGB (32-bit).
+            </summary>
+            <param name="assembly">The input assembly.</param>
+            <param name="resourcePath">The .ICO embedded resource path.</param>
+            <param name="filePath">The target .DLL file path.</param>
+            <param name="resourceId">The Win32 resource identifier.</param>
+            <param name="language">The language. Use 1033 for en-US.</param>
+            <param name="deleteExisting">If set to <c>true</c> the target.DLL path will always be overwritten; otherwise, existing icons will be preserved.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsDll(System.IO.Stream,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Writes a stream that points to an Icon binary format (possibly containing multiple sizes) into a Win32 resource-only .DLL file. The output format is always PNG / ARGB (32-bit).
+            </summary>
+            <param name="iconStream">The input stream.</param>
+            <param name="filePath">The target .DLL file path.</param>
+            <param name="resourceId">The Win32 resource identifier.</param>
+            <param name="language">The language. Use 1033 for en-US.</param>
+            <param name="deleteExisting">If set to <c>true</c> the target.DLL path will always be overwritten; otherwise, existing icons will be preserved.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsDll(System.Drawing.Bitmap,System.String,System.Collections.Generic.IEnumerable{System.Int32},System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Writes a bitmap as an Icon into a Win32 resource-only .DLL file. The icon may be saved in multiple sizes. The output format is always ARGB (32-bit).
+            </summary>
+            <param name="bitmap">The input bitmap.</param>
+            <param name="filePath">The target .DLL file path.</param>
+            <param name="sizes">The various sizes.</param>
+            <param name="resourceId">The Win32 resource identifier.</param>
+            <param name="language">The language. Use 1033 for en-US.</param>
+            <param name="deleteExisting">If set to <c>true</c> the target.DLL path will always be overwritten; otherwise, existing icons will be preserved.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Drawing.Bitmap,System.String)">
+            <summary>
+            Saves a bitmap as a .ICO file.
+            </summary>
+            <param name="bitmap">The input bitmap.</param>
+            <param name="filePath">The target .ICO file path.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Drawing.Bitmap,System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Saves a bitmap as a .ICO file, possibly in multiple sizes.
+            </summary>
+            <param name="bitmap">The input bitmap.</param>
+            <param name="filePath">The target .ICO file path.</param>
+            <param name="sizes">The multiple sizes.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Drawing.Bitmap,System.IO.Stream,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Saves a bitmap as a .ICO stream, possibly in multiple sizes.
+            </summary>
+            <param name="bitmap">The input bitmap.</param>
+            <param name="stream">The target stream</param>
+            <param name="sizes">The multiple sizes.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Collections.Generic.IEnumerable{System.Drawing.Bitmap},System.String)">
+            <summary>
+            Saves multiple bitmaps as a .ICO file.
+            </summary>
+            <param name="bitmaps">The list of bitmaps to write.</param>
+            <param name="filePath">The target file path.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Collections.Generic.IEnumerable{System.Drawing.Bitmap},System.IO.Stream)">
+            <summary>
+            Saves multiple bitmaps as a .ICO stream.
+            </summary>
+            <param name="bitmaps">The list of bitmaps to write.</param>
+            <param name="stream">The target stream.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String)">
+            <summary>
+            Loads the best icon from a file path.
+            </summary>
+            <param name="iconFilePath">The input file path.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Loads the best icon from a file path.
+            </summary>
+            <param name="iconFilePath">The input file path.</param>
+            <param name="indexOrResourceId">An optional index or resource id.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Loads the best icon from a file path.
+            </summary>
+            <param name="iconFilePath">The input file path.</param>
+            <param name="indexOrResourceId">An optional index or resource id.</param>
+            <param name="preferredSize">An optionalm preferred size.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconsForExtension(System.String)">
+            <summary>
+            Loads all icons for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <returns>A list of icons, loaded as bitmaps.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconsForExtension(System.String,System.String@)">
+            <summary>
+            Loads all icons for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="iconFilePath">The output icon file path.</param>
+            <returns>A list of icons, loaded as bitmaps.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIcons(System.String)">
+            <summary>
+            Lods all the icons from an icon file path. Supports .ICO and .DLL files.
+            </summary>
+            <param name="iconFilePath">The icon file path.</param>
+            <returns>A list of icons, loaded as bitmaps.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIcons(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Lods all the icons from an icon file path. Supports .ICO and .DLL files.
+            </summary>
+            <param name="iconFilePath">The icon file path.</param>
+            <param name="byIndexOrResourceId">An optional index or resource id parameter.</param>
+            <returns>A list of icons, loaded as bitmaps.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String)">
+            <summary>
+            Loads the icon for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String,System.String)">
+            <summary>
+            Loads the icon for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Loads the icon for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
+            <param name="preferredSize">An optional preferred size argument.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIconForExtension(System.String)">
+            <summary>
+            Loads the best icon for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIconForExtension(System.String,System.String)">
+            <summary>
+            Loads the best icon for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
+            <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetIconFilePathForExtension(System.String)">
+            <summary>
+            Gets the icon file path for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <returns>A file path string or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetIconFilePathForExtension(System.String,System.Nullable{System.Int32}@)">
+            <summary>
+            Gets the icon file path for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="indexOrResourceId">An optional index or resource id argument.</param>
+            <returns>A file path string or null.</returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ILogger">
             <summary>

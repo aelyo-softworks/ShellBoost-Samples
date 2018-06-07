@@ -1,5 +1,7 @@
 <root>
 	<element name="test element">
-		<childElement />
+		<childElement1 overlay="Error" />
+		<childElement2 />
+		<childElement3 overlay="Warning" />
 	</element>
 </root>
