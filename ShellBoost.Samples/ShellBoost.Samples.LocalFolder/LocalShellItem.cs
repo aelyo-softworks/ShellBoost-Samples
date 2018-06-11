@@ -8,7 +8,7 @@ namespace ShellBoost.Samples.LocalFolder
     public class LocalShellItem : ShellItem
     {
         public LocalShellItem(ShellFolder parent, FileInfo info)
-            : base(parent, info) // there is a specific overload for DirectoryInfo
+            : base(parent, info) // there is a specific overload for FileInfo
         {
             CanCopy = true;
             CanDelete = true;

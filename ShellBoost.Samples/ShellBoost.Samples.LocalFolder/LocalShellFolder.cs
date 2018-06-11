@@ -30,7 +30,7 @@ namespace ShellBoost.Samples.LocalFolder
 
         public DirectoryInfo Info { get; }
 
-        // we export this as internal so the roo folder shares this behavior
+        // we export this as internal so the root folder shares this behavior
         internal static IEnumerable<FileSystemInfo> EnumerateFileSystemItems(DirectoryInfo info, string searchPattern)
         {
             // for demonstration purpose, we hide any file or directory that has "hidden" in its name

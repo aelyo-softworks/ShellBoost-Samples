@@ -19,6 +19,7 @@ namespace ShellBoost.Samples.LocalFolder
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
+            // shell is asking for folders, use Xml elements as folder
             if (options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
             {
                 foreach (var child in Element.ChildNodes.OfType<XmlElement>())
@@ -27,6 +28,7 @@ namespace ShellBoost.Samples.LocalFolder
                 }
             }
 
+            // shell is asking for non folders (items), use Xml attributes as items
             if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
             {
                 foreach (var att in Element.Attributes.OfType<XmlAttribute>())
