@@ -3265,7 +3265,7 @@
             </summary>
             <param name="imageLocation">The image path.</param>
             <param name="iconLocation">The icon path.</param>
-            <param name="iconIndex">The icon index.</param>
+            <param name="iconIndex">The icon index if it's positive or the icon resource id, if it's negative.</param>
             <exception cref="T:System.ArgumentNullException">imageLocation is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellThumbnail.#ctor(System.String,System.Int32)">
@@ -3273,7 +3273,7 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellThumbnail"/> class.
             </summary>
             <param name="iconLocation">The icon path.</param>
-            <param name="iconIndex">The icon index.</param>
+            <param name="iconIndex">The icon index if it's positive or the icon resource id, if it's negative.</param>
             <exception cref="T:System.ArgumentNullException">iconLocation is null.</exception>
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.ImageLocation">
@@ -3296,9 +3296,9 @@
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.IconIndex">
             <summary>
-            Gets or sets the icon index.
+            Gets or sets the icon index if it's positive, or the icon resource id, if it's negative.
             </summary>
-            <value>The icon index.</value>
+            <value>The icon index or the icon resource id if it's negative.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.IconOptions">
             <summary>

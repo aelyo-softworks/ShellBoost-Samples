@@ -3265,7 +3265,7 @@
             </summary>
             <param name="imageLocation">The image path.</param>
             <param name="iconLocation">The icon path.</param>
-            <param name="iconIndex">The icon index.</param>
+            <param name="iconIndex">The icon index if it's positive or the icon resource id, if it's negative.</param>
             <exception cref="T:System.ArgumentNullException">imageLocation is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellThumbnail.#ctor(System.String,System.Int32)">
@@ -3273,7 +3273,7 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellThumbnail"/> class.
             </summary>
             <param name="iconLocation">The icon path.</param>
-            <param name="iconIndex">The icon index.</param>
+            <param name="iconIndex">The icon index if it's positive or the icon resource id, if it's negative.</param>
             <exception cref="T:System.ArgumentNullException">iconLocation is null.</exception>
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.ImageLocation">
@@ -3296,9 +3296,9 @@
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.IconIndex">
             <summary>
-            Gets or sets the icon index.
+            Gets or sets the icon index if it's positive, or the icon resource id, if it's negative.
             </summary>
-            <value>The icon index.</value>
+            <value>The icon index or the icon resource id if it's negative.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellThumbnail.IconOptions">
             <summary>
@@ -4002,12 +4002,6 @@
             Gets a useful debug string.
             </summary>
             <value>The debug string.</value>
-        </member>
-        <member name="M:ShellBoost.Core.ShellItemId.ToString">
-            <summary>
-            Returns a <see cref="T:System.String" /> that represents this instance.
-            </summary>
-            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemId.CopyToPointer(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemId},System.Int32@)">
             <summary>
@@ -5095,191 +5089,6 @@
             <param name="filePath">The file path.</param>
             <returns>A timestamp.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
-        </member>
-        <member name="T:ShellBoost.Core.Utilities.Authenticode">
-            <summary>
-            A set of Authenticode utilities.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.Utilities.Authenticode.Sha1AlgorithmId">
-            <summary>
-            The CALG_SHA1 algorithm identifier
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.Utilities.Authenticode.Sha256AlgorithmId">
-            <summary>
-            The CALG_SHA_256 algorithm identifier
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.Utilities.Authenticode.Sha384AlgorithmId">
-            <summary>
-            The CALG_SHA_384 algorithm identifier
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.Utilities.Authenticode.Sha512AlgorithmId">
-            <summary>
-            The CALG_SHA_512 algorithm identifier
-            </summary>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.FindSuitableCertificate">
-            <summary>
-            Finds a suitable certificate for authenticode.
-            </summary>
-            <returns>An instance of the X509Certificate2 type or null if not found.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.FindSuitableCertificate(System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String)">
-            <summary>
-            Finds a suitable certificate for authenticode.
-            </summary>
-            <param name="storeName">Store name.</param>
-            <param name="storeLocation">Store location.</param>
-            <param name="thumbPrint">The certificate thumbprint.</param>
-            <returns>An instance of the X509Certificate2 type or null if not found.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.SignFile(System.Security.Cryptography.X509Certificates.X509Certificate2,System.String,System.String,System.String)">
-            <summary>
-            Signs a file.
-            </summary>
-            <param name="certificate">The certificate.</param>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <param name="displayName">The display name.</param>
-            <exception cref="T:System.ArgumentNullException">certificate is null
-            or
-            filePath is null.</exception>
-            <exception cref="T:System.ArgumentException">Certificate cannot sign code.
-            or
-            Certificate has no private key.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.SignFile(System.Security.Cryptography.X509Certificates.X509Certificate2,System.String,System.String,System.String,System.Boolean)">
-            <summary>
-            Signs a file.
-            </summary>
-            <param name="certificate">The certificate.</param>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <param name="displayName">The display name.</param>
-            <param name="checkCertificate">if set to <c>true</c> check the certificate for authenticode.</param>
-            <exception cref="T:System.ArgumentNullException">certificate is null
-            or
-            filePath is null.</exception>
-            <exception cref="T:System.ArgumentException">Certificate cannot sign code.
-            or
-            Certificate has no private key.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.SignFile(System.Security.Cryptography.X509Certificates.X509Certificate2,System.String,System.String,System.String,System.Int32)">
-            <summary>
-            Signs a file.
-            </summary>
-            <param name="certificate">The certificate.</param>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <param name="displayName">The display name.</param>
-            <param name="hashAlgorithmId">The hash algorithm identifier.</param>
-            <exception cref="T:System.ArgumentNullException">certificate is null
-            or
-            filePath is null.</exception>
-            <exception cref="T:System.ArgumentException">Certificate cannot sign code.
-            or
-            Certificate has no private key.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.SignFile(System.Security.Cryptography.X509Certificates.X509Certificate2,System.String,System.String,System.String,System.Int32,System.Boolean,ShellBoost.Core.Utilities.AuthenticodeAttribute)">
-            <summary>
-            Signs a file.
-            </summary>
-            <param name="certificate">The certificate.</param>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <param name="displayName">The display name.</param>
-            <param name="hashAlgorithmId">The hash algorithm identifier.</param>
-            <param name="checkCertificate">if set to <c>true</c> check the certificate for authenticode.</param>
-            <param name="extraAttribute">An optional extra attribute.</param>
-            <exception cref="T:System.ArgumentNullException">
-            certificate is null
-            or
-            filePath is null.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-            Certificate cannot sign code.
-            or
-            Certificate has no private key.
-            </exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.TimeStampFile(System.String,System.String)">
-            <summary>
-            Timestamps a file.
-            </summary>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <exception cref="T:System.ArgumentNullException">
-            filePath is null
-            or
-            tsServer is null.
-            </exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.TimeStampFileRfc3161(System.String,System.String)">
-            <summary>
-            Timestamps a file using RFC3161.
-            </summary>
-            <param name="filePath">The file path.</param>
-            <param name="tsServer">The timestamp server.</param>
-            <exception cref="T:System.ArgumentNullException">
-            filePath is null
-            or
-            tsServer is null.
-            </exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.CanSignCode(System.Security.Cryptography.X509Certificates.X509Certificate2)">
-            <summary>
-            Determines whether the specified certificate can sign code.
-            </summary>
-            <param name="certificate">The certificate.</param>
-            <returns><c>true</c> if this the specified certificate can sign code; otherwise, <c>false</c>.</returns>
-            <exception cref="T:System.ArgumentNullException">certificate is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.IsSigned(System.String)">
-            <summary>
-            Determines whether the specified file is signed.
-            </summary>
-            <param name="filePath">The file path.</param>
-            <returns><c>true</c> if the specified file is signed; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.Authenticode.GetSignStatus(System.String)">
-            <summary>
-            Gets the sign status for a file.
-            </summary>
-            <param name="filePath">The file path.</param>
-            <returns>The result of a call to the WinVerifyTrust Windows function.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
-        </member>
-        <member name="T:ShellBoost.Core.Utilities.AuthenticodeAttribute">
-            <summary>
-            Represents an Authenticode attribute.
-            </summary>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.AuthenticodeAttribute.#ctor(System.String,System.Byte[])">
-            <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.AuthenticodeAttribute"/> class.
-            </summary>
-            <param name="oid">The OID.</param>
-            <param name="data">The data.</param>
-            <exception cref="T:System.ArgumentNullException">
-            oid is null
-            or
-            data is null.
-            </exception>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.AuthenticodeAttribute.Oid">
-            <summary>
-            Gets the OID.
-            </summary>
-            <value>The OID.</value>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.AuthenticodeAttribute.Data">
-            <summary>
-            Gets the data.
-            </summary>
-            <value>The data.</value>
         </member>
         <member name="T:ShellBoost.Core.Utilities.CommandLine">
             <summary>
