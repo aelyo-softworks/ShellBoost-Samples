@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ShellBoost.Samples.LocalFolder - Release")]
 [assembly: AssemblyConfiguration("RELEASE")]
 #endif
-[assembly: AssemblyDescription("ShellBoost Samples - Overview")]
+[assembly: AssemblyDescription("ShellBoost Samples - LocalFolder")]
 [assembly: AssemblyCompany("Aelyo Softworks")]
 [assembly: AssemblyProduct("Shell Namespace Extension Booster")]
 [assembly: AssemblyCopyright("Copyright (C) 2017-2018 Aelyo Softworks. All rights reserved.")]

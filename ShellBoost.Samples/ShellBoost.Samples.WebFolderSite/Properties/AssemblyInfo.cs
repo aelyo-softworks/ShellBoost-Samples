@@ -9,7 +9,7 @@ using System.Windows;
 [assembly: AssemblyTitle("ShellBoost.Samples.WebFolderSite - Release")]
 [assembly: AssemblyConfiguration("RELEASE")]
 #endif
-[assembly: AssemblyDescription("ShellBoost Samples - Web Folder")]
+[assembly: AssemblyDescription("ShellBoost Samples - Web Folder Site")]
 [assembly: AssemblyCompany("Aelyo Softworks")]
 [assembly: AssemblyProduct("Shell Namespace Extension Booster")]
 [assembly: AssemblyCopyright("Copyright (C) 2017-2018 Aelyo Softworks. All rights reserved.")]
