@@ -223,6 +223,12 @@
             </summary>
             <value>The logger.</value>
         </member>
+        <member name="P:ShellBoost.Core.Client.Installer.Configuration">
+            <summary>
+            Gets or sets the configuration.
+            </summary>
+            <value>The configuration.</value>
+        </member>
         <member name="M:ShellBoost.Core.Client.Installer.LogInfo(System.Object,System.String)">
             <summary>
             Logs information.
@@ -8113,6 +8119,7 @@
             Create the directory needed to contain a specified file path.
             </summary>
             <param name="filePath">The file path.</param>
+            <returns><c>true</c> if a directory was created, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String)">
@@ -8121,17 +8128,20 @@
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
+            <returns><c>true</c> if a file was moved, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">source is null
             or
             destination is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Moves a file.
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns><c>true</c> if a file was moved, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">source is null
             or
             destination is null.</exception>
@@ -8142,13 +8152,15 @@
             </summary>
             <param name="filePath">The file path.</param>
             <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
             Deletes a file.
             </summary>
             <param name="filePath">The file path.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
@@ -8158,17 +8170,18 @@
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <returns><c>true</c> if a file was copied, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Overwrites a file.
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns><c>true</c> if a file was copied, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileExists(System.String)">
