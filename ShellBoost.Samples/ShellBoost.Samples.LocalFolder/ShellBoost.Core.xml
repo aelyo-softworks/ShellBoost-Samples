@@ -593,6 +593,23 @@
             </summary>
             <value>The local application path.</value>
         </member>
+        <member name="T:ShellBoost.Core.InformationBar">
+            <summary>
+            A class that ShellBoost uses to represent an information bar above the standard explorer folder view.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.InformationBar.Guid">
+            <summary>
+            Gets or sets the bar identifier.
+            </summary>
+            <value>The bar identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.InformationBar.Message">
+            <summary>
+            Gets or sets the message to display.
+            </summary>
+            <value>The message to display.</value>
+        </member>
         <member name="T:ShellBoost.Core.Int16KeyShellItemId">
             <summary>
             A class that represent a Windows Shell's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb759800.aspx">SHITEMID structure</see> with a signed 16-bit key.
@@ -3655,6 +3672,30 @@
             </summary>
             <param name="e">The <see cref="T:ShellBoost.Core.ShellOperationEventArgs" /> instance containing the event data.</param>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetInformationBar">
+            <summary>
+            Called when ShellBoost asks for an information bar. This implementation returns null.
+            To be valid, an information bar must have a non empty guid and a non null nor empty message.
+            </summary>
+            <returns>An instance of the InformationBar class or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.CreateInformationBarMenu(ShellBoost.Core.InformationBar,ShellBoost.Core.ShellMenu)">
+            <summary>
+            Called when ShellBoost asks for an information bar menu. It expects items to be added as children of the menu instance.
+            This implementation does not add any items to the menu instance.
+            </summary>
+            <param name="bar">The information bar instance. May not be null.</param>
+            <param name="menu">The menu instance. May not be null.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.HandleInformationBarMenu(ShellBoost.Core.InformationBar,System.IntPtr,System.Int32)">
+            <summary>
+            Called when an information bar menu item has been clicked.
+            This implementation does nothing.
+            </summary>
+            <param name="bar">The information bar instance. May not be null.</param>
+            <param name="hwndOwner">The owner window handle.</param>
+            <param name="id">The identifier of the clicked menu item.</param>
+        </member>
         <member name="T:ShellBoost.Core.ShellFolderColumn">
             <summary>
             Defines a Shell Folder column.
@@ -5566,7 +5607,7 @@
             <summary>
             Gets or sets a value indicating whether insert happens by position or by index.
             </summary>
-            <value><c>true</c> if [insert before by position]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if insert happens by position; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.NewMenuPlaceHolderPath">
             <summary>
@@ -5584,7 +5625,7 @@
             <summary>
             Gets or sets a value indicating whether insert happens by id or by position.
             </summary>
-            <value><c>true</c> if [insert before by identifier]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if insert happends by identifier; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.Text">
             <summary>
@@ -10896,7 +10937,7 @@
             <summary>
             Gets or sets a value indicating whether to use the last-modified-since HTTP header, if the file already exists.
             </summary>
-            <value><c>true</c> if [dont use last modified]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if the last modified-since HTTP header is not used; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.WebFileCacheRequestOptions.DontForceServerCheck">
             <summary>
@@ -11309,7 +11350,7 @@
         </member>
         <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.DoModelessAsync(System.Action)">
             <summary>
-            Runs an action in a modal UI loop.
+            Runs an action in a modeless UI loop.
             </summary>
             <param name="action">The action.</param>
             <returns>An instance of the Task type.</returns>

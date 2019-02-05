@@ -223,6 +223,12 @@
             </summary>
             <value>The logger.</value>
         </member>
+        <member name="P:ShellBoost.Core.Client.Installer.Configuration">
+            <summary>
+            Gets or sets the configuration.
+            </summary>
+            <value>The configuration.</value>
+        </member>
         <member name="M:ShellBoost.Core.Client.Installer.LogInfo(System.Object,System.String)">
             <summary>
             Logs information.
@@ -586,6 +592,23 @@
             Gets the local application path, used for storing cached icon files.
             </summary>
             <value>The local application path.</value>
+        </member>
+        <member name="T:ShellBoost.Core.InformationBar">
+            <summary>
+            A class that ShellBoost uses to represent an information bar above the standard explorer folder view.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.InformationBar.Guid">
+            <summary>
+            Gets or sets the bar identifier.
+            </summary>
+            <value>The bar identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.InformationBar.Message">
+            <summary>
+            Gets or sets the message to display.
+            </summary>
+            <value>The message to display.</value>
         </member>
         <member name="T:ShellBoost.Core.Int16KeyShellItemId">
             <summary>
@@ -1877,6 +1900,983 @@
             A local file data has been fetched.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.ProjFS.FileSystemItem">
+            <summary>
+            Represents a physical (file or directory) item for the Projected File System.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.FileSystemItem.Get(System.String)">
+            <summary>
+            Gets an instance of the FileSystemItem class for a given physical path.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>An instance of the FileSystemItem class of null if not found.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.FileSystemItem.#ctor(System.IO.FileSystemInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ProjFS.FileSystemItem"/> class.
+            </summary>
+            <param name="info">The item FileSystemInfo instance.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.Info">
+            <summary>
+            Gets the FileSystemInfo corresponding instance.
+            </summary>
+            <value>Gets the FileSystemInfo instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.Length">
+            <summary>
+            Gets or sets the size, in bytes, of the current item.
+            </summary>
+            <value>The size.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.Attributes">
+            <summary>
+            Gets or sets the file attributes of the current item.
+            </summary>
+            <value>The attributes.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.CreationTime">
+            <summary>
+            Gets or sets the creation time of the current item.
+            </summary>
+            <value>The creating time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.LastAccessTime">
+            <summary>
+            Gets or sets the time the current item was last accessed.
+            </summary>
+            <value>The last access time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.LastWriteTime">
+            <summary>
+            Gets or sets the time when the current item was last written to.
+            </summary>
+            <value>The last write time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.FileSystemItem.ChangeTime">
+            <summary>
+            Gets or sets the time when the current item was last changed.
+            Equals to LastWriteTime.
+            </summary>
+            <value>The change time.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.FileSystemItem.WriteData(System.IO.Stream,System.Int64,System.Int32,System.Int32)">
+            <summary>
+            Requests the contents of a file's primary data stream.
+            </summary>
+            <param name="output">The stream to write the data to.</param>
+            <param name="fileOffset">Offset of the requested data, in bytes, from the beginning of the file.</param>
+            <param name="count">Number of bytes of file data requested.</param>
+            <param name="prefferedBufferAlignment">The preffered buffer alignment.</param>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO">
+            <summary>
+            Information that uniquely identifies the contents of a placeholder file.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ns-projectedfslib-prj_placeholder_version_info">PRJ_PLACEHOLDER_VERSION_INFO structure</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO.PRJ_PLACEHOLDER_ID_LENGTH">
+            <summary>
+            Length of ContentID and ProviderID in bytes.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO.ProviderID">
+            <summary>
+            A provider-specific identifier. The provider may use this value as its own unique identifier, for example as a version number for the format of the ContentID field.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO.ContentID">
+            <summary>
+            A content identifier, generated by the provider. This value is used to distinguish different versions of the same file, i.e. different file contents and/or metadata (e.g. timestamps) for the same file path.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider">
+            <summary>
+            A utility class that represents an provider for the Projected File System.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider"/> class.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.ProjectedFileSystem">
+            <summary>
+            Gets the Projected File System instance.
+            </summary>
+            <value>The instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.StartFlags">
+            <summary>
+            Gets or sets starting flags for the Projected File System.
+            </summary>
+            <value>The flags.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnQueryFileName(System.Object,ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs)">
+            <summary>
+            Called when a file is queried for.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnProviderError(System.Object,ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs)">
+            <summary>
+            Called when a provider error occurs.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnNotification(System.Object,ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs)">
+            <summary>
+            Called when a notification occurs.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnGetPlaceholderInfo(System.Object,ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs)">
+            <summary>
+            Called when a placeholder is requested.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnDirectoryEnumeration(System.Object,ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs)">
+            <summary>
+            Called when a directory enumeration starts.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.OnCancelCommand(System.Object,ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs)">
+            <summary>
+            Called when a command is canceled.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.GetItem(System.String)">
+            <summary>
+            Gets an item using its relative path. This method should be overriden for optimal performance.
+            </summary>
+            <param name="relativePath">A string specifying the path, relative to the virtualization root, to the file or directory to be deleted.</param>
+            <returns>An instance of a ProjectedFileSystemItem class or null if the item was not found.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.EnumerateItems(System.String,System.String)">
+            <summary>
+            Enumerates the item under the relative path.
+            </summary>
+            <param name="relativePath">A string specifying the path, relative to the virtualization root, to the file or directory to be deleted.</param>
+            <param name="searchExpression">Gets the search expression. The search expression may include wildcard characters. The provider should use the ProjectedFileSystem's DoesNameContainWildCards function to determine whether wildcards are present in searchExpression, and it should use the DoesFileNameMatch function to determine whether an entry in its backing store matches a search expression containing wildcards.</param>
+            <returns>A list of items corresponding to the input arguments.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.Start(System.String)">
+            <summary>
+            Starts the Projected File System, making it available to service I/O and invoke callbacks on this provider instance.
+            </summary>
+            <param name="directoryPath">A string specifying the full path to the virtualization root.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProvider.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_FILE_STATE">
+            <summary>
+            The state of an item.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_file_state">PRJ_FILE_STATE enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_UNKNOWN">
+            <summary>
+            The state cannot be determined.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_PLACEHOLDER">
+            <summary>
+            The item is a placeholder. The PRJ_FILE_STATE_FULL and PRJ_FILE_STATE_TOMBSTONE bits will not appear in combination with each other or any other bit.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_HYDRATED_PLACEHOLDER">
+            <summary>
+            The item is a hydrated placeholder, i.e., the item's content has been written to disk.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_DIRTY_PLACEHOLDER">
+            <summary>
+            The placeholder item's metadata has been modified.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_FULL">
+            <summary>
+            The item is full.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_TOMBSTONE">
+            <summary>
+            The item is a tombstone.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION">
+            <summary>
+            A notification value specified when sending the notification in a callback.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notification">PRJ_NOTIFICATION enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_OPENED">
+            <summary>
+            If received in a notification: indicates that a handle has been created to an existing file or folder, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: indicates that the provider should be notified when a handle is created to an existing file or folder.
+            If specified in response to a notification: indicates that the provider should be notified if any further handles are created to the file or folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_NEW_FILE_CREATED">
+            <summary>
+            If received in a notification: a new file or folder has been created, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: the provider should be notified when a new file or folder is created.
+            If specified in response to a notification: no effect.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_OVERWRITTEN">
+            <summary>
+            If received in a notification: an existing file has been overwritten or superceded, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: indicates that the provider should be notified when an existing when an existing file is overwritten or superceded.
+            If specified in response to a notification: indicates that the provider should be notified when the file or folder is overwritten or superceded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_PRE_DELETE">
+            <summary>
+            If received in a notification: a file or folder is about to be deleted. If the provider returns an error code from the callback, the delete will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a file or folder is about to be deleted.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder is about to be deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_PRE_RENAME">
+            <summary>
+            If received in a notification: a file or folder is about to be renamed. If the provider returns an error code from the callback, the rename will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a file or folder is about to be renamed.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder is about to be renamed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_PRE_SET_HARDLINK">
+            <summary>
+            If received in a notification: a hard link is about to be created for the file. If the provider returns an error code from the callback, the hard link operation will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a hard link is about to be created for a file.
+            If specified in response to a notification: indicates that the provider should be notified when a hard link is about to be created for a file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_RENAMED">
+            <summary>
+            If received in a notification: indicates that a file/folder has been renamed. The file/folder may have been moved into the virtualization instance.
+            If specified on virtualization instance start: indicates that the provider should be notified that a file or folder has been renamed.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder has been renamed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_HARDLINK_CREATED">
+            <summary>
+            If received in a notification: indicates that a hard link has been created for the file.
+            If specified on virtualization instance start: indicates that the provider should be notified that a hard link has been created for a file.
+            If specified in response to a notification: indicates that the provider should be notified that a hard link has been created for the file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_HANDLE_CLOSED_NO_MODIFICATION">
+            <summary>
+            If received in a notification: a handle has been closed on the file/folder, and the file’s content was not modified while the handle was open, and the file/folder was not deleted
+            If specified on virtualization instance start: yhe provider should be notified when a handle is closed on a file/folder and the closing handle neither modified nor deleted it.
+            If specified in response to a notification: yhe provider should be notified when handles are closed for the file/folder and there were no modifications or deletions associated with the closing handle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_HANDLE_CLOSED_FILE_MODIFIED">
+            <summary>
+            If received in a notification: a handle has been closed on the file, and that the file’s content was modified while the handle was open.
+            If specified on virtualization instance start: the provider should be notified when a handle is closed on a file/folder and the closing handle was used to modify it.
+            If specified in response to a notification: the provider should be notified when a handle is closed on the file/folder and the closing handle was used to modify it.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_HANDLE_CLOSED_FILE_DELETED">
+            <summary>
+            If received in a notification: a handle has been closed on the file/folder, and that it was deleted as part of closing the handle.
+            If specified on virtualization instance start: the provider should be notified when a handle is closed on a file/folder and it is deleted as part of closing the handle.
+            If specified in response to a notification: the provider should be notified when a handle is closed on the file/folder and it is deleted as part of closing the handle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_PRE_CONVERT_TO_FULL">
+            <summary>
+            If received in a notification: the file is about to be expanded from a placeholder to a full file, i.e. its contents are likely to be modified. If the provider returns an error code from the callback, the file will not be expanded to a full file, and the I/O that triggered the conversion will fail.
+            If there are multiple racing I/Os that would expand the same file, the provider will receive this notification value only once for the file.
+            If specified on virtualization instance start: the provider should be notified when it is about to convert a placeholder to a full file.
+            If specified in response to a notification: the provider should be notified when it is about to convert the placeholder to a full file, assuming it is a placeholder and not already a full file.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES">
+            <summary>
+            Types of notifications describing a change to the file or folder.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notify_types">PRJ_NOTIFICATION enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_NONE">
+            <summary>
+            No notification.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_SUPPRESS_NOTIFICATIONS">
+            <summary>
+            If received in a notification: this notification value is not sent.
+            If specified on virtualization instance start: indicates that notifications should not be sent for the virtualization instance, or a specified subtree of the instance.
+            If specified in response to a notification: indicates that notifications should not be sent for the specified file or folder until all handles to it are closed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_OPENED">
+            <summary>
+            If received in a notification: indicates that a handle has been created to an existing file or folder, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: indicates that the provider should be notified when a handle is created to an existing file or folder.
+            If specified in response to a notification: indicates that the provider should be notified if any further handles are created to the file or folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_NEW_FILE_CREATED">
+            <summary>
+            If received in a notification: a new file or folder has been created, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: the provider should be notified when a new file or folder is created.
+            If specified in response to a notification: no effect.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_OVERWRITTEN">
+            <summary>
+            If received in a notification: an existing file has been overwritten or superceded, the provider can specify a new notification mask for this file or folder when responding to the notification.
+            If specified on virtualization instance start: indicates that the provider should be notified when an existing when an existing file is overwritten or superceded.
+            If specified in response to a notification: indicates that the provider should be notified when the file or folder is overwritten or superceded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_PRE_DELETE">
+            <summary>
+            If received in a notification: a file or folder is about to be deleted. If the provider returns an error code from the callback, the delete will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a file or folder is about to be deleted.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder is about to be deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_PRE_RENAME">
+            <summary>
+            If received in a notification: a file or folder is about to be renamed. If the provider returns an error code from the callback, the rename will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a file or folder is about to be renamed.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder is about to be renamed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_PRE_SET_HARDLINK">
+            <summary>
+            If received in a notification: a hard link is about to be created for the file. If the provider returns an error code from the callback, the hard link operation will not take effect.
+            If specified on virtualization instance start: indicates that the provider should be notified when a hard link is about to be created for a file.
+            If specified in response to a notification: indicates that the provider should be notified when a hard link is about to be created for a file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_RENAMED">
+            <summary>
+            If received in a notification: indicates that a file/folder has been renamed. The file/folder may have been moved into the virtualization instance.
+            If specified on virtualization instance start: indicates that the provider should be notified that a file or folder has been renamed.
+            If specified in response to a notification: indicates that the provider should be notified when a file or folder has been renamed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_HARDLINK_CREATED">
+            <summary>
+            If received in a notification: indicates that a hard link has been created for the file.
+            If specified on virtualization instance start: indicates that the provider should be notified that a hard link has been created for a file.
+            If specified in response to a notification: indicates that the provider should be notified that a hard link has been created for the file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_HANDLE_CLOSED_NO_MODIFICATION">
+            <summary>
+            If received in a notification: a handle has been closed on the file/folder, and the file’s content was not modified while the handle was open, and the file/folder was not deleted
+            If specified on virtualization instance start: yhe provider should be notified when a handle is closed on a file/folder and the closing handle neither modified nor deleted it.
+            If specified in response to a notification: yhe provider should be notified when handles are closed for the file/folder and there were no modifications or deletions associated with the closing handle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_HANDLE_CLOSED_FILE_MODIFIED">
+            <summary>
+            If received in a notification: a handle has been closed on the file, and that the file’s content was modified while the handle was open.
+            If specified on virtualization instance start: the provider should be notified when a handle is closed on a file/folder and the closing handle was used to modify it.
+            If specified in response to a notification: the provider should be notified when a handle is closed on the file/folder and the closing handle was used to modify it.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_HANDLE_CLOSED_FILE_DELETED">
+            <summary>
+            If received in a notification: a handle has been closed on the file/folder, and that it was deleted as part of closing the handle.
+            If specified on virtualization instance start: the provider should be notified when a handle is closed on a file/folder and it is deleted as part of closing the handle.
+            If specified in response to a notification: the provider should be notified when a handle is closed on the file/folder and it is deleted as part of closing the handle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_FILE_PRE_CONVERT_TO_FULL">
+            <summary>
+            If received in a notification: the file is about to be expanded from a placeholder to a full file, i.e. its contents are likely to be modified. If the provider returns an error code from the callback, the file will not be expanded to a full file, and the I/O that triggered the conversion will fail.
+            If there are multiple racing I/Os that would expand the same file, the provider will receive this notification value only once for the file.
+            If specified on virtualization instance start: the provider should be notified when it is about to convert a placeholder to a full file.
+            If specified in response to a notification: the provider should be notified when it is about to convert the placeholder to a full file, assuming it is a placeholder and not already a full file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_USE_EXISTING_MASK">
+            <summary>
+            If received in a notification: this notification is not sent by the API.
+            If specified on virtualization instance start: this value is not valid on virtualization instance start.
+            If specified in response to a notification: continue to use the existing set of notifications for this file/folder.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS">
+            <summary>
+            Flags to provide when starting a virtualization instance.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_startvirtualizing_flags">PRJ_STARTVIRTUALIZING_FLAGS enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS.PRJ_FLAG_NONE">
+            <summary>
+            No flags.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS.PRJ_FLAG_USE_NEGATIVE_PATH_CACHE">
+            <summary>
+            Specifies that ProjFS should maintain a "negative path cache" for the virtualization instance.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES">
+            <summary>
+            Descriptions for the reason an update failed.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_failure_causes">PRJ_UPDATE_FAILURE_CAUSES enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_NONE">
+            <summary>
+            The update did not fail.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_DIRTY_METADATA">
+            <summary>
+            The item was a dirty placeholder (hydrated or not), and the provider did not specify PRJ_UPDATE_ALLOW_DIRTY_METADATA in PRJ_UPDATE_TYPES.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_DIRTY_DATA">
+            <summary>
+            The item was a full file and the provider did not specify PRJ_UPDATE_ALLOW_DIRTY_DATA in PRJ_UPDATE_TYPES.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_TOMBSTONE">
+            <summary>
+            The item was a tombstone and the provider did not specify PRJ_UPDATE_ALLOW_TOMBSTONE in PRJ_UPDATE_TYPES.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_READ_ONLY">
+            <summary>
+            The item had the DOS read-only bit set and the provider did not specify PRJ_UPDATE_ALLOW_READ_ONLY in PRJ_UPDATE_TYPES.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES">
+            <summary>
+            Flags to specify whether updates will be allowed given the state of a file or directory on disk.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_types">PRJ_UPDATE_TYPES enumeration</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_NONE">
+            <summary>
+            Allow update only if the item is a placeholder (whether hydrated or not).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_ALLOW_DIRTY_METADATA">
+            <summary>
+            Allow update if the item is a placeholder or a dirty placeholder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_ALLOW_DIRTY_DATA">
+            <summary>
+            Allow update if the item is a placeholder or if it is a full file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_ALLOW_TOMBSTONE">
+            <summary>
+            Allow update if the item is a placeholder or if it is a tombstone.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_ALLOW_READ_ONLY">
+            <summary>
+            Allow update regardless of whether the DOS read-only bit is set on the item.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs">
+            <summary>
+            Provides data for the DirectoryEnumeration event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Provides data for the DirectoryEnumeration event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+            <param name="searchExpression">The search expression.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs.SearchExpression">
+            <summary>
+            Gets the search expression.
+            The search expression may include wildcard characters.
+            The provider should use the ProjectedFileSystem's DoesNameContainWildCards function to determine whether wildcards are present in searchExpression, and it should use the DoesFileNameMatch function to determine whether an entry in its backing store matches a search expression containing wildcards.
+            </summary>
+            <value>The search expression.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs.Enumerable">
+            <summary>
+            Gets or sets a value that receives the enumerated items from the provider.
+            If SearchExpression is not null, the provider must return only those directory entries whose names match the search expression.
+            If SearchExpression is null, the provider must return all directory entries.
+            </summary>
+            <value>The items.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedFileSystemItem">
+            <summary>
+            Represents an item (file or directory) in the Projected File System.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ProjFS.ProjectedFileSystemItem"/> class.
+            </summary>
+            <param name="name">The item name.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.Name">
+            <summary>
+            Gets the name of the current item.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.Length">
+            <summary>
+            Gets or sets the size, in bytes, of the current item.
+            </summary>
+            <value>The size.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.CreationTime">
+            <summary>
+            Gets or sets the creation time of the current item.
+            </summary>
+            <value>The creation time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.LastAccessTime">
+            <summary>
+            Gets or sets the time the current item was last accessed.
+            </summary>
+            <value>The last access time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.LastWriteTime">
+            <summary>
+            Gets or sets the time when the current item was last written to.
+            </summary>
+            <value>The last write time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.ChangeTime">
+            <summary>
+            Gets or sets the time when the current item was last changed.
+            </summary>
+            <value>The change time.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.Attributes">
+            <summary>
+            Gets or sets the file attributes of the current item.
+            </summary>
+            <value>The attributes.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.VersionInfo">
+            <summary>
+            Gets or sets the version information of the current item.
+            </summary>
+            <value>The version info.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.IsDirectory">
+            <summary>
+            Gets or sets a value that indicates if the current item is a file or a directory.
+            </summary>
+            <value>true if the item is a directory; false otherwise.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.WriteData(System.IO.Stream,System.Int64,System.Int32,System.Int32)">
+            <summary>
+            Requests the contents of a file's primary data stream.
+            </summary>
+            <param name="output">The stream to write the data to.</param>
+            <param name="fileOffset">Offset of the requested data, in bytes, from the beginning of the file.</param>
+            <param name="count">Number of bytes of file data requested.</param>
+            <param name="prefferedBufferAlignment">The preffered buffer alignment.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.AlignDown(System.Int32,System.Int32)">
+            <summary>
+            Aligns a number to a given aligment.
+            </summary>
+            <param name="number">The number.</param>
+            <param name="alignment">The alignment.</param>
+            <returns>The aligned value.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.StreamData(System.IO.Stream,System.IO.Stream,System.Int64,System.Int32,System.Int32)">
+            <summary>
+            Writes the contents a stream to a file's primary data stream.
+            </summary>
+            <param name="input">The input stream. This stream must be positioned at the beginning of the file.</param>
+            <param name="output">The stream to write the data to. This stream is already positioned at fileOffset.</param>
+            <param name="fileOffset">Offset of the requested data, in bytes, from the beginning of the file.</param>
+            <param name="count">Number of bytes of file data requested.</param>
+            <param name="prefferedBufferAlignment">The preffered buffer alignment.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemItem.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs">
+            <summary>
+            Provides data for the Notification event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String,System.Boolean,ShellBoost.Core.ProjFS.PRJ_NOTIFICATION,System.String)">
+            <summary>
+            Provides data for the Notification event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+            <param name="destinationFilePath">A string specifying the path, relative to the virtualization root, of the target of the operation.</param>
+            <param name="isDirectory">A value that indicates whether the item is a directory or a file.</param>
+            <param name="notification">A value specifying the notification.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs.IsDirectory">
+            <summary>
+            Gets a value that indicates whether the item is a directory or a file.
+            </summary>
+            <value>true if the item is a directory; false otherwise.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs.Notification">
+            <summary>
+            Gets a value specifying the notification.
+            </summary>
+            <value>The notifiction.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs.DestinationFilePath">
+            <summary>
+            If notification is PRJ_NOTIFICATION_PRE_RENAME or PRJ_NOTIFICATION_PRE_SET_HARDLINK, this points to a string specifying the path, relative to the virtualization root, of the target of the rename or set-hardlink operation.
+            </summary>
+            <value>The file path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs.Types">
+            <summary>
+            Gets or sets a value that indicates the new set of future notifications that the provider wishes to receive for the file.
+            The default value is all.
+            </summary>
+            <value>The set.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs">
+            <summary>
+            Provides data for the GetPlaceholderInfo event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String)">
+            <summary>
+            Provides data for the GetPlaceholderInfo event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs.Item">
+            <summary>
+            Gets or sets a value that receives the file or directory item from the provider.
+            </summary>
+            <value>The item.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs">
+            <summary>
+            Provides data for the QueryFileName event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String)">
+            <summary>
+            Provides data for the QueryFileName event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs.Handled">
+            <summary>
+            Gets or sets a value that indicates whether the event handler has completely handled the event or whether the system should continue its own processing.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs.FileExists">
+            <summary>
+            Gets or sets a value that indicates whether the item exists or not.
+            </summary>
+            <value>true if the item exists; false otherwise.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs">
+            <summary>
+            Provides base data for the CancelCommand event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String)">
+            <summary>
+            Provides data for the CancelCommand event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedEventArgs">
+            <summary>
+            Provides base data for the ProjectedFileSystem events.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedEventArgs.#ctor(System.Guid,ShellBoost.Core.ProjFS.PRJ_PLACEHOLDER_VERSION_INFO,System.Int32,System.Int32,System.String)">
+            <summary>
+            Provides data for the ProjectedEventArgs event.
+            </summary>
+            <param name="instanceId">A value that identifies the virtualization instance.</param>
+            <param name="versionInfo">The version information if the target of the callback is a placeholder or partial file.</param>
+            <param name="commandId">A value that uniquely identifies a particular invocation of a callback.</param>
+            <param name="triggeringProcessId">The process identifier for the process that triggered this callback.</param>
+            <param name="filePath">The path to the target file. This path is always specified relative to the virtualization root.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.InstanceId">
+            <summary>
+            Gets a value that identifies the virtualization instance.
+            </summary>
+            <value>The instance identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.VersionInfo">
+            <summary>
+            Gets the version information if the target of the callback is a placeholder or partial file.
+            </summary>
+            <value>The version info.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.CommandId">
+            <summary>
+            Gets a value that uniquely identifies a particular invocation of a callback.
+            </summary>
+            <value>The command identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.TriggeringProcessId">
+            <summary>
+            Gets the process identifier for the process that triggered this callback. If this information is not available, this will be 0.
+            </summary>
+            <value>The triggering process id.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.FilePath">
+            <summary>
+            Gets the path to the target file. This path is always specified relative to the virtualization root.
+            </summary>
+            <value>The file path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedEventArgs.TriggeringProcess">
+            <summary>
+            Gets the process that triggered this callback. If this information is not available, this will be null.
+            </summary>
+            <value>The triggering process.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedFileSystem">
+            <summary>
+            A utility class that supports the Windows Projected File System (ProjFS) for .NET projects.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.DirectoryEnumeration">
+            <summary>
+            Occurs when the Projected File System requests directory enumeration information from the provider.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.GetPlaceholderInfo">
+            <summary>
+            Occurs when the Projected File System requests information for a file or directory from the provider.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.QueryFileName">
+            <summary>
+            Occurs when the Projected File System determines whether a given file path exists in the provider's backing store.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.Notification">
+            <summary>
+            Occurs when the Projected File System delivers notifications to the provider about file system operations.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.CancelCommand">
+            <summary>
+            Occurs when the Projected File System notifies the provider that an operation by an earlier invocation of a callback should be canceled.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ProjFS.ProjectedFileSystem.ProviderError">
+            <summary>
+            Occurs when the Projected File System notifies the provider that an error occurred in the provider handling code.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ProjFS.ProjectedFileSystem"/> class.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystem.KeepDeletedFilesAsPlaceHolders">
+            <summary>
+            Gets or sets a value that determines if this current instance should keep files that have been deleted by the Projected File System.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystem.KeepRenamedFilesAsPlaceHolders">
+            <summary>
+            Gets or sets a value that determines if this current instance should keep files that have been renamed by the Projected File System.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Start(System.String,ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS)">
+            <summary>
+            Configures this virtualization instance and starts it, making it available to service I/O and invoke callbacks on the provider.
+            </summary>
+            <param name="directoryPath">A string specifying the full path to the virtualization root.</param>
+            <param name="flags">Flags for starting virtualization.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnProviderError(System.Object,ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs)">
+            <summary>
+            Called when a provider error occurs.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnCancelCommand(System.Object,ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs)">
+            <summary>
+            Called when a command is canceled.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedCancelCommandEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnQueryFileName(System.Object,ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs)">
+            <summary>
+            Called when a file is queried for.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedQueryFileNameEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnGetPlaceholderInfo(System.Object,ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs)">
+            <summary>
+            Called when a placeholder is requested.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedGetPlaceholderInfoEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnDirectoryEnumeration(System.Object,ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs)">
+            <summary>
+            Called when a directory enumeration starts.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedDirectoryEnumerationEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.OnNotification(System.Object,ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs)">
+            <summary>
+            Called when a notification occurs.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.ProjFS.ProjectedNotificationEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.DeleteFile(System.String,ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES,System.Boolean)">
+            <summary>
+            Enables a provider to delete an item that has been cached on the local file system.
+            </summary>
+            <param name="filePath">A string specifying the path, relative to the virtualization root, to the file or directory to be deleted.</param>
+            <param name="types">Flags to control the delete operation should be allowed given the state of the file.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be thrown otherwise the return value may be null.</param>
+            <returns>A value that describes the reason for the failure, if any.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.UpdateFileIfNeeded(System.String,ShellBoost.Core.ProjFS.ProjectedFileSystemItem,ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES,System.Boolean)">
+            <summary>
+            Enables a provider to update an item that has been cached on the local file system.
+            </summary>
+            <param name="filePath">A string specifying the path, relative to the virtualization root, to the file or directory to be updated.</param>
+            <param name="item">The item to update. If the item's VersionInfo.ContentID contains a content identifier that is the same as the content identifier already on the file/directory, the call succeeds and no update takes place. Otherwise, if the call succeeds then the item's VersionInfo.ContentID replaces the existing content identifier on the file.</param>
+            <param name="types">Flags to control updates. If the item is a dirty placeholder, full file, or tombstone, and the provider does not specify the appropriate flag(s), this routine will fail to update the placeholder.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be thrown otherwise the return value may be null.</param>
+            <returns>A value that describes the reason for the failure, if any.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.ClearNegativePathCache(System.Boolean)">
+            <summary>
+            Purges the virtualization instance's negative path cache, if it is active.
+            </summary>
+            <param name="throwOnError">if set to <c>true</c> errors may be thrown otherwise the return value may be null.</param>
+            <returns>A valud that represents the number of paths that were in the cache before it was purged.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.DoesNameCompare(System.String,System.String)">
+            <summary>
+            Compares two file names and returns a value that indicates their relative collation order.
+            </summary>
+            <param name="filePath1">A string specifying the first name to compare.</param>
+            <param name="filePath2">A string specifying the second name to compare.</param>
+            <returns>A negative value indicates fileName1 is before fileName2 in collation order, zero indicates fileName1 is equal to fileName2, a positive value indicates fileName1 is after fileName2 in collation order</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.DoesNameContainWildCards(System.String)">
+            <summary>
+            Determines whether a name contains wildcard characters.
+            </summary>
+            <param name="filePath">A string to check for wildcard characters.</param>
+            <returns>true if the name contains wildcards; false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.DoesFileNameMatch(System.String,System.String)">
+            <summary>
+            Determines whether a file name matches a search pattern.
+            </summary>
+            <param name="filePath">A string of at most MAX_PATH (260) characters specifying the file name to check against pattern.</param>
+            <param name="pattern">A string of at most MAX_PATH (260) characters specifying the pattern to compare against the file name.</param>
+            <returns>true if the file name matches the pattern; false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.GetOnDiskFileState(System.String)">
+            <summary>
+            Gets the on-disk file state for a file or directory.
+            </summary>
+            <remarks>This routine tells the caller what the ProjFS caching state is of the specified file or directory. For example, the caller can use this routine to determine whether the given item is a placeholder or full file.
+            A running provider should be cautious if using this routine on files or directories within one of its virtualization instances, as it may cause callbacks to be invoked in the provider. Depending on the design of the provider this may lead to deadlocks.
+            </remarks>
+            <param name="filePath">A string specifying the full path to the file whose state is to be queried.</param>
+            <returns>A value indicating the state of an item.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs">
+            <summary>
+            Provides data for the ProviderError event.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs.#ctor(System.Exception)">
+            <summary>
+            Provides data for the ProviderError event.
+            </summary>
+            <param name="error">The error that occurred.</param>
+        </member>
+        <member name="P:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs.Error">
+            <summary>
+            Gets the error that occurred.
+            </summary>
+            <value>The error.</value>
+        </member>
         <member name="T:ShellBoost.Core.PropertyStore">
             <summary>
             Represents a Shell Item Property Store.
@@ -2299,21 +3299,25 @@
             <summary>
             Gets the current context.
             </summary>
+            <value>An instance of the ShellContext type.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellContext.IsEmpty">
             <summary>
             Gets a value that indicates whether this context is empty.
             </summary>
+            <value>true if this context is empty; false otherwise.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellContext.ClientPrincipalName">
             <summary>
             Gets the client's principal name. May be null.
             </summary>
+            <value>A string or null.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellContext.ClientProcessId">
             <summary>
              Gets the client's process identifier. May be 0.
             </summary>
+            <value>An integer or 0.</value>
         </member>
         <member name="T:ShellBoost.Core.ShellDataObject">
             <summary>
@@ -2668,6 +3672,30 @@
             </summary>
             <param name="e">The <see cref="T:ShellBoost.Core.ShellOperationEventArgs" /> instance containing the event data.</param>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetInformationBar">
+            <summary>
+            Called when ShellBoost asks for an information bar. This implementation returns null.
+            To be valid, an information bar must have a non empty guid and a non null nor empty message.
+            </summary>
+            <returns>An instance of the InformationBar class or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.CreateInformationBarMenu(ShellBoost.Core.InformationBar,ShellBoost.Core.ShellMenu)">
+            <summary>
+            Called when ShellBoost asks for an information bar menu. It expects items to be added as children of the menu instance.
+            This implementation does not add any items to the menu instance.
+            </summary>
+            <param name="bar">The information bar instance. May not be null.</param>
+            <param name="menu">The menu instance. May not be null.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.HandleInformationBarMenu(ShellBoost.Core.InformationBar,System.IntPtr,System.Int32)">
+            <summary>
+            Called when an information bar menu item has been clicked.
+            This implementation does nothing.
+            </summary>
+            <param name="bar">The information bar instance. May not be null.</param>
+            <param name="hwndOwner">The owner window handle.</param>
+            <param name="id">The identifier of the clicked menu item.</param>
+        </member>
         <member name="T:ShellBoost.Core.ShellFolderColumn">
             <summary>
             Defines a Shell Folder column.
@@ -2921,6 +3949,7 @@
             <summary>
             Gets a value indicating if ShellBoost is configured to impersonate the Windows Shell user.
             </summary>
+            <value>true if if ShellBoost is configured to impersonate the Windows Shell user; false otherwise.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderId">
             <summary>
@@ -3473,7 +4502,7 @@
         </member>
         <member name="P:ShellBoost.Core.ShellItem.ReadPropertiesFromShell">
             <summary>
-            Gets or sets a value indicating whether to read properties from shell, in FileSystemPath is not null, when they are not defined by this instance.
+            Gets or sets a value indicating whether to read properties from shell, if FileSystemPath is not null, when they are not defined by this instance.
             </summary>
             <value><c>true</c> if the shell is used as fallback property provider; otherwise, <c>false</c>.</value>
         </member>
@@ -3492,7 +4521,7 @@
         </member>
         <member name="P:ShellBoost.Core.ShellItem.FileSystemPath">
             <summary>
-            Gets or sets the file system path. A shell item does not have to have a corresponding file system path.
+            Gets or sets the physical file system path. A shell item does not need to have a corresponding file system path.
             </summary>
             <value>The file system path.</value>
             <exception cref="T:System.ArgumentException">value is null.</exception>
@@ -3596,9 +4625,9 @@
         </member>
         <member name="P:ShellBoost.Core.ShellItem.CanPaste">
             <summary>
-            Gets or sets a value indicating whether this instance supports clipboard paste operation.
+            Gets or sets a value indicating whether this instance supports clipboard paste operations.
             </summary>
-            <value><c>true</c> if this instance supports clipboard paste operation; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if this instance supports clipboard paste operations; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellItem.CanCopy">
             <summary>
@@ -4578,7 +5607,7 @@
             <summary>
             Gets or sets a value indicating whether insert happens by position or by index.
             </summary>
-            <value><c>true</c> if [insert before by position]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if insert happens by position; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.NewMenuPlaceHolderPath">
             <summary>
@@ -4596,7 +5625,7 @@
             <summary>
             Gets or sets a value indicating whether insert happens by id or by position.
             </summary>
-            <value><c>true</c> if [insert before by identifier]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if insert happends by identifier; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.Text">
             <summary>
@@ -6634,21 +7663,25 @@
             <summary>
             Gets the icon identifier.
             </summary>
+            <value>A string.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.IconInformation.Index">
             <summary>
             Gets the icon index.
             </summary>
+            <value>An integer.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.IconInformation.GroupId">
             <summary>
             Gets the icon group identifier.
             </summary>
+            <value>A string.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.IconInformation.GroupIndex">
             <summary>
             Gets the icon group index.
             </summary>
+            <value>An integer.</value>
         </member>
         <member name="T:ShellBoost.Core.Utilities.IconMode">
             <summary>
@@ -7127,6 +8160,7 @@
             Create the directory needed to contain a specified file path.
             </summary>
             <param name="filePath">The file path.</param>
+            <returns><c>true</c> if a directory was created, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String)">
@@ -7135,17 +8169,20 @@
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
+            <returns><c>true</c> if a file was moved, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">source is null
             or
             destination is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Moves a file.
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns><c>true</c> if a file was moved, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">source is null
             or
             destination is null.</exception>
@@ -7156,13 +8193,15 @@
             </summary>
             <param name="filePath">The file path.</param>
             <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
             Deletes a file.
             </summary>
             <param name="filePath">The file path.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
@@ -7172,17 +8211,18 @@
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <returns><c>true</c> if a file was copied, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Overwrites a file.
             </summary>
             <param name="source">The source.</param>
             <param name="destination">The destination.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns><c>true</c> if a file was copied, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileExists(System.String)">
@@ -7418,6 +8458,28 @@
             <returns>
             	<c>true</c> if the specified text represents a valid file name; otherwise, <c>false</c>.
             </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsPathRooted(System.String)">
+            <summary>
+            Gets a value indicating whether the specified path string contains a root.
+            </summary>
+            <param name="path">The path to test.</param>
+            <returns>true if path contains a root; false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathCombineNoCheck(System.String[])">
+            <summary>
+            Combines an array of strings into a path. Parts may not be valid file names.
+            </summary>
+            <param name="paths">An array of parts of the path.</param>
+            <returns>The combined paths.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathCombineNoCheck(System.Char,System.String[])">
+            <summary>
+            Combines an array of strings into a path. Parts may not be valid file names.
+            </summary>
+            <param name="paths">An array of parts of the path.</param>
+            <param name="separator">The part separator character.</param>
+            <returns>The combined paths.</returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.KnownFolder">
             <summary>
@@ -8507,10 +9569,58 @@
             <param name="includeBitmaps">if set to <c>true</c>, include bitmaps.</param>
             <returns>An instance of the ShellMenuItemList type.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractMenu(System.String)">
+            <summary>
+            Extracts all menu items from a shell item's context menu.
+            </summary>
+            <remarks>This method behavior depends on many contextual parameters such as the process bitness (32 or 64 bit), the type of process (Console vs Windows), or the the current thread's COM apartment state (STA vs MTA, etc.).
+            It also depends on how dynamic context menu handlers choose to add or not menu items.
+            </remarks>
+            <param name="path">The shell item's path.</param>
+            <returns>A list of ShellMenuItem instances.</returns>
+            <exception cref="T:System.ArgumentException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractMenu(System.String,System.Action{ShellBoost.Core.ShellMenuItem,ShellBoost.Core.ShellMenuItem})">
+            <summary>
+            Runs an action on all menu items from a shell item's context menu.
+            </summary>
+            <remarks>This method behavior depends on many contextual parameters such as the process bitness (32 or 64 bit), the type of process (Console vs Windows), or the the current thread's COM apartment state (STA vs MTA, etc.).
+            It also depends on how dynamic context menu handlers choose to add or not menu items.
+            </remarks>
+            <param name="path">The shell item's path.</param>
+            <param name="action">The action to run. First parameter is the current item's parent (which can be null for top level items), second parameter is the current item.</param>
+            <exception cref="T:System.ArgumentException">path or action is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.InvokeMenuItem(System.String,System.Func{ShellBoost.Core.ShellMenuItem,System.Boolean})">
+            <summary>
+            Invokes a shell item's context menu item.
+            </summary>
+            <remarks>This method behavior depends on many contextual parameters such as the process bitness (32 or 64 bit), the type of process (Console vs Windows), or the the current thread's COM apartment state (STA vs MTA, etc.).
+            It also depends on how dynamic context menu handlers choose to add or not menu items.
+            </remarks>
+            <param name="path">The shell item's path.</param>
+            <param name="predicate">The filter that determine wich item should be invoked in the list of available items.</param>
+            <exception cref="T:System.ArgumentException">path or predicate is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.InvokeMenuItem(System.String,System.IntPtr,System.Func{ShellBoost.Core.ShellMenuItem,System.Boolean})">
+            <summary>
+            Invokes a shell item's context menu item.
+            </summary>
+            <remarks>This method behavior depends on many contextual parameters such as the process bitness (32 or 64 bit), the type of process (Console vs Windows), or the the current thread's COM apartment state (STA vs MTA, etc.).
+            It also depends on how dynamic context menu handlers choose to add or not menu items.
+            </remarks>
+            <param name="path">The shell item's path.</param>
+            <param name="hwnd">A handle to the window that is the owner of the displayed UI. Callers must specify a legitimate value that can be used as the owner window for any UI that may be displayed. Failing to specify a value when calling from a UI thread (one with windows already created) will result in reentrancy and possible bugs.</param>
+            <param name="predicate">The filter that determine wich item should be invoked in the list of available items.</param>
+            <exception cref="T:System.ArgumentException">path or predicate is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractMenu(System.IntPtr,System.Boolean)">
             <summary>
             Extracts a Windows menu information.
             </summary>
+            <remarks>This method behavior depends on many contextual parameters such as the process bitness (32 or 64 bit), the type of process (Console vs Windows), or the the current thread's COM apartment state (STA vs MTA, etc.).
+            It also depends on how dynamic context menu handlers choose to add or not menu items.
+            </remarks>
             <param name="menuHandle">The menu handle.</param>
             <param name="includeBitmaps">if set to <c>true</c>, include bitmaps</param>
             <returns>An instance of the ShellMenuItemList type.</returns>
@@ -9827,7 +10937,7 @@
             <summary>
             Gets or sets a value indicating whether to use the last-modified-since HTTP header, if the file already exists.
             </summary>
-            <value><c>true</c> if [dont use last modified]; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if the last modified-since HTTP header is not used; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.WebFileCacheRequestOptions.DontForceServerCheck">
             <summary>
@@ -10240,7 +11350,7 @@
         </member>
         <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.DoModelessAsync(System.Action)">
             <summary>
-            Runs an action in a modal UI loop.
+            Runs an action in a modeless UI loop.
             </summary>
             <param name="action">The action.</param>
             <returns>An instance of the Task type.</returns>
