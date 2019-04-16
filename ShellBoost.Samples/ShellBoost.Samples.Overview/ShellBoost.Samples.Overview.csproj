@@ -51,6 +51,9 @@
     <Compile Include="SimpleItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

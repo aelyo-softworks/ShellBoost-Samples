@@ -87,6 +87,9 @@
     <EmbeddedResource Include="Resources\WarningOverlay.ico" />
     <Content Include="ShellBoost.Core.dll" />
     <Content Include="ShellBoost.Core.xml" />
+    <Content Include="ShellBoost.d63d2a2ff5f144c4b8442675be8f4a91.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShellBoost.d63d2a2ff5f144c4b8442675be8f4a91.x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

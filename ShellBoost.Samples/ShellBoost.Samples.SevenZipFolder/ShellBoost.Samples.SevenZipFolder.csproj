@@ -4,13 +4,30 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71D62CDC-75C9-4F2C-A481-943960018EDF}</ProjectGuid>
+    <ProjectGuid>{19BEAE69-F655-49E1-B84E-42646C1E3990}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ShellBoost.Samples.FolderService</RootNamespace>
-    <AssemblyName>ShellBoost.Samples.FolderService</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>ShellBoost.Samples.SevenZipFolder</RootNamespace>
+    <AssemblyName>ShellBoost.Samples.SevenZipFolder</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,10 +48,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ShellBoost.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=744e822bc93b8fcf, processorArchitecture=MSIL">
@@ -42,48 +55,45 @@
       <HintPath>.\ShellBoost.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OverviewShellFolderServer.cs" />
-    <Compile Include="ProjectInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ProjectInstaller.designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RootFolder.cs" />
+    <Compile Include="ArchiveFolderShellFolder.cs" />
+    <Compile Include="ArchiveFolderInfo.cs" />
+    <Compile Include="ArchiveRootFolderInfo.cs" />
+    <Compile Include="SevenZipShellFolderServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShellFolderService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ShellFolderService.designer.cs">
-      <DependentUpon>ShellFolderService.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SimpleItem.cs" />
+    <Compile Include="ArchiveRootShellFolder.cs" />
+    <Compile Include="ArchiveFileShellItem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="install.bat" />
+    <PackageReference Include="Squid-Box.SevenZipSharp">
+      <Version>1.1.136</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </EmbeddedResource>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ShellBoost.a00eee689f804dbf8477e6e7dcaa86ea.ARM64.dll">
+    <Content Include="ShellBoost.0be2b1ba238d4e98859e29904e9518c9.ARM64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShellBoost.a00eee689f804dbf8477e6e7dcaa86ea.x64.dll">
+    <Content Include="ShellBoost.0be2b1ba238d4e98859e29904e9518c9.x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShellBoost.a00eee689f804dbf8477e6e7dcaa86ea.x86.dll">
+    <Content Include="ShellBoost.0be2b1ba238d4e98859e29904e9518c9.x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ShellBoost.Core.dll" />
