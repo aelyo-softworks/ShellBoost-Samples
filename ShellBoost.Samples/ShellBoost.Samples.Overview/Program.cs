@@ -7,7 +7,7 @@ namespace ShellBoost.Samples.Overview
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("ShellBoost Samples - Overview - Copyright © 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            Console.WriteLine("ShellBoost Samples - Overview - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine();
 
             Console.WriteLine("Press a key:");
