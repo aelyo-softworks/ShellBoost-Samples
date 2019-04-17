@@ -10,6 +10,7 @@ namespace ShellBoost.Samples.SevenZipFolder
         public ArchiveFolderShellFolder(ShellFolder parent, ArchiveFolderInfo folder)
             : base(parent, new StringKeyShellItemId(folder.Name))
         {
+            CanCopy = true;
             Folder = folder;
             AddColumn(Props.System.FileAttributes, SHCOLSTATE.SHCOLSTATE_DEFAULT);
             AddColumn(Props.System.Comment, SHCOLSTATE.SHCOLSTATE_DEFAULT);
