@@ -394,6 +394,11 @@
             Occurs when a drag and drop operation is completed.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.DragDropTargetEventType.Prepare">
+            <summary>
+            Occurs when a drag and drop operation is being prepared.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.ExplorerPanes">
             <summary>
             A list of Windows Explorer panes identifier.
@@ -3174,6 +3179,18 @@
             </summary>
             <value>The full parsing name.</value>
         </member>
+        <member name="M:ShellBoost.Core.RootShellFolder.GetFullDisplayName">
+            <summary>
+            Gets this item's display name, that is, including the parent's full display name.
+            </summary>
+            <returns>The full display name.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.RootShellFolder.GetFullParsingName">
+            <summary>
+            Gets this item's display name, that is, including the parent's full display name.
+            </summary>
+            <returns>The full display name.</returns>
+        </member>
         <member name="M:ShellBoost.Core.RootShellFolder.GetItem(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Gets a Shell Item using its PIDL.
@@ -3339,6 +3356,12 @@
             <returns>An instance of the ShellDataObjectFormat type or null if it was not found.</returns>
             <value>An instance of the ShellDataObjectFormat type or null if it was not found.</value>
             <exception cref="T:System.ArgumentNullException">name is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.ShellDataObject.ItemsIdLists">
+            <summary>
+            Gets a list of Shell Items the data object may reference.
+            </summary>
+            <value>A list of Shell Items the data object may reference.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellDataObject.Count">
             <summary>
@@ -3941,13 +3964,13 @@
             <summary>
             Gets the Shell Namespace Extension location folder absolute parsing path.
             </summary>
-            <value>The location folder absolute parsing path.</value>
+            <value>The location folder absolute parsing path. null for a non-rooted path.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.FolderParsingName">
             <summary>
             Gets the Shell Namespace Extension folder absolute parsing path.
             </summary>
-            <value>The folder absolute parsing path.</value>
+            <value>The folder absolute parsing path. null for a non-rooted path.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.IsImpersonatingClient">
             <summary>
@@ -3995,13 +4018,13 @@
             <summary>
             Gets the Shell Namespace Extension root path.
             </summary>
-            <value>The root path.</value>
+            <value>The root path. Null for non-rooted extensions.</value>
         </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.RoodIdList">
+        <member name="P:ShellBoost.Core.ShellFolderServer.RootIdList">
             <summary>
             Gets the Shell Namespace Extension root PIDL.
             </summary>
-            <value>The rood identifier list.</value>
+            <value>The root identifier list. Null for non-rooted extensions.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.IsDisposed">
             <summary>
@@ -5000,6 +5023,12 @@
             </summary>
             <value>The payload.</value>
         </member>
+        <member name="M:ShellBoost.Core.ShellItemId.GetPayload">
+            <summary>
+            Gets the payload, which is the Data without the Header.
+            </summary>
+            <returns>The payload.</returns>
+        </member>
         <member name="P:ShellBoost.Core.ShellItemId.IsKnown">
             <summary>
             Gets a value indicating whether this instance is known by the current Shell Folder Server.
@@ -5018,6 +5047,12 @@
             Returns a hash code for this instance.
             </summary>
             <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemId.ComputeHashCode">
+            <summary>
+            Computes the hash code for this instance.
+            </summary>
+            <returns>The hash code for this instance.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemId.Equals(ShellBoost.Core.ShellItemId)">
             <summary>
@@ -9785,6 +9820,12 @@
             Passes the foreground privilege (the privilege to set the foreground window) from one process to another. Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms690514.aspx">CoAllowSetForegroundWindow function</see>.
             </summary>
             <param name="obj">The object.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetApartmentState">
+            <summary>
+            Determines the state of the current thread's COM apartment
+            </summary>
+            <returns>The apartment state.</returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.SingleInstance">
             <summary>
