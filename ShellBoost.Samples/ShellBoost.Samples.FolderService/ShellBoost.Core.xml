@@ -270,6 +270,12 @@
             <param name="id">The ShellBoost identifier.</param>
             <returns>A string.</returns>
         </member>
+        <member name="P:ShellBoost.Core.Client.Installer.IsNetCore">
+            <summary>
+            Gets or sets a value indicating whether this app domain is running with .NET Core.
+            </summary>
+            <value><c>true</c> if this app domain is running with .NET Core; otherwise, <c>false</c>.</value>
+        </member>
         <member name="M:ShellBoost.Core.Client.Installer.GetNativeAssemblyPath(System.String)">
             <summary>
             Gets the ShellBoost native proxy assembly path.
@@ -371,7 +377,7 @@
         </member>
         <member name="T:ShellBoost.Core.DragDropTargetEventType">
             <summary>
-            Defines a drag and drop even type.
+            Defines a drag and drop event type.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.DragDropTargetEventType.DragEnter">
@@ -461,6 +467,184 @@
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
         </member>
+        <member name="T:ShellBoost.Core.ShareViolationFileDialogEventArgs">
+            <summary>
+            Provides data for the FileDialog event of the ShellFolderServer type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShareViolationFileDialogEventArgs.Response">
+            <summary>
+            Gets or sets the share violation response.
+            </summary>
+            <value>The share violation response .</value>
+        </member>
+        <member name="T:ShellBoost.Core.OverwriteFileDialogEventArgs">
+            <summary>
+            Provides data for the FileDialog event of the ShellFolderServer type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.OverwriteFileDialogEventArgs.Response">
+            <summary>
+            Gets or sets the overwrite response.
+            </summary>
+            <value>The overwrite response .</value>
+        </member>
+        <member name="T:ShellBoost.Core.FileDialogEventArgs">
+            <summary>
+            Provides data for the FileDialog event of the ShellFolderServer type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.Type">
+            <summary>
+            Gets the type of FileDialog event.
+            </summary>
+            <value>The type of event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.Folder">
+            <summary>
+            Gets the opened Shell Folder instance.
+            </summary>
+            <value>The opened Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.Hwnd">
+            <summary>
+            Gets the owner window handle.
+            </summary>
+            <value>The owner window handle.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.FolderIdList">
+            <summary>
+            Gets the folder id list.
+            </summary>
+            <value>The folder id list.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.CurrentSelectionIdList">
+            <summary>
+            Gets the current selection id list.
+            </summary>
+            <value>The current selection id list.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.ResultsIdLists">
+            <summary>
+            Gets the results id list array.
+            </summary>
+            <value>The results id list array.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.ItemsIdLists">
+            <summary>
+            Gets the items id list array.
+            </summary>
+            <value>The items id list array.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.ItemIdList">
+            <summary>
+            Gets the item id list.
+            </summary>
+            <value>The item id list.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.ResultIdList">
+            <summary>
+            Gets the result id list.
+            </summary>
+            <value>The result id list.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.FileTypeIndex">
+            <summary>
+            Gets the file type index.
+            </summary>
+            <value>The file type index.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.FileName">
+            <summary>
+            Gets the file name.
+            </summary>
+            <value>The file name.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.IsFileSave">
+            <summary>
+            The context is a File Save dialog.
+            </summary>
+            <value>true if the context is a File Save dialog; false otherwise.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.IsFolderPicker">
+            <summary>
+            The context is a Folder Picker dialog.
+            </summary>
+            <value>true if the context is a Folder Picker dialog; false otherwise.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.Options">
+            <summary>
+            Gets the options.
+            </summary>
+            <value>The options.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.ViewFlags">
+            <summary>
+            Gets the view flags.
+            </summary>
+            <value>The view flags.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FileDialogEventArgs.HResult">
+            <summary>
+            Gets or sets the operation HResult.
+            </summary>
+            <value>The operation HResult.</value>
+        </member>
+        <member name="T:ShellBoost.Core.FileDialogEventType">
+            <summary>
+            Defines a drag and drop event type.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.FileOk">
+            <summary>
+            Called just before the dialog is about to return with a result.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.FolderChange">
+            <summary>
+            Called when the user navigates to a new folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.FolderChanging">
+            <summary>
+            Called before FolderChange. This allows the implementer to stop navigation to a particular location.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.Overwrite">
+            <summary>
+            Called from the save dialog when the user chooses to overwrite a file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.SelectionChange">
+            <summary>
+            Called when the user changes the selection in the dialog's view.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.ShareViolation">
+            <summary>
+            Enables an application to respond to sharing violations that arise from Open or Save operations.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.TypeChange">
+            <summary>
+            Called when the dialog is opened to notify the application of the initial chosen filetype.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.OnButtonOk">
+            <summary>
+            Called when the default button is pressed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.OnButtonCancel">
+            <summary>
+            Called when the cancel button is pressed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventType.OnClose">
+            <summary>
+            Called when the window is closed.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.FileShellContent">
             <summary>
             Defines the content of a Shell Item that's represented by a file.
@@ -473,6 +657,12 @@
             </summary>
             <param name="filePath">The file path.</param>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.FileShellContent.Stream">
+            <summary>
+            Gets the underlying stream instance. Lazily loaded.
+            </summary>
+            <value>The underlying stream instance.</value>
         </member>
         <member name="P:ShellBoost.Core.FileShellContent.Name">
             <summary>
@@ -1349,7 +1539,7 @@
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncPeriod">
             <summary>
-            Gets or sets the synchronize period in millisecond. If it's set to zero, the synchronization process will stop.
+            Gets or sets the synchronize period in seconds. If it's set to zero, the synchronization process will stop.
             </summary>
             <value>The synchronize period.</value>
         </member>
@@ -1359,6 +1549,16 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.OnDemandSynchronizerEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ValidateResource(ShellBoost.Core.IRemoteResource,System.Collections.Generic.ICollection{System.Exception})">
+            <summary>
+            Validates a resource.
+            </summary>
+            <param name="resource">The resource.</param>
+            <param name="exceptions">A collection of exceptions.</param>
+            <returns>An exception if the resource is invalid; otherwise, null.</returns>
+            <exception cref="T:System.ArgumentNullException">resource is null.</exception>
+            <exception cref="T:System.ArgumentNullException">exceptions is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.FetchData(System.String,System.Int64,System.Int64,System.IO.Stream)">
             <summary>
@@ -2108,7 +2308,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_FILE_STATE">
             <summary>
             The state of an item.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_file_state">PRJ_FILE_STATE enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_file_state">PRJ_FILE_STATE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_FILE_STATE.PRJ_FILE_STATE_UNKNOWN">
@@ -2144,7 +2344,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION">
             <summary>
             A notification value specified when sending the notification in a callback.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notification">PRJ_NOTIFICATION enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notification">PRJ_NOTIFICATION enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFICATION.PRJ_NOTIFICATION_FILE_OPENED">
@@ -2235,7 +2435,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES">
             <summary>
             Types of notifications describing a change to the file or folder.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notify_types">PRJ_NOTIFICATION enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_notify_types">PRJ_NOTIFICATION enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_NOTIFY_TYPES.PRJ_NOTIFY_NONE">
@@ -2345,7 +2545,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS">
             <summary>
             Flags to provide when starting a virtualization instance.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_startvirtualizing_flags">PRJ_STARTVIRTUALIZING_FLAGS enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_startvirtualizing_flags">PRJ_STARTVIRTUALIZING_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_STARTVIRTUALIZING_FLAGS.PRJ_FLAG_NONE">
@@ -2361,7 +2561,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES">
             <summary>
             Descriptions for the reason an update failed.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_failure_causes">PRJ_UPDATE_FAILURE_CAUSES enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_failure_causes">PRJ_UPDATE_FAILURE_CAUSES enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_FAILURE_CAUSES.PRJ_UPDATE_FAILURE_CAUSE_NONE">
@@ -2392,7 +2592,7 @@
         <member name="T:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES">
             <summary>
             Flags to specify whether updates will be allowed given the state of a file or directory on disk.
-            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_types">PRJ_UPDATE_TYPES enumeration</see>.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/projectedfslib/ne-projectedfslib-prj_update_types">PRJ_UPDATE_TYPES enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ProjFS.PRJ_UPDATE_TYPES.PRJ_UPDATE_NONE">
@@ -2832,7 +3032,7 @@
             Purges the virtualization instance's negative path cache, if it is active.
             </summary>
             <param name="throwOnError">if set to <c>true</c> errors may be thrown otherwise the return value may be null.</param>
-            <returns>A valud that represents the number of paths that were in the cache before it was purged.</returns>
+            <returns>A value that represents the number of paths that were in the cache before it was purged.</returns>
         </member>
         <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Dispose">
             <summary>
@@ -2989,6 +3189,12 @@
             Gets the moniker ShellBoost specific property key.
             </summary>
             <value>The moniker property key.</value>
+        </member>
+        <member name="P:ShellBoost.Core.PropertyStore.SupportsIStream">
+            <summary>
+            Gets a value indicating if this item supports content IStream.
+            </summary>
+            <value>A valud indicating if this item supports content IStream.</value>
         </member>
         <member name="P:ShellBoost.Core.PropertyStore.Count">
             <summary>
@@ -3343,6 +3549,12 @@
             </summary>
             <value>An integer or 0.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellContext.ClientProcess">
+            <summary>
+             Gets the client's process instance. May be null.
+            </summary>
+            <value>A process instance or null.</value>
+        </member>
         <member name="T:ShellBoost.Core.ShellDataObject">
             <summary>
             Defines a collection of ShellDataObjectFormat type instances.
@@ -3433,6 +3645,11 @@
         <member name="T:ShellBoost.Core.ShellFolder">
             <summary>
             Represents a Windows Shell Folder.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.FileDialogEvent">
+            <summary>
+            Raised when event are received from a Common Dialog.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
@@ -3695,6 +3912,13 @@
             <param name="column">The column.</param>
             <returns><c>true</c> if the column was removed, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">column is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnFileDialogEvent(System.Object,ShellBoost.Core.FileDialogEventArgs)">
+            <summary>
+            Called when a notification is sent by a Common Dialog
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.FileDialogEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnOperate(ShellBoost.Core.ShellOperationEventArgs)">
             <summary>
@@ -5300,6 +5524,13 @@
             </summary>
             <param name="designName">The type of name to request.</param>
             <returns>A string.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.IsChildOf(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Determines if this instance is a child of another instance.
+            </summary>
+            <param name="parent">The potential parent instance.</param>
+            <returns><c>true</c> if this instance is a child of the parent instance; otherwise, <c>false</c>.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemId})">
             <summary>
@@ -8307,6 +8538,11 @@
         <member name="F:ShellBoost.Core.Utilities.IOUtilities.DefaultWrapSharingViolationsWaitTime">
             <summary>
             The default wrap sharing violations wait time value (100).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.IOUtilities.MinFileTime">
+            <summary>
+            The minimum Windows file time value.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FindContentType(System.Byte[])">
@@ -11669,7 +11905,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.CONDITION_OPERATION">
             <summary>
             Provides a set of flags to be used in property descriptions.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa965691.aspx">CONDITION_OPERATION enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa965691.aspx">CONDITION_OPERATION enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.CONDITION_OPERATION.COP_IMPLICIT">
@@ -11750,7 +11986,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS">
             <summary>
             Indicates flags that modify the property store object retrieved by methods that create a property store.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762582.aspx">GETPROPERTYSTOREFLAGS enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762582.aspx">GETPROPERTYSTOREFLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS.GPS_DEFAULT">
@@ -11849,7 +12085,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_AGGREGATION_TYPE">
             <summary>
             Describes how property values are displayed when multiple items are selected. For a particular property, PROPDESC_AGGREGATION_TYPE describes how the property should be displayed when multiple items that have a value for the property are selected, such as whether the values should be summed, or averaged, or just displayed with the default "Multiple Values" string.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762522.aspx">PROPDESC_AGGREGATION_TYPE enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762522.aspx">PROPDESC_AGGREGATION_TYPE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_AGGREGATION_TYPE.PDAT_DEFAULT">
@@ -11895,7 +12131,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_COLUMNINDEX_TYPE">
             <summary>
             Indicates whether or how a property can be indexed.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762587.aspx">PROPDESC_COLUMNINDEX_TYPE enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762587.aspx">PROPDESC_COLUMNINDEX_TYPE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_COLUMNINDEX_TYPE.PDCIT_NONE">
@@ -11931,7 +12167,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_CONDITION_TYPE">
             <summary>
             Describes the condition type to use when displaying the property in the query builder UI in Windows Vista, but not in Windows 7 and later.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762523.aspx">PROPDESC_CONDITION_TYPE enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762523.aspx">PROPDESC_CONDITION_TYPE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_CONDITION_TYPE.PDCOT_NONE">
@@ -11997,7 +12233,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_ENUMFILTER">
             <summary>
             Describes the filtered list of property descriptions that is returned.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762524.aspx">PROPDESC_ENUMFILTER enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762524.aspx">PROPDESC_ENUMFILTER enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_ENUMFILTER.PDEF_ALL">
@@ -12038,7 +12274,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_FORMAT_FLAGS">
             <summary>
             Used by property description functions to indicate the format of a property string.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762524.aspx">PROPDESC_FORMAT_FLAGS enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762524.aspx">PROPDESC_FORMAT_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_FORMAT_FLAGS.PDFF_DEFAULT">
@@ -12159,7 +12395,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_RELATIVEDESCRIPTION_TYPE">
             <summary>
             Describes the relative description type for a property description, as determined by the relativeDescriptionType attribute of the displayInfo element.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762526.aspx">PROPDESC_RELATIVEDESCRIPTION_TYPE enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762526.aspx">PROPDESC_RELATIVEDESCRIPTION_TYPE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_RELATIVEDESCRIPTION_TYPE.PDRDT_GENERAL">
@@ -12220,7 +12456,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_SEARCHINFO_FLAGS">
             <summary>
             Determines whether and how a property is indexed by Windows Search.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762526.aspx">PROPDESC_SEARCHINFO_FLAGS enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762526.aspx">PROPDESC_SEARCHINFO_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_SEARCHINFO_FLAGS.PDSIF_DEFAULT">
@@ -12286,7 +12522,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_TYPE_FLAGS">
             <summary>
             Describes attributes of the typeInfo element in the property's .propdesc file.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762527.aspx">PROPDESC_TYPE_FLAGS enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762527.aspx">PROPDESC_TYPE_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_TYPE_FLAGS.PDTF_DEFAULT">
@@ -12372,7 +12608,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS">
             <summary>
             These flags describe properties in property description list strings.
-            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762528.aspx">PROPDESC_VIEW_FLAGS enumeration</see>.
+            Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762528.aspx">PROPDESC_VIEW_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS.PDVF_DEFAULT">
@@ -26767,6 +27003,16 @@
             <returns><c>true</c> if the property was read, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.TryGetPathProperty(System.String,ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Object@)">
+            <summary>
+            Gets a property value for a given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="property">The property to retrieve.</param>
+            <param name="value">The value.</param>
+            <returns><c>true</c> if the property was read, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.UnregisterPropertySchema(System.String)">
             <summary>
             Informs the schema subsystem of the removal of a property description schema file.
@@ -27311,6 +27557,46 @@
         <member name="F:ShellBoost.Core.WindowsShell.BrowserNavConstants.navHostNavigation">
             <summary>
             Undocumented.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.CDB2GVF">
+            <summary>
+            Common dialog browser customization view flags.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_SHOWALLFILES">
+            <summary>
+            All files, including hidden and system files, should be shown.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_ISFILESAVE">
+            <summary>
+             This browser is designated to choose a file to save.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_ALLOWPREVIEWPANE">
+            <summary>
+             Not used.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_NOSELECTVERB">
+            <summary>
+            Do not show a "select" verb on an item's context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_NOINCLUDEITEM">
+            <summary>
+            ICommDlgBrowser::IncludeObject should not be called.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_ISFOLDERPICKER">
+            <summary>
+            This browser is designated to pick folders.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CDB2GVF.CDB2GVF_ADDSHIELD">
+            <summary>
+             Windows 7 and later. Displays a UAC shield on the selected item when CDB2GVF_NOSELECTVERB is not specified.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.CMF">
@@ -27860,7 +28146,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.EXPLORERPANESTATE">
             <summary>
             Indicate flags used to get the current state of the given Windows Explorer pane.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762580.aspx">EXPLORERPANESTATE enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762580.aspx">EXPLORERPANESTATE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.EXPLORERPANESTATE.EPS_DONTCARE">
@@ -27888,6 +28174,48 @@
             Users cannot modify the state, that is, they do not have the ability to show or hide the given pane. This option implies EPS_INITIALSTATE.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FDE_OVERWRITE_RESPONSE">
+            <summary>
+            Specifies the values used by the OverwriteFileDialogEventArgs Response property to indicate an application's response to an overwrite request during a save operation using the common file dialog.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/ne-shobjidl_core-fde_overwrite_response">FDE_OVERWRITE_RESPONSE enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT">
+            <summary>
+            The application has not handled the event. The dialog displays a UI asking the user whether the file should be overwritten and returned from the dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_OVERWRITE_RESPONSE.FDEOR_ACCEPT">
+            <summary>
+            The application has determined that the file should be returned from the dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_OVERWRITE_RESPONSE.FDEOR_REFUSE">
+            <summary>
+            The application has determined that the file should not be returned from the dialog.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FDE_SHAREVIOLATION_RESPONSE">
+            <summary>
+            Specifies the values used by the ShareViolationFileDialogEventArgs Response property to indicate an application's response to a sharing violation that occurs when a file is opened or saved.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/ne-shobjidl_core-fde_shareviolation_response">FDE_SHAREVIOLATION_RESPONSE enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT">
+            <summary>
+            The application has not handled the event. The dialog displays a UI that indicates that the file is in use and a different file must be chosen.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_SHAREVIOLATION_RESPONSE.FDESVR_ACCEPT">
+            <summary>
+            The application has determined that the file should be returned from the dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FDE_SHAREVIOLATION_RESPONSE.FDESVR_REFUSE">
+            <summary>
+            The application has determined that the file should not be returned from the dialog.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.FFFP_MODE">
             <summary>
             Describes match criteria for known folder search.
@@ -27901,6 +28229,129 @@
         <member name="F:ShellBoost.Core.WindowsShell.FFFP_MODE.FFFP_NEARESTPARENTMATCH">
             <summary>
             Nearest parent match.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS">
+            <summary>
+            Specifies the values used by the ShareViolationFileDialogEventArgs Response property to indicate an application's response to a sharing violation that occurs when a file is opened or saved.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/desktop/api/shobjidl_core/ne-shobjidl_core-_fileopendialogoptions">FILEOPENDIALOGOPTIONS enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_OVERWRITEPROMPT">
+            <summary>
+            When saving a file, prompt before overwriting an existing file of the same name. This is a default value for the Save dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_STRICTFILETYPES">
+            <summary>
+            In the Save dialog, only allow the user to choose a file that has one of the file name extensions specified.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_NOCHANGEDIR">
+            <summary>
+            Don't change the current working directory.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_PICKFOLDERS">
+            <summary>
+            Present an Open dialog that offers a choice of folders rather than files.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_FORCEFILESYSTEM">
+            <summary>
+            Ensures that returned items are file system items (SFGAO_FILESYSTEM).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_ALLNONSTORAGEITEMS">
+            <summary>
+            Enables the user to choose any item in the Shell namespace, not just those with SFGAO_STREAM or SFAGO_FILESYSTEM attributes. This flag cannot be combined with FOS_FORCEFILESYSTEM.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_NOVALIDATE">
+            <summary>
+            Do not check for situations that would prevent an application from opening the selected file, such as sharing violations or access denied errors.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_ALLOWMULTISELECT">
+            <summary>
+            Enables the user to select multiple items in the open dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_PATHMUSTEXIST">
+            <summary>
+            The item returned must be in an existing folder. This is a default value.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_FILEMUSTEXIST">
+            <summary>
+            The item returned must exist. This is a default value for the Open dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_CREATEPROMPT">
+            <summary>
+            Prompt for creation if the item returned in the save dialog does not exist. Note that this does not actually create the item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_SHAREAWARE">
+            <summary>
+            In the case of a sharing violation when an application is opening a file. This flag is overridden by FOS_NOVALIDATE.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_NOREADONLYRETURN">
+            <summary>
+            Do not return read-only items. This is a default value for the Save dialog.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_NOTESTFILECREATE">
+            <summary>
+            Do not test whether creation of the item as specified in the Save dialog will be successful. If this flag is not set, the calling application must handle errors, such as denial of access, discovered when the item is created.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_HIDEMRUPLACES">
+            <summary>
+            Hide the list of places from which the user has recently opened or saved items. This value is not supported as of Windows 7.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_HIDEPINNEDPLACES">
+            <summary>
+            Hide items shown by default in the view's navigation pane. This flag is often used in conjunction with the IFileDialog::AddPlace method, to hide standard locations and replace them with custom locations.
+            Windows 7 and later. Hide all of the standard namespace locations (such as Favorites, Libraries, Computer, and Network) shown in the navigation pane.
+            Windows Vista.Hide the contents of the Favorite Links tree in the navigation pane.Note that the category itself is still displayed, but shown as empty.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_NODEREFERENCELINKS">
+            <summary>
+            Shortcuts should not be treated as their target items. This allows an application to open a .lnk file rather than what that file is a shortcut to.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_OKBUTTONNEEDSINTERACTION">
+            <summary>
+            Only enable the OK button if the user has done something in the view.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_DONTADDTORECENT">
+            <summary>
+            Do not add the item being opened or saved to the recent documents list.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_FORCESHOWHIDDEN">
+            <summary>
+            Include hidden and system items.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_DEFAULTNOMINIMODE">
+            <summary>
+            Indicates to the Save As dialog box that it should open in expanded mode. Expanded mode is the mode that is set and unset by clicking the button in the lower-left corner of the Save As dialog box that switches between Browse Folders and Hide Folders when clicked. This value is not supported as of Windows 7.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_FORCEPREVIEWPANEON">
+            <summary>
+            Indicates to the Open dialog box that the preview pane should always be displayed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS.FOS_SUPPORTSTREAMABLEITEMS">
+            <summary>
+            Indicates that the caller is opening a file as a stream, so there is no need to download that file.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.FOF">
@@ -28079,7 +28530,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.FOLDERFLAGS">
             <summary>
             A set of flags that specify folder view options.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762508.aspx">FOLDERFLAGS enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762508.aspx">FOLDERFLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.FOLDERFLAGS.FWF_NONE">
@@ -28959,7 +29410,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.FOLDERLOGICALVIEWMODE">
             <summary>
             Describes a folder view mode.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762509.aspx">FOLDERLOGICALVIEWMODE enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762509.aspx">FOLDERLOGICALVIEWMODE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.FOLDERLOGICALVIEWMODE.FLVM_UNSPECIFIED">
@@ -29403,7 +29854,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.KF_CATEGORY">
             <summary>
             Represents a category by which a folder registered with the Known Folder system can be classified.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762512.aspx">KF_CATEGORY enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762512.aspx">KF_CATEGORY enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.KF_CATEGORY.KF_CATEGORY_VIRTUAL">
@@ -29429,7 +29880,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.KF_DEFINITION_FLAGS">
             <summary>
             Flags that specify certain known folder behaviors.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762512.aspx">KF_DEFINITION_FLAGS enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762512.aspx">KF_DEFINITION_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.KF_DEFINITION_FLAGS.KFDF_LOCAL_REDIRECT_ONLY">
@@ -29465,7 +29916,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.KF_REDIRECTION_CAPABILITIES">
             <summary>
             Flags that specify the current redirection capabilities of a known folder.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762514.aspx">KF_REDIRECTION_CAPABILITIES enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762514.aspx">KF_REDIRECTION_CAPABILITIES enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.KF_REDIRECTION_CAPABILITIES.KF_REDIRECTION_CAPABILITIES_ALLOW_ALL">
@@ -29621,7 +30072,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG">
             <summary>
             Specify special retrieval options for known folders. These values supersede CSIDL values, which have parallel meanings.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762514.aspx">KNOWN_FOLDER_FLAG enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762514.aspx">KNOWN_FOLDER_FLAG enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG.KF_FLAG_DEFAULT">
@@ -29711,7 +30162,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.LOCKTYPE">
             <summary>
             Indicates the type of locking requested for the specified range of bytes
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380048.aspx">LOCKTYPE enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380048.aspx">LOCKTYPE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.LOCKTYPE.LOCK_WRITE">
@@ -29817,7 +30268,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.PERCEIVED">
             <summary>
             Specifies a file's perceived type.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762520.aspx">PERCEIVED enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762520.aspx">PERCEIVED enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.PERCEIVED.PERCEIVED_TYPE_CUSTOM">
@@ -29933,7 +30384,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.PLACEHOLDER_STATES">
             <summary>
             Specifies the states that a placeholder file can have. Retrieve this value through the System.FilePlaceholderStatus (PKEY_FilePlaceholderStatus) property.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn457657.aspx">PLACEHOLDER_STATES enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/dn457657.aspx">PLACEHOLDER_STATES enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.PLACEHOLDER_STATES.PS_NONE">
@@ -30054,7 +30505,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SFGAO">
             <summary>
             Attributes that can be retrieved on a Shell item (file or folder) or set of Shell items.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762589.aspx">SFGAO enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762589.aspx">SFGAO enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SFGAO.SFGAO_NONE">
@@ -30448,7 +30899,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SHCOLSTATE">
             <summary>
             Describes how a property or Shell list view column should be treated.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762538.aspx">SHCOLSTATE enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762538.aspx">SHCOLSTATE enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCOLSTATE.SHCOLSTATE_DEFAULT">
@@ -30554,7 +31005,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SHCONTF">
             <summary>
             Determines the types of items included in an enumeration.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762539.aspx">SHCONTF enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762539.aspx">SHCONTF enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCONTF.SHCONTF_CHECKING_FOR_CHILDREN">
@@ -30625,7 +31076,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SHGDNF">
             <summary>
             Defines options used to get Shell Items names.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762539.aspx">SHGDNF enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762539.aspx">SHGDNF enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHGDNF.SHGDN_NORMAL">
@@ -30657,7 +31108,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SICHINT">
             <summary>
             Used to determine how to compare two Shell items.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762543.aspx">SICHINTF enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762543.aspx">SICHINTF enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SICHINT.SICHINT_DISPLAY">
@@ -30683,7 +31134,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.SIGDN">
             <summary>
             Defines the form of an item's display name to get.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762544.aspx">SIGDN enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762544.aspx">SIGDN enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SIGDN.SIGDN_NORMALDISPLAY">
@@ -30896,7 +31347,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.STGTY">
             <summary>
             The STGTY enumeration values are used in the type member of the STATSTG structure to indicate the type of the storage element. A storage element is a storage object, a stream object, or a byte-array object (LOCKBYTES).
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380348.aspx">STGTY enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380348.aspx">STGTY enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.STGTY.STGTY_STORAGE">
@@ -30922,7 +31373,7 @@
         <member name="T:ShellBoost.Core.WindowsShell.TRANSFER_SOURCE_FLAGS">
             <summary>
             Used by file operation methods.
-            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762594.aspx">TRANSFER_SOURCE_FLAGS enumeration</see>.
+            Maps to Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762594.aspx">TRANSFER_SOURCE_FLAGS enumeration.</see>.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.TRANSFER_SOURCE_FLAGS.TSF_NORMAL">
