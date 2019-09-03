@@ -6252,6 +6252,58 @@
             </summary>
             <value>The code.</value>
         </member>
+        <member name="T:ShellBoost.Core.StreamShellContent">
+            <summary>
+            Defines the content of a Shell Item that's represented by a Stream.
+            If the stream cannot be seek or does not support the Length property, the length parameter must be supplied;
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.StreamShellContent.#ctor(System.IO.Stream,System.Nullable{System.Int64})">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent"/> class.
+            </summary>
+            <param name="stream">The input stream.</param>
+            <param name="length">The stream length, if the stream is not seekable.</param>
+        </member>
+        <member name="P:ShellBoost.Core.StreamShellContent.Stream">
+            <summary>
+            Gets the underlying Stream instance.
+            </summary>
+            <value>The underlying Stream instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.StreamShellContent.Length">
+            <summary>
+            Gets the content length.
+            </summary>
+            <value>The content length.</value>
+        </member>
+        <member name="P:ShellBoost.Core.StreamShellContent.Type">
+            <summary>
+            Gets the content storage type for Shell operations.
+            </summary>
+            <value>The content storage type .</value>
+        </member>
+        <member name="M:ShellBoost.Core.StreamShellContent.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.StreamShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream.
+            </summary>
+            <param name="offset">A byte offset relative to the origin parameter.</param>
+            <param name="origin">A value indicating the reference point used to obtain the new position.</param>
+            <returns>The new position within the current stream or null if this information is unknown.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.StreamShellContent.Read(System.Byte[],System.Int32)">
+            <summary>
+            Reads a sequence of bytes from the current content and advances the position within the stream by the number of bytes read.
+            </summary>
+            <param name="array">An array of bytes.</param>
+            <param name="count">The maximum number of bytes to be read from the current content.</param>
+            <returns>The number of bytes read.</returns>
+        </member>
         <member name="T:ShellBoost.Core.StringKeyShellItemId">
             <summary>
             A class that represent a Windows Shell's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb759800.aspx">SHITEMID structure</see> with a string key.
@@ -11901,6 +11953,18 @@
             <exception cref="T:System.ArgumentNullException">root is null
             or
             name is null.</exception>
+        </member>
+        <member name="T:ShellBoost.Core.WebFileShellContent">
+            <summary>
+            Defines the content of a Shell Item that's represented by an HTTP(S) file.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WebFileShellContent.#ctor(System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent"/> class.
+            </summary>
+            <param name="url">The url to download the file from.</param>
+            <param name="length">The file length.</param>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.CONDITION_OPERATION">
             <summary>
@@ -31368,6 +31432,66 @@
         <member name="F:ShellBoost.Core.WindowsShell.STGTY.STGTY_PROPERTY">
             <summary>
             Indicates that the storage element is a property storage object.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.StorageProviderState">
+            <summary>
+            Defines the possible states of a storage provider file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.None">
+            <summary>
+            Nothing .
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Sparse">
+            <summary>
+            Available when online.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.InSync">
+            <summary>
+            Available on this device.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Pinned">
+            <summary>
+            Always available on this device.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.PendingUpload">
+            <summary>
+            Sync pending, uploading.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.PendingDownload">
+            <summary>
+            Sync pending, downloading.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Transferring">
+            <summary>
+            Syncing.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Error">
+            <summary>
+            Error.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Warning">
+            <summary>
+            Warning.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Excluded">
+            <summary>
+            Excluded (not synced).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Pending">
+            <summary>
+            Sync pending.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.TRANSFER_SOURCE_FLAGS">

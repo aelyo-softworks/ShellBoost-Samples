@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Squid-Box.SevenZipSharp">
-      <Version>1.1.136</Version>
+      <Version>1.2.184</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
