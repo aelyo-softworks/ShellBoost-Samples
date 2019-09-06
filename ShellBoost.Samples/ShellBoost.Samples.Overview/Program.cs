@@ -56,6 +56,8 @@ namespace ShellBoost.Samples.Overview
 #if DEBUG
                 config.Logger = new Core.Utilities.ConsoleLogger();
 #endif
+                server.Licensing += OnLicensing;
+
                 server.Start(config);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
                 Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
@@ -64,6 +66,13 @@ namespace ShellBoost.Samples.Overview
                 }
                 Console.WriteLine("Stopped");
             }
+        }
+
+        private static void OnLicensing(object sender, LicensingEventArgs e)
+        {
+            Console.WriteLine("LicenseDataIsValid: " + ShellFolderServer.LicenseDataIsValid);
+            Console.WriteLine("LicenseExpirationDate: " + ShellFolderServer.LicenseExpirationDate);
+            Console.WriteLine("LicenseRegisteredCompany: " + ShellFolderServer.LicenseRegisteredCompany);
         }
     }
 }
