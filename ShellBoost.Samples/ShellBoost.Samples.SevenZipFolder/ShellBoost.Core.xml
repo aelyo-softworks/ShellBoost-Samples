@@ -31441,7 +31441,7 @@
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.None">
             <summary>
-            Nothing .
+            Nothing.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.StorageProviderState.Sparse">
