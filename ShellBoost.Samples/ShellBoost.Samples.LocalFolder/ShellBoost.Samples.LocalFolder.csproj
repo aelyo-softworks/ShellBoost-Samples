@@ -106,10 +106,16 @@
     <None Include="Data\Another Folder\A Child Folder\A Zip file.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\One Folder\Rich Text Document.rtf">
+    <Content Include="Data\One Folder\PerfectSteaks.recipe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="Data\One Folder\Rich Text Document.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Resources\LocalFolder.propdesc" />
+    <Content Include="Data\One Folder\This is a PDF file.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
