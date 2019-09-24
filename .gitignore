@@ -286,3 +286,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/ShellBoost.Samples/ShellBoost.Samples.WebFolderSite/App_Data/Drive

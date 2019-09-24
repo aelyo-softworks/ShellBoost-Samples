@@ -9,6 +9,8 @@ namespace ShellBoost.Samples.LocalFolder
 {
     public class RootFolder : RootShellFolder
     {
+        private readonly DropTargetShellFolder _dropTarget;
+
         public RootFolder(LocalShellFolderServer server, ShellItemIdList idList)
             : base(idList)
         {
@@ -16,6 +18,7 @@ namespace ShellBoost.Samples.LocalFolder
                 throw new ArgumentNullException(nameof(server));
 
             Server = server;
+            _dropTarget = new DropTargetShellFolder(this);
         }
 
         public LocalShellFolderServer Server { get; }
@@ -38,6 +41,8 @@ namespace ShellBoost.Samples.LocalFolder
                     yield return new LocalShellItem(this, (FileInfo)fi);
                 }
             }
+
+            yield return _dropTarget;
         }
     }
 }

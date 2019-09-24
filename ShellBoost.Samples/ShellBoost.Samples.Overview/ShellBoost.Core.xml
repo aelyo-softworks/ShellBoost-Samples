@@ -363,6 +363,11 @@
             </summary>
             <value>The allowed effect.</value>
         </member>
+        <member name="P:ShellBoost.Core.DragDropTargetEventArgs.Hwnd">
+            <summary>
+            Gets the HWND that hosts the event. May be zero.
+            </summary>
+        </member>
         <member name="P:ShellBoost.Core.DragDropTargetEventArgs.Effect">
             <summary>
             Gets or sets the target drop effect in a drag-and-drop operation.
@@ -3569,6 +3574,26 @@
             <value>An instance of the ShellDataObjectFormat type or null if it was not found.</value>
             <exception cref="T:System.ArgumentNullException">name is null.</exception>
         </member>
+        <member name="P:ShellBoost.Core.ShellDataObject.FileDescriptors">
+            <summary>
+            Gets a list of file descriptors the data object may reference.
+            </summary>
+            <value>A list of file descriptors the data object may reference.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellDataObject.FileContentsPaths">
+            <summary>
+            Gets a list of file paths the data object may reference.
+            These files are temporary files that contain file data. They can be moved during the operation.
+            This list is only available on DragDropTargetEventType's DragDrop type events.
+            </summary>
+            <value>A list of temporary file paths the data object may reference.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellDataObject.FileContentsDatas">
+            <summary>
+            Gets a list of file content the data object may reference.
+            </summary>
+            <value>A list of temporary file paths the data object may reference.</value>
+        </member>
         <member name="P:ShellBoost.Core.ShellDataObject.ItemsIdLists">
             <summary>
             Gets a list of Shell Items the data object may reference.
@@ -3602,6 +3627,11 @@
             The CFSTR CFSTR_FILENAME ('FileNameW') format.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_FILEDESCRIPTOR">
+            <summary>
+            The CFSTR CFSTR_FILEDESCRIPTOR ('FileGroupDescriptorW') format.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_SHELLIDLISTOFFSET">
             <summary>
             The CFSTR CFSTR_SHELLIDLISTOFFSET ('Shell Object Offsets') format.
@@ -3610,6 +3640,18 @@
         <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_PREFERREDDROPEFFECT">
             <summary>
             The CFSTR CFSTR_PREFERREDDROPEFFECT ('Preferred DropEffect') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_INETURL">
+            <summary>
+            The CFSTR CFSTR_INETURLW ('UniformResourceLocatorW') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_FILECONTENTS">
+            <summary>
+            The CFSTR CFSTR_FILECONTENTS ('FileContents') format.
+            Note in the case of ShellBoost, this format's data does not contains the same data as expected.
+            Instead, the data is an enumerable of temporary files that can be moved wherever you want.
             </summary>
         </member>
         <member name="P:ShellBoost.Core.ShellDataObjectFormat.Format">
@@ -3627,12 +3669,14 @@
         <member name="P:ShellBoost.Core.ShellDataObjectFormat.Data">
             <summary>
             Gets the data associated with this format.
+            For array data (such as file contents corresponding to file descriptors), this will be null, use ConvertedData instead.
             </summary>
             <value>The data.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellDataObjectFormat.ConvertedData">
             <summary>
             Gets the typed data associated with this data.
+            For array data (such as file contents corresponding to file descriptors), this will contain array of string (temporary files) or byte[].
             </summary>
             <value>The typed data.</value>
         </member>
@@ -3746,6 +3790,48 @@
             <returns>An instance of the ShellItem type or null if parsing failed.</returns>
             <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.TryParseItem(System.String,System.Int32@,ShellBoost.Core.WindowsShell.SFGAO@,ShellBoost.Core.ShellItemIdList@)">
+            <summary>
+            Parses a display name for a Shell Item that may not exist.
+            This method returns false. If you override it, make sure you also override TryGetDisplayName, TryGetAttributes and TryGetPropertyValue in a consistent manner.
+            </summary>
+            <param name="displayName">The display name.</param>
+            <param name="eatenCharacters">The number of characters of the display name that was parsed.</param>
+            <param name="attributes">Attributes of the virtual item that was parsed.</param>
+            <param name="relativeIdl">The relative PIDL.</param>
+            <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.TryGetDisplayName(ShellBoost.Core.ShellItemIdList,System.String@)">
+            <summary>
+            Gets the display name for a PIDL that may not represent an existing Shell Item.
+            This method returns false. If you override it, make sure you also override TryParseItem, TryGetAttributes and TryGetPropertyValue in a consistent manner.
+            </summary>
+            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="displayName">The displau name.</param>
+            <returns>The display name or null.</returns>
+            <exception cref="T:System.ArgumentNullException">relativeIdl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.TryGetAttributes(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SFGAO@)">
+            <summary>
+            Gets the attributes for a PIDL that may not represent an existing Shell Item.
+            This method returns false. If you override it, make sure you also override TryParseItem, TryGetDisplayName and TryGetPropertyValue in a consistent manner.
+            </summary>
+            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="attributes">The attributes.</param>
+            <returns>The display name or null.</returns>
+            <exception cref="T:System.ArgumentNullException">relativeIdl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.TryGetPropertyValue(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Object@)">
+            <summary>
+            Gets a property key value. or a PIDL that may not represent an existing Shell Ite
+            This method returns false. If you override it, make sure you also override TryParseItem and TryGetDisplayName and TryGetAttributesin a consistent manner.
+            </summary>
+            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="key">The property key.</param>
+            <param name="value">The value.</param>
+            <returns><c>true</c> if the value was read, <c>false</c> otherwise.</returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.GetItem(System.String)">
             <summary>
             Gets an item using its display name.
@@ -3761,6 +3847,14 @@
             <param name="id">The identifier.</param>
             <returns>An instance of the ShellItem type or null if the item was not found.</returns>
             <exception cref="T:System.ArgumentNullException">id is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetItemByPath(System.String)">
+            <summary>
+            Gets an item using its relative path from this folder. The separator used is the '\' character.
+            If path is null or empty, this folder is returned.
+            </summary>
+            <param name="path"></param>
+            <returns>An instance of the ShellItem type or null if the item was not found.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemItem(ShellBoost.Core.ShellItemId,System.String)">
             <summary>
@@ -5538,6 +5632,14 @@
             <param name="parent">The potential parent instance.</param>
             <returns><c>true</c> if this instance is a child of the parent instance; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Get this PIDL relatively from a parent PIDL.
+            </summary>
+            <param name="parent">The parent PIDL.</param>
+            <returns>A relative PIDL or null if this is not a child of parent.</returns>
+            <exception cref="T:System.ArgumentNullException">parent is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemId})">
             <summary>
             Adds a range of SHITEMID structures to this instance.
@@ -5950,12 +6052,6 @@
             Gets or sets the tag, a custom arbitrary value that can be used to store anything.
             </summary>
             <value>The tag value.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellMenuItem.NewMenuExtension">
-            <summary>
-            Gets or sets the new menu extension.
-            </summary>
-            <value>The new menu extension.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.DisplayText">
             <summary>
@@ -6464,6 +6560,55 @@
             <param name="filePath">The file path.</param>
             <returns>A timestamp.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ChangeNotifier">
+            <summary>
+            Listens to Windows Shell change notifications and raises events when a notification is received.
+            Note events can arrive from any thread.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.Utilities.ChangeNotifier.Notify">
+            <summary>
+            Occurs when a Windows Shell change notifications is received.
+            Note events can arrive from any thread.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.#ctor(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ChangeNotifier"/> class.
+            </summary>
+            <param name="idl">The PIDL for which to receive notifications.</param>
+            <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ChangeNotifyEntry">
+            <summary>
+            Contains and receives information for change notifications.
+            This structure is used with the ChangeNotifyRegister function.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifyEntry.#ctor(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ChangeNotifyEntry"/> class.
+            </summary>
+            <param name="idl">The PIDL for which to receive notifications.</param>
+            <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEntry.IdList">
+            <summary>
+            The PIDL for which to receive notifications.
+            </summary>
+            <value>The PIDL.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEntry.IsRecursive">
+            <summary>
+            Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.
+            </summary>
+            <value>A boolean value.</value>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ChunkedMemoryStream">
             <summary>
@@ -8961,6 +9106,20 @@
             <param name="path">The path to test.</param>
             <returns>true if path contains a root; false otherwise.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathRemoveEndSlash(System.String)">
+            <summary>
+            Removes end slash.
+            </summary>
+            <param name="path">A path.</param>
+            <returns>A path without end slash or the same path.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathRemoveStartSlash(System.String)">
+            <summary>
+            Removes start slash.
+            </summary>
+            <param name="path">A path.</param>
+            <returns>A path without start slash or the same path.</returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathCombineNoCheck(System.String[])">
             <summary>
             Combines an array of strings into a path. Parts may not be valid file names.
@@ -9285,6 +9444,71 @@
             <summary>
             The users libraries.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ChangeNotifyEventArgs">
+            <summary>
+            Provides data for the Notify event of the ChangeNotifier type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.IdList1">
+            <summary>
+            Gets event source first item's PIDL.
+            </summary>
+            <value>A PIDL or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.IdList2">
+            <summary>
+            Gets event source second item's PIDL.
+            </summary>
+            <value>A PIDL or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.Event">
+            <summary>
+            Gets the type of event.
+            </summary>
+            <value>The type of event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.ExtendedEvent">
+            <summary>
+            Gets the type of extended event.
+            </summary>
+            <value>The type of extended event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.Path1">
+            <summary>
+            Gets event source first item's path.
+            </summary>
+            <value>The path or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.Path2">
+            <summary>
+            Gets event source second item's path.
+            </summary>
+            <value>The path or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.FileSystemPath1">
+            <summary>
+            Gets event source first item's file system path.
+            </summary>
+            <value>The file system path or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.FileSystemPath2">
+            <summary>
+            Gets event source second item's file system path.
+            </summary>
+            <value>The file system path or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.ExtendedEventData1">
+            <summary>
+            Gets first extended event data in the case of an extended event.
+            </summary>
+            <value>The extended event data or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifyEventArgs.ExtendedEventData2">
+            <summary>
+            Gets second extended event data in the case of an extended event.
+            </summary>
+            <value>The extended event data or null.</value>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ObservableSet`1">
             <summary>
@@ -10022,6 +10246,8 @@
             <param name="includeNewMenuItem">if set to <c>true</c> include the 'New' menu item itself.</param>
             <param name="includeBitmaps">if set to <c>true</c>, include bitmaps.</param>
             <returns>An instance of the ShellMenuItemList type.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+            <exception cref="T:System.ArgumentException">idl is a terminator.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractMenu(System.String)">
             <summary>
@@ -10120,6 +10346,43 @@
             Determines the state of the current thread's COM apartment
             </summary>
             <returns>The apartment state.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotificationLock(System.IntPtr,System.Int32,ShellBoost.Core.ShellItemIdList@,ShellBoost.Core.ShellItemIdList@,ShellBoost.Core.WindowsShell.SHCNE@)">
+            <summary>
+            Locks the shared memory associated with a Shell change notification event.
+            </summary>
+            <param name="changeHandle">A handle to a window received as a wParam in the specified Shell change notification message.</param>
+            <param name="processId">The process ID (lParam in the message callback).</param>
+            <param name="idl1">The first affected PIDLs.</param>
+            <param name="idl2">The second affected PIDLs.</param>
+            <param name="event">The Shell change notification ID of the event that took place.</param>
+            <returns>Returns a handle to the locked memory. Pass this value to ChangeNotificationUnlock when finished.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotificationUnlock(System.IntPtr)">
+            <summary>
+            Unlocks shared memory for a change notification.
+            </summary>
+            <param name="lock">A handle to the memory lock. This is the handle returned by ChangeNotificationLock when it locked the memory.</param>
+            <returns>true on success;false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyDeregister(System.UInt32)">
+            <summary>
+            Unregisters the client's window process from receiving ChangeNotify messages.
+            </summary>
+            <param name="id">A value that specifies the registration ID returned by ChangeNotifyRegister.</param>
+            <returns>true if the specified client was found and removed; false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyRegister(System.IntPtr,ShellBoost.Core.WindowsShell.SHCNE,System.Int32,System.Collections.Generic.IEnumerable{ShellBoost.Core.Utilities.ChangeNotifyEntry})">
+            <summary>
+            Registers a window to receive notifications from the file system or Shell, if the file system supports notifications.
+            </summary>
+            <param name="hwnd">A handle to the window that receives the change or notification messages.</param>
+            <param name="events">A combination of values that indicate the type of events for which to receive notifications.</param>
+            <param name="message">Message to be posted to the window procedure.</param>
+            <param name="entries">A list of ChangeNotifyEntry structures that contain the notifications.</param>
+            <returns>A positive integer registration ID. 0 if an error ocrurred.</returns>
+            <exception cref="T:System.ArgumentNullException">entries is null.</exception>
+            <exception cref="T:System.ArgumentException">entries is empty.</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.SingleInstance">
             <summary>
@@ -27459,14 +27722,38 @@
             Defines where to obtain association data and the form the data is stored in for the AssociationElement type.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_SHELL_KEY">
+            <summary>
+            The hkClass member names a key found as HKEY_CLASSES_ROOT\SystemFileAssociations.
+            Unused by ShellBoost.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_PROGID_KEY">
+            <summary>
+            The hkClass member provides the full registry path of a ProgID.
+            Unused by ShellBoost.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_PROGID_STR">
             <summary>
             The Class property names a ProgID found as HKEY_CLASSES_ROOT\Class.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_CLSID_KEY">
+            <summary>
+            The hkClass member provides the full registry path of a CLSID.
+            Unused by ShellBoost.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_CLSID_STR">
             <summary>
             The Class property names a CLSID found as HKEY_CLASSES_ROOT\CLSID\Class.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_APP_KEY">
+            <summary>
+            The hkClass member provides the full registry path of an application identifier (APPID)..
+            Unused by ShellBoost.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_APP_STR">
@@ -28244,6 +28531,61 @@
             Users cannot modify the state, that is, they do not have the ability to show or hide the given pane. This option implies EPS_INITIALSTATE.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FD">
+            <summary>
+            Indicates which of the other structure members contain valid data.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_CLSID">
+            <summary>
+            The clsid member is valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_SIZEPOINT">
+            <summary>
+            The sizel and pointl members are valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_ATTRIBUTES">
+            <summary>
+            The dwFileAttributes member is valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_CREATETIME">
+            <summary>
+            The ftCreationTime member is valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_ACCESSTIME">
+            <summary>
+            The ftLastAccessTime member is valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_WRITESTIME">
+            <summary>
+            The ftLastWriteTime member is valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_FILESIZE">
+            <summary>
+            The nFileSizeHigh and nFileSizeLow members are valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_PROGRESSUI">
+            <summary>
+            A progress indicator is shown with drag-and-drop operations.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_LINKUI">
+            <summary>
+            Treat the operation as a shortcut.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FD.FD_UNICODE">
+            <summary>
+            Windows Vista and later. The descriptor is Unicode.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.FDE_OVERWRITE_RESPONSE">
             <summary>
             Specifies the values used by the OverwriteFileDialogEventArgs Response property to indicate an application's response to an overwrite request during a save operation using the common file dialog.
@@ -28300,6 +28642,72 @@
             <summary>
             Nearest parent match.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR">
+            <summary>
+            Describes the properties of a file that is being copied by means of the clipboard during a drag-and-drop operation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.dwFlags">
+            <summary>
+            Flags that indicate which of the other structure members contain valid data.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.clsid">
+            <summary>
+            The file type identifier.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.sizel">
+            <summary>
+            The width and height of the file icon.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.pointl">
+            <summary>
+            The screen coordinates of the file object.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.dwFileAttributes">
+            <summary>
+            File attribute flags.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.ftCreationTime">
+            <summary>
+            The FILETIME structure that contains the time of file creation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.ftLastAccessTime">
+            <summary>
+            The FILETIME structure that contains the time that the file was last accessed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.ftLastWriteTime">
+            <summary>
+            The FILETIME structure that contains the time of the last write operation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.nFileSizeHigh">
+            <summary>
+            The high-order DWORD of the file size, in bytes.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.nFileSizeLow">
+            <summary>
+            The low-order DWORD of the file size, in bytes.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.cFileName">
+            <summary>
+            The string that contains the name of the file.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FILEDESCRIPTOR.ToString">
+            <summary>
+            Returns the file name of this instance.
+            </summary>
+            <returns>The file name of this instance.</returns>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.FILEOPENDIALOGOPTIONS">
             <summary>
@@ -30623,6 +31031,11 @@
         <member name="F:ShellBoost.Core.WindowsShell.SFGAO.SFGAO_DROPTARGET">
             <summary>
             The specified items are drop targets.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SFGAO.SFGAO_VALIDATE_URL">
+            <summary>
+            This is specific to ShellBoost. Don't use it.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SFGAO.SFGAO_PLACEHOLDER">
