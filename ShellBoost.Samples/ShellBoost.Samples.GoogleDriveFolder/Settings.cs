@@ -89,14 +89,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             // make sure we never delete a folder under root that's not associated with an account
             if (e.Type == OnDemandSynchronizerEventType.EnumeratingLocalResources)
             {
-                var localDirectoryPath = (string)e.Input["localDirectoryPath"];
-                if (!localDirectoryPath.EqualsIgnoreCase(DataDirectoryPath))
+                var localDirectoryFullPath = (string)e.Input["localDirectoryFullPath"];
+                if (!localDirectoryFullPath.EqualsIgnoreCase(DataDirectoryPath))
                     return;
 
                 var list = new List<string>();
 
                 // contrary to the standard .NET classes, this ShellBoost utility method just skip locked files or file that would otherwise cause errors
-                foreach (var entry in Win32FindData.EnumerateFileSystemEntries(localDirectoryPath))
+                foreach (var entry in Win32FindData.EnumerateFileSystemEntries(localDirectoryFullPath))
                 {
                     // if a folder there doesn't match a valid account, we skip it
                     // so the synchronizer just won't know about it and won't try to delete it

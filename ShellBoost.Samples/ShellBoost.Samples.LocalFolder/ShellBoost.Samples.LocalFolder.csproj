@@ -59,6 +59,7 @@
     <Compile Include="RootFolder.cs" />
     <Compile Include="VirtualAndPhysicalShellFolder.cs" />
     <Compile Include="VirtualAndPhysicalShellItem.cs" />
+    <Compile Include="VirtualShellItem.cs" />
     <Compile Include="XmlAttributeShellItem.cs" />
     <Compile Include="XmlDocumentShellFolder.cs" />
     <Compile Include="XmlElementShellFolder.cs" />

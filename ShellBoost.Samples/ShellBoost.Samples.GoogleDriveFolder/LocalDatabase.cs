@@ -85,8 +85,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 throw new ArgumentException(null, nameof(file));
 
             var path = new DrivePath();
-            path.RelativePath = relativePath;
             path.Id = file.Id;
+            path.RelativePath = relativePath;
             var options = _db.CreateSaveOptions();
             options.SynchronizeSchema = false;
             options.SynchronizeIndices = false;
@@ -115,7 +115,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            var dp = _db.Load<DrivePath>("WHERE Id=?", id).FirstOrDefault();
+            var dp = _db.LoadByPrimaryKey<DrivePath>(id);
             if (dp == null)
                 return null;
 
@@ -128,7 +128,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (relativePath == null)
                 throw new ArgumentNullException(nameof(relativePath));
 
-            var dp = _db.LoadByPrimaryKey<DrivePath>(relativePath);
+            var dp = _db.Load<DrivePath>("WHERE RelativePath=?", relativePath).FirstOrDefault();
             if (dp == null)
                 return null;
 

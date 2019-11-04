@@ -79,7 +79,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
         public override string ToString() => UserEmailAddress;
 
-        private static void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null) => Logger?.Log(level, value, methodName);
+        public static void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null) => Logger?.Log(level, value, methodName);
 
         public void Dispose()
         {
@@ -114,10 +114,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             var id = GetId(relativePath);
             if (id == null)
-            {
-                Log(TraceLevel.Warning, "Id '" + id + "' wasn't found in the database.");
-                return Enumerable.Empty<DriveFile>();
-            }
+                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
 
             return Database.GetFolderFiles(id);
         }
@@ -129,10 +126,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             string id = GetId(relativePath);
             if (id == null)
-            {
-                Log(TraceLevel.Warning, "Id '" + id + "' wasn't found in the database.");
-                return;
-            }
+                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
 
             var request = Service.Files.Delete(id);
             request.Execute();
@@ -146,10 +140,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             string id = GetId(relativePath);
             if (id == null)
-            {
-                Log(TraceLevel.Warning, "Id '" + id + "' wasn't found in the database.");
-                return null;
-            }
+                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
 
             return Database.GetFile(id);
         }
@@ -167,17 +158,11 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             string id = GetId(relativePath);
             if (id == null)
-            {
-                Log(TraceLevel.Warning, "Id '" + id + "' wasn't found in the database.");
-                return;
-            }
+                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
 
             var file = Database.GetFile(id);
             if (file == null)
-            {
-                Log(TraceLevel.Warning, "File id '" + id + "' wasn't found in the database.");
-                return;
-            }
+                throw new FolderException("0002: File for id '" + id + "' wasn't found in the database.");
 
             var request = Service.Files.Get(id);
             request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
@@ -195,15 +180,36 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 var driveFile = DriveFile.From(result);
 
                 if (driveFile == null || string.IsNullOrEmpty(driveFile.Id) || driveFile.Id != id)
-                {
-                    // check google api log
-                    Log(TraceLevel.Error, "Drive result is empty or its id is invalid.");
-                }
-                else
-                {
-                    Database.SynchronizeOne(relativePath, driveFile);
-                }
+                    throw new FolderException("0003: Drive result is empty or its id is invalid.");
+
+                Database.SynchronizeOne(relativePath, driveFile);
             }
+        }
+
+        public void RenameFile(string relativePath, string newName)
+        {
+            if (relativePath == null)
+                throw new ArgumentNullException(nameof(relativePath));
+
+            if (newName == null)
+                throw new ArgumentNullException(nameof(newName));
+
+            string id = GetId(relativePath);
+            if (id == null)
+                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
+
+            var file = new Google.Apis.Drive.v3.Data.File();
+            file.Name = newName;
+            var request = Service.Files.Update(file, id);
+            request.Fields = GetFileFields();
+            var result = request.Execute();
+
+            var driveFile = DriveFile.From(result);
+            if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
+                throw new FolderException("0003: Drive result is empty or its id is invalid.");
+
+            var newRelativePath = Path.Combine(Path.GetDirectoryName(relativePath), newName);
+            Database.SynchronizeOne(newRelativePath, driveFile);
         }
 
         public void UploadFile(string relativePath, string fullPath, Stream input)
@@ -214,15 +220,12 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (fullPath == null)
                 throw new ArgumentNullException(nameof(fullPath));
 
-            // note input can be null (if the file is currently locked but exists locally)
+            // note input can be null (for example if the file is currently locked but exists locally, so it should exist remotely as well even if its content is not ok)
 
             var parentPath = Path.GetDirectoryName(relativePath);
             string parentId = GetId(parentPath);
             if (parentId == null)
-            {
-                Log(TraceLevel.Warning, "Parent id '" + parentId + "' wasn't found in the database.");
-                return;
-            }
+                throw new FolderException("0004: Parent id for parent path '" + parentPath + "' wasn't found in the database.");
 
             var id = GetId(relativePath); // can be null
 
@@ -277,14 +280,9 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             var driveFile = DriveFile.From(result);
             if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-            {
-                // check google api log
-                Log(TraceLevel.Error, "Drive result is empty or its id is invalid.");
-            }
-            else
-            {
-                Database.SynchronizeOne(relativePath, driveFile);
-            }
+                throw new FolderException("0003: Drive result is empty or its id is invalid.");
+
+            Database.SynchronizeOne(relativePath, driveFile);
         }
 
         public void CreateDirectory(string relativePath, string fullPath)
@@ -298,10 +296,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             var parentPath = Path.GetDirectoryName(relativePath);
             string parentId = GetId(parentPath);
             if (parentId == null)
-            {
-                Log(TraceLevel.Warning, "Parent id '" + parentId + "' wasn't found in the database.");
-                return;
-            }
+                throw new FolderException("0004: Parent id for parent path '" + parentPath + "' wasn't found in the database.");
 
             var file = new Google.Apis.Drive.v3.Data.File();
             file.Name = Path.GetFileName(relativePath);
@@ -320,14 +315,9 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             var result = request.Execute();
             var driveFile = DriveFile.From(result);
             if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-            {
-                // check google api log
-                Log(TraceLevel.Error, "Drive result is empty or its id is invalid.");
-            }
-            else
-            {
-                Database.SynchronizeOne(relativePath, driveFile);
-            }
+                throw new FolderException("0003: Drive result is empty or its id is invalid.");
+
+            Database.SynchronizeOne(relativePath, driveFile);
         }
 
         // get full path from a file id
@@ -519,8 +509,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     var file = DriveFile.From(driveFile);
                     if (file != null)
                     {
-                        //var filePath = Path.Combine(path, file.FileName);
-                        //files[filePath] = file;
                         files[driveFile.Id] = file;
                     }
                 }

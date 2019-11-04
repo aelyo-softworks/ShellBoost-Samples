@@ -6,9 +6,9 @@ namespace ShellBoost.Samples.GoogleDriveFolder
     public class DrivePath
     {
         [SQLiteColumn(IsPrimaryKey = true)]
-        public string RelativePath { get; set; }
-
-        [SQLiteIndex("IDX_Id")]
         public string Id { get; set; }
+
+        [SQLiteIndex("IDX_Path")]
+        public string RelativePath { get; set; }
     }
 }

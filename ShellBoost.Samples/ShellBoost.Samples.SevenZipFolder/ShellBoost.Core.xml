@@ -548,14 +548,6 @@
             <param name="resource">The resource. Can be null.</param>
             <returns>An array of bytes that represents the remote resource identity or null or empty if the file system didn't compute the identity.</returns>
         </member>
-        <member name="M:ShellBoost.Core.IRemoteFileSystem2.AreResourcesEqual(ShellBoost.Core.IRemoteResource,ShellBoost.Core.IRemoteResource)">
-            <summary>
-            Determines if two remote resources represent the same remote object.
-            </summary>
-            <param name="resource1">The first resource instance.</param>
-            <param name="resource2">The second resource instance.</param>
-            <returns>true if the two instances represent the same remote object; false otherwise, or null if the file system didn't compare the objects.</returns>
-        </member>
         <member name="M:ShellBoost.Core.IRemoteFileSystem2.NormalizeDateTime(System.DateTime)">
             <summary>
             Normalizes a date time information for comparison.
@@ -569,6 +561,34 @@
             </summary>
             <param name="capability">The capability to test</param>
             <returns>true if the capability is supported; otherwise false.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.IRemoteFileSystem3">
+            <summary>
+            Represents an external file system resources.
+            A remote resource can be a file or a directory.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.IRemoteFileSystem3.TryDeleteOnDemandEntry(System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being deleted.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.IRemoteFileSystem3.TryDehydrateOnDemandEntry(System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being dehydrated.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.IRemoteFileSystem3.TryRenamedOnDemandEntry(System.String,System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being renamed.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="localRelativeTargetPath">The local relative target path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
         </member>
         <member name="T:ShellBoost.Core.IRemoteResourceState">
             <summary>
@@ -634,6 +654,22 @@
             Gets the identity of this remote resource instance.
             </summary>
             <value>An array of bytes that represents the remote resource identity</value>
+        </member>
+        <member name="T:ShellBoost.Core.OnDemandSynchronizerOptions">
+            <summary>
+            Defines options for the On-Demand synchronizer.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizerOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizerOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizerOptions.StartHandleWatcherEvents">
+            <summary>
+            Gets or sets a value indicating whether watcher events are handled at start time or not.
+            </summary>
+            <value><c>true</c> if watcher events are handled; otherwise, <c>false</c>.</value>
         </member>
         <member name="T:ShellBoost.Core.RemoteFileSystemCapability">
             <summary>
@@ -878,11 +914,6 @@
             </summary>
             <value>The content storage type .</value>
         </member>
-        <member name="M:ShellBoost.Core.FileShellContent.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-        </member>
         <member name="M:ShellBoost.Core.FileShellContent.Read(System.Byte[],System.Int32)">
             <summary>
             Reads a sequence of bytes from the current content and advances the position within the stream by the number of bytes read.
@@ -904,6 +935,17 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
             <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.FileShellContent.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing">true if the object is disposing; otherwise false.</param>
+        </member>
+        <member name="M:ShellBoost.Core.FileShellContent.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.GuidKeyShellItemId">
             <summary>
@@ -1122,16 +1164,16 @@
         </member>
         <member name="M:ShellBoost.Core.IRemoteFileSystem.UpdateResource(ShellBoost.Core.RemoteOperationContext,System.String,ShellBoost.Core.IRemoteResource,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})">
             <summary>
-            Updates a remote resource information.
+            Updates a remote resource information. This is also called for renaming operations if resource's DisplayName is different than local relative path's name
             </summary>
             <param name="context">The operation context.</param>
             <param name="relativePath">The resource path.</param>
-            <param name="resource">The resource information.</param>
-            <param name="properties">The extra resource properties.</param>
+            <param name="resource">The new resource information.</param>
+            <param name="properties">The extra resource properties. May be null.</param>
         </member>
         <member name="M:ShellBoost.Core.IRemoteFileSystem.UploadResource(ShellBoost.Core.RemoteOperationContext,System.String,System.IO.Stream)">
             <summary>
-            Uploads a remote resource content from a stream. If the stream is null, the file can be created if it doesn't exist.
+            Uploads a remote resource content from a stream. If the input stream is null, the file can be created empty, if it already exists (an existing file should not be overwritten with a null input stream).
             </summary>
             <param name="context">The operation context.</param>
             <param name="relativePath">The resource path.</param>
@@ -1139,7 +1181,7 @@
         </member>
         <member name="M:ShellBoost.Core.IRemoteFileSystem.DownloadResource(ShellBoost.Core.RemoteOperationContext,System.String,System.Int64,System.Int64,System.IO.Stream)">
             <summary>
-            Downloads a remote resource content to a stream.
+            Downloads remote resource partial content to a write-only stream.
             </summary>
             <param name="context">The operation context.</param>
             <param name="relativePath">The resource relative path.</param>
@@ -1181,15 +1223,15 @@
         </member>
         <member name="P:ShellBoost.Core.IRemoteResource.ContentLength">
             <summary>
-            Gets or sets the resource content length.
+            Gets or sets the resource content length. It should be set to 0 for a directory resource.
             </summary>
             <value>The content length.</value>
         </member>
         <member name="P:ShellBoost.Core.IRemoteResource.ETag">
             <summary>
-            Gets or sets the resource ETAG.
+            Gets or sets the resource ETag. It corresponds to a file version, but can be null.
             </summary>
-            <value>The ETAG.</value>
+            <value>The ETag.</value>
         </member>
         <member name="P:ShellBoost.Core.IRemoteResource.LastWriteTimeUtc">
             <summary>
@@ -1665,19 +1707,20 @@
             Gets a value indicating whether Files On-Demand technology is supported on the current platform.
             <b>Windows 10, version 1709 or higher is needed</b>.
             </summary>
-            <value><c>true</c> if Files On-Demand technology is supported; otherwise, <c>false</c>.</value>
+            <value>true if Files On-Demand technology is supported; otherwise, false.</value>
         </member>
         <member name="E:ShellBoost.Core.OnDemandSynchronizer.Synchronizing">
             <summary>
             Occurs when synchronization happens.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.#ctor(System.String,ShellBoost.Core.IRemoteFileSystem)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.#ctor(System.String,ShellBoost.Core.IRemoteFileSystem,ShellBoost.Core.OnDemandSynchronizerOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizer"/> class.
             </summary>
             <param name="rootPath">The root path.</param>
             <param name="remoteFileSystem">The remote file system.</param>
+            <param name="options">The options.</param>
             <exception cref="T:System.ArgumentNullException">
             rootPath is null
             or
@@ -1691,6 +1734,12 @@
             </summary>
             <value>The root directory path.</value>
         </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.Options">
+            <summary>
+            Gets the options.
+            </summary>
+            <value>The options.</value>
+        </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.RemoteFileSystem">
             <summary>
             Gets the remote file system instance.
@@ -1703,12 +1752,6 @@
             </summary>
             <value>The file system watcher instance.</value>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandSynchronizer.Scheduler">
-            <summary>
-            The task scheduler used for operations.
-            </summary>
-            <value>The task scheduler instance.</value>
-        </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.Logger">
             <summary>
             Gets or sets the diagnostics logger.
@@ -1717,27 +1760,39 @@
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.SynchronizableAttributes">
             <summary>
-            Gets or sets the synchronizable attributes. You should change that with caution. It depends on the remote file system.
+            Gets or sets the synchronizable attributes. You should change that with caution. It depends on the remote file system, if attributes are replicated or not, and how resources are enumerated.
             </summary>
             <value>The synchronizable attributes.</value>
         </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.SharingViolationRetryDelay">
+            <summary>
+            Gets or sets the sharing violation retry delay, in milliseconds.
+            </summary>
+            <value>The timeout value.</value>
+        </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteFileSystem">
             <summary>
-            Gets or sets a value indicating whether the remote file system will be updated or not. The default value is true.
+            Gets or sets a value indicating whether the remote file system will be updated or not.
             </summary>
-            <value><c>true</c> if the remote file system will be updated; otherwise, <c>false</c>.</value>
+            <value>true if the remote file system will be updated; otherwise, false.</value>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.UseNullInput">
+            <summary>
+            Gets or sets a value indicating whether a null Stream input can be sent when uploading a remote resource.
+            </summary>
+            <value>true if a null Stream input can be sent when uploading a remote resource; otherwise, false.</value>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.IsSynchronizing">
             <summary>
             Gets or sets a value indicating whether this instance is synchronizing files.
             </summary>
-            <value><c>true</c> if this instance is synchronizing files; otherwise, <c>false</c>.</value>
+            <value>true if this instance is synchronizing files; otherwise, false.</value>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.HandleWatcherEvents">
             <summary>
             Gets or sets a value indicating whether watcher events are handled or not.
             </summary>
-            <value><c>true</c> if watcher events are handled; otherwise, <c>false</c>.</value>
+            <value>true if watcher events are handled; otherwise, false.</value>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncPeriod">
             <summary>
@@ -1747,32 +1802,22 @@
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.IsDownloadingResource(System.String)">
             <summary>
-            Determines if a given resource is being downloaded, that is if its data is being fetched by Windows.
+            Determines if a given resource is being downloaded, that is if its data is being hydrated by Windows.
             </summary>
             <param name="relativePath">The resource relative path.</param>
             <returns>true if the resource is being downloaded.</returns>
         </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ScheduleOnWatcherEvent(System.IO.FileSystemEventArgs)">
+            <summary>
+            Schedules a watcher event or skip it.
+            </summary>
+            <param name="args">The instance containing the event data.</param>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.OnWatcherEvent(System.IO.FileSystemEventArgs)">
             <summary>
-            Handles all watcher events.
+            Handles a watcher event.
             </summary>
-            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.WatcherEventsSuspendedCall(System.Action)">
-            <summary>
-            Calls an action with watcher events suspended.
-            </summary>
-            <param name="action">The action to call.</param>
-            <exception cref="T:System.ArgumentNullException">action is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.WatcherEventsSuspendedCall``1(System.Func{``0})">
-            <summary>
-            Calls a function with watcher events suspended.
-            </summary>
-            <typeparam name="T">The function return type.</typeparam>
-            <param name="func">The action to call.</param>
-            <returns>The fuction return or the default value.</returns>
-            <exception cref="T:System.ArgumentNullException">func is null.</exception>
+            <param name="args">The instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.OnSynchronizing(System.Object,ShellBoost.Core.OnDemandSynchronizerEventArgs)">
             <summary>
@@ -1798,9 +1843,9 @@
             <param name="total">The total number of bytes.</param>
             <param name="completed">The current number of bytes.</param>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.FetchData(System.Object,System.String,System.Int64,System.Int64,System.IO.Stream)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.HydrateData(System.Object,System.String,System.Int64,System.Int64,System.IO.Stream)">
             <summary>
-            Fetches the data of an On-Demand file.
+            Hydrates the data of an On-Demand file.
             </summary>
             <param name="callbackContext">The callback context. This is an opaque object.</param>
             <param name="relativePath">The relative file path.</param>
@@ -1815,22 +1860,43 @@
             </exception>
             <returns>0 if operation was successful; otherwise an error code.</returns>
         </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.GetRemoteResource(System.String)">
+            <summary>
+            Gets a remote resource information.
+            </summary>
+            <param name="relativePath">The relative file path.</param>
+            <returns>An instance of the IRemoteResource type or null if the resource does not exist.</returns>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.Synchronize">
             <summary>
             Add the root path to the synchronization process and execute the synchronization.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.Synchronize(System.Threading.CancellationToken)">
+            <summary>
+            Add the root path to the synchronization process and execute the synchronization.
+            </summary>
+            <param name="token">The cancellation token.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.DoSynchronize">
             <summary>
             Add the root path to the synchronization process and execute the synchronization.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ScheduleTask(System.Action)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.DequeueScheduledTasks">
+            <summary>
+            Dequeues pending scheduled tasks.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ScheduleTask(System.String,System.Action,System.Threading.CancellationToken,System.Int32)">
             <summary>
             Schedules an action on the scheduler.
             </summary>
+            <param name="key">The action key. Must be unique for a given task. Keys that start with the '!' character are reserved and should not be used.</param>
             <param name="action">The action.</param>
-            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+            <param name="token">The cancellation token.</param>
+            <param name="delay">A delay to retry the task. If the delay is greather than 0, the task will be executed on a random thread.</param>
+            <exception cref="T:System.ArgumentNullException">key is null or action is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.TimerSynchronize(System.Object)">
             <summary>
@@ -1843,7 +1909,7 @@
             Checks the Files On-Demand technology is supported.
             </summary>
             <param name="throwIfNotSupported">Pass true to throw if the technology is not supported; otherwise, false.</param>
-            <returns><c>true</c> if Files On-Demand technology is supported; otherwise, <c>false</c>.</returns>
+            <returns>true if Files On-Demand technology is supported; otherwise, false.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
             <summary>
@@ -1915,24 +1981,24 @@
             <param name="dateTime">The input date time information.</param>
             <returns>The normalized date time information.</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteResource(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ShouldUploadLocalResource(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
             <summary>
-            Determines if a remote resource should be updated from a local one.
+            Determines if a remote resource should be uploaded from a local one.
             </summary>
             <param name="info">The file system information.</param>
             <param name="resource">The resource.</param>
-            <returns><c>true</c> if the remote resource must be updated, <c>false</c> otherwise.</returns>
+            <returns>true if the remote resource must be uploaded, false otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">info is null
             or
             resource is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateOnDemand(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ShouldUpdateOnDemandEntry(System.IO.FileSystemInfo,ShellBoost.Core.IRemoteResource)">
             <summary>
             Determines if an On-Demand local resource (file or directory) should be updated from the remote file system.
             </summary>
             <param name="info">The file system information.</param>
             <param name="resource">The resource.</param>
-            <returns><c>true</c> if the local file or directory must be updated, <c>false</c> otherwise.</returns>
+            <returns>true if the local file or directory must be updated, false otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">info is null
             or
             resource is null.</exception>
@@ -1942,6 +2008,12 @@
             Synchronizes all files and directory beneath the root directory path.
             </summary>
         </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SynchronizeAll(System.Threading.CancellationToken)">
+            <summary>
+            Synchronizes all files and directory beneath the root directory path.
+            </summary>
+            <param name="token">The cancellation token.</param>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.DoSynchronizeNextPath">
             <summary>
             Synchronizes all files and directory beneath the root directory path.
@@ -1949,74 +2021,72 @@
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.SynchronizePath(System.String)">
             <summary>
-            Synchronizes a specific path.
+            Synchronizes a specific local directory path.
             </summary>
-            <param name="path">The path to synchronize.</param>
+            <param name="localDirectoryRelativePath">The path to synchronize.</param>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.Synchronize(System.String)">
             <summary>
             Synchronizes the specified local relative directory path.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <returns><c>true</c> if no error occurred, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <returns>true if no error occurred, false otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.Synchronize(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Synchronizes the specified local relative directory path.
+            </summary>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <param name="token">The cancellation token.</param>
+            <returns>true if no error occurred, false otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.DoSynchronizePath(System.String)">
             <summary>
             Synchronizes the specified local relative directory path.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <returns><c>true</c> if no error occurred, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UploadLocalResource(System.String,System.String)">
-            <summary>
-            Uploads a local resource.
-            </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <param name="localPath">The local resource path.</param>
-            <exception cref="T:System.ArgumentNullException">
-            localRelativeDirectoryPath is null
-            or
-            localPath is null.
-            </exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <returns>true if no error occurred, false otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.LocalFileExists(System.String)">
             <summary>
             Determines whether the specified local file exists.
             </summary>
-            <param name="localPath">The file path to test.</param>
+            <param name="localFullPath">The file path to test.</param>
             <returns>true if path refers to an existing file; false if the file does not exist or an error occurs when trying to determine if the specified file exists.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.LocalDirectoryExists(System.String)">
             <summary>
             Determines whether the given path refers to an existing local directory.
             </summary>
-            <param name="localPath">The directory path to test.</param>
+            <param name="localFullPath">The directory path to test.</param>
             <returns>true if path refers to an existing directory; false if the directory does not exist or an error occurs when trying to determine if the specified directory exists.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.LocalDirectoryCreate(System.String)">
             <summary>
             Creates a local directory.
             </summary>
-            <param name="localPath">The directory path.</param>
+            <param name="localFullPath">The directory path.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.LocalDirectoryDelete(System.String,System.Boolean)">
             <summary>
             Deletes the specified local directory.
             </summary>
-            <param name="localPath">The directory path.</param>
+            <param name="localFullPath">The directory path.</param>
             <param name="recursive">true to remove directories, subdirectories, and files in path; otherwise, false.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.LocalFileDelete(System.String)">
             <summary>
             Deletes the specified local file.
             </summary>
-            <param name="localPath">The file path.</param>
+            <param name="localFullPath">The file path.</param>
             <returns>true if a file was deleted; false if the file did not existed or an error occured.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.WrapSharingViolations``1(System.Func{``0})">
@@ -2039,92 +2109,125 @@
             <summary>
             Opens an existing local file for reading.
             </summary>
-            <param name="localPath">The file path.</param>
+            <param name="localFullPath">The file path.</param>
             <returns>A read-only Stream on the specified file path or null if a sharing violation occurred.</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SafeRun(System.Action)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SafeRun(ShellBoost.Core.RemoteOperationContext,System.Action)">
             <summary>
             Calls an action wrapped by a try catch to avoid errors.
             </summary>
+            <param name="context">The remote operation context.</param>
             <param name="action">The action to call.</param>
-            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+            <exception cref="T:System.ArgumentNullException">context is null or action is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SafeRun``1(System.Func{``0})">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SafeRun``1(ShellBoost.Core.RemoteOperationContext,System.Func{``0})">
             <summary>
             Calls a function wrapped by a try catch to avoid errors.
             </summary>
             <typeparam name="T">The function return type.</typeparam>
+            <param name="context">The remote operation context.</param>
             <param name="func">The function to call.</param>
             <returns>The fuction return or the default value.</returns>
-            <exception cref="T:System.ArgumentNullException">func is null.</exception>
+            <exception cref="T:System.ArgumentNullException">context is null or action is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.DoUploadLocalResource(System.String,System.String)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UploadLocalResource(System.String,System.String)">
             <summary>
-            Do the real work of uploading a local resource to the remote file system.
+            Uploads a local resource to the remote file system.
             For a file it will correspond to a file upload. For a directory, it will create it remotely.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <param name="localPath">The local path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <param name="localFullPath">The local path.</param>
+            <returns>true if the resource was uploaded or at least created on the remote system; otherwise false.</returns>
             <exception cref="T:System.ArgumentNullException">
-            localRelativeDirectoryPath is null
+            localDirectoryRelativePath is null
             or
-            localPath is null.
+            localFullPath is null.
             </exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path or localFullPath is not a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.DehydrateRemoteResource(System.String)">
+            <summary>
+            Dehydrate a remote resource. Currently does nothing.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.RenameRemoteResource(System.String,System.String)">
+            <summary>
+            Renames a remote resource.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="localSourceRelativePath">The local source relative path.</param>
+            <returns>true if the resource was renamed on the local system; otherwise false.</returns>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null or localSourceRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteResource(System.String,ShellBoost.Core.IRemoteResource,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})">
+            <summary>
+            Updates a remote resource. This is also called for renaming operations if resource's DisplayName is different than local relative path's name.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="resource">The new resource information.</param>
+            <param name="properties">The extra resource properties.</param>
+            <returns>true if the resource was updated on the remote system; otherwise false.</returns>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null or resource is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.DeleteRemoteResource(System.String)">
             <summary>
             Deletes a remote resource.
             </summary>
             <param name="localRelativePath">The local relative path.</param>
+            <returns>true if the resource was deleted on the remote system; otherwise false.</returns>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
-            <returns>0 if operation was successful; otherwise an error code.</returns>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.DeleteLocalResource(System.String)">
             <summary>
             Deletes a local resource.
             </summary>
-            <param name="localPath">The local path.</param>
-            <exception cref="T:System.ArgumentNullException">localPath is null.</exception>
+            <param name="localFullPath">The local path.</param>
+            <exception cref="T:System.ArgumentNullException">localFullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">localFullPath is not a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.EnumerateLocalResources(System.String)">
             <summary>
             Enumerates local resources, files and directories.
             This methods offers a mechanism to hide file or folders from the synchronizer.
             </summary>
-            <param name="localDirectoryPath">The local directory path.</param>
-            <returns>A list of local resources</returns>
-            <exception cref="T:System.ArgumentNullException">localDirectoryPath is null.</exception>
+            <param name="localDirectoryFullPath">The local directory full path.</param>
+            <returns>A list of local resources full path.</returns>
+            <exception cref="T:System.ArgumentNullException">localDirectoryFullPath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.IncludeFileSystemEntry(ShellBoost.Core.Utilities.Win32FindData)">
+            <summary>
+            Determines if a file system entry must be included as a local resource or not.
+            This methods offers a mechanism to hide file or folders from the synchronizer.
+            </summary>
+            <param name="entry">The file system entry.</param>
+            <returns>true if the entry must be included as a local resource; otherwise false.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.UploadLocalResources(System.String,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.OnDemandSynchronizer.LocalResource})">
             <summary>
-            Uploads local resources in a specified directory.
+            Uploads local resources in a specified directory, to remote resources. It may also delete local resources that would not exist remotely.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
             <param name="remotes">The list of corresponding remote resources.</param>
             <exception cref="T:System.ArgumentNullException">remotes is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.EnumerateRemoteResources(ShellBoost.Core.RemoteOperationContext,System.String)">
             <summary>
             Enumerates remote resources.
             </summary>
             <param name="context">The context.</param>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
             <returns>A list of remote resources.</returns>
-            <exception cref="T:System.ArgumentNullException">context or localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentNullException">context or localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AreResourcesEqual(ShellBoost.Core.IRemoteResource,ShellBoost.Core.IRemoteResource)">
-            <summary>
-            Determines if two remote resources represent the same remote object.
-            </summary>
-            <param name="resource1">The first resource instance.</param>
-            <param name="resource2">The second resource instance.</param>
-            <returns>true if the two instances represent the same remote object; false otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">resource1 or resource2 is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateRemoteResourceLocally(System.String,ShellBoost.Core.IRemoteResource)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.UpdateLocalResource(System.String,ShellBoost.Core.IRemoteResource)">
             <summary>
             Updates a local file or directory from a remote resource.
             </summary>
@@ -2133,21 +2236,56 @@
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateRemoteResourcesLocally(System.String,System.Boolean@)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateLocalResources(System.String,System.Boolean@)">
             <summary>
-            Creates remote resources locally.
+            Creates local resources from remote resources.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <param name="fatalErrors">if set to <c>true</c> fatal errors occurred.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <param name="fatalErrors">if set to true fatal errors occurred.</param>
             <returns>A list of local resources</returns>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.IsOnDemandEntry(System.String)">
+            <summary>
+            Determines if a file is an On-Demand entry.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>true if the file is an On-Demand entry; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.ConvertToOnDemandEntry(System.String)">
+            <summary>
+            Converts a regular file into an On-Demand entry.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.TryDeleteOnDemandEntry(System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being deleted.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.TryDehydrateOnDemandEntry(System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being dehydrated.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.TryRenamedOnDemandEntry(System.String,System.String)">
+            <summary>
+            Called by the file system when an On-Demand file is being renamed.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="localRelativeTargetPath">The local relative target path.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.PinOnDemandEntry(System.String,System.Boolean)">
             <summary>
-            Asks the system to fetch the On-Demand file content.
+            Asks the system to hydrate the On-Demand file content.
             </summary>
-            <param name="localRelativePath">The local relative directory path.</param>
+            <param name="localRelativePath">The local relative path.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>0 if operation was successful; otherwise an error code.</returns>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
@@ -2157,7 +2295,7 @@
             <summary>
             Asks the system to invalidate the On-Demand file content.
             </summary>
-            <param name="localRelativePath">The local relative directory path.</param>
+            <param name="localRelativePath">The local relative path.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>0 if operation was successful; otherwise an error code.</returns>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
@@ -2167,7 +2305,27 @@
             <summary>
             The On-Demand file will be excluded for synchronization with the system.
             </summary>
-            <param name="localRelativePath">The local relative directory path.</param>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SetInSyncOnDemandEntry(System.String,System.Boolean)">
+            <summary>
+            The On-Demand file will be set in sync for synchronization with the system.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SetNotInSyncOnDemandEntry(System.String,System.Boolean)">
+            <summary>
+            The On-Demand file will be set not in sync for synchronization with the system.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>0 if operation was successful; otherwise an error code.</returns>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
@@ -2214,23 +2372,15 @@
             <exception cref="T:System.ArgumentNullException">localRelativePath or resource is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AddSyncPath(System.String)">
-            <summary>
-            Adds a path to synchronize.
-            </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
-            <returns>The count of paths to synchronize.</returns>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.AddSyncPath(System.String,System.Int32)">
             <summary>
-            Adds a path to synchronize.
+            Adds a directory path to synchronize.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
             <param name="priority">The priority of this path in the list of paths to synchronize.</param>
             <returns>The count of paths to synchronize.</returns>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.GetNextSyncPath">
             <summary>
@@ -2242,33 +2392,49 @@
             <summary>
             Gets the last synchronization state for the given directory.
             </summary>
-            <param name="directoryPath">The directory path.</param>
+            <param name="localDirectoryFullPath">The directory path.</param>
             <returns>An instance of the LastSyncState type or null if no state was saved.</returns>
-            <exception cref="T:System.ArgumentNullException">directoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">directoryPath is not rooted.</exception>
+            <exception cref="T:System.ArgumentNullException">localDirectoryFullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryFullPath is not rooted.</exception>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateSyncState(System.String)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.NewSyncState(System.String)">
             <summary>
             Creates an instance of the LastSyncState class for the given directory.
             </summary>
-            <param name="directoryPath">The directory path.</param>
+            <param name="localDirectoryFullPath">The directory path.</param>
             <returns>An instance of the LastSyncState class.</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateLocalResource(ShellBoost.Core.IRemoteResource,System.String)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.NewLocalResource(ShellBoost.Core.IRemoteResource,System.String)">
             <summary>
             Creates an instance of the LocalResource class for the given remote resource.
             </summary>
             <param name="resource">The resource.</param>
-            <param name="localPath">The local path.</param>
+            <param name="localFullPath">The local full path.</param>
             <returns>An instance of the LocalResource class.</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.CreateSyncAction(System.String,System.Int32)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.NewSyncAction(System.String,System.Int32)">
             <summary>
             Creates an instance of the SyncAction class for the given remote resource.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
             <param name="priority">The priority of this path in the list of paths to synchronize.</param>
             <returns>An instance of the SyncAction class.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.DeleteSyncState(System.String)">
+            <summary>
+            Deletes the sync state of a given directory.
+            This method should be used for testing and debugging purposes only.
+            </summary>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <returns>true if a state was existing, and deleted; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.EnumerateSyncStateResources(System.String)">
+            <summary>
+            Enumerate the resources in the sync state of a given directory.
+            This method should be used for testing and debugging purposes only.
+            </summary>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
+            <returns>A list of resources in the sync state.</returns>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.Dispose(System.Boolean)">
             <summary>
@@ -2295,12 +2461,12 @@
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizer.SyncAction"/> class.
             </summary>
-            <param name="localRelativeDirectoryPath">The local relative directory path.</param>
+            <param name="localDirectoryRelativePath">The local relative directory path.</param>
             <param name="priority">The priority of this path in the list of paths to synchronize.</param>
-            <exception cref="T:System.ArgumentNullException">localRelativeDirectoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">localRelativeDirectoryPath is a rooted path.</exception>
+            <exception cref="T:System.ArgumentNullException">localDirectoryRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryRelativePath is a rooted path.</exception>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncAction.LocalRelativeDirectoryPath">
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncAction.LocalDirectoryRelativePath">
             <summary>
             Gets the local relative directory path.
             </summary>
@@ -2336,14 +2502,11 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizer.LocalResource"/> class.
             </summary>
             <param name="resource">The resource.</param>
-            <param name="localPath">The local path.</param>
-            <exception cref="T:System.ArgumentNullException">
-            resource is null
-            or
-            localPath is null.
-            </exception>
+            <param name="localFullPath">The local full path.</param>
+            <exception cref="T:System.ArgumentNullException">resource is null or localFullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">localFullPath is not rooted.</exception>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandSynchronizer.LocalResource.LocalPath">
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.LocalResource.LocalFullPath">
             <summary>
             Gets the local resource path.
             </summary>
@@ -2371,9 +2534,9 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizer.SyncState"/> class.
             </summary>
             <param name="synchronizer">The synchronizer instance.</param>
-            <param name="directoryPath">The directory path.</param>
-            <exception cref="T:System.ArgumentNullException">synchronizer or directoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">directoryPath is not rooted.</exception>
+            <param name="localDirectoryFullPath">The directory path.</param>
+            <exception cref="T:System.ArgumentNullException">synchronizer or localDirectoryFullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">localDirectoryFullPath is not rooted.</exception>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncState.Synchronizer">
             <summary>
@@ -2381,7 +2544,7 @@
             </summary>
             <value>The synchronizer instance.</value>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncState.DirectoryPath">
+        <member name="P:ShellBoost.Core.OnDemandSynchronizer.SyncState.LocalDirectoryFullPath">
             <summary>
             Gets the directory path.
             </summary>
@@ -2389,7 +2552,7 @@
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.SyncState.ContainsResource(ShellBoost.Core.IRemoteResource)">
             <summary>
-            Determines if the state contains a compatable resource.
+            Determines if the state contains a comparable resource.
             </summary>
             <param name="resource">The resource to compare.</param>
             <returns>true if the state contains a comparable resource; otherwise false.</returns>
@@ -2410,18 +2573,32 @@
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.SyncState.Load">
             <summary>
-            Loads the new state.
+            Loads the state.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.OnDemandSynchronizer.SyncState.Delete">
             <summary>
             Deletes the state
             </summary>
-            <returns><c>true</c> if this instance was deleted from the disk, <c>false</c> otherwise.</returns>
+            <returns>true if this instance was deleted from the disk, false otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SyncState.ContainsResource(System.String)">
+            <summary>
+            Determines if the state contains a resource with the specified name.
+            </summary>
+            <param name="displayName">The resource displayName.</param>
+            <returns>true if the state contains a comparable resource; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.SyncState.GetEnumerator">
+            <summary>
+            Enumerates the resources in the sync state.
+            This is mostly intended for debugging purposes.
+            </summary>
+            <returns>A list of resources.</returns>
         </member>
         <member name="T:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState">
             <summary>
-            Defines a the last synchronization state. Implementatio uses the directory's alternate NTFS stream.
+            Defines a the last synchronization state. This implementation uses the directory's alternate NTFS stream.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.StreamName">
@@ -2434,9 +2611,9 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState"/> class.
             </summary>
             <param name="synchronizer">The synchronizer instance.</param>
-            <param name="directoryPath">The directory path.</param>
-            <exception cref="T:System.ArgumentNullException">directoryPath is null.</exception>
-            <exception cref="T:System.ArgumentException">synchronizer or directoryPath is not rooted.</exception>
+            <param name="localDirectoryFullPath">The directory path.</param>
+            <exception cref="T:System.ArgumentNullException">localDirectoryFullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">synchronizer or localDirectoryFullPath is not rooted.</exception>
         </member>
         <member name="P:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.HasChanged">
             <summary>
@@ -2460,15 +2637,15 @@
             <summary>
             Deletes this instance from the disk.
             </summary>
-            <returns><c>true</c> if this instance was deleted from the disk, <c>false</c> otherwise.</returns>
+            <returns>true if this instance was deleted from the disk, false otherwise.</returns>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.Load(System.IO.Stream)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.Load(System.IO.FileStream)">
             <summary>
             Loads the current state from the specified stream.
             </summary>
             <param name="stream">The input stream.</param>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.Save(System.IO.Stream)">
+        <member name="M:ShellBoost.Core.OnDemandSynchronizer.AlternateStreamSyncState.Save(System.IO.FileStream)">
             <summary>
             Save the current state to the specified stream.
             </summary>
@@ -2518,11 +2695,6 @@
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.DeletedLocalResource">
             <summary>
             A local resource has been deleted.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UploadLocalResource">
-            <summary>
-            Initiate a local resource upload.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UploadingLocalResource">
@@ -2595,14 +2767,14 @@
             Determines if the remote resource corresponding to a local file must be updated.
             </summary>
         </member>
-        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.FetchingData">
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.HydratingData">
             <summary>
-            A local file data is being fetched.
+            A local file data is being hydrated.
             </summary>
         </member>
-        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.FetchedData">
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.HydratedData">
             <summary>
-            A local file data has been fetched.
+            A local file data has been hydrated.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.ReportingProgress">
@@ -2618,6 +2790,36 @@
         <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.EnumeratingLocalResources">
             <summary>
             Local files are enumerated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UpdatingRemoteResource">
+            <summary>
+            A remote resource is being updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.UpdatedRemoteResource">
+            <summary>
+            A remote resource has been updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemUpdatingResource">
+            <summary>
+            A remote resource is being updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RemoteFileSystemUpdatedResource">
+            <summary>
+            A remote resource has been updated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RenamingRemoteResource">
+            <summary>
+            A remote resource is being renamed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.OnDemandSynchronizerEventType.RenamedRemoteResource">
+            <summary>
+            A remote resource has been renamed.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.ProjFS.FileSystemItem">
@@ -3542,11 +3744,6 @@
             <param name="throwOnError">if set to <c>true</c> errors may be thrown otherwise the return value may be null.</param>
             <returns>A value that represents the number of paths that were in the cache before it was purged.</returns>
         </member>
-        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-        </member>
         <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.DoesNameCompare(System.String,System.String)">
             <summary>
             Compares two file names and returns a value that indicates their relative collation order.
@@ -3579,6 +3776,22 @@
             </remarks>
             <param name="filePath">A string specifying the full path to the file whose state is to be queried.</param>
             <returns>A value indicating the state of an item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing">true if the object is being disposed; otherwise false.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Finalize">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ProjFS.ProjectedFileSystem.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.ProjFS.ProjectedFileSystemProviderErrorEventArgs">
             <summary>
@@ -3860,11 +4073,12 @@
             </summary>
             <value>0 means no error, any other value is an error.</value>
         </member>
-        <member name="M:ShellBoost.Core.RemoteOperationContext.AddError(System.Exception)">
+        <member name="M:ShellBoost.Core.RemoteOperationContext.AddError(System.Exception,System.String)">
             <summary>
             Adds an error to the context.
             </summary>
             <param name="error">The error.</param>
+            <param name="methodName">The calling method name.</param>
             <exception cref="T:System.ArgumentNullException">error is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.RemoteOperationContext.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
@@ -4351,6 +4565,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.GetItem(System.String)">
             <summary>
             Gets an item using its display name.
+            This method should be overriden for direct access as the current implementation uses the EnumItems method.
             </summary>
             <param name="displayName">The item's display name.</param>
             <returns>An instance of the ShellItem type or null if the item was not found.</returns>
@@ -4359,6 +4574,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.GetItem(ShellBoost.Core.ShellItemId)">
             <summary>
             Gets an item using its identifier.
+            This method should be overriden for direct access as the current implementation uses the EnumItems method.
             </summary>
             <param name="id">The identifier.</param>
             <returns>An instance of the ShellItem type or null if the item was not found.</returns>
@@ -4448,7 +4664,8 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.EnumItems(ShellBoost.Core.WindowsShell.SHCONTF)">
             <summary>
-            Enumerates Shell Items
+            Enumerates Shell Items.
+            To maximize performance, the GetItem(ShellItemId) and GetItem(string) methods should be overriden.
             </summary>
             <param name="options">The options.</param>
             <returns>A list of ShellItem instances.</returns>
@@ -6682,6 +6899,12 @@
             </summary>
             <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         </member>
+        <member name="M:ShellBoost.Core.ShellMenuItem.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing">true if the object is being disposed; otherwise false.</param>
+        </member>
         <member name="M:ShellBoost.Core.ShellMenuItem.Dispose">
             <summary>
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -7153,6 +7376,12 @@
             </summary>
             <param name="idl">The PIDL for which to receive notifications.</param>
             <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.Dispose(System.Boolean)">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <param name="disposing">true if the object is being disposed; otherwise false.</param>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.Dispose">
             <summary>
@@ -9344,18 +9573,6 @@
             <param name="contentType">The content type.</param>
             <returns>An extension or null if it cannot be determined.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.ExtractAssemblyResource(System.Reflection.Assembly,System.String,System.String)">
-            <summary>
-            Extracts a resource from an assembly to a file. If the file already exists, it will not be overwritten.
-            </summary>
-            <param name="assembly">The assembly.</param>
-            <param name="directoryPath">The directory path where to store the extracted data file.</param>
-            <param name="name">The resource name.</param>
-            <returns>The extracted data file path.</returns>
-            <exception cref="T:System.ArgumentNullException">name is null
-            or
-            directoryPath is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.ExtractAssemblyResource(System.Reflection.Assembly,System.String,System.String,System.Boolean)">
             <summary>
             Extracts a resource from an assembly to a file.
@@ -9391,17 +9608,6 @@
             <param name="directoryPath">The path of the directory to remove.</param>
             <exception cref="T:System.ArgumentNullException">directoryPath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String)">
-            <summary>
-            Moves a file. The destination will be unprotected if needed.
-            </summary>
-            <param name="source">The source.</param>
-            <param name="destination">The destination.</param>
-            <returns><c>true</c> if a file was moved, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">source is null
-            or
-            destination is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileMove(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Moves a file.
@@ -9415,12 +9621,13 @@
             or
             destination is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileUnprotect(System.String,System.Boolean)">
             <summary>
-            Deletes a file. The destination will be unprotected if needed.
+            Unprotects a file.
             </summary>
             <param name="filePath">The file path.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns><c>true</c> if the file was unprotected, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean,System.Boolean)">
@@ -9430,16 +9637,7 @@
             <param name="filePath">The file path.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
-            <returns><c>true</c> if a file was deleted, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String)">
-            <summary>
-            Overwrites a file. The destination will be unprotected if needed.
-            </summary>
-            <param name="source">The source.</param>
-            <param name="destination">The destination.</param>
-            <returns><c>true</c> if a file was copied, <c>false</c> otherwise.</returns>
+            <returns><c>true</c> if the file was deleted, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean,System.Boolean)">
@@ -9467,17 +9665,6 @@
             <param name="path">The path.</param>
             <returns><c>true</c> if the path is valid and the file exists, <c>false</c> otherwise.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsEqual(System.String,System.String)">
-            <summary>
-            Tests if two paths are equal. Paths are normalized prior to comparison.
-            </summary>
-            <param name="path1">The first path.</param>
-            <param name="path2">The second path.</param>
-            <returns><c>true</c> if the two paths are equal, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">path1 is null
-            or
-            path2 is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsEqual(System.String,System.String,System.Boolean)">
             <summary>
             Tests if two paths are equal.
@@ -9490,17 +9677,6 @@
             or
             path2 is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsChildOrEqual(System.String,System.String)">
-            <summary>
-            Tests if a path is a child of or equal to another path. Paths are normalized prior to comparison.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="child">The possible child.</param>
-            <returns><c>true</c> if child is a child of path, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">path is null
-            or
-            child is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsChildOrEqual(System.String,System.String,System.Boolean)">
             <summary>
             Tests if a path is a child of or equal to another path.
@@ -9508,17 +9684,6 @@
             <param name="path">The path.</param>
             <param name="child">The possible child.</param>
             <param name="normalize">if set to <c>true</c> paths will be normalized first.</param>
-            <returns><c>true</c> if child is a child of path, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">path is null
-            or
-            child is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsChild(System.String,System.String)">
-            <summary>
-            Tests if a path is a child of another path. Paths are normalized prior to comparison.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="child">The possible child.</param>
             <returns><c>true</c> if child is a child of path, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">path is null
             or
@@ -9624,13 +9789,12 @@
             <returns>The result of a func() call.</returns>
             <exception cref="T:System.ArgumentNullException">func is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsSharingViolation(System.IO.IOException)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsSharingViolation(System.Exception)">
             <summary>
             Determines whether the specified exception represents a sharing violation error.
             </summary>
             <param name="exception">The exception.</param>
             <returns><c>true</c> if specified exception represents a sharing violation error; otherwise, <c>false</c>.</returns>
-            <exception cref="T:System.ArgumentNullException">exception is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.UrlCombine(System.String[])">
             <summary>
@@ -9638,14 +9802,6 @@
             </summary>
             <param name="urls">The urls.</param>
             <returns>A string representing the combination of urls.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFilePath(System.String)">
-            <summary>
-            Converts a text into a valid file path.
-            </summary>
-            <param name="filePath">The file name.</param>
-            <returns>A valid file name.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFilePath(System.String,System.String,System.String)">
             <summary>
@@ -9657,16 +9813,6 @@
             <returns>A valid file name.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFileName(System.String)">
-            <summary>
-            Converts a text into a valid file name.
-            </summary>
-            <param name="fileName">The file name.</param>
-            <returns>
-            A valid file name.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">fileName is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFileName(System.String,System.String,System.String)">
             <summary>
             Converts a text into a valid file name.
@@ -9676,6 +9822,13 @@
             <param name="reservedCharFormat">The reserved format to use for reserved characters. If null '_x{0}_' will be used.</param>
             <returns>A valid file name.</returns>
             <exception cref="T:System.ArgumentNullException">fileName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsPathDirectory(System.String)">
+            <summary>
+            Determines if a path points to an existing directory.
+            </summary>
+            <param name="path">The input path. If null, false will be returned.</param>
+            <returns>true if the path points to an existing directory; otherwise false.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathHasInvalidChars(System.String)">
             <summary>
@@ -10431,6 +10584,13 @@
             <param name="error">The error, if any.</param>
             <returns>A list of processes.</returns>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.RestartManager.IsFileLocked(System.String)">
+            <summary>
+            Determines if a give file is locked.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <returns>true if the file is locked; otherwise false.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.RestartManager.GetLockingProcesses(System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Boolean,System.Exception@)">
             <summary>

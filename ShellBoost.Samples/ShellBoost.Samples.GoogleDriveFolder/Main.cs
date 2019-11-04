@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShellBoost.Core;
@@ -223,7 +224,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     methodName = ":" + methodName;
                 }
 
-                Main.InvokeAddLog(Prefix + methodName + ":" + level + ": " + value, true);
+                var threadName = Thread.CurrentThread.Name.Nullify() ?? Thread.CurrentThread.ManagedThreadId.ToString();
+                Main.InvokeAddLog("(" + threadName + "):" + Prefix + methodName + ":" + level + ": " + value, true);
             }
         }
 

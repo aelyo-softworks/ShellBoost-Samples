@@ -1,8 +1,8 @@
-﻿using ShellBoost.Core;
+﻿using System;
+using System.IO;
+using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsPropertySystem;
-using System;
-using System.IO;
 
 namespace ShellBoost.Samples.LocalFolder
 {

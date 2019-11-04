@@ -9,7 +9,7 @@ namespace ShellBoost.Samples.LocalFolder
     class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             const string testProperty = "ShellBoost.Samples.LocalFolder.IconUI";
             string already = PropertySystem.GetPropertyDescription(testProperty, false) != null ? " (note: they are already registered)." : ".";

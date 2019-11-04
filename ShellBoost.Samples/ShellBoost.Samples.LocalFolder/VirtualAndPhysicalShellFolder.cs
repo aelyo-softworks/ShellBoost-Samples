@@ -1,6 +1,8 @@
-﻿using ShellBoost.Core;
-using ShellBoost.Core.WindowsShell;
+﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using ShellBoost.Core;
+using ShellBoost.Core.WindowsShell;
 
 namespace ShellBoost.Samples.LocalFolder
 {
@@ -11,6 +13,7 @@ namespace ShellBoost.Samples.LocalFolder
         public VirtualAndPhysicalShellFolder(ShellFolder parent, string name)
             : base(parent, new StringKeyShellItemId(name))
         {
+            CanPaste = true;
         }
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
@@ -19,10 +22,16 @@ namespace ShellBoost.Samples.LocalFolder
             if (!options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
                 yield break;
 
-            // show 10 virtual files
-            for (int i = 0; i < 10; i++)
+            // show 5 virtual & physical files
+            for (int i = 0; i < 5; i++)
             {
-                yield return new VirtualAndPhysicalShellItem(this, "virtual item " + i);
+                yield return new VirtualAndPhysicalShellItem(this, "virtual and physical item " + i);
+            }
+
+            // show 5 virtual files
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new VirtualShellItem(this, "virtual item " + i + ".txt");
             }
         }
 
@@ -39,6 +48,21 @@ namespace ShellBoost.Samples.LocalFolder
                     // TODO: do something with this...
                 }
             }
+        }
+
+        protected override void OnDragDropTarget(DragDropTargetEventArgs e)
+        {
+            Console.WriteLine("OnDragDropTarget " + e.Type);
+            e.Effect = DragDropEffects.Copy;
+            foreach (var data in e.DataObject)
+            {
+                Console.WriteLine(" format: " + data.Name + " " + data.ConvertedData);
+            }
+        }
+
+        protected override void OnOperate(ShellOperationEventArgs e)
+        {
+            Console.WriteLine("OnOperate " + e.Operation);
         }
     }
 }

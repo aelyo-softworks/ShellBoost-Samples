@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -92,23 +93,38 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             foreach (var file in account.GetFolderFiles(relativePath))
             {
+                Account.Log(TraceLevel.Info, "File: " + file);
                 yield return new FileResource(file);
             }
         }
 
         public void CreateDirectory(RemoteOperationContext context, string path)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             // first level are accounts folders
             // we can't create a first level directory
             var account = GetAccount(path, out var relativePath);
             if (account == null || string.IsNullOrEmpty(relativePath))
                 return;
 
+            Account.Log(TraceLevel.Info, "Before RelativePath: " + relativePath);
             account.CreateDirectory(relativePath, Path.Combine(account.DataDirectoryPath, relativePath));
+            Account.Log(TraceLevel.Info, "After RelativePath: " + relativePath);
         }
 
         public void DeleteResource(RemoteOperationContext context, string path)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             // first level are accounts folders
             // we can't delete a first level directory
             var account = GetAccount(path, out var relativePath);
@@ -116,11 +132,22 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 return;
 
             relativePath = NormPath(relativePath);
+            Account.Log(TraceLevel.Info, "Before RelativePath: " + relativePath);
             account.DeleteFile(relativePath);
+            Account.Log(TraceLevel.Info, "After RelativePath: " + relativePath);
         }
 
         public void DownloadResource(RemoteOperationContext context, string path, long offset, long count, Stream output)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+
             // first level are accounts folders
             // we can't download a file from there
             var account = GetAccount(path, out var relativePath);
@@ -140,11 +167,22 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 return;
             }
 
+            Account.Log(TraceLevel.Info, "Before RelativePath: " + relativePath + " offset: " + offset + " count: " + count);
             account.DownloadFile(relativePath, offset, count, output, context);
+            Account.Log(TraceLevel.Info, "After RelativePath: " + relativePath);
         }
 
         public void UploadResource(RemoteOperationContext context, string path, Stream input)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
             // can't change google doc
             if (path.EndsWith(UrlExt))
                 return;
@@ -155,11 +193,19 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (account == null || string.IsNullOrEmpty(relativePath))
                 return;
 
+            Account.Log(TraceLevel.Info, "Before RelativePath: " + relativePath);
             account.UploadFile(relativePath, Path.Combine(account.DataDirectoryPath, relativePath), input);
+            Account.Log(TraceLevel.Info, "After RelativePath: " + relativePath);
         }
 
         public IRemoteResource GetResource(RemoteOperationContext context, string path)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             var account = GetAccount(path, out var relativePath);
             if (account == null)
                 return null;
@@ -175,8 +221,37 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             return new FileResource(file);
         }
 
-        // these are currently unsused by OnDemandSynchronizer
-        public void UpdateResource(RemoteOperationContext context, string path, IRemoteResource resource, IReadOnlyDictionary<string, object> properties) => throw new NotSupportedException();
+        public void UpdateResource(RemoteOperationContext context, string path, IRemoteResource resource, IReadOnlyDictionary<string, object> properties)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource));
+
+            // first level are accounts folders
+            // we can't update anything
+            var account = GetAccount(path, out var relativePath);
+            if (account == null || string.IsNullOrEmpty(relativePath))
+                return;
+
+            // rename is when the resource name doesn't match the path
+            bool rename = resource.DisplayName != null && !resource.DisplayName.EqualsIgnoreCase(Path.GetFileName(path));
+            if (rename)
+            {
+                relativePath = NormPath(relativePath);
+                Account.Log(TraceLevel.Info, "Before RelativePath: " + relativePath + " new name: " + resource.DisplayName);
+                account.RenameFile(relativePath, resource.DisplayName);
+                Account.Log(TraceLevel.Info, "After RelativePath: " + relativePath);
+                return;
+            }
+
+            // else we currently don't support this
+        }
+
         public bool TryGetPropertyValue(string name, out object value) { value = null; return false; }
 
         private static string NormPath(string path)

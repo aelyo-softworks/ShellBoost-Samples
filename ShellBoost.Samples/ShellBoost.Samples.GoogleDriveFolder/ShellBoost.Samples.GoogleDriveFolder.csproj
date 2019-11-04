@@ -70,6 +70,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="DriveFile.cs" />
     <Compile Include="FileSystem.cs" />
+    <Compile Include="FolderException.cs" />
     <Compile Include="LocalDatabase.cs" />
     <Compile Include="DrivePath.cs" />
     <Compile Include="Main.cs">
@@ -107,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.41.1.1734</Version>
+      <Version>1.41.1.1750</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
