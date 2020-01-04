@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using ShellBoost.Core;
+using System.Linq;
+using System.Xml.Serialization;
 using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.GoogleDriveFolder
@@ -11,22 +12,22 @@ namespace ShellBoost.Samples.GoogleDriveFolder
     public class Settings : Serializable<Settings>
     {
         private int _syncPeriod;
+        private Lazy<IReadOnlyList<Account>> _accounts;
 
-        public static FileSystem FileSystem { get; }
-        public static OnDemandSynchronizer Synchronizer { get; private set; }
         public static string ConfigurationDirectoryPath { get; }
         public static string DataDirectoryPath { get; }
+        public static string LogsDirectoryPath { get; }
         public static string SecretsFilePath { get; }
         public static string ConfigurationFilePath { get; }
         public static string ConfigurationBackupDirectoryPath { get; }
         public static Settings Current { get; }
+        public static ILogger SynchronizerLogger { get; set; }
 
         static Settings()
         {
-            FileSystem = new FileSystem();
-
             // configuration files are stored in %localappdata%
             ConfigurationDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), typeof(Program).Namespace);
+            LogsDirectoryPath = Path.Combine(ConfigurationDirectoryPath, "Logs");
 
             // data is stored in user's Documents
             DataDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), typeof(Program).Namespace);
@@ -43,7 +44,23 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             AddAccountClearCookies = true;
             GoogleApisLogLevel = TraceLevel.Info;
             SynchronizerLogLevel = TraceLevel.Verbose;
+            GoogleTempFolderName = _defaultGoogleTempFolderName;
+            ResetAccounts();
         }
+
+        internal void ResetAccounts()
+        {
+            if (_accounts != null && _accounts.IsValueCreated)
+            {
+                foreach (var account in _accounts.Value)
+                {
+                    account.Dispose();
+                }
+            }
+            _accounts = new Lazy<IReadOnlyList<Account>>(LoadAccounts);
+        }
+
+        private IReadOnlyList<Account> LoadAccounts() => Account.GetAllAccounts(true).ToList();
 
         public static bool HasSecretsFile => IOUtilities.FileExists(SecretsFilePath);
 
@@ -58,90 +75,15 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             SerializeToConfiguration();
         }
 
-        public static void StartSynchronizer(ILogger logger = null)
-        {
-            if (Synchronizer == null)
-            {
-                RegisterOnDemandSynchronizer();
-                Synchronizer = new OnDemandSynchronizer(DataDirectoryPath, FileSystem);
+        public Account GetAccount(string emailAddress) => Accounts.FirstOrDefault(a => a.UserEmailAddress.EqualsIgnoreCase(emailAddress));
 
-            }
+        [XmlIgnore]
+        [Browsable(false)]
+        public bool IsSynchronizationStarted => Accounts.Any(a => a.Synchronizer.IsStarted);
 
-            Synchronizer.Logger = logger;
-            Synchronizer.Synchronizing += OnSynchronizing;
-            Synchronizer.SyncPeriod = Current.SyncPeriod;
-            Synchronizer.Synchronize();
-        }
-
-        // we handle some synchronizer events in a special way for this sample
-        private static void OnSynchronizing(object sender, OnDemandSynchronizerEventArgs e)
-        {
-            if (e.Type == OnDemandSynchronizerEventType.SynchronizingAll)
-            {
-                // we couple the synchronizer with Google Drive change tracking mechanism
-                foreach (var account in FileSystem.Accounts)
-                {
-                    account.SynchronizeChanges();
-                }
-                return;
-            }
-
-            // make sure we never delete a folder under root that's not associated with an account
-            if (e.Type == OnDemandSynchronizerEventType.EnumeratingLocalResources)
-            {
-                var localDirectoryFullPath = (string)e.Input["localDirectoryFullPath"];
-                if (!localDirectoryFullPath.EqualsIgnoreCase(DataDirectoryPath))
-                    return;
-
-                var list = new List<string>();
-
-                // contrary to the standard .NET classes, this ShellBoost utility method just skip locked files or file that would otherwise cause errors
-                foreach (var entry in Win32FindData.EnumerateFileSystemEntries(localDirectoryFullPath))
-                {
-                    // if a folder there doesn't match a valid account, we skip it
-                    // so the synchronizer just won't know about it and won't try to delete it
-                    if (!Account.IsDirectoryAnAccount(Path.GetFileName(entry.FullName)))
-                    {
-#if RELEASE
-                        Synchronizer.Logger?.Log(TraceLevel.Info, "Found a directory '" + entry.FullName + "' that's not associated with a valid account.");
-#endif
-                        continue;
-                    }
-
-                    list.Add(entry.FullName);
-                }
-
-                e.Output["resources"] = list;
-                e.Handled = true;
-                return;
-            }
-        }
-
-        public static void RegisterOnDemandSynchronizer()
-        {
-            // ensure the local data directory exists
-            if (!IOUtilities.DirectoryExists(DataDirectoryPath))
-            {
-                Directory.CreateDirectory(DataDirectoryPath);
-            }
-            OnDemandSynchronizer.EnsureRegistered(DataDirectoryPath, GetRegistration());
-        }
-
-        // customize registration to give a nice name to the cloud provider we represent
-        private static OnDemandRegistration GetRegistration()
-        {
-            var reg = new OnDemandRegistration();
-            reg.ProviderName = AssemblyUtilities.GetDescription();
-            return reg;
-        }
-
-        public static void UnregisterOnDemandSynchronizer()
-        {
-            if (IOUtilities.DirectoryExists(DataDirectoryPath))
-            {
-                OnDemandSynchronizer.Unregister(DataDirectoryPath, GetRegistration());
-            }
-        }
+        [XmlIgnore]
+        [Browsable(false)]
+        public IReadOnlyList<Account> Accounts => _accounts.Value;
 
         // the application end-user settings
         [Category("On-Demand Synchronizer")]
@@ -168,6 +110,13 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         [DisplayName("Clear cookies when adding an Account")]
         [DefaultValue(true)]
         public bool AddAccountClearCookies { get; set; }
+
+        internal const string _defaultGoogleTempFolderName = "ShellBoostTemp";
+
+        [Category("Google Drive")]
+        [DisplayName("Temporary Files Folder Name")]
+        [DefaultValue(_defaultGoogleTempFolderName)]
+        public string GoogleTempFolderName { get; set; }
 
         [Category("Logging")]
         [DisplayName("Google Apis Log Level")]

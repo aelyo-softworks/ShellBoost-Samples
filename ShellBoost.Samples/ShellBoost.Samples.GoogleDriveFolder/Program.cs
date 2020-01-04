@@ -38,7 +38,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main());
-            Settings.Synchronizer?.Dispose();
         }
     }
 }

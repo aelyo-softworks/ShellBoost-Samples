@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -9,6 +11,8 @@ using System.Windows.Forms;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Requests;
 using Google.Apis.Auth.OAuth2.Responses;
+using Microsoft.Win32;
+using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.GoogleDriveFolder
 {
@@ -37,11 +41,24 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 SuppressCookiesPersistence();
             }
 
+            // we want IE11 full compat, otherwise script errors happen
+            // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/general-info/ee330730(v=vs.85)#browser_emulation
+            using (var reg = WindowsUtilities.EnsureSubKey(Registry.CurrentUser, @"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
+            {
+                var exeName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
+
+                // 11001 means: Internet Explorer 11. Webpages are displayed in IE11 edge mode, regardless of the declared !DOCTYPE directive
+                reg.SetValue(exeName, 11001);
+            }
+
             webBrowserMain.Navigate(authorizationUrl);
         }
 
         // if this stays null, it means the form was closed early or an error occured
         public AuthorizationCodeResponseUrl ResponseUrl { get; private set; }
+
+        // Google's auth ICodeReceiver custom implementation
+        public static ICodeReceiver GetNewCodeReceiver(bool clearCookies = true) => new FormCodeReceiver(clearCookies);
 
         private async Task<AuthorizationCodeResponseUrl> RunServerAsync(string redirectUri)
         {
@@ -92,9 +109,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
         [DllImport("wininet", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern bool InternetSetOption(IntPtr hInternet, int dwOption, ref int lpBuffer, int dwBufferLength);
-
-        // Google's auth ICodeReceiver custom implementation
-        public static ICodeReceiver GetNewCodeReceiver(bool clearCookies = true) => new FormCodeReceiver(clearCookies);
 
         private class FormCodeReceiver : ICodeReceiver
         {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShellBoost.Core;
+using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.GoogleDriveFolder
@@ -12,6 +14,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
     public partial class Main : Form
     {
         private ILogger _apisLogger;
+        private ILogger _syncLogger;
 
         public Main()
         {
@@ -27,7 +30,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 return;
             }
 
-            if (!OnDemandSynchronizer.IsSupported)
+            if (!OnDemandLocalFileSystem.IsSupported)
             {
                 AddLog();
                 AddLog("! File On-Demand technology is not available on this version of Windows. You need Windows 10, version 1709 or higher.");
@@ -35,16 +38,73 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
 
             AddLog();
+            ListAccounts();
         }
 
+        private void SynchronizeNow()
+        {
+            if (!Settings.HasSecretsFile)
+                return;
+
+            if (!OnDemandLocalFileSystem.IsSupported)
+                return;
+
+            foreach (var account in Settings.Current.Accounts)
+            {
+                account.FileSystem.Synchronize();
+                account.Synchronizer.DoRunJobs();
+            }
+        }
+
+        private void StartSynchronization()
+        {
+            if (Settings.Current.Accounts.Count == 0)
+                return;
+
+            foreach (var account in Settings.Current.Accounts)
+            {
+                account.Synchronizer.Start();
+            }
+            AddLog("Synchronization is started.");
+        }
+
+        private void StopSynchronization()
+        {
+            if (Settings.Current.Accounts.Count == 0)
+                return;
+
+            foreach (var account in Settings.Current.Accounts)
+            {
+                account.Synchronizer.Stop();
+            }
+            AddLog("Synchronization is stopped.");
+        }
+
+        private void ResetSynchronization()
+        {
+            if (Settings.Current.Accounts.Count == 0)
+                return;
+
+            foreach (var account in Settings.Current.Accounts)
+            {
+                account.Synchronizer.Stop(1000);
+                account.Synchronizer.StateProvider.Reset();
+                account.ResetLastStartPageToken();
+            }
+            AddLog("Synchronization is reset.");
+        }
+
+        protected override void OnClosed(EventArgs e) => Settings.Current.ResetAccounts();
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
             _apisLogger = new MainLogger(this, "GoogleApis", Settings.Current.GoogleApisLogLevel);
+            _syncLogger = new MainLogger(this, "MPSync", Settings.Current.SynchronizerLogLevel);
+            Settings.SynchronizerLogger = _syncLogger;
             Account.Logger = _apisLogger;
             if (Settings.Current.SyncAutoStart)
             {
-                SynchronizeNow();
+                StartSynchronization();
             }
         }
 
@@ -67,12 +127,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ListAccountsToolStripMenuItem_Click(object sender, EventArgs e) => ListAccounts();
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e) => Close();
+        private void StartSynchronizerToolStripMenuItem_Click(object sender, EventArgs e) => StartSynchronization();
+        private void StopSynchronizerToolStripMenuItem_Click(object sender, EventArgs e) => StopSynchronization();
+        private void SynchronizeNowToolStripMenuItem_Click(object sender, EventArgs e) => SynchronizeNow();
+        private void ClearLogToolStripMenuItem_Click(object sender, EventArgs e) => textBoxMain.Clear();
+        private void ClearAllToolStripMenuItem_Click(object sender, EventArgs e) => textBoxMain.Clear();
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var dlg = new AboutBox())
             {
@@ -80,7 +142,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        private void installSecretsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void InstallSecretsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Settings.HasSecretsFile)
             {
@@ -106,7 +168,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             this.ShowMessage("Secrets file has been configured successfully.");
         }
 
-        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PreferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var dlg = new SettingsBox(Settings.Current))
             {
@@ -117,7 +179,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        private void addAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddAccountToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -127,11 +189,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
                 AddLog("Account for '" + about.User.EmailAddress + "' has been added.");
 
-                var account = Account.GetAccount(about.User.EmailAddress);
+                var account = Settings.Current.GetAccount(about.User.EmailAddress);
                 if (account != null)
                 {
-                    Settings.FileSystem.AddAccount(account, true);
-                    SynchronizeNow();
+                    account.Synchronizer.Start();
                 }
             }
             catch (Exception ex)
@@ -143,17 +204,18 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        private void listAccountsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ListAccounts()
         {
             AddLog();
-            var accounts = Account.GetAllAccounts(true).ToArray();
-            AddLog(accounts.Length + " account(s) where found.");
-            for (int i = 0; i < accounts.Length; i++)
+            AddLog(Settings.Current.Accounts.Count + " valid account(s) where found.");
+            for (int i = 0; i < Settings.Current.Accounts.Count; i++)
             {
-                var account = accounts[i];
+                var account = Settings.Current.Accounts[i];
                 AddLog("Account[" + i + "]");
                 AddLog(" User Email Address           : " + account.UserEmailAddress);
                 AddLog(" Data Directory Path          : " + account.DataDirectoryPath);
+                AddLog(" File System RootId           : " + account.FileSystem.RootId);
+                AddLog(" Synchronizer Started         : " + account.Synchronizer.IsStarted);
                 if (account.About != null)
                 {
                     AddLog(" User Display Name            : " + account.About.User.DisplayName);
@@ -195,14 +257,84 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        private void FileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             addAccountToolStripMenuItem.Enabled = Settings.HasSecretsFile;
             listAccountsToolStripMenuItem.Enabled = Settings.HasSecretsFile;
+            removeAConfiguredAccountToolStripMenuItem.Enabled = Settings.HasSecretsFile && Settings.Current.Accounts.Any();
+        }
+
+        private void SynchronizationToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            bool setupOk = OnDemandLocalFileSystem.IsSupported && Settings.HasSecretsFile;
+            startSynchronizerToolStripMenuItem.Enabled = setupOk && !Settings.Current.IsSynchronizationStarted && Settings.Current.Accounts.Any();
+            stopSynchronizerToolStripMenuItem.Enabled = setupOk && Settings.Current.IsSynchronizationStarted && Settings.Current.Accounts.Any();
+            synchronizeNowToolStripMenuItem.Enabled = setupOk && Settings.Current.Accounts.Any();
+        }
+
+        private void ResetGoogleDriveStateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.ShowConfirm("You are about to reset the synchronization information for all configured accounts. This could take some time depending on the number of folders and file it will impact." +
+                Environment.NewLine + Environment.NewLine +
+                "Are you sure you want to do this?") != DialogResult.Yes)
+                return;
+
+            ResetSynchronization();
+        }
+
+        private void OpenConfigurationBackupPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IOUtilities.DirectoryExists(Settings.ConfigurationBackupDirectoryPath))
+            {
+                WindowsUtilities.OpenExplorer(Settings.ConfigurationBackupDirectoryPath);
+            }
+        }
+
+        private void DiagnosticsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            openConfigurationBackupPathToolStripMenuItem.Enabled = IOUtilities.DirectoryExists(Settings.ConfigurationBackupDirectoryPath);
+            resetGoogleDriveStateToolStripMenuItem.Enabled = OnDemandLocalFileSystem.IsSupported && Settings.HasSecretsFile && Settings.Current.Accounts.Any();
+        }
+
+        private void OpenDataDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IOUtilities.DirectoryExists(Settings.DataDirectoryPath))
+            {
+                WindowsUtilities.OpenExplorer(Settings.DataDirectoryPath);
+            }
+        }
+
+        private void OpenDataDirectoryToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            openDataDirectoryToolStripMenuItem.Enabled = IOUtilities.DirectoryExists(Settings.DataDirectoryPath);
+            openLogsPathToolStripMenuItem.Enabled = IOUtilities.DirectoryExists(Settings.LogsDirectoryPath);
+        }
+
+        private void OpenLogsPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IOUtilities.DirectoryExists(Settings.LogsDirectoryPath))
+            {
+                WindowsUtilities.OpenExplorer(Settings.LogsDirectoryPath);
+            }
         }
 
         private class MainLogger : ILogger
         {
+            private readonly static SingleThreadTaskScheduler _scheduler;
+            private readonly static string _logPath;
+
+            static MainLogger()
+            {
+                _scheduler = new SingleThreadTaskScheduler((t) =>
+                {
+                    t.Name = string.Format("_gd_logger{0}", Environment.TickCount);
+                    return true;
+                });
+                string name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
+                _logPath = Path.Combine(Settings.LogsDirectoryPath, name);
+                IOUtilities.FileCreateDirectory(_logPath);
+            }
+
             public MainLogger(Main main, string prefix, TraceLevel maxLevel = TraceLevel.Verbose)
             {
                 Main = main;
@@ -225,129 +357,46 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 }
 
                 var threadName = Thread.CurrentThread.Name.Nullify() ?? Thread.CurrentThread.ManagedThreadId.ToString();
-                Main.InvokeAddLog("(" + threadName + "):" + Prefix + methodName + ":" + level + ": " + value, true);
-            }
-        }
+                var text = "(" + threadName + "):" + Prefix + methodName + ":" + level + ": " + value;
+                Main.InvokeAddLog(text, true);
 
-        private void StartSynchronizer(bool synchronizeRootFolder = false)
-        {
-            InvokeAddLog("Starting synchronization on data directory: " + Settings.DataDirectoryPath);
-            int i = 0;
-            foreach (var account in Account.GetAllAccounts(false))
-            {
-                Settings.FileSystem.AddAccount(account, synchronizeRootFolder);
-                InvokeAddLog("Added account : " + account.UserEmailAddress);
-                i++;
-            }
-            InvokeAddLog("Synchronizer has found " + i + " account(s) to synchronize.");
-
-            Settings.StartSynchronizer(new MainLogger(this, "Synchronizer", Settings.Current.SynchronizerLogLevel));
-        }
-
-        private void SynchronizeNow()
-        {
-            if (!Settings.HasSecretsFile)
-                return;
-
-            if (!OnDemandSynchronizer.IsSupported)
-                return;
-
-            Task.Run(() =>
-            {
-                if (Settings.Synchronizer == null)
+                Task.Factory.StartNew(() =>
                 {
-                    StartSynchronizer();
-                    return;
+                    WriteLineToLog(DateTime.Now + ": " + text);
+                }, CancellationToken.None, TaskCreationOptions.None, _scheduler);
+            }
+
+            private void WriteLineToLog(string text)
+            {
+                // we don't lock the file, we open it each time (note it's a less fast, especially when it gets bigger over time)
+                using (var writer = new StreamWriter(_logPath, true, Encoding.UTF8))
+                {
+                    writer.WriteLine(text);
+                    writer.Flush();
                 }
-
-                Settings.Synchronizer.Synchronize();
-            });
-        }
-
-        private void runSynchronizerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Task.Run(() => StartSynchronizer());
-        }
-
-        private void synchronizeNowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SynchronizeNow();
-        }
-
-        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            textBoxMain.Clear();
-        }
-
-        private void synchronizationToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            runSynchronizerToolStripMenuItem.Enabled = OnDemandSynchronizer.IsSupported && Settings.HasSecretsFile &&
-                (Settings.Synchronizer == null || Settings.Synchronizer.SyncPeriod <= 0);
-
-            synchronizeNowToolStripMenuItem.Enabled = OnDemandSynchronizer.IsSupported && Settings.HasSecretsFile;
-            stopSynchronizerToolStripMenuItem.Enabled = OnDemandSynchronizer.IsSupported && Settings.HasSecretsFile &&
-                Settings.Synchronizer != null && Settings.Synchronizer.SyncPeriod > 0;
-
-            uninstallToolStripMenuItem.Enabled = OnDemandSynchronizer.IsSupported;
-        }
-
-        private void resetGoogleDriveStateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.ShowConfirm("You are about to reset the synchronization information from the root folder. This could take some time depending on the number of folders and file it will impact." +
-                Environment.NewLine + Environment.NewLine +
-                "Are you sure you want to do this?") != DialogResult.Yes)
-                return;
-
-            foreach (var account in Settings.FileSystem.Accounts)
-            {
-                account.InitializeDatabase(true);
             }
         }
 
-        private void stopSynchronizerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RemoveAConfiguredAccountToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Settings.Synchronizer == null)
-                return;
-
-            Settings.Synchronizer.SyncPeriod = 0;
-            AddLog("Synchronization is stopped.");
-        }
-
-        private void uninstallToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            if (this.ShowConfirm("You are about to deactivate the synchronization that is setup between the '" + Settings.DataDirectoryPath + "' directory and the cloud." +
-                Environment.NewLine + Environment.NewLine +
-                "Are you sure you want to do this?") != DialogResult.Yes)
-                return;
-
-            Settings.UnregisterOnDemandSynchronizer();
-        }
-
-        private void openConfigurationBackupPathToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (IOUtilities.DirectoryExists(Settings.ConfigurationBackupDirectoryPath))
+            using (var dlg = new ChooseAccount())
             {
-                WindowsUtilities.OpenExplorer(Settings.ConfigurationBackupDirectoryPath);
+                dlg.ShowDialog(this);
+                var account = dlg.SelectedAccount;
+                if (account != null)
+                {
+                    if (this.ShowConfirm("Are you sure you want to remove account '" + account.UserEmailAddress + "'?") != DialogResult.Yes)
+                        return;
+
+                    account.Synchronizer.Stop();
+                    account.Synchronizer.StateProvider.Reset();
+                    account.Remove();
+                    account.UnregisterOnDemandSynchronizer();
+                    IOUtilities.DirectoryDelete(account.DataDirectoryPath, true, false);
+                    Settings.Current.ResetAccounts();
+                    this.ShowMessage("Account '" + account.UserEmailAddress + "' was removed successfully.");
+                }
             }
-        }
-
-        private void diagnosticsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            openConfigurationBackupPathToolStripMenuItem.Enabled = IOUtilities.DirectoryExists(Settings.ConfigurationBackupDirectoryPath);
-            resetGoogleDriveStateToolStripMenuItem.Enabled = OnDemandSynchronizer.IsSupported && Settings.HasSecretsFile;
-        }
-
-        private void openDataDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (IOUtilities.DirectoryExists(Settings.DataDirectoryPath))
-            {
-                WindowsUtilities.OpenExplorer(Settings.DataDirectoryPath);
-            }
-        }
-
-        private void openDataDirectoryToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            openDataDirectoryToolStripMenuItem.Enabled = IOUtilities.DirectoryExists(Settings.DataDirectoryPath);
         }
     }
 }

@@ -17,15 +17,30 @@ namespace ShellBoost.Samples.PhysicalOverview
             CanPaste = true;
         }
 
-        private class MyShelItem : ShellItem
+        public PhysicalFolder(ShellFolder parent, ShellItemId fileSystemId, string fileSystemPath)
+            : base(parent, fileSystemId, fileSystemPath)
+        {
+            CanDelete = true;
+        }
+
+        private class MyShellItem : ShellItem
         {
             // this item is backed by a physical file
-            public MyShelItem(ShellFolder parent, FileInfo info)
+            public MyShellItem(ShellFolder parent, FileInfo info)
                 : base(parent, info)
             {
                 CanDelete = true;
                 CanMove = true;
                 CanCopy = true;
+            }
+
+            public MyShellItem(ShellFolder parent, ShellItemId fileSystemId, string fileSystemPath)
+                : base(parent, fileSystemId, fileSystemPath)
+            {
+                CanDelete = true;
+                CanMove = true;
+                CanCopy = true;
+                //ReadPropertiesFromShell = true;
             }
 
             public override bool TryGetPropertyValue(Props.PropertyKey key, out object value)
@@ -54,10 +69,18 @@ namespace ShellBoost.Samples.PhysicalOverview
             {
                 CanDelete = true;
             }
+
+            public MyShellFolder(ShellFolder parent, ShellItemId fileSystemId, string fileSystemPath)
+                : base(parent, fileSystemId, fileSystemPath)
+            {
+                CanDelete = true;
+            }
         }
 
         protected override ShellItem CreateFileSystemFolder(DirectoryInfo info) => new MyShellFolder(this, info);
-        protected override ShellItem CreateFileSystemItem(FileInfo info) => new MyShelItem(this, info);
+        protected override ShellItem CreateFileSystemItem(FileInfo info) => new MyShellItem(this, info);
+        protected override ShellItem CreateFileSystemItem(ShellItemId fileSystemId, string fileSystemPath) => new MyShellItem(this, fileSystemId, fileSystemPath);
+        protected override ShellItem CreateFileSystemFolder(ShellItemId fileSystemId, string fileSystemPath) => new MyShellFolder(this, fileSystemId, fileSystemPath);
 
         protected override IEnumerable<FileSystemInfo> EnumerateFileSystemInfos(DirectoryInfo info, SHCONTF options, string searchPattern)
         {
@@ -69,6 +92,31 @@ namespace ShellBoost.Samples.PhysicalOverview
 
                 yield return fsi;
             }
+        }
+
+        protected override ShellItem GetItem(string displayName)
+        {
+            var item = base.GetItem(displayName);
+            if (item != null)
+                return item;
+
+            // this is for Common Dialog Save As support
+            // here, we create a non-existing item.
+            return new MyShellItem(this, new FileInfo(Path.Combine(FileSystemPath, displayName)));
+        }
+
+        public override ShellItem GetItem(ShellItemId id)
+        {
+            var item = base.GetItem(id);
+            if (item != null)
+                return item;
+
+            // this is for Common Dialog Save As support
+            // here, we check it's a non-existing item that we may have built in GetItem(string displayName)
+            if (id.TryGetFileSystemName(out var fileName))
+                return new MyShellItem(this, new FileInfo(Path.Combine(FileSystemPath, fileName)));
+
+            return null;
         }
 
         public override bool TryGetPropertyValue(Props.PropertyKey key, out object value)
@@ -89,48 +137,14 @@ namespace ShellBoost.Samples.PhysicalOverview
             return b;
         }
 
-        // these 3 following functions overrides allow common dialogs to parse & evaluate an item that doesn't exist yet
-        public override bool TryParseItem(string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
-        {
-            // check path is valid
-            if (IOUtilities.PathIsValidFileName(displayName))
-            {
-                // create some PIDL & attribute
-                eatenCharacters = displayName.Length;
-                attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM;
-                relativeIdl = new ShellItemIdList();
-                relativeIdl.Add(new StringKeyShellItemId(displayName));
-                return true;
-            }
-            return base.TryParseItem(displayName, out eatenCharacters, out attributes, out relativeIdl);
-        }
-
-        // this is the reverse of the previous function
-        public override bool TryGetDisplayName(ShellItemIdList relativeIdl, out string displayName)
-        {
-            if (KeyShellItemId.From(relativeIdl.Last.Data, false) is StringKeyShellItemId sk)
-            {
-                displayName = sk.Value;
-                return true;
-            }
-
-            return base.TryGetDisplayName(relativeIdl, out displayName);
-        }
-
-        // get some attributes (the default returned by ShellItem)
-        public override bool TryGetAttributes(ShellItemIdList relativeIdl, out SFGAO attributes)
-        {
-            attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM;
-            return true;
-        }
-
         protected override void OnFileDialogEvent(object sender, FileDialogEventArgs e)
         {
             if (e.Type == FileDialogEventType.Overwrite)
             {
-                // commdlg can call us for virtual items not even written yet
+                // commdlg can call us for virtual items (that we sent back) not even written yet
                 // tell it it's ok to overwrite
-                if (GetItem(e.ItemIdList.Last) == null)
+                if (e.ItemIdList.Last.TryGetFileSystemName(out var fileName) &&
+                    !IOUtilities.FileExists(Path.Combine(FileSystemPath, fileName)))
                 {
                     var ov = (OverwriteFileDialogEventArgs)e;
                     ov.Response = FDE_OVERWRITE_RESPONSE.FDEOR_ACCEPT;

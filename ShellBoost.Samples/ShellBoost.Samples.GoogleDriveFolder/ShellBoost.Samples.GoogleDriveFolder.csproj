@@ -66,13 +66,16 @@
     <Compile Include="AddAccountBox.Designer.cs">
       <DependentUpon>AddAccountBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChooseAccount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseAccount.designer.cs">
+      <DependentUpon>ChooseAccount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Account.cs" />
-    <Compile Include="DriveFile.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="FolderException.cs" />
-    <Compile Include="LocalDatabase.cs" />
-    <Compile Include="DrivePath.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,12 +92,14 @@
     <Compile Include="SettingsBox.Designer.cs">
       <DependentUpon>SettingsBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="SqlNado.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddAccountBox.resx">
       <DependentUpon>AddAccountBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChooseAccount.resx">
+      <DependentUpon>ChooseAccount.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -112,6 +117,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>

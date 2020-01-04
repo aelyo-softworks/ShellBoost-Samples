@@ -33,29 +33,31 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeAConfiguredAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.installSecretsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.synchronizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.synchronizeNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDataDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBoxMain = new System.Windows.Forms.TextBox();
-            this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.installSecretsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetGoogleDriveStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.openConfigurationBackupPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogsPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBoxMain = new System.Windows.Forms.TextBox();
+            this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.contextMenuStripLog.SuspendLayout();
             this.SuspendLayout();
@@ -78,6 +80,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addAccountToolStripMenuItem,
             this.listAccountsToolStripMenuItem,
+            this.removeAConfiguredAccountToolStripMenuItem,
             this.toolStripSeparator3,
             this.installSecretsToolStripMenuItem,
             this.preferencesToolStripMenuItem,
@@ -86,67 +89,86 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
-            this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
+            this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.FileToolStripMenuItem_DropDownOpening);
             // 
             // addAccountToolStripMenuItem
             // 
             this.addAccountToolStripMenuItem.Name = "addAccountToolStripMenuItem";
-            this.addAccountToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.addAccountToolStripMenuItem.Text = "Add &Account...";
-            this.addAccountToolStripMenuItem.Click += new System.EventHandler(this.addAccountToolStripMenuItem_Click);
+            this.addAccountToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            this.addAccountToolStripMenuItem.Text = "Configure a New &Account...";
+            this.addAccountToolStripMenuItem.Click += new System.EventHandler(this.AddAccountToolStripMenuItem_Click);
             // 
             // listAccountsToolStripMenuItem
             // 
             this.listAccountsToolStripMenuItem.Name = "listAccountsToolStripMenuItem";
-            this.listAccountsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.listAccountsToolStripMenuItem.Text = "&List Accounts";
-            this.listAccountsToolStripMenuItem.Click += new System.EventHandler(this.listAccountsToolStripMenuItem_Click);
+            this.listAccountsToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            this.listAccountsToolStripMenuItem.Text = "&List Configured Accounts";
+            this.listAccountsToolStripMenuItem.Click += new System.EventHandler(this.ListAccountsToolStripMenuItem_Click);
+            // 
+            // removeAConfiguredAccountToolStripMenuItem
+            // 
+            this.removeAConfiguredAccountToolStripMenuItem.Name = "removeAConfiguredAccountToolStripMenuItem";
+            this.removeAConfiguredAccountToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            this.removeAConfiguredAccountToolStripMenuItem.Text = "Remove a Configured Account...";
+            this.removeAConfiguredAccountToolStripMenuItem.Click += new System.EventHandler(this.RemoveAConfiguredAccountToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(243, 6);
+            // 
+            // installSecretsToolStripMenuItem
+            // 
+            this.installSecretsToolStripMenuItem.Name = "installSecretsToolStripMenuItem";
+            this.installSecretsToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
+            this.installSecretsToolStripMenuItem.Text = "Configure &Secrets File...";
+            this.installSecretsToolStripMenuItem.Click += new System.EventHandler(this.InstallSecretsToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
             this.preferencesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.preferencesToolStripMenuItem.Text = "&Preferences...";
-            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
+            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.PreferencesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(243, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // synchronizationToolStripMenuItem
             // 
             this.synchronizationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runSynchronizerToolStripMenuItem,
+            this.startSynchronizerToolStripMenuItem,
             this.stopSynchronizerToolStripMenuItem,
-            this.synchronizeNowToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.uninstallToolStripMenuItem});
+            this.synchronizeNowToolStripMenuItem});
             this.synchronizationToolStripMenuItem.Name = "synchronizationToolStripMenuItem";
             this.synchronizationToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.synchronizationToolStripMenuItem.Text = "Synchronization";
-            this.synchronizationToolStripMenuItem.DropDownOpening += new System.EventHandler(this.synchronizationToolStripMenuItem_DropDownOpening);
+            this.synchronizationToolStripMenuItem.DropDownOpening += new System.EventHandler(this.SynchronizationToolStripMenuItem_DropDownOpening);
             // 
-            // runSynchronizerToolStripMenuItem
+            // startSynchronizerToolStripMenuItem
             // 
-            this.runSynchronizerToolStripMenuItem.Name = "runSynchronizerToolStripMenuItem";
-            this.runSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.runSynchronizerToolStripMenuItem.Text = "Start Synchronizer";
-            this.runSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.runSynchronizerToolStripMenuItem_Click);
+            this.startSynchronizerToolStripMenuItem.Name = "startSynchronizerToolStripMenuItem";
+            this.startSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.startSynchronizerToolStripMenuItem.Text = "Start Synchronizer";
+            this.startSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.StartSynchronizerToolStripMenuItem_Click);
+            // 
+            // stopSynchronizerToolStripMenuItem
+            // 
+            this.stopSynchronizerToolStripMenuItem.Name = "stopSynchronizerToolStripMenuItem";
+            this.stopSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.stopSynchronizerToolStripMenuItem.Text = "Stop Synchronizer";
+            this.stopSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.StopSynchronizerToolStripMenuItem_Click);
             // 
             // synchronizeNowToolStripMenuItem
             // 
@@ -154,12 +176,14 @@
             this.synchronizeNowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.synchronizeNowToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.synchronizeNowToolStripMenuItem.Text = "Synchronize Now";
-            this.synchronizeNowToolStripMenuItem.Click += new System.EventHandler(this.synchronizeNowToolStripMenuItem_Click);
+            this.synchronizeNowToolStripMenuItem.Click += new System.EventHandler(this.SynchronizeNowToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openDataDirectoryToolStripMenuItem});
+            this.openDataDirectoryToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.clearLogToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -170,8 +194,20 @@
             this.openDataDirectoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openDataDirectoryToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.openDataDirectoryToolStripMenuItem.Text = "&Open Data Directory...";
-            this.openDataDirectoryToolStripMenuItem.DropDownOpening += new System.EventHandler(this.openDataDirectoryToolStripMenuItem_DropDownOpening);
-            this.openDataDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openDataDirectoryToolStripMenuItem_Click);
+            this.openDataDirectoryToolStripMenuItem.DropDownOpening += new System.EventHandler(this.OpenDataDirectoryToolStripMenuItem_DropDownOpening);
+            this.openDataDirectoryToolStripMenuItem.Click += new System.EventHandler(this.OpenDataDirectoryToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(230, 6);
+            // 
+            // clearLogToolStripMenuItem
+            // 
+            this.clearLogToolStripMenuItem.Name = "clearLogToolStripMenuItem";
+            this.clearLogToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.clearLogToolStripMenuItem.Text = "Clear Log";
+            this.clearLogToolStripMenuItem.Click += new System.EventHandler(this.ClearLogToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -183,12 +219,55 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
+            // diagnosticsToolStripMenuItem
+            // 
+            this.diagnosticsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resetGoogleDriveStateToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.openConfigurationBackupPathToolStripMenuItem,
+            this.openLogsPathToolStripMenuItem});
+            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
+            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
+            this.diagnosticsToolStripMenuItem.DropDownOpening += new System.EventHandler(this.DiagnosticsToolStripMenuItem_DropDownOpening);
+            // 
+            // resetGoogleDriveStateToolStripMenuItem
+            // 
+            this.resetGoogleDriveStateToolStripMenuItem.Name = "resetGoogleDriveStateToolStripMenuItem";
+            this.resetGoogleDriveStateToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.resetGoogleDriveStateToolStripMenuItem.Text = "Reset Google Drive State";
+            this.resetGoogleDriveStateToolStripMenuItem.Click += new System.EventHandler(this.ResetGoogleDriveStateToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(255, 6);
+            // 
+            // openConfigurationBackupPathToolStripMenuItem
+            // 
+            this.openConfigurationBackupPathToolStripMenuItem.Name = "openConfigurationBackupPathToolStripMenuItem";
+            this.openConfigurationBackupPathToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.openConfigurationBackupPathToolStripMenuItem.Text = "Open Configuration Backup Path...";
+            this.openConfigurationBackupPathToolStripMenuItem.Click += new System.EventHandler(this.OpenConfigurationBackupPathToolStripMenuItem_Click);
+            // 
+            // openLogsPathToolStripMenuItem
+            // 
+            this.openLogsPathToolStripMenuItem.Name = "openLogsPathToolStripMenuItem";
+            this.openLogsPathToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.openLogsPathToolStripMenuItem.Text = "Open Logs Path...";
+            this.openLogsPathToolStripMenuItem.Click += new System.EventHandler(this.OpenLogsPathToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(132, 6);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // textBoxMain
             // 
@@ -217,68 +296,7 @@
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.clearAllToolStripMenuItem.Text = "Clear All";
-            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
-            // 
-            // stopSynchronizerToolStripMenuItem
-            // 
-            this.stopSynchronizerToolStripMenuItem.Name = "stopSynchronizerToolStripMenuItem";
-            this.stopSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.stopSynchronizerToolStripMenuItem.Text = "Stop Synchronizer";
-            this.stopSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.stopSynchronizerToolStripMenuItem_Click);
-            // 
-            // uninstallToolStripMenuItem
-            // 
-            this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.uninstallToolStripMenuItem.Text = "&Uninstall Synchronizer";
-            this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click_1);
-            // 
-            // installSecretsToolStripMenuItem
-            // 
-            this.installSecretsToolStripMenuItem.Name = "installSecretsToolStripMenuItem";
-            this.installSecretsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.installSecretsToolStripMenuItem.Text = "Configure &Secrets File...";
-            this.installSecretsToolStripMenuItem.Click += new System.EventHandler(this.installSecretsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
-            // 
-            // diagnosticsToolStripMenuItem
-            // 
-            this.diagnosticsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetGoogleDriveStateToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.openConfigurationBackupPathToolStripMenuItem});
-            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
-            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
-            this.diagnosticsToolStripMenuItem.DropDownOpening += new System.EventHandler(this.diagnosticsToolStripMenuItem_DropDownOpening);
-            // 
-            // resetGoogleDriveStateToolStripMenuItem
-            // 
-            this.resetGoogleDriveStateToolStripMenuItem.Name = "resetGoogleDriveStateToolStripMenuItem";
-            this.resetGoogleDriveStateToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.resetGoogleDriveStateToolStripMenuItem.Text = "Reset Google Drive State";
-            this.resetGoogleDriveStateToolStripMenuItem.Click += new System.EventHandler(this.resetGoogleDriveStateToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(255, 6);
-            // 
-            // openConfigurationBackupPathToolStripMenuItem
-            // 
-            this.openConfigurationBackupPathToolStripMenuItem.Name = "openConfigurationBackupPathToolStripMenuItem";
-            this.openConfigurationBackupPathToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.openConfigurationBackupPathToolStripMenuItem.Text = "Open Configuration Backup Path...";
-            this.openConfigurationBackupPathToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationBackupPathToolStripMenuItem_Click);
+            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.ClearAllToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -317,17 +335,19 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openDataDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchronizationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runSynchronizerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startSynchronizerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchronizeNowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopSynchronizerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installSecretsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem diagnosticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetGoogleDriveStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem openConfigurationBackupPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLogsPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeAConfiguredAccountToolStripMenuItem;
     }
 }
 

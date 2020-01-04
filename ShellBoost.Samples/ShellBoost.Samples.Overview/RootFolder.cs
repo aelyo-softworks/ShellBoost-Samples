@@ -20,7 +20,6 @@ namespace ShellBoost.Samples.Overview
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
-            Console.WriteLine("EnumItems options:" + options);
             int max = 2;
             for (int i = 0; i < max; i ++)
             {

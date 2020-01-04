@@ -11,22 +11,40 @@ using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Requests;
 using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Download;
 using Google.Apis.Drive.v3;
-using Google.Apis.Drive.v3.Data;
 using Google.Apis.Json;
 using Google.Apis.Logging;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using ShellBoost.Core;
+using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
+using GDriveData = Google.Apis.Drive.v3.Data;
 
 namespace ShellBoost.Samples.GoogleDriveFolder
 {
     // represent one Google Drive account
     public sealed class Account : IDisposable
     {
+        // https://developers.google.com/drive/api/v3/mime-types
+        public const string FolderMimeType = "application/vnd.google-apps.folder";
+
+        // https://support.google.com/drive/answer/6374270?visit_id=637072450166330725-2466926012&rd=1&hl=en
+        // these mime type don't take size on Google drive, so they report a size of zero
+        public static string[] GoogleDocMimeTypes = new string[] {
+            "application/vnd.google-apps.document",
+            "application/vnd.google-apps.drawing",
+            "application/vnd.google-apps.file",
+            "application/vnd.google-apps.form",
+            "application/vnd.google-apps.fusiontable",
+            "application/vnd.google-apps.map",
+            "application/vnd.google-apps.presentation",
+            "application/vnd.google-apps.script",
+            "application/vnd.google-apps.site",
+            "application/vnd.google-apps.spreadsheet"
+        };
+
         private const string _tokenJsonExt = ".token.json";
-        private const string _changeTokenKey = "ChangeToken";
         public static Core.Utilities.ILogger Logger { get; set; }
 
         static Account()
@@ -46,7 +64,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             // we want read & write access
             var scopes = new[] { DriveService.Scope.Drive };
             UserCredential credential;
-            using (var stream = System.IO.File.OpenRead(Settings.SecretsFilePath))
+            using (var stream = File.OpenRead(Settings.SecretsFilePath))
             {
                 var receiver = noReceiver ? new NullReceiver() : AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies);
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath), receiver).Result;
@@ -54,10 +72,19 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             Service = GetService(credential);
             RefreshAbout();
+            GetRootAndTempFolder();
             UserFileName = GetUserFileName(UserEmailAddress);
             DataDirectoryPath = GetDataDirectoryPath(UserEmailAddress);
-            DatabaseFilePath = GetDatabaseFilePath(UserEmailAddress);
-            Database = new LocalDatabase(DatabaseFilePath);
+
+            // each GDrive account has its own synchronizer (cloud provider) instance
+            IOUtilities.DirectoryCreate(DataDirectoryPath);
+            OnDemandLocalFileSystem.EnsureRegistered(DataDirectoryPath, GetRegistration());
+            FileSystem = new FileSystem(this);
+
+            // note the mpsync identifier must be *globally unique*, so you can choose a guid, or something like a .NET namespace
+            Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true });
+            Synchronizer.AddEndPoint("Local", new OnDemandLocalFileSystem(DataDirectoryPath));
+            Synchronizer.AddEndPoint("GDrive", FileSystem);
         }
 
         // a receive that doesn't to anything on purpose
@@ -69,13 +96,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
         public DriveService Service { get; }
         public string TokenFilePath { get; }
-        public About About { get; private set; }
+        public GDriveData.About About { get; private set; }
         public string UserEmailAddress => About.User.EmailAddress;
         public string UserFileName { get; }
-        public string DatabaseFilePath { get; }
         public string DataDirectoryPath { get; }
-        public LocalDatabase Database { get; }
         public string RootId { get; private set; }
+        public string TempFolderId { get; private set; }
+        public MultiPointSynchronizer Synchronizer { get; }
+        public FileSystem FileSystem { get; }
 
         public override string ToString() => UserEmailAddress;
 
@@ -83,19 +111,27 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
         public void Dispose()
         {
+#if DEBUG
+            Account.Log(TraceLevel.Info, "");
+#endif
+            Synchronizer?.Dispose();
+            FileSystem?.Dispose();
             Service?.Dispose();
-            Database?.Dispose();
         }
 
-        // start the database linked to this account
-        public void InitializeDatabase(bool synchronizeRootFolder = false)
+        // customize registration to give a nice name to the cloud provider we represent
+        private static OnDemandLocalFileSystemRegistration GetRegistration()
         {
-            GetRootFolder();
+            var reg = new OnDemandLocalFileSystemRegistration();
+            reg.ProviderName = AssemblyUtilities.GetDescription();
+            return reg;
+        }
 
-            bool needRootRefresh = SynchronizeChanges();
-            if (synchronizeRootFolder || needRootRefresh)
+        public void UnregisterOnDemandSynchronizer()
+        {
+            if (IOUtilities.DirectoryExists(DataDirectoryPath))
             {
-                SynchronizeRootFolder();
+                OnDemandLocalFileSystem.Unregister(DataDirectoryPath, GetRegistration());
             }
         }
 
@@ -107,155 +143,249 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             About = aboutRequest.Execute();
         }
 
-        public IEnumerable<DriveFile> GetFolderFiles(string relativePath)
+        public IEnumerable<GDriveData.File> GetFolderFiles(string parentId, bool all)
         {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
+            if (parentId == null)
+                throw new ArgumentNullException(nameof(parentId));
 
-            var id = GetId(relativePath);
-            if (id == null)
-                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
+            if (parentId != RootId && all)
+                throw new NotSupportedException();
 
-            return Database.GetFolderFiles(id);
+            Log(TraceLevel.Info, "parentId:" + parentId + " all:" + all);
+            string pageToken = null;
+            do
+            {
+                var request = Service.Files.List();
+
+                request.Fields = "nextPageToken, files(" + GetFileFields() + ")";
+                request.PageToken = pageToken;
+
+                // in this implementation, we don't want deleted files
+                request.Q = "trashed=false";
+                if (parentId != RootId)
+                {
+                    request.Q += " and '" + parentId + "' in parents";
+                }
+                request.Spaces = "drive";
+
+                var result = request.Execute();
+                foreach (var file in result.Files)
+                {
+                    // don't send the temp folder
+                    if (parentId == RootId && file.Id == TempFolderId)
+                        continue;
+
+                    yield return file;
+                }
+
+                pageToken = result.NextPageToken;
+            } while (pageToken != null);
         }
 
-        public void DeleteFile(string relativePath)
+        public void DeleteFilesByName(string parentId, string name)
         {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
+            var files = GetFilesByName(parentId, name);
+            foreach (var file in files)
+            {
+                DeleteFile(file.Id);
+            }
+        }
 
-            string id = GetId(relativePath);
+        public IList<GDriveData.File> GetFilesByName(string parentId, string name)
+        {
+            if (parentId == null)
+                throw new ArgumentNullException(nameof(parentId));
+
+            if (name == null)
+                return new List<GDriveData.File>();
+
+            Log(TraceLevel.Info, "parentId:" + parentId + " name:" + name);
+            var request = Service.Files.List();
+            request.Fields = "files(" + GetFileFields() + ")";
+
+            // escape single quotes in queries
+            // https://developers.google.com/drive/api/v3/ref-search-terms
+            request.Q = "trashed=false and '" + parentId + "' in parents and name='" + name.Replace("'", @"\'") + "'";
+            request.Spaces = "drive";
+
+            // note there can be more than once, but we only need the first
+            request.PageSize = 1;
+            return request.Execute().Files;
+        }
+
+        public GDriveData.File GetFile(string id)
+        {
             if (id == null)
-                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
+                return null; // this is on purpose
 
+            Log(TraceLevel.Info, "id:" + id);
+            var request = Service.Files.Get(id);
+            request.Fields = GetFileFields();
+            return request.Execute();
+        }
+
+        public GDriveData.File UpdateFile(string id, DateTime modifiedTime, string mimeType = null)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            Log(TraceLevel.Info, "id:" + id + " modifiedTime:" + modifiedTime + " mimeType:" + mimeType);
+            var fields = new List<string>();
+            var file = new GDriveData.File();
+            file.MimeType = mimeType;
+            fields.Add("mimeType");
+
+            if (modifiedTime != DateTime.MinValue)
+            {
+                file.ModifiedTime = modifiedTime;
+                fields.Add("modifiedTime");
+            }
+
+            var request = Service.Files.Update(file, id);
+            request.Fields = GetFileFields();
+            return request.Execute();
+        }
+
+        public void DeleteFile(string id)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            Log(TraceLevel.Info, "id:" + id);
             var request = Service.Files.Delete(id);
             request.Execute();
-            Database.DeleteFile(id);
         }
 
-        public DriveFile GetFile(string relativePath)
+        public Task DownloadFileAsync(string id, long offset, long count, Stream output, CancellationToken cancellationToken, Action<IDownloadProgress> downloadProgress = null)
         {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
-
-            string id = GetId(relativePath);
             if (id == null)
-                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
-
-            return Database.GetFile(id);
-        }
-
-        public void DownloadFile(string relativePath, long offset, long count, Stream output, RemoteOperationContext context)
-        {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
+                throw new ArgumentNullException(nameof(id));
 
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
 
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            string id = GetId(relativePath);
-            if (id == null)
-                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
-
-            var file = Database.GetFile(id);
-            if (file == null)
-                throw new FolderException("0002: File for id '" + id + "' wasn't found in the database.");
-
+            Log(TraceLevel.Info, "id:" + id + " offset:" + offset + " count:" + count);
             var request = Service.Files.Get(id);
-            request.MediaDownloader.ProgressChanged += (Google.Apis.Download.IDownloadProgress progress) =>
+            if (downloadProgress != null)
             {
-                context.Synchronizer.ReportProgress(context.CallbackContext, file.Size, progress.BytesDownloaded);
-            };
-
-            var prog = request.DownloadRange(output, new RangeHeaderValue(offset, (offset + count) - 1));
-            if (prog.BytesDownloaded != count)
-            {
-                // downloaded bytes size is not the same as expected, update our local database
-                request = Service.Files.Get(id);
-                request.Fields = GetFileFields();
-                var result = request.Execute();
-                var driveFile = DriveFile.From(result);
-
-                if (driveFile == null || string.IsNullOrEmpty(driveFile.Id) || driveFile.Id != id)
-                    throw new FolderException("0003: Drive result is empty or its id is invalid.");
-
-                Database.SynchronizeOne(relativePath, driveFile);
+                request.MediaDownloader.ProgressChanged += (progress) =>
+                {
+                    downloadProgress(progress);
+                };
             }
+
+            return request.DownloadRangeAsync(output, new RangeHeaderValue(offset, (offset + count) - 1), cancellationToken);
         }
 
-        public void RenameFile(string relativePath, string newName)
+        public GDriveData.File CreateFolder(string name, string parentId, DateTime? createdTime = null, DateTime? modifiedTime = null) => CreateFile(name, parentId, createdTime, modifiedTime, FolderMimeType);
+        public GDriveData.File CreateFile(string name, string parentId, DateTime? createdTime = null, DateTime? modifiedTime = null, string mimeType = null)
         {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (parentId == null)
+                throw new ArgumentNullException(nameof(parentId));
+
+            Log(TraceLevel.Info, "name:'" + name + "' parentId:" + parentId + " createdTime:" + createdTime + " modifiedTime:" + modifiedTime + " mimeType:" + mimeType);
+            var file = new GDriveData.File();
+            var request = Service.Files.Create(file);
+            file.Name = name;
+            file.Parents = new List<string>(new[] { parentId });
+            if (!string.IsNullOrWhiteSpace(mimeType))
+            {
+                file.MimeType = mimeType;
+            }
+
+            if (modifiedTime.HasValue)
+            {
+                file.ModifiedTime = modifiedTime.Value;
+            }
+
+            if (createdTime.HasValue)
+            {
+                file.CreatedTime = createdTime.Value;
+            }
+
+            request.Fields = GetFileFields();
+            return request.Execute();
+        }
+
+        public GDriveData.File MoveFile(string id, string newName, string oldParentId, string newParentId)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             if (newName == null)
                 throw new ArgumentNullException(nameof(newName));
 
-            string id = GetId(relativePath);
-            if (id == null)
-                throw new FolderException("0001: Id for relative path '" + relativePath + "' wasn't found in the database.");
+            if (oldParentId == null)
+                throw new ArgumentNullException(nameof(oldParentId));
 
-            var file = new Google.Apis.Drive.v3.Data.File();
+            if (newParentId == null)
+                throw new ArgumentNullException(nameof(newParentId));
+
+            Log(TraceLevel.Info, "id:" + id + " newName:" + newName + " oldParentId:" + oldParentId + " newParentId:" + newParentId);
+
+            // note google drive allows multiple files with the same name, so we must delete conflicting targets
+            DeleteFilesByName(newParentId, newName);
+
+            var file = new GDriveData.File();
             file.Name = newName;
+
+            // Note: it looks like originalFileName can not be changed, at least not like this
+            // For some reason, Google Drive keeps using the original extension (the one with originalFilename), even once the file has been renamed, when we download it using Google Drive UI.
+            // So, the whole thing works with Google Drive because the file name we used for temporary uploads has the same extension than the the final name
             var request = Service.Files.Update(file, id);
+
+            if (oldParentId != newParentId)
+            {
+                request.AddParents = newParentId;
+                request.RemoveParents = oldParentId;
+            }
+
             request.Fields = GetFileFields();
-            var result = request.Execute();
-
-            var driveFile = DriveFile.From(result);
-            if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-                throw new FolderException("0003: Drive result is empty or its id is invalid.");
-
-            var newRelativePath = Path.Combine(Path.GetDirectoryName(relativePath), newName);
-            Database.SynchronizeOne(newRelativePath, driveFile);
+            return request.Execute();
         }
 
-        public void UploadFile(string relativePath, string fullPath, Stream input)
+        public async Task<GDriveData.File> UploadFileAsync(string parentId, string id, string name, DateTime createdTime, DateTime modifiedTime, Stream input, CancellationToken cancellationToken)
         {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
-
-            if (fullPath == null)
-                throw new ArgumentNullException(nameof(fullPath));
-
-            // note input can be null (for example if the file is currently locked but exists locally, so it should exist remotely as well even if its content is not ok)
-
-            var parentPath = Path.GetDirectoryName(relativePath);
-            string parentId = GetId(parentPath);
             if (parentId == null)
-                throw new FolderException("0004: Parent id for parent path '" + parentPath + "' wasn't found in the database.");
+                throw new ArgumentNullException(nameof(parentId));
 
-            var id = GetId(relativePath); // can be null
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
-            var file = new Google.Apis.Drive.v3.Data.File();
-            var fi = new FileInfo(fullPath);
-            if (fi.Exists)
+            Log(TraceLevel.Info, "parentId:" + parentId + " id:" + id + " name:" + name + " createdTime:" + createdTime + " modifiedTime:" + modifiedTime);
+            var file = new GDriveData.File();
+            if (modifiedTime != DateTime.MinValue)
             {
-                file.ModifiedTime = fi.LastWriteTime;
-                if (id == null)
+                file.ModifiedTime = modifiedTime;
+            }
+
+            if (id == null)
+            {
+                if (createdTime != DateTime.MinValue)
                 {
-                    file.CreatedTime = fi.CreationTime;
+                    file.CreatedTime = createdTime;
                 }
             }
 
-            Google.Apis.Drive.v3.Data.File result;
+            GDriveData.File result;
             if (input == null)
             {
                 if (id == null)
                 {
                     var request = Service.Files.Create(file);
-                    file.Name = Path.GetFileName(relativePath);
+                    file.Name = name;
                     file.Parents = new List<string>(new[] { parentId });
                     request.Fields = GetFileFields();
-                    result = request.Execute();
+                    result = await request.ExecuteAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
                     var request = Service.Files.Update(file, id);
                     request.Fields = GetFileFields();
-                    result = request.Execute();
+                    result = await request.ExecuteAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
             else
@@ -263,286 +393,218 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 if (id == null)
                 {
                     var request = Service.Files.Create(file, input, null);
-                    file.Name = Path.GetFileName(relativePath);
+                    file.Name = name;
                     file.Parents = new List<string>(new[] { parentId });
                     request.Fields = GetFileFields();
-                    request.Upload();
+                    await request.UploadAsync(cancellationToken).ConfigureAwait(false);
                     result = request.ResponseBody;
                 }
                 else
                 {
                     var request = Service.Files.Update(file, id, input, null);
                     request.Fields = GetFileFields();
-                    request.Upload();
+                    await request.UploadAsync(cancellationToken).ConfigureAwait(false);
                     result = request.ResponseBody;
                 }
             }
 
-            var driveFile = DriveFile.From(result);
-            if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-                throw new FolderException("0003: Drive result is empty or its id is invalid.");
-
-            Database.SynchronizeOne(relativePath, driveFile);
-        }
-
-        public void CreateDirectory(string relativePath, string fullPath)
-        {
-            if (relativePath == null)
-                throw new ArgumentNullException(nameof(relativePath));
-
-            if (fullPath == null)
-                throw new ArgumentNullException(nameof(fullPath));
-
-            var parentPath = Path.GetDirectoryName(relativePath);
-            string parentId = GetId(parentPath);
-            if (parentId == null)
-                throw new FolderException("0004: Parent id for parent path '" + parentPath + "' wasn't found in the database.");
-
-            var file = new Google.Apis.Drive.v3.Data.File();
-            file.Name = Path.GetFileName(relativePath);
-            file.MimeType = DriveFile.FolderMimeType;
-            file.Parents = new List<string>(new[] { parentId });
-
-            var di = new DirectoryInfo(fullPath);
-            if (di.Exists)
+            if (result == null)
             {
-                file.ModifiedTime = di.LastWriteTime;
-                file.CreatedTime = di.CreationTime;
+                Log(TraceLevel.Info, "result is null.");
             }
-
-            var request = Service.Files.Create(file);
-            request.Fields = GetFileFields();
-            var result = request.Execute();
-            var driveFile = DriveFile.From(result);
-            if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-                throw new FolderException("0003: Drive result is empty or its id is invalid.");
-
-            Database.SynchronizeOne(relativePath, driveFile);
-        }
-
-        // get full path from a file id
-        private string GetFullPath(string id)
-        {
-            var path = GetRelativePath(id);
-            if (path == null)
-                return null;
-
-            return Path.Combine(DataDirectoryPath, path);
-        }
-
-        private string GetRelativePath(string id)
-        {
-            if (id == RootId)
-                return string.Empty;
-
-            return Database.GetRelativePath(id);
-        }
-
-        // get id from relativePath
-        private string GetId(string relativePath)
-        {
-            if (string.IsNullOrEmpty(relativePath))
-                return RootId;
-
-            return Database.GetId(relativePath);
+            else
+            {
+                Log(TraceLevel.Info, "result id:" + result.Id);
+            }
+            return result;
         }
 
         // get and sync the root folder
-        private void GetRootFolder()
+        private void GetRootAndTempFolder()
         {
             var rootFile = Service.Files.Get("root").Execute();
             RootId = rootFile.Id;
-            Database.SetValue(nameof(RootId), RootId);
+
+            var tempFolderName = Settings.Current.GoogleTempFolderName.Nullify() ?? Settings._defaultGoogleTempFolderName;
+            var tempFolder = GetFilesByName(RootId, tempFolderName).FirstOrDefault();
+            if (tempFolder == null)
+            {
+                tempFolder = CreateFolder(tempFolderName, RootId);
+            }
+            TempFolderId = tempFolder.Id;
         }
 
-        private void SynchronizeRootFolder()
+        private string GetLastStartPageToken()
         {
-            // note we read all (not trashed) files here. this could be optimized
-            var folder = LoadAllFiles(RootId);
-            Database.SynchronizeAll(folder);
+            var path = GetStartPageTokenFilePath(UserEmailAddress);
+            if (!IOUtilities.FileExists(path))
+                return null;
+
+            try
+            {
+                return File.ReadAllText(path);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public bool SynchronizeChanges()
+        private void SetLastStartPageToken(string token)
         {
-            var dbChangeToken = Database.GetNullifiedValue(_changeTokenKey);
+            var path = GetStartPageTokenFilePath(UserEmailAddress);
+            File.WriteAllText(path, token);
+        }
+
+        public void ResetLastStartPageToken()
+        {
+            var path = GetStartPageTokenFilePath(UserEmailAddress);
+            IOUtilities.FileDelete(path);
+        }
+
+        public void SynchronizeChanges(EventHandler<SyncFileSystemEventArgs> eventHandler)
+        {
+            var lastToken = GetLastStartPageToken();
             var response = Service.Changes.GetStartPageToken().Execute();
             var changeToken = response.StartPageTokenValue;
 
-            if (dbChangeToken != null && changeToken != dbChangeToken)
-                return TrackChanges(dbChangeToken);
+            if (lastToken != null && changeToken != lastToken)
+            {
+                TrackChanges(lastToken, eventHandler);
+                return;
+            }
 
-            Database.SetValue(_changeTokenKey, changeToken);
-            return false;
+            SetLastStartPageToken(changeToken);
         }
 
         // track changes using Google Drive Change API
         // https://developers.google.com/drive/api/v3/reference/changes
-        private bool TrackChanges(string token)
+        private void TrackChanges(string token, EventHandler<SyncFileSystemEventArgs> eventHandler)
         {
             string pageToken = token;
             while (pageToken != null)
             {
                 var request = Service.Changes.List(pageToken);
                 request.Spaces = "drive";
-                request.Fields = "*";
+                request.Fields = "*"; // should be optimized
                 var changes = request.Execute();
                 foreach (var change in changes.Changes)
                 {
                     try
                     {
-                        if (ProcessChange(change))
-                            return true;
+                        ProcessChange(change, eventHandler);
                     }
                     catch (Exception e)
                     {
-                        Log(TraceLevel.Error, "An error has occurred trying to process change: " + e);
-                        return false;
+                        Log(TraceLevel.Warning, "An error has occurred trying to process change: " + e);
+                        return;
                     }
                 }
 
                 if (changes.NewStartPageToken != null)
                 {
-                    Database.SetValue(_changeTokenKey, changes.NewStartPageToken);
+                    SetLastStartPageToken(changes.NewStartPageToken);
                 }
                 pageToken = changes.NextPageToken;
             }
-            return false;
         }
 
         // return true to resynchronize root
-        private bool ProcessChange(Change change)
+        private void ProcessChange(GDriveData.Change change, EventHandler<SyncFileSystemEventArgs> eventHandler)
         {
+            if (eventHandler == null)
+                return;
+
             if (change.Type == "file")
             {
-                if ((change.File == null && change.Removed == true) || change.File.Trashed == true)
+                Log(TraceLevel.Info, "Change " + Trace(change));
+                if ((change.File == null && change.Removed == true) || change.File?.Trashed == true)
                 {
-                    var path = GetFullPath(change.FileId);
-                    if (path == null)
-                    {
-                        if (change.File != null)
-                        {
-                            Log(TraceLevel.Warning, "Trashed file '" + change.File.Name + "' was not found and cannot be deleted.");
-                        }
-                        else
-                        {
-                            Log(TraceLevel.Warning, "Trashed file with id '" + change.FileId + "' was not found and cannot be deleted.");
-                        }
-                        return false;
-                    }
-
-                    Database.DeleteFile(change.FileId);
-                    IOUtilities.FileDelete(path, true);
-                    if (change.File != null)
-                    {
-                        Log(TraceLevel.Info, "File '" + change.File.Name + "' was deleted.");
-                    }
-                    else
-                    {
-                        Log(TraceLevel.Info, "File with id '" + change.FileId + "' was deleted.");
-                    }
-                    return false;
+                    eventHandler.Invoke(FileSystem, new SyncFileSystemEventArgs(SyncFileSystemEventType.Deleted, change.Time.Value, new StateSyncEntry { Id = change.FileId }));
+                    Log(TraceLevel.Info, "File with id '" + change.FileId + "' was deleted.");
+                    return;
                 }
 
                 if (change.File == null)
                 {
                     Log(TraceLevel.Warning, "Don't know what to do with a change without an associated file.");
-                    return false;
+                    return;
                 }
 
-                if (change.File.Name != null && change.File.Name.EndsWith(FileSystem.UrlExt))
+                if (change.File.Name != null && change.File.Name.EndsWith(FileSystem.UrlExt, StringComparison.OrdinalIgnoreCase))
                 {
                     Log(TraceLevel.Warning, "File '" + change.File.Name + "' is a .url, skipped.");
-                    return false;
+                    return;
                 }
 
-                var driveFile = DriveFile.From(change.File);
-                if (driveFile == null || string.IsNullOrEmpty(driveFile.Id))
-                {
-                    Log(TraceLevel.Warning, "File '" + change.File.Name + "' is empty or its id is invalid.");
-                    return false;
-                }
+                var parentId = change.File.Parents?.FirstOrDefault();
 
-                if (driveFile.ParentId == null)
-                {
-                    Log(TraceLevel.Warning, "File '" + change.File.Name + "' has no parent id.");
-                    return false;
-                }
-
-                var parentPath = GetRelativePath(driveFile.ParentId);
-                if (parentPath == null)
-                {
-                    Log(TraceLevel.Warning, "File '" + change.File.Name + "' with parent id '" + driveFile.ParentId + "' has no parent path.");
-                    return false;
-                }
-
-                var relativePath = Path.Combine(parentPath, driveFile.FileName);
-                Database.SynchronizeOne(relativePath, driveFile);
-                Log(TraceLevel.Info, "File '" + change.File.Name + "' was synchronized.");
-                return false;
+                eventHandler.Invoke(FileSystem, new SyncFileSystemEventArgs(SyncFileSystemEventType.Changed, change.Time.Value, new StateSyncEntry { Id = change.FileId, ParentId = parentId }));
             }
-            return false;
         }
 
-        private static string GetFileFields() => "id, parents, name, mimeType, size, version, modifiedTime, createdTime, folderColorRgb, owners, lastModifyingUser, webViewLink, webContentLink";
-
-        // build a dictionary of <relative path> => file
-        private IReadOnlyDictionary<string, DriveFile> LoadAllFiles(string rootId)
+        private static string Trace(GDriveData.Change change)
         {
-            var files = new Dictionary<string, DriveFile>();
-            string pageToken = null;
-            do
+            var list = new List<Tuple<string, object>>();
+            list.Add(new Tuple<string, object>("FileId", change.FileId));
+            list.Add(new Tuple<string, object>("ChangeType", change.ChangeType));
+            if (change.Removed.HasValue)
             {
-                var request = Service.Files.List();
+                list.Add(new Tuple<string, object>("Removed", change.Removed.Value));
+            }
 
-                // fields are described here
-                // https://developers.google.com/drive/api/v3/reference/files
-                request.Fields = "nextPageToken, files(" + GetFileFields() + ")";
-                request.PageToken = pageToken;
+            if (change.Time.HasValue)
+            {
+                list.Add(new Tuple<string, object>("Time", change.Time.Value));
+            }
 
-                // in this implementation, we don't want deleted files
-                request.Q = "trashed=false";
-                request.Spaces = "drive";
-
-                var result = request.Execute();
-                foreach (var driveFile in result.Files)
+            if (change.File != null)
+            {
+                list.Add(new Tuple<string, object>("File.Name", change.File.Name));
+                list.Add(new Tuple<string, object>("File.MimeType", change.File.MimeType));
+                if (change.File.OriginalFilename != null)
                 {
-                    var file = DriveFile.From(driveFile);
-                    if (file != null)
-                    {
-                        files[driveFile.Id] = file;
-                    }
+                    list.Add(new Tuple<string, object>("File.OriginalFilename", change.File.OriginalFilename));
                 }
 
-                pageToken = result.NextPageToken;
-            } while (pageToken != null);
+                if (change.File.Size.HasValue)
+                {
+                    list.Add(new Tuple<string, object>("File.Size", change.File.Size.Value));
+                }
 
-            var dic = new Dictionary<string, DriveFile>(files.Count);
-            foreach (var kv in files)
-            {
-                var path = buildPath(kv.Value);
-                if (path == null)
-                    continue; // huh?
+                if (change.File.Trashed.HasValue)
+                {
+                    list.Add(new Tuple<string, object>("File.Trashed", change.File.Trashed.Value));
+                }
 
-                dic[path] = kv.Value;
+                if (change.File.Version.HasValue)
+                {
+                    list.Add(new Tuple<string, object>("File.Version", change.File.Version.Value));
+                }
+
+                if (change.File.Parents != null)
+                {
+                    list.Add(new Tuple<string, object>("File.Parents", string.Join("|", change.File.Parents)));
+                }
+
+                if (change.File.CreatedTime.HasValue)
+                {
+                    list.Add(new Tuple<string, object>("File.CreatedTime", change.File.CreatedTime.Value));
+                }
+
+                if (change.File.ModifiedTime.HasValue)
+                {
+                    list.Add(new Tuple<string, object>("File.ModifiedTime", change.File.ModifiedTime.Value));
+                }
             }
 
-            string buildPath(DriveFile file)
-            {
-                if (file.ParentId == rootId)
-                    return file.FileName;
-
-                files.TryGetValue(file.ParentId, out var parent);
-                if (parent == null)
-                    return null;
-
-                var parentPath = buildPath(parent);
-                if (parentPath == null)
-                    return null;
-
-                return Path.Combine(parentPath, file.FileName);
-            }
-            return dic;
+            return string.Join(", ", list.Select(c => c.Item1 + "=" + c.Item2));
         }
+
+        // these are the fields we really use
+        // fields are described here
+        // https://developers.google.com/drive/api/v3/reference/files
+        private static string GetFileFields() => "id, parents, name, mimeType, size, version, modifiedTime, createdTime, webViewLink";
 
         private static DriveService GetService(UserCredential credential) => new DriveService(new BaseClientService.Initializer()
         {
@@ -563,8 +625,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
+        public static string GetStartPageTokenFilePath(string emailAddress) => Path.Combine(Settings.ConfigurationDirectoryPath, GetUserFileName(emailAddress) + "_startPageToken.txt");
         public static string GetTokenFilePath(string emailAddress) => Path.Combine(Settings.ConfigurationDirectoryPath, GetUserFileName(emailAddress) + _tokenJsonExt);
-        public static string GetDatabaseFilePath(string emailAddress) => Path.Combine(Settings.ConfigurationDirectoryPath, GetUserFileName(emailAddress) + ".db");
         public static string GetDataDirectoryPath(string emailAddress) => Path.Combine(Settings.DataDirectoryPath, GetUserFileName(emailAddress));
         public static string GetUserFileName(string emailAddress)
         {
@@ -574,10 +636,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             return IOUtilities.PathToValidFileName(emailAddress);
         }
 
-        // does the directory name matches a valid account?
-        public static bool IsDirectoryAnAccount(string directoryName) => GetAllAccounts(true).Any(a => a.UserFileName.EqualsIgnoreCase(directoryName));
-
-        public static Account GetAccount(string emailAddress) => GetAllAccounts(true).FirstOrDefault(a => a.UserEmailAddress.EqualsIgnoreCase(emailAddress));
+        public static bool IsGoogleDoc(GDriveData.File file) => file != null && file.MimeType != null && GoogleDocMimeTypes.Contains(file.MimeType);
 
         // get all accounts stored in the app local data directory
         public static IEnumerable<Account> GetAllAccounts(bool noReceiver)
@@ -591,26 +650,16 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         }
 
         // remove an account (token, files, etc.) from app local data directory
-        public void Remove(bool deleteData = true)
+        public void Remove()
         {
             var tokenFilePath = GetTokenFilePath(UserEmailAddress);
             IOUtilities.FileDelete(tokenFilePath, true);
-
-            if (deleteData)
-            {
-                Database?.Dispose();
-
-                var databaseFilePath = GetDatabaseFilePath(UserEmailAddress);
-                IOUtilities.FileDelete(databaseFilePath, true);
-
-                var dataDirectoryPath = GetDataDirectoryPath(UserEmailAddress);
-                IOUtilities.DirectoryDelete(dataDirectoryPath, true);
-            }
+            ResetLastStartPageToken();
         }
 
         // adds an account to app local data directory
         // uses Google Sign-In (pops up a form)
-        public static About AddAccount()
+        public static GDriveData.About AddAccount()
         {
             if (!Settings.HasSecretsFile)
                 throw new InvalidOperationException();
@@ -619,7 +668,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             var scopes = new[] { DriveService.Scope.Drive };
             UserCredential credential;
             var tempPath = Path.Combine(Settings.ConfigurationDirectoryPath, "temp" + _tokenJsonExt);
-            using (var stream = System.IO.File.OpenRead(Settings.SecretsFilePath))
+            using (var stream = File.OpenRead(Settings.SecretsFilePath))
             {
                 IOUtilities.FileCreateDirectory(tempPath);
                 var store = new FileStore(tempPath);
@@ -636,6 +685,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
                 // note this could overwrite an existing token file. this is ok since this one is more recent
                 IOUtilities.FileMove(tempPath, path, true);
+                Settings.Current.ResetAccounts();
                 return about;
             }
         }
@@ -655,7 +705,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             {
                 var serialized = NewtonsoftJsonSerializer.Instance.Serialize(value);
                 IOUtilities.FileCreateDirectory(TokenFilePath);
-                System.IO.File.WriteAllText(TokenFilePath, serialized);
+                File.WriteAllText(TokenFilePath, serialized);
                 return Task.CompletedTask;
             }
 
@@ -671,7 +721,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 {
                     try
                     {
-                        var serialized = System.IO.File.ReadAllText(TokenFilePath);
+                        var serialized = File.ReadAllText(TokenFilePath);
                         if (!string.IsNullOrEmpty(serialized))
                         {
                             var result = NewtonsoftJsonSerializer.Instance.Deserialize<T>(serialized);
