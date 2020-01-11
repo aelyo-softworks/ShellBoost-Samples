@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.Physical
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.GoogleDriveFolder", "ShellBoost.Samples.GoogleDriveFolder\ShellBoost.Samples.GoogleDriveFolder.csproj", "{9029CAB1-B317-479F-93C5-8D07842FD893}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.MultiHost", "ShellBoost.Samples.MultiHost\ShellBoost.Samples.MultiHost.csproj", "{72501D06-AA4C-4BEE-B6F8-086830AF6C01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{9029CAB1-B317-479F-93C5-8D07842FD893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9029CAB1-B317-479F-93C5-8D07842FD893}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9029CAB1-B317-479F-93C5-8D07842FD893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

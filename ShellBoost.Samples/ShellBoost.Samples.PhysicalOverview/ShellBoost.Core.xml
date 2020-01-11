@@ -686,6 +686,28 @@
             Can the creation date time be changed after creation?
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.ServerStopOptions">
+            <summary>
+            Defines options for stopping the server.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ServerStopOptions.None">
+            <summary>
+            No option.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ServerStopOptions.WaitForCallsToComplete">
+            <summary>
+            Wait for pending calls to complete.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ServerStopOptions.DontStopListening">
+            <summary>
+            Don't stop listening for calls globally. Only stop listening for this ShellBoost project calls.
+            Used for multiple AppDomain scenarios to stop listening only in one AppDomain.
+            This will keep the RPC server alive.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.ShareViolationFileDialogEventArgs">
             <summary>
             Provides data for the FileDialog event of the ShellFolderServer type.
@@ -4344,6 +4366,9 @@
             Gets the last file dialog event arguments.
             Will be null if the code is not running in a Common File Dialog context.
             </summary>
+            <value>
+            The last file dialog event arguments.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.ShellContext.ClientProcess">
             <summary>
@@ -5275,16 +5300,23 @@
             </summary>
             <param name="configuration">The configuration.</param>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.StopListening">
+            <summary>
+            Stops all instances of ShellFolderServer from listening.
+            This should only be used after all instances have stop listening.
+            Provided for multiple AppDomains support.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.Stop">
             <summary>
             Stops this instance.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.ShellFolderServer.Stop(System.Boolean)">
+        <member name="M:ShellBoost.Core.ShellFolderServer.Stop(ShellBoost.Core.ServerStopOptions)">
             <summary>
             Stops this instance.
             </summary>
-            <param name="waitForCallsToComplete">if set to <c>true</c> wait for calls to complete.</param>
+            <param name="options">Options to use.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.RegisterNativeDll(ShellBoost.Core.RegistrationMode)">
             <summary>
@@ -7318,11 +7350,17 @@
             A string that identifies a file name as being a file name of a temporary sync entry.
             Temporary files should be excluded from all file system events reporting.
             </summary>
+            <value>
+            A string that identifies a file name as being a file name of a temporary sync entry.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.ContentMover.Synchronizer">
             <summary>
             The multi-point synchronizer instance.
             </summary>
+            <value>
+            The synchronizer instance.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.ContentMover.Downloading">
             <summary>
@@ -8174,6 +8212,7 @@
             <param name="localRelativePath">The local relative path.</param>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+            <returns>0 if operation was successful; otherwise an error code.</returns>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.PlaformInfo">
             <summary>
@@ -9682,13 +9721,12 @@
             <param name="entry">The entry.</param>
             <param name="input">The input stream. The stream is not seekable, and not writable.</param>
             <param name="options">The options.</param>
-            <exception cref="T:System.ArgumentNullException">
-            context is null
+            <exception cref="T:System.ArgumentNullException">context is null
             or
             input is null
             or
-            entry is null.
-            </exception>
+            entry is null.</exception>
+            <returns>A task that represents the work queued.</returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.GetEntryContentAsync(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry,System.IO.Stream,ShellBoost.Core.Synchronization.SyncGetEntryContentOptions)">
             <summary>
@@ -9705,6 +9743,7 @@
             or
             output is null.
             </exception>
+            <returns>A task that represents the work queued.</returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.GetSourceDownloadFileName(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncChange)">
             <summary>
@@ -11598,19 +11637,29 @@
             <summary>
             Gets the underlying list object.
             </summary>
+            <value>
+            The underlying list object.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.ConcurrentList`1.Item(System.Int32)">
             <summary>
             Gets or sets the element at the specified index.
             </summary>
+            <value>
+            The element at the specified index.
+            </value>
             <param name="index">The zero-based index of the element to get or set.</param>
-            <returns>The element at the specified index.</returns>
+            <returns>
+            The element at the specified index.
+            </returns>
         </member>
         <member name="P:ShellBoost.Core.Utilities.ConcurrentList`1.Count">
             <summary>
             Gets the number of elements contained in the list.
             </summary>
-            <value>The number of elements contained in the list.</value>
+            <value>
+            The number of elements contained in the list.
+            </value>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ConcurrentList`1.Add(`0)">
             <summary>
@@ -11666,7 +11715,7 @@
             Copies the entire list to a compatible one-dimensional array, starting at the specified index of the target array.
             </summary>
             <param name="array">The one-dimensional array that is the destination of the elements copied from list. The System.Array must have zero-based indexing.</param>
-            <param name="arrayIndex"></param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ConcurrentList`1.GetEnumerator">
             <summary>
@@ -12928,6 +12977,9 @@
             <summary>
             If the Attributes propery includes the ReparsePoint value, this member specifies the reparse point tag. Otherwise, this value is undefined and should not be used.
             </summary>
+            <value>
+            The reparse point tag.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.FileSystemEntry.VolumeSerialNumber">
             <summary>
@@ -14812,77 +14864,121 @@
             <summary>
             Gets the fully qualifed path of the affected file or directory.
             </summary>
+            <value>
+            The path.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.OldPath">
             <summary>
             Gets the previous fully qualified path of the affected file or directory.
             </summary>
+            <value>
+            The old path.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.Action">
             <summary>
             Gets the type of directory event that occurred.
             </summary>
+            <value>
+            The action.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.CreationTime">
             <summary>
             Gets the creation time of the affected file or directory.
             </summary>
+            <value>
+            The creation time.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.LastModificationTime">
             <summary>
             Gets the last modification time of the affected file or directory.
             </summary>
+            <value>
+            The last modification time.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.LastChangeTime">
             <summary>
             Gets the last change time of the affected file or directory.
             </summary>
+            <value>
+            The last change time.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.LastAccessTime">
             <summary>
             Gets the last access time of the affected file or directory.
             </summary>
+            <value>
+            The last access time.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.AllocatedLength">
             <summary>
             Gets the allocated size of the affected file or directory.
             </summary>
+            <value>
+            The allocated length.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.Size">
             <summary>
-            Gets the size of the affected file or directory.
+            Gets the size of the affected file.
             </summary>
+            <value>
+            The size of the file.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.Attributes">
             <summary>
             Gets the attributes of the affected file or directory.
             </summary>
+            <value>
+            The file or directory attributes.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.ReparsePointTag">
             <summary>
             Gets the reparse point tag of the affected file or directory.
             </summary>
+            <value>
+            The reparse point tag.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.Id">
             <summary>
             Gets the  128-bit identifier of the affected file or directory.
             </summary>
+            <value>
+            The 128-bit identifier.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.ParentId">
             <summary>
             Gets the parent 128-bit identifier of the affected file or directory.
             </summary>
+            <value>
+            The parent 128-bit identifier.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.VolumeGuid">
             <summary>
             Gets the affected file or directory (and parent) volume GUID.
             </summary>
-            <value>The volume GUID.</value>
+            <value>
+            The volume GUID.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.EventTime">
             <summary>
             Gets this event creation time.
             </summary>
+            <value>
+            This event creation time.
+            </value>
         </member>
         <member name="M:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.ToString">
             <summary>
@@ -15299,11 +15395,17 @@
             <summary>
             Gets a list of all its parents.
             </summary>
+            <value>
+            The list of all its parents.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.PathSegmentList.ThisAndParents">
             <summary>
             Gets this and a list of all its parents.
             </summary>
+            <value>
+            The list of this and all its parents.
+            </value>
         </member>
         <member name="M:ShellBoost.Core.Utilities.PathSegmentList.Clone">
             <summary>
