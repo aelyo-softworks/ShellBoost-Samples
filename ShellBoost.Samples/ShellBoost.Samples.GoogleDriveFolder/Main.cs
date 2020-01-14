@@ -38,7 +38,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
 
             AddLog();
-            ListAccounts();
         }
 
         private void SynchronizeNow()
@@ -102,6 +101,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             _syncLogger = new MainLogger(this, "MPSync", Settings.Current.SynchronizerLogLevel);
             Settings.SynchronizerLogger = _syncLogger;
             Account.Logger = _apisLogger;
+            ListAccounts();
             if (Settings.Current.SyncAutoStart)
             {
                 StartSynchronization();
