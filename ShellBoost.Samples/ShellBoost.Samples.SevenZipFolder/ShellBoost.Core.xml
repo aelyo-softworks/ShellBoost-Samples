@@ -539,6 +539,21 @@
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
         </member>
+        <member name="T:ShellBoost.Core.GetFolderSettingsEventType">
+            <summary>
+            Defines a get folder settings event type.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.GetFolderSettingsEventType.ViewCreated">
+            <summary>
+            Called after the view has been created.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.GetFolderSettingsEventType.GetEmptyText">
+            <summary>
+            Called when the empty text is requested.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.IRemoteFileSystem2">
             <summary>
             Represents an external file system resources.
@@ -732,7 +747,7 @@
         </member>
         <member name="T:ShellBoost.Core.FileDialogEventArgs">
             <summary>
-            Provides data for the FileDialog event of the ShellFolderServer type.
+            Provides data for the FileDialog event of the ShellFolder type.
             </summary>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.Type">
@@ -833,7 +848,7 @@
         </member>
         <member name="T:ShellBoost.Core.FileDialogEventType">
             <summary>
-            Defines a drag and drop event type.
+            Defines a file dialog event type.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.FileOk">
@@ -4512,6 +4527,11 @@
             Raised when event are received from a Common Dialog.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetFolderSettings">
+            <summary>
+            Raised when a shell view window has been created.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
@@ -4845,6 +4865,13 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.FileDialogEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetFolderSettingsEvent(System.Object,ShellBoost.Core.GetFolderSettingsEventArgs)">
+            <summary>
+            Called when the native proxy is asking for the current view settings.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetFolderSettingsEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnOperate(ShellBoost.Core.ShellOperationEventArgs)">
             <summary>
@@ -5757,6 +5784,7 @@
         <member name="P:ShellBoost.Core.ShellItem.FullDisplayName">
             <summary>
             Gets this item's display name, that is, including the parent's full display name.
+            The full disply name is also what is used in the Windows Explorer's Address Bar.
             </summary>
             <value>The full display name.</value>
         </member>
@@ -8394,6 +8422,52 @@
             </summary>
             <value><c>true</c> if the show as group context menu must be hidden; otherwise, <c>false</c>.</value>
         </member>
+        <member name="T:ShellBoost.Core.Synchronization.StateEntry">
+            <summary>
+            Defines a state entry.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.StateEntry.#ctor(ShellBoost.Core.Synchronization.EndPointSynchronizer,ShellBoost.Core.Synchronization.StateSyncEntry,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Synchronization.StateEntry" /> class.
+            </summary>
+            <param name="synchronizer">The endpoint synchronizer.</param>
+            <param name="entry">The stored entry.</param>
+            <param name="relativeFilePath">The entry relative path or null if the path couldn't be computed because of hierarchy problems.</param>
+            <exception cref="T:System.ArgumentNullException">entry is null
+            or
+            relativePath is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateEntry.Synchronizer">
+            <summary>
+            Gets the endpoint synchronizer.
+            </summary>
+            <value>
+            The synchronizer.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateEntry.Entry">
+            <summary>
+            Gets the stored entry.
+            </summary>
+            <value>
+            The stored entry.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateEntry.RelativeFilePath">
+            <summary>
+            Gets the relative path of this stored entry, or null if the path couldn't be computed because of hierarchy problems.
+            </summary>
+            <value>
+            The relative file path.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.StateEntry.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
         <member name="T:ShellBoost.Core.Synchronization.StateSyncChange">
             <summary>
             Defines a persistable change state.
@@ -9227,7 +9301,7 @@
             Enumerates children entries for a parent identifier, for a given endpoint synchronizer.
             </summary>
             <param name="synchronizer">The synchronizer.</param>
-            <param name="parentEntryId">The parent entry identifier.</param>
+            <param name="parentEntryId">The parent entry identifier or null to enumerate all entries.</param>
             <param name="options">The options.</param>
             <returns>A list of entries.</returns>
         </member>
@@ -9251,7 +9325,7 @@
             </summary>
             <param name="synchronizer">The synchronizer.</param>
             <param name="entryId">The entry identifier.</param>
-            <returns>A file path.</returns>
+            <returns>A file path or null if the path couldn't be computed because of missing hierarchy entries.</returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.ISyncStateProvider.GetEntryByPath(ShellBoost.Core.Synchronization.EndPointSynchronizer,System.String)">
             <summary>
@@ -9806,6 +9880,8 @@
             <summary>
             Defines an endpoint synchronizer that handles a specific file system instance.
             </summary>
+            <seealso cref="T:ShellBoost.Core.Synchronization.ISyncEntryComparer" />
+            <seealso cref="T:System.IDisposable" />
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.#ctor(ShellBoost.Core.Synchronization.MultiPointSynchronizer,System.String,ShellBoost.Core.Synchronization.ISyncFileSystem,ShellBoost.Core.Synchronization.EndPointSynchronizerOptions)">
             <summary>
@@ -9999,6 +10075,13 @@
             <returns>A full file path.</returns>
             <exception cref="T:System.ArgumentNullException">entry is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.EnumerateStateEntries(System.String)">
+            <summary>
+            Enumerates entries stored in this endpoint's state provider.
+            </summary>
+            <param name="parentEntryId">The parent entry identifier. Use null to gather all entries.</param>
+            <returns>A list of entries.</returns>
+        </member>
         <member name="T:ShellBoost.Core.Synchronization.EndPointSynchronizer.StateEvent">
             <summary>
             Defines an event associated with entries and a timestamp.
@@ -10134,6 +10217,17 @@
             <value>
             The deleted entries.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.AddChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.SyncFileSystemEvent)">
+            <summary>
+            Add a change manually.
+            </summary>
+            <param name="type">The change type.</param>
+            <param name="entry">The entry related to the change.</param>
+            <param name="oldEntry">The optional old entry related to the change.</param>
+            <param name="event">The optional related file system event.</param>
+            <returns>The change instance or null if because the entry parent path could not be computed.</returns>
+            <exception cref="T:System.ArgumentNullException">entry is null</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.SaveStateDiff(ShellBoost.Core.Synchronization.ISyncEventsSink,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateDiff)">
             <summary>
@@ -10273,10 +10367,12 @@
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.GetSources(System.String)">
             <summary>
-            Gets the available sources endpoints for a given path, excluding this instance.
+            Gets the available sources endpoints for a given path, from a given set of endpoints, excluding this instance.
             </summary>
             <param name="relativePath">The relative path.</param>
-            <returns>A list of source, sorted by priority.</returns>
+            <returns>
+            A list of source, sorted by priority.
+            </returns>
             <exception cref="T:System.ArgumentNullException">relativePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.ToString">
@@ -10430,6 +10526,22 @@
             <summary>
             Updates all endpoints states.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.SynchronizeStates">
+            <summary>
+            Synchronizes all endpoint states.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.GetSources(System.String,System.Collections.Generic.IEnumerable{ShellBoost.Core.Synchronization.EndPointSynchronizer})">
+            <summary>
+            Gets the available sources endpoints for a given path, from a given set of endpoints.
+            </summary>
+            <param name="relativePath">The relative path.</param>
+            <param name="endpoints">A list of endpoints. If null all FileSystemRead endpoints are considered.</param>
+            <returns>
+            A list of source, sorted by priority.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">relativePath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.RunJobs">
             <summary>
@@ -10702,6 +10814,23 @@
             </summary>
             <value>
               <c>true</c> if state must be backuped at initialization; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizerOptions.StateProviderTraceLevel">
+            <summary>
+            Gets or sets the state provider trace level.
+            </summary>
+            <value>
+            The state provider trace level.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizerOptions.StateProviderProperties">
+            <summary>
+            Gets the properties to pass to the state provider at initialization.
+            The exact set of required properties depends on the implementation.
+            </summary>
+            <value>
+            The state provider properties.
             </value>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.SyncEntryAttributes">
@@ -14123,6 +14252,28 @@
             The minimum Windows file time value.
             </summary>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathMakeSystemFolder(System.String,System.Boolean)">
+            <summary>
+            Gives an existing folder the proper attributes to become a system folder.
+            </summary>
+            <param name="path">The folder path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns>
+              <c>true</c> if the operation succeeded, <c>false</c> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathUnmakeSystemFolder(System.String,System.Boolean)">
+            <summary>
+            Removes the attributes from a folder that make it a system folder. This folder must actually exist in the file system.
+            </summary>
+            <param name="path">The folder path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns>
+              <c>true</c> if the operation succeeded, <c>false</c> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FindContentType(System.Byte[])">
             <summary>
             Determines the MIME type from the data provided. Based on Windows FindMimeFromData function.
@@ -15872,12 +16023,11 @@
             </summary>
             <param name="waitForCompletion">if set to <c>true</c> wait for refresh completion.</param>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.FromAttributes(System.IO.FileAttributes,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.FromAttributes(System.IO.FileAttributes)">
             <summary>
             Converts file attributes to SFGAO.
             </summary>
             <param name="attributes">The attributes.</param>
-            <param name="fileSystem">if set to <c>true</c> adds the SFGAO_FILESYSTEM attribute.</param>
             <returns>An SFGAO value.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIconHandle(System.String,ShellBoost.Core.Utilities.IconMode)">
@@ -18439,6 +18589,95 @@
             </summary>
             <param name="url">The url to download the file from.</param>
             <param name="length">The file length.</param>
+        </member>
+        <member name="T:ShellBoost.Core.GetFolderSettingsEventArgs">
+            <summary>
+            Provides data for the GetFolderSettings event of the ShellFolder type.
+            How properties are used by the Shell depends on the type of the event.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.Type">
+            <summary>
+            Gets the type of event.
+            </summary>
+            <value>The type of event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.Folder">
+            <summary>
+            Gets the opened Shell Folder instance.
+            </summary>
+            <value>The opened Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.Hwnd">
+            <summary>
+            Gets the created window handle. May be IntPtr.Zero depending on context.
+            </summary>
+            <value>The created window handle.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.ViewMode">
+            <summary>
+            Gets or sets the folder view mode.
+            </summary>
+            <value>
+            The folder view mode.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.IconSize">
+            <summary>
+            Gets or sets the size of the image in pixels.
+            Only used if ViewMode is not set to FVM_AUTO.
+            </summary>
+            <value>
+            The size of the image in pixels.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.Flags">
+            <summary>
+            Gets or sets the folder flags.
+            </summary>
+            <value>
+            The folder flags.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.EmptyText">
+            <summary>
+            Gets or sets the text to be used when there are no items in the view.
+            </summary>
+            <value>
+            The the text to be used when there are no items in the view.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.GroupSubsetCount">
+            <summary>
+            Gets or sets the group subset count.
+            If the value is 0, subsetting is turned off.
+            If the value is greater than 0, group subsetting is turned on and the value sets the number of visible rows of items in each group.
+            </summary>
+            <value>
+            The group subset count.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.GroupByKey">
+            <summary>
+            Gets or sets a PropertyKey by which the view should be grouped.
+            </summary>
+            <value>
+            A Propertykey by which the view should be grouped.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.GroupByDirection">
+            <summary>
+            Gets or sets the group by direction.
+            </summary>
+            <value>
+            The group by direction.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.HResult">
+            <summary>
+            Gets or sets the operation HResult.
+            </summary>
+            <value>The operation HResult.</value>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.CONDITION_OPERATION">
             <summary>
@@ -35208,6 +35447,57 @@
         <member name="F:ShellBoost.Core.WindowsShell.FOF.FOFX_DONTDISPLAYLOCATIONS">
             <summary>
             <b>Introduced in Windows 7</b>. Do not display the location line in the progress dialog.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE">
+            <summary>
+            Specifies the folder view type.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/ne-shobjidl_core-folderviewmode">FOLDERVIEWMODE enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_AUTO">
+            <summary>
+            The view should determine the best option.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_ICON">
+            <summary>
+            The view should display medium-size icons.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_SMALLICON">
+            <summary>
+            The view should display small icons.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_LIST">
+            <summary>
+            Object names are displayed in a list view.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_DETAILS">
+            <summary>
+            Object names and other selected information, such as the size or date last updated, are shown.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_THUMBNAIL">
+            <summary>
+            The view should display thumbnail icons.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_TILE">
+            <summary>
+            The view should display large icons.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_THUMBSTRIP">
+            <summary>
+            The view should display icons in a filmstrip format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE.FVM_CONTENT">
+            <summary>
+            Windows 7 and later. The view should display content mode.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.FOLDERFLAGS">

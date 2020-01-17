@@ -44,6 +44,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             AddAccountClearCookies = true;
             GoogleApisLogLevel = TraceLevel.Info;
             SynchronizerLogLevel = TraceLevel.Verbose;
+            StateProviderLogLevel = TraceLevel.Off;
             GoogleTempFolderName = _defaultGoogleTempFolderName;
             ResetAccounts();
         }
@@ -127,5 +128,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         [DisplayName("Synchronizer Log Level")]
         [DefaultValue(TraceLevel.Verbose)]
         public TraceLevel SynchronizerLogLevel { get; set; }
+
+        [Category("Logging")]
+        [DisplayName("State Provider Log Level")]
+        [DefaultValue(TraceLevel.Off)]
+        public TraceLevel StateProviderLogLevel { get; set; }
     }
 }

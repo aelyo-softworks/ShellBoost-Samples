@@ -82,7 +82,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             FileSystem = new FileSystem(this);
 
             // note the mpsync identifier must be *globally unique*, so you can choose a guid, or something like a .NET namespace
-            Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true });
+            Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true, StateProviderTraceLevel = Settings.Current.StateProviderLogLevel });
             Synchronizer.AddEndPoint("Local", new OnDemandLocalFileSystem(DataDirectoryPath));
             Synchronizer.AddEndPoint("GDrive", FileSystem);
         }
@@ -112,7 +112,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         public void Dispose()
         {
 #if DEBUG
-            Account.Log(TraceLevel.Info, "");
+            Log(TraceLevel.Info, "");
 #endif
             Synchronizer?.Dispose();
             FileSystem?.Dispose();

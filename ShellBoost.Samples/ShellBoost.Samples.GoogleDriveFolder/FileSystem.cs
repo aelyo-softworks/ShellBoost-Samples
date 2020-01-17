@@ -174,6 +174,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (!options.CanCreate)
                 return null;
 
+            // we can't create google docs
+            if (IsGoogleDoc(entry))
+                return null;
+
             return CreateEntry(entry);
         }
 
@@ -184,6 +188,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             if (entry == null)
                 throw new ArgumentNullException(nameof(entry));
+
+            // we can't update google docs
+            if (IsGoogleDoc(entry))
+                return;
 
             options = options ?? new SyncUpdateEntryOptions();
             var file = Account.GetFile(entry.Id);
@@ -247,6 +255,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
 
+            // we can't update google docs
+            if (IsGoogleDoc(entry))
+                return;
+
             options = options ?? new SyncSetEntryContentOptions();
             var file = await Account.UploadFileAsync(entry.ParentId, entry.Id, entry.Name, entry.CreationTime.LocalDateTime, entry.LastWriteTime.LocalDateTime, input, options.CancellationToken).ConfigureAwait(false);
             if (file != null)
@@ -271,6 +283,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             return Account.CreateFile(entry.Name, entry.ParentId, entry.CreationTime.LocalDateTime, entry.LastWriteTime.LocalDateTime);
         }
+
+        private bool IsGoogleDoc(StateSyncEntry entry) => entry != null && entry.Name.EndsWith(UrlExt, StringComparison.OrdinalIgnoreCase);
 
         private void CopyToEntry(GDriveData.File file, StateSyncEntry entry)
         {
