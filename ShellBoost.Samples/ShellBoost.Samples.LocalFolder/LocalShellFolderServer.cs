@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 
@@ -43,6 +45,11 @@ namespace ShellBoost.Samples.LocalFolder
                 _root = new RootFolder(this, idl);
             }
             return _root;
+        }
+
+        protected override void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null)
+        {
+            Console.WriteLine(level + ":" + methodName + ":" + value);
         }
     }
 }

@@ -5233,6 +5233,14 @@
             </summary>
             <value>The IPC cache timeout.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.Cache">
+            <summary>
+            Gets the cache by PIDL instance.
+            </summary>
+            <value>
+            The cache instance.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.GetRootFolder(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Gets the root folder.
@@ -5288,6 +5296,14 @@
         <member name="M:ShellBoost.Core.ShellFolderServer.GetFromCache(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Gets a Shell Item from the cache using its PIDL.
+            </summary>
+            <param name="idl">The item's PIDL.</param>
+            <returns>Gets a ShellItem instance that was cached or null if it was not cached.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.RemoveFromCache(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Removes a Shell Item from the cache using its PIDL.
             </summary>
             <param name="idl">The item's PIDL.</param>
             <returns>Gets a ShellItem instance that was cached or null if it was not cached.</returns>
@@ -5965,14 +5981,54 @@
             <param name="value">The value.</param>
             <returns><c>true</c> if the value was read, <c>false</c> otherwise.</returns>
         </member>
-        <member name="M:ShellBoost.Core.ShellItem.MergeContextMenu(ShellBoost.Core.ShellFolder,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem},ShellBoost.Core.ShellMenu,ShellBoost.Core.ShellMenu)">
+        <member name="M:ShellBoost.Core.ShellItem.MergeContextMenuTop(ShellBoost.Core.ShellFolder,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem},ShellBoost.Core.ShellMenu,ShellBoost.Core.ShellMenu)">
             <summary>
-            Merges a context menu.
+            Allows to add items to the top of the context  menu.
             </summary>
             <param name="folder">The context folder.</param>
             <param name="items">The items selected.</param>
             <param name="existingMenu">The existing menu.</param>
             <param name="appendMenu">The append menu.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItem.MergeContextMenuBottom(ShellBoost.Core.ShellFolder,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem},ShellBoost.Core.ShellMenu,ShellBoost.Core.ShellMenu)">
+            <summary>
+            Allows to add items to the bottom of the context  menu.
+            </summary>
+            <param name="folder">The context folder.</param>
+            <param name="items">The items selected.</param>
+            <param name="existingMenu">The existing menu.</param>
+            <param name="appendMenu">The append menu.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItem.MergeContextMenu(ShellBoost.Core.ShellFolder,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem},ShellBoost.Core.ShellMenu,ShellBoost.Core.ShellMenu)">
+            <summary>
+            Allows to add items to context menu.
+            </summary>
+            <param name="folder">The context folder.</param>
+            <param name="items">The items selected.</param>
+            <param name="existingMenu">The existing menu.</param>
+            <param name="appendMenu">The append menu.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItem.ShowDefaultContextMenu(System.IntPtr,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem})">
+            <summary>
+            Shows the default context menu.
+            </summary>
+            <param name="hwndOwner">The owner window handle.</param>
+            <param name="items">The items selected.</param>
+            <returns>
+            true to show the default context menu; otherwise false.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItem.ModifyContextMenuFlags(ShellBoost.Core.ShellFolder,System.IntPtr,System.Collections.Generic.IReadOnlyList{ShellBoost.Core.ShellItem},ShellBoost.Core.WindowsShell.CMF)">
+            <summary>
+            The Shell is calling this method to ask for context menu flags modification.
+            </summary>
+            <param name="folder">The context folder.</param>
+            <param name="hwndOwner">The owner window handle.</param>
+            <param name="items">The items selected.</param>
+            <param name="flags">The flags.</param>
+            <returns>
+            The new flags.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItem.MergeViewMenu(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellMenu,ShellBoost.Core.ShellMenu)">
             <summary>
@@ -6663,7 +6719,9 @@
             <summary>
             Gets the flags.
             </summary>
-            <value>The flags.</value>
+            <value>
+            The flags.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenu.LastIndex">
             <summary>
@@ -6689,11 +6747,38 @@
             </summary>
             <value>The child items.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellMenu.AllItems">
+            <summary>
+            Gets all child items.
+            </summary>
+            <value>The child items.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenu.AllItemsIds">
+            <summary>
+            Gets all child items ids.
+            </summary>
+            <value>
+            All child items ids.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.ShellMenu.RemovedIds">
             <summary>
             Gets the a list of menu item identifiers that must be removed.
             </summary>
             <value>A list of of menu item identifiers that must be removed.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenu.RemoveIdsWhere(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellMenuItem},System.Func{ShellBoost.Core.ShellMenuItem,System.Boolean})">
+            <summary>
+            Removes a list of menu item ids using a predicate function.
+            </summary>
+            <param name="items">The input items.</param>
+            <param name="predicate">The predicate. If null, all items match and will be removed.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenu.RemoveIdsRange(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Removes a list of menu item ids.
+            </summary>
+            <param name="ids">The list of menu item ids</param>
         </member>
         <member name="M:ShellBoost.Core.ShellMenu.GetByIndex(System.Int32)">
             <summary>
@@ -6855,6 +6940,12 @@
             </summary>
             <value>The child items.</value>
         </member>
+        <member name="P:ShellBoost.Core.ShellMenuItem.AllItems">
+            <summary>
+            Gets all child items.
+            </summary>
+            <value>The child items.</value>
+        </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.Id">
             <summary>
             Gets this item menu identifier.
@@ -6920,6 +7011,12 @@
             Gets or sets the type.
             </summary>
             <value>The type.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItem.NativeTag">
+            <summary>
+            Gets or sets the menu item user data, a custom arbitrary value that can be used to store anything.
+            </summary>
+            <value>The tag value.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.Tag">
             <summary>
@@ -19772,11 +19869,12 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList"/> class.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.#ctor(System.String)">
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.#ctor(System.String,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList"/> class.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList" /> class.
             </summary>
             <param name="propList">The property list.</param>
+            <param name="throwOnError">if set to <c>true</c> Windows error may be thrown.</param>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.#ctor(ShellBoost.Core.WindowsPropertySystem.PropertyKey[])">
             <summary>
@@ -20075,6 +20173,14 @@
             <param name="data">The property key as an array of 20 bytes.</param>
             <exception cref="T:System.ArgumentNullException">data is null.</exception>
             <exception cref="T:System.ArgumentException">data length is not equal to 20.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyKey.FromString(System.String,System.Boolean)">
+            <summary>
+            Converts a string to a PropertyKey instance.
+            </summary>
+            <param name="value">The string.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>A PropertyKey instance or null if an error ocurred.</returns>
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.PropertyKey.CanonicalName">
             <summary>
@@ -34135,15 +34241,6 @@
             <param name="throwOnError">if set to <c>true</c> Windows error may be thrown.</param>
             <returns>An instance of the PropVariant type or null if an error occurred.</returns>
             <exception cref="T:System.ArgumentNullException">bytes is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.Deserialize(System.IntPtr,System.Int32)">
-            <summary>
-            Deserializes a PropVariant from the specified buffer.
-            </summary>
-            <param name="ptr">The buffer pointer.</param>
-            <param name="size">The size.</param>
-            <returns>An instance of the PropVariant type or null if an error occurred.</returns>
-            <exception cref="T:System.ArgumentNullException">ptr is zero.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.Deserialize(System.IntPtr,System.Int32,System.Boolean)">
             <summary>
