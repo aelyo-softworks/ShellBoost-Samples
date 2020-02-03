@@ -554,6 +554,131 @@
             Called when the empty text is requested.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.OnDiskDataSize">
+            <summary>
+            The on disk data size.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.ValidatedDataSize">
+            <summary>
+            The validated data size.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.ModifiedDataSize">
+            <summary>
+            The modified data size.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.PropertiesSize">
+            <summary>
+            The properties size.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.PinState">
+            <summary>
+            The pin state.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.InSyncState">
+            <summary>
+            The in synchronize state.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.FileId">
+            <summary>
+            The file identifier.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.SyncRootFileId">
+            <summary>
+            The synchronize root file identifier.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.OnDemandInfo.FileIdentity">
+            <summary>
+            The file identity.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_IN_SYNC_STATE.SB_IN_SYNC_STATE_NOT_IN_SYNC">
+            <summary>
+            The platform clears the placeholder’s in-sync state upon a successful call.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_IN_SYNC_STATE.SB_IN_SYNC_STATE_IN_SYNC">
+            <summary>
+            The platform sets the placeholder’s in-sync state upon a successful call.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PIN_STATE.SB_PIN_STATE_UNSPECIFIED">
+            <summary>
+            The platform can decide freely when the placeholder’s content needs to present or absent locally on the disk.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PIN_STATE.SB_PIN_STATE_PINNED">
+            <summary>
+            The sync provider will be notified to fetch the placeholder’s content asynchronously after the pin request is received by the platform.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PIN_STATE.SB_PIN_STATE_UNPINNED">
+            <summary>
+            The sync provider will be notified to dehydrate/invalidate the placeholder’s content on-disk asynchronously after the unpin request is received by the platform.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PIN_STATE.SB_PIN_STATE_EXCLUDED">
+            <summary>
+            the placeholder will never be synced to the cloud by the sync provider.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PIN_STATE.SB_PIN_STATE_INHERIT">
+            <summary>
+            The platform treats it as if the caller performs a move operation on the placeholder and hence re-evaluates the placeholder’s pin state based on its parent’s pin state.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE">
+            <summary>
+            Defines the state of a placeholder file or folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_NO_STATES">
+            <summary>
+            When returned, the file or directory is not a placeholder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_PLACEHOLDER">
+            <summary>
+            The file or directory is a placeholder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_SYNC_ROOT">
+            <summary>
+            The directory is both a placeholder directory as well as the sync root.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_ESSENTIAL_PROP_PRESENT">
+            <summary>
+            The file or directory must be a placeholder and there exists an essential property in the property store of the file or directory.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_IN_SYNC">
+            <summary>
+            The file or directory must be a placeholder and its content in sync with the cloud.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_PARTIAL">
+            <summary>
+            The file or directory must be a placeholder and its content is not ready to be consumed by the user application, though it may or may not be fully present locally.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_PARTIALLY_ON_DISK">
+            <summary>
+            The file or directory must be a placeholder and its content is not fully present locally. When this is set, CF_PLACEHOLDER_STATE_PARTIAL must also be set.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Ipc.SB_PLACEHOLDER_STATE.SB_PLACEHOLDER_STATE_INVALID">
+            <summary>
+            This is an invalid state. The API fails to parse the information of the file or directory.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.IRemoteFileSystem2">
             <summary>
             Represents an external file system resources.
@@ -4859,6 +4984,11 @@
             <returns><c>true</c> if the column was removed, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">column is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.RemoveAllColumns">
+            <summary>
+            Removes all columns.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnFileDialogEvent(System.Object,ShellBoost.Core.FileDialogEventArgs)">
             <summary>
             Called when a notification is sent by a Common Dialog
@@ -7954,6 +8084,34 @@
             The job change is a content change and it's been uploaded to a destination.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs">
+            <summary>
+            Provides data for the Includes event of the LocalFileSystem class.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs.#ctor(ShellBoost.Core.Utilities.FileSystemEntry)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs"/> class.
+            </summary>
+            <param name="entry">The entry instance.</param>
+            <exception cref="T:System.ArgumentNullException">entry is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs.Entry">
+            <summary>
+            Gets the entry instance.
+            </summary>
+            <value>
+            The entry instance.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs.IsIncluded">
+            <summary>
+            Gets or sets a value indicating whether the entry is included.
+            </summary>
+            <value>
+              <c>true</c> if the entry is included; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter">
             <summary>
             Defines an event filter.
@@ -8145,11 +8303,26 @@
             </summary>
             <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs" /> instance containing the event data.</param>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateEntry(System.String)">
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateAllEntriesStates(System.Boolean)">
+            <summary>
+            Updates all entries on-demand states.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateEntryStates(System.String,System.Boolean)">
+            <summary>
+            Updates an entry on-demand entry states.
+            </summary>
+            <param name="fullPath">The entry full path.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <exception cref="T:System.ArgumentNullException">fullPath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateEntry(System.String,System.Boolean)">
             <summary>
             Updates an on-demand entry.
             </summary>
             <param name="fullPath">The entry full path.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentNullException">fullPath is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.ReportProgress(System.Object,System.Int64,System.Int64)">
@@ -8409,6 +8582,14 @@
             </summary>
             <value>
               <c>true</c> if on-demand content is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.UpdateAllEntriesStatesAtInitialization">
+            <summary>
+            Gets or sets a value indicating whether to update all entries states at initialization.
+            </summary>
+            <value>
+              <c>true</c> if all entries states should be updated at initialization; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration">
@@ -9535,6 +9716,11 @@
             Occurs when a file system event occurs.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.Synchronization.LocalFileSystem.Including">
+            <summary>
+            Occurs when a FileSystemEntry is being included.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.#ctor(System.String,ShellBoost.Core.Synchronization.LocalFileSystemOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystem"/> class.
@@ -9649,6 +9835,13 @@
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.SyncFileSystemEventArgs" /> instance containing the event data.</param>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.OnIncluding(System.Object,ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs)">
+            <summary>
+            Raises the <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs" /> event.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs" /> instance containing the event data.</param>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.OnWatcherEvent(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
             <summary>
             Handles a file system event.
@@ -9709,6 +9902,13 @@
             <param name="volumeGuid">The volume GUID.</param>
             <param name="id">The identifier.</param>
             <returns>An identifier.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.EntryFromId(System.String)">
+            <summary>
+            Get a FileSystemEntry from a state identifier.
+            </summary>
+            <param name="id">The state identifier.</param>
+            <returns>A FileSystemEntry instance of null.</returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.IncludeEntry(ShellBoost.Core.Utilities.FileSystemEntry)">
             <summary>
@@ -13283,13 +13483,16 @@
             <param name="throwOnError">true to throw errors; otherwise false.</param>
             <returns>An enumerable collection of entries in the current directory.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.EnumerateAllChildren(System.Int32,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.EnumerateAllChildren(ShellBoost.Core.Utilities.FileSystemEntryEnumerationOptions,System.Int32,System.Boolean)">
             <summary>
             Returns an enumerable collection of all entries in the current directory hierarchy.
             </summary>
+            <param name="options">The options to use.</param>
             <param name="bufferSize">The buffer size.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
-            <returns>An enumerable collection of all entries in the current directory hierarchy.</returns>
+            <returns>
+            An enumerable collection of all entries in the current directory hierarchy.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.GetFullPath(System.String,System.Boolean)">
             <summary>
@@ -13551,6 +13754,21 @@
             <param name="share">A constant that determines how the file will be shared by processes.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
             <returns>A handle to the opened entry or IntPtr.Zero.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.FileSystemEntryEnumerationOptions">
+            <summary>
+            A combination of file system entry enumeration options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.FileSystemEntryEnumerationOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.FileSystemEntryEnumerationOptions.BreadthFirst">
+            <summary>
+            Do breadth-first enumeration.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.FileSystemVolume">
             <summary>
@@ -15076,6 +15294,14 @@
              </summary>
             <value>true if subdirectories within the specified path should be monitored; otherwise, false.</value>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcher.SetRelativePaths">
+            <summary>
+            Gets or sets a value indicating whether to set fully qualifed paths or a relative paths in LocalFileSystemWatcherEventArgs event instances.
+            </summary>
+            <value>
+              <c>true</c> if relative paths are set; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcher.NotifyFilter">
             <summary>
             Gets or sets the type of changes to watch for.
@@ -15110,7 +15336,8 @@
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.Path">
             <summary>
-            Gets the fully qualifed path of the affected file or directory.
+            Gets the fully qualifed path or a relative path of the affected file or directory.
+            The LocalFileSystemWatcher SetRelativePaths property value determines if relative paths are used.
             </summary>
             <value>
             The path.
@@ -15118,7 +15345,8 @@
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs.OldPath">
             <summary>
-            Gets the previous fully qualified path of the affected file or directory.
+            Gets the previous fully qualified path or a relative path of the affected file or directory.
+            The LocalFileSystemWatcher SetRelativePaths property value determines if relative paths are used.
             </summary>
             <value>
             The old path.
