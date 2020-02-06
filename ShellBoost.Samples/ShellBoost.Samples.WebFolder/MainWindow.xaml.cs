@@ -10,6 +10,7 @@ using System.Windows.Interop;
 using System.Windows.Threading;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
+using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
 using ShellBoost.Samples.WebFolder.Folder;
 

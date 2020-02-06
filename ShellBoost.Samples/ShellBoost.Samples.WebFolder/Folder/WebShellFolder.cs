@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShellBoost.Core;
-using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
 
 namespace ShellBoost.Samples.WebFolder.Folder
@@ -45,9 +44,9 @@ namespace ShellBoost.Samples.WebFolder.Folder
                 return await EnumItemsAsync(itemId, includeFolders, includeItems);
             }).Result;
 
-        public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
+        public override IEnumerable<ShellItem> EnumItems(Core.WindowsShell.SHCONTF options)
         {
-            foreach (var item in EnumItems(Folder.Id, options.HasFlag(SHCONTF.SHCONTF_FOLDERS), options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS)))
+            foreach (var item in EnumItems(Folder.Id, options.HasFlag(Core.WindowsShell.SHCONTF.SHCONTF_FOLDERS), options.HasFlag(Core.WindowsShell.SHCONTF.SHCONTF_NONFOLDERS)))
             {
                 if (item.Type == Api.ItemType.Folder)
                 {
