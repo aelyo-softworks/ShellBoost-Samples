@@ -14,7 +14,7 @@ namespace ShellBoost.Samples.FolderService
             {
                 // this is only for console testing (note: the application must be of Console type, not Windows)
                 var service = new ShellFolderService();
-                service.TestStartupAndStop(null);
+                service.InteractiveStartAndStop();
             }
             else
             {

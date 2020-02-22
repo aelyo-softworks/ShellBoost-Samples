@@ -13,10 +13,9 @@ namespace ShellBoost.Samples.FolderService
             InitializeComponent();
         }
 
-        // this is only for console testing (note: the application must be of Console type, not Windows)
-        internal void TestStartupAndStop(string[] args)
+        internal void InteractiveStartAndStop()
         {
-            OnStart(args);
+            CommonStart();
             Console.WriteLine("Press ESC to quit...");
             while (Console.ReadKey(true).Key != ConsoleKey.Escape)
             {
@@ -24,14 +23,26 @@ namespace ShellBoost.Samples.FolderService
             OnStop();
         }
 
-        protected override void OnStart(string[] args)
+        private void CommonStart(string ipcFormat = null)
         {
             _server?.Stop();
             _server = new OverviewShellFolderServer();
             var config = new ShellFolderConfiguration();
+
+            // we're not impersonating client
+            config.ImpersonateClient = false;
+
+            // this will fix an endpoint for clients connecting to a service:
+            // they *must* register with "ShellBoost.Samples.FolderService.ShellFolderService" as IpcFormat.
+            //
+            // clients from interactive run (console) don't need that.
+            config.IpcFormat = ipcFormat;
+
             config.NativeDllRegistration = RegistrationMode.User;
             _server.Start(config);
         }
+
+        protected override void OnStart(string[] args) => CommonStart(GetType().FullName);
 
         protected override void OnStop()
         {
