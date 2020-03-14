@@ -4994,6 +4994,15 @@
             </summary>
             <value>The folder view mode.</value>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.AddNewMenuToMenu(ShellBoost.Core.ShellMenu)">
+            <summary>
+            Adds the New menu to a menu.
+            It only works if the AddNewMenuTemplatePath value is not null nor empty.
+            </summary>
+            <param name="menu">The menu to add the New menu to.</param>
+            <returns>true if the New menu was added; false otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">appendMenu is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.GetPaneState(System.Guid)">
             <summary>
             Gets the Windows Explorer pane state.
@@ -5978,6 +5987,41 @@
             <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
             <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
         </member>
+        <member name="T:ShellBoost.Core.ShellMenuMergeType">
+            <summary>
+            Defines the context for merge operations.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.None">
+            <summary>
+            There is no specific merge context associated with this menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.Menu">
+            <summary>
+            The menu is merged to the item menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenu">
+            <summary>
+            The menu is merged to the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuTop">
+            <summary>
+            The menu is merged to the top of the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuBottom">
+            <summary>
+            The menu is merged to the bottom of the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.InformationBar">
+            <summary>
+            The menu is merged to the information bar.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.NameFormat">
             <summary>
             Specifies a format for a directory service object name.
@@ -6173,6 +6217,13 @@
             </summary>
             <param name="idList">The PIDL for which to receive notifications.</param>
             <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.OnNotify(System.Object,ShellBoost.Core.Utilities.ChangeNotifyEventArgs)">
+            <summary>
+            Called when a Windows Shell change notifications is received.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.Utilities.ChangeNotifyEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.Dispose(System.Boolean)">
             <summary>
@@ -17865,9 +17916,19 @@
             SHCNE_EXTENDED_EVENT extended events. These events are ordinals.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_THEMECHANGED">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_ORDERCHANGED">
             <summary>
             Pidl2 is the changed folder
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_WININETCHANGED">
+            <summary>
+            Undocumented.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_MSI_CHANGE">
@@ -17878,6 +17939,41 @@
         <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_MSI_UNINSTALL">
             <summary>
             pidl2 is a SHChangeProductKeyAsIDList.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_PROMOTEDITEM">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_DEMOTEDITEM">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_ALIASINUSE">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_SHORTCUTINVOKE">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_PINLISTCHANGED">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_USERINFOCHANGED">
+            <summary>
+            Undocumented.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNEE.SHCNEE_UPDATEFOLDERLOCATION">
+            <summary>
+            Undocumented.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SHCNF">
@@ -20314,6 +20410,14 @@
             Gets the Shell Folder server.
             </summary>
             <value>The Shell Folder server.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenu.MergeType">
+            <summary>
+            Gets the menu's merge context, if the menu is used in a merge context.
+            </summary>
+            <value>
+            The merge context.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenu.FirstId">
             <summary>
