@@ -157,7 +157,10 @@ namespace ShellBoost.Samples.RegistryFolder
         {
             // e.MenuItem can be null for standard commands
             var menu = (ShellMenu)sender;
-            menu.Server.Configuration?.Logger?.Log(TraceLevel.Info, "Shell Item '" + e.MenuItem + "' (cmd:" + e.Command + ") called.", nameof(OnShellMenuItemInvoke));
+
+            // log something (if a logger is configured)
+            menu.Server.Configuration?.Logger?.Log(TraceLevel.Info, "Shell Item '" + e.MenuItem + "' (cmd:" + e.Command + ") called.");
+
             var mc = Conversions.ChangeType(e.MenuItem?.Tag, MenuCommand.Unknown);
             switch (mc)
             {

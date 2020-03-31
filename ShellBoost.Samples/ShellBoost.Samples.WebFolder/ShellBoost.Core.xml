@@ -539,6 +539,31 @@
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
         </member>
+        <member name="T:ShellBoost.Core.SelectAndEditItemEventArgs">
+            <summary>
+            Provides data for the SelectAndEditItem event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.SelectAndEditItemEventArgs.Folder">
+            <summary>
+            Gets the opened Shell Folder instance.
+            </summary>
+            <value>The opened Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.SelectAndEditItemEventArgs.ItemIdList">
+            <summary>
+            Gets the PIDL of the Shell Item being selected.
+            </summary>
+            <value>The PIDL of the Shell Item being selected.</value>
+        </member>
+        <member name="P:ShellBoost.Core.SelectAndEditItemEventArgs.Flags">
+            <summary>
+            Gets the flags.
+            </summary>
+            <value>
+            The flags.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.GetDynamicColumnDetailsEventArgs">
             <summary>
             Provides data for the GetDynamicColumnDetails event of the ShellFolder type.
@@ -552,7 +577,7 @@
         </member>
         <member name="P:ShellBoost.Core.GetDynamicColumnDetailsEventArgs.PropertyKey">
             <summary>
-            Gets the dynamic column's property key
+            Gets the dynamic column's property key.
             </summary>
             <value>The dynamic column's property key.</value>
         </member>
@@ -1644,13 +1669,6 @@
             Gets the value.
             </summary>
             <value>The value.</value>
-        </member>
-        <member name="M:ShellBoost.Core.KeyShellItemId.From(System.Byte[])">
-            <summary>
-            Creates an instance of a KeyShellItemId from a PIDL data.
-            </summary>
-            <param name="data">The data.</param>
-            <returns>An instance of the KeyShellItemId class.</returns>
         </member>
         <member name="M:ShellBoost.Core.KeyShellItemId.IsValid(System.Byte[])">
             <summary>
@@ -4138,7 +4156,7 @@
         </member>
         <member name="P:ShellBoost.Core.PropertyStore.Cookie">
             <summary>
-            Gets the context cookie from a shell folder.
+            Gets the context cookie from a shell folder. Only available from the native proxy.
             </summary>
             <value>The context cookie.</value>
         </member>
@@ -4238,6 +4256,18 @@
             <summary>
             Gets the storage ShellBoost specific property key.
             If the value is a 32-bit negative integer, it will be used as an error to report on storage open tentative.
+            </summary>
+            <value>The moniker property key.</value>
+        </member>
+        <member name="P:ShellBoost.Core.PropertyStore.ViewHwnd">
+            <summary>
+            Gets the ShellBoost view window handle property key. Only available from the native proxy.
+            </summary>
+            <value>The moniker property key.</value>
+        </member>
+        <member name="P:ShellBoost.Core.PropertyStore.FileSystemPath">
+            <summary>
+            Gets a physical ShellBoost Shell Item file system path.
             </summary>
             <value>The moniker property key.</value>
         </member>
@@ -4525,13 +4555,13 @@
         </member>
         <member name="P:ShellBoost.Core.ShellBoostView.Cookie">
             <summary>
-            Gets the ShellBoost cookie that uniquely identifies the ShellBoost view.
+            Gets the ShellBoost cookie that identifies the ShellBoost view.
             </summary>
             <value>
             The ShellBoost cookie.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.ShellBoostView.GetFromContextAsync(ShellBoost.Core.ShellItemIdList,System.Int32)">
+        <member name="M:ShellBoost.Core.ShellBoostView.GetFromContextAsync(ShellBoost.Core.ShellItemIdList,System.Int64)">
             <summary>
             Gets a ShellBoost-hosted view in the Windows Explorer or folder windows.
             </summary>
@@ -4692,9 +4722,16 @@
             Defines the current Windows Shell context of the calling client.
             </summary>
         </member>
+        <member name="M:ShellBoost.Core.ShellContext.Clone">
+            <summary>
+            Clones this instance.
+            </summary>
+            <returns>An instance of the ShellContext.</returns>
+        </member>
         <member name="P:ShellBoost.Core.ShellContext.Current">
             <summary>
             Gets the current context.
+            Note the current context is bound to the current thread.
             </summary>
             <value>An instance of the ShellContext type.</value>
         </member>
@@ -4922,6 +4959,11 @@
             Raised when the shell asks for a dynamic column details.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.ShellFolder.SelectAndEditItem">
+            <summary>
+            Raised when a Shell Item has been created with the New menu.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
@@ -5102,7 +5144,9 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.GetItemByPath(System.String)">
             <summary>
-            Gets an item using its relative path from this folder. The separator used is the '\' character.
+            Gets an item using its relative path from this folder.
+            The path is a list of display names.
+            The separator used is the '\' character.
             If path is null or empty, this folder is returned.
             </summary>
             <param name="path">A relative path from this folder. Each segment can be separated by the '\' character.</param>
@@ -5193,6 +5237,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(System.String)">
             <summary>
             Adds a column, using a property key canonical name, to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="canonicalName">The canonical name.</param>
             <returns>An instance of the ShellFolderColumn type.</returns>
@@ -5201,6 +5246,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(System.String,ShellBoost.Core.WindowsShell.SHCOLSTATE)">
             <summary>
             Adds a column, using a property key canonical name, to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="canonicalName">The canonical name.</param>
             <param name="state">The state.</param>
@@ -5210,6 +5256,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(ShellBoost.Core.WindowsPropertySystem.PropertyDescription)">
             <summary>
             Adds a column, defined as a property, to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="property">The property.</param>
             <returns>An instance of the ShellFolderColumn type.</returns>
@@ -5218,6 +5265,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(ShellBoost.Core.WindowsPropertySystem.PropertyKey)">
             <summary>
             Adds a column, defined as a property key, to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="key">The property key.</param>
             <returns>An instance of the ShellFolderColumn type.</returns>
@@ -5225,6 +5273,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(ShellBoost.Core.WindowsPropertySystem.PropertyKey,ShellBoost.Core.WindowsShell.SHCOLSTATE)">
             <summary>
             Adds a column, defined as a property key, to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="key">The property key.</param>
             <param name="state">The column state.</param>
@@ -5233,6 +5282,7 @@
         <member name="M:ShellBoost.Core.ShellFolder.AddColumn(ShellBoost.Core.ShellFolderColumn)">
             <summary>
             Adds a column to this folder.
+            If a column with the same property key was already present in the Columns collection, it will be replaced.
             </summary>
             <param name="column">The column.</param>
             <exception cref="T:System.ArgumentNullException">column is null.</exception>
@@ -5285,6 +5335,13 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.GetDynamicColumnDetailsEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.SelectAndEditItemEvent(System.Object,ShellBoost.Core.SelectAndEditItemEventArgs)">
+            <summary>
+            Called when a shell item has been created with the New menu.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.SelectAndEditItemEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnGetFolderSettingsEvent(System.Object,ShellBoost.Core.GetFolderSettingsEventArgs)">
             <summary>
@@ -10709,6 +10766,11 @@
             The Windows E_NOTIMPL error value (0x80004001).
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Utilities.ShellUtilities.ERROR_NOT_SUPPORTED">
+            <summary>
+            The Windows ERROR_NOT_SUPPORTED error value (0x80070032).
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.Utilities.ShellUtilities.E_PENDING">
             <summary>
             The Windows E_PENDING error value (0x8000000A).
@@ -11112,6 +11174,150 @@
             Passes the foreground privilege (the privilege to set the foreground window) from one process to another. Wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms690514.aspx">CoAllowSetForegroundWindow function</see>.
             </summary>
             <param name="obj">The object.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+            <summary>
+            Creates a data object from a pidl.
+            </summary>
+            <param name="idList">The pidl.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">idList is null</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemIdList},System.Boolean)">
+            <summary>
+            Creates a data object from a list of pidls.
+            </summary>
+            <param name="idLists">The pidls.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">idLists is null</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(System.String,System.Boolean)">
+            <summary>
+            Creates a data object from a path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Creates a data object from a list of paths.
+            </summary>
+            <param name="paths">The paths.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">paths is null</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(System.IntPtr,System.Boolean)">
+            <summary>
+            Creates a data object from a pidl.
+            </summary>
+            <param name="pidl">The pidl.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentException">pidl is IntPtr.Zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateDataObject(System.Collections.Generic.IEnumerable{System.IntPtr},System.Boolean)">
+            <summary>
+            Creates a data object from a list of pidls.
+            </summary>
+            <param name="pidls">The pidls.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of the IDataObject interface or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">pidls is null</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.String,System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            true if the property sheet was successfully created; otherwise, false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.Collections.Generic.IEnumerable{System.String},System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a list of paths.
+            </summary>
+            <param name="paths">The paths.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            true if the property sheet was successfully created; otherwise, false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">paths is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(ShellBoost.Core.ShellItemIdList,System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a pidl.
+            </summary>
+            <param name="idList">The pidl.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>true if the property sheet was successfully created; otherwise, false.</returns>
+            <exception cref="T:System.ArgumentNullException">idList is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemIdList},System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a list of pidls.
+            </summary>
+            <param name="idLists">The pidls.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>true if the property sheet was successfully created; otherwise, false.</returns>
+            <exception cref="T:System.ArgumentNullException">idLists is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.IntPtr,System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a pidl.
+            </summary>
+            <param name="pidl">The pidl.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>true if the property sheet was successfully created; otherwise, false.</returns>
+            <exception cref="T:System.ArgumentException">pidl is IntPtr.Zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.Collections.Generic.IEnumerable{System.IntPtr},System.String,System.Boolean)">
+            <summary>
+            Opens the property sheet from a list of pidls.
+            </summary>
+            <param name="pidls">The pidls.</param>
+            <param name="caption">The caption.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>true if the property sheet was successfully created; otherwise, false.</returns>
+            <exception cref="T:System.ArgumentNullException">pidls is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.OpenPropertySheet(System.Runtime.InteropServices.ComTypes.IDataObject,System.String,System.Collections.Generic.IEnumerable{System.IntPtr},System.Nullable{System.Guid},System.String)">
+            <summary>
+            Opens the property sheet from a data object.
+            </summary>
+            <param name="dataObject">The data object.</param>
+            <param name="caption">The optional caption.</param>
+            <param name="registryKeysHandles">An optional list of registry keys handles that represent the CLSIDs of the individual property sheets.</param>
+            <param name="defaultClsid">The optional default CLSID.</param>
+            <param name="startPage">The optional start page.</param>
+            <returns>
+            true if the property sheet was successfully created; otherwise, false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">dataObject is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetApartmentState">
             <summary>
@@ -12264,7 +12470,7 @@
             Forgets a task, with acceptable exceptions.
             </summary>
             <param name="task">The task.</param>
-            <param name="acceptableExceptions">A list acceptable exceptions.</param>
+            <param name="acceptableExceptions">A list of acceptable exceptions.</param>
         </member>
         <member name="M:ShellBoost.Core.Utilities.TaskUtilities.StartSTAThreadTask``1(System.Func{``0})">
             <summary>
@@ -12274,6 +12480,14 @@
             <param name="func">The function.</param>
             <returns>An instance of the Task type.</returns>
             <exception cref="T:System.ArgumentNullException">func is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.TaskUtilities.StartSTAThreadTask(System.Action)">
+            <summary>
+            Starts an STA thread task.
+            </summary>
+            <param name="action">The action.</param>
+            <returns>An instance of the Task type.</returns>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.TokenElevationType">
             <summary>
@@ -12895,13 +13109,6 @@
             </summary>
             <param name="handle">The window handle.</param>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowPlacement.GetPlacement(System.IntPtr)">
-            <summary>
-            Retrieves the show state and the restored, minimized, and maximized positions of the specified window.
-            </summary>
-            <param name="windowHandle">The window handle.</param>
-            <returns>An instance of the WindowPlacement type.</returns>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.WindowPlacement.GetPlacement(System.IntPtr,System.Boolean)">
             <summary>
             Retrieves the show state and the restored, minimized, and maximized positions of the specified window.
@@ -12914,6 +13121,37 @@
             <summary>
             As set of windows utilities.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.GetParentWindow(System.IntPtr)">
+            <summary>
+            Gets the specified window's parent window, if any.
+            </summary>
+            <param name="hwnd">The window handle.</param>
+            <returns>A window handle of IntPtr.Zero.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.GetOwnerWindow(System.IntPtr)">
+            <summary>
+            Gets the specified window's owner window, if any.
+            </summary>
+            <param name="hwnd">The window handle.</param>
+            <returns>A window handle of IntPtr.Zero.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.IsParentWindow(System.IntPtr,System.IntPtr)">
+            <summary>
+            Determines whether the specified parent window is a parent or grand parent of the specified child window.
+            </summary>
+            <param name="parent">The parent window handle.</param>
+            <param name="child">The child window handle.</param>
+            <returns>
+              <c>true</c> if the specified parent window is a parent or grand parent of the specified child window; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.EnumerateParentWindows(System.IntPtr)">
+            <summary>
+            Enumerates the specified window's parent windows, if any.
+            </summary>
+            <param name="hwnd">The window handle.</param>
+            <returns>A list of window handles.</returns>
         </member>
         <member name="F:ShellBoost.Core.Utilities.WindowsUtilities.ApplicationIcon">
             <summary>
@@ -13464,19 +13702,22 @@
             The window handle.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.Browser.GetControlHwnd(ShellBoost.Core.WindowsShell.FCW)">
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.GetControlHwnd(ShellBoost.Core.WindowsShell.FCW,System.Boolean)">
             <summary>
             Gets the window handle to a browser control.
             </summary>
             <param name="id">The control identifier.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A valid IntPtr or IntPtr.Zero.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.Browser.BrowseTo(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.SBSP)">
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.BrowseTo(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.SBSP,System.Boolean)">
             <summary>
             Informs Windows Explorer to browse to another folder.
             </summary>
             <param name="item">The item to browse to.</param>
             <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
             <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.FCW">
@@ -13517,6 +13758,21 @@
         <member name="F:ShellBoost.Core.WindowsShell.FVTEXTTYPE.FVST_EMPTYTEXT">
             <summary>
             The text to display when there are no items in the view.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.NMCSAEI_FLAGS">
+            <summary>
+            Indicates how item must be selected.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NMCSAEI_FLAGS.NMCSAEI_SELECT">
+            <summary>
+            Select the item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NMCSAEI_FLAGS.NMCSAEI_EDIT">
+            <summary>
+            Edit the item.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SBSP">
@@ -15153,104 +15409,160 @@
             The items in the view.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.EnumerateItems(ShellBoost.Core.WindowsShell.SVGIO)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.EnumerateItems(ShellBoost.Core.WindowsShell.SVGIO,System.Boolean)">
             <summary>
             Enumerates the items items in the folder view..
             </summary>
             <param name="flags">SVGIO values that limit the enumeration to certain types of items.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A list of items in the view.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.InvokeVerbOnSelection(System.String)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.InvokeVerbOnSelection(System.String,System.Boolean)">
             <summary>
             Invokes the given verb on the current selection.
             </summary>
             <param name="verb">The verb.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
             <exception cref="T:System.ArgumentNullException">verb is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetVisibleItem(System.Int32,System.Boolean)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetVisibleItem(System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Gets the next visible item in relation to a given index in the view.
             </summary>
             <param name="startIndex">The start index.</param>
             <param name="previous">if set to true, find the first visible item before startIndex; otherwise find the first visible item after startIndex.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An instance of Item or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SelectItem(System.Int32,ShellBoost.Core.WindowsShell.SVSIF)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SelectItems(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsShell.Item},ShellBoost.Core.WindowsShell.SVSIF,System.Boolean)">
+            <summary>
+            Allows the selection and positioning of items visible in the folder's view.
+            </summary>
+            <param name="pidls">The pidls.</param>
+            <param name="flags">One of the SVSIF constants that specify the type of selection to apply.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SelectItems(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemIdList},ShellBoost.Core.WindowsShell.SVSIF,System.Boolean)">
+            <summary>
+            Allows the selection and positioning of items visible in the folder's view.
+            </summary>
+            <param name="pidls">The pidls.</param>
+            <param name="flags">One of the SVSIF constants that specify the type of selection to apply.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SelectItems(System.Collections.Generic.IEnumerable{System.IntPtr},ShellBoost.Core.WindowsShell.SVSIF,System.Boolean)">
+            <summary>
+            Allows the selection and positioning of items visible in the folder's view.
+            </summary>
+            <param name="pidls">The pidls.</param>
+            <param name="flags">One of the SVSIF constants that specify the type of selection to apply.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.DeselectAllItems(System.Boolean)">
+            <summary>
+            Deselects all items in the view.
+            </summary>
+            <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+            <returns>
+            An error number or 0.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SelectItem(System.Int32,ShellBoost.Core.WindowsShell.SVSIF,System.Boolean)">
             <summary>
             Selects an item in the view.
             </summary>
             <param name="index">The index of the item to select.</param>
             <param name="flags">One of the SVSIF constants that specify the type of selection to apply.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetSelectedItem(System.Int32)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetSelectedItem(System.Int32,System.Boolean)">
             <summary>
             Gets the currently selected item at or after a given index.
             </summary>
             <param name="startIndex">The start index.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An instance of Item or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemIndex(System.Func{ShellBoost.Core.WindowsShell.Item,System.Boolean},ShellBoost.Core.WindowsShell.SVGIO)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemIndex(System.Func{ShellBoost.Core.WindowsShell.Item,System.Boolean},ShellBoost.Core.WindowsShell.SVGIO,System.Boolean)">
             <summary>
             Gets an item index using a predicate.
             </summary>
             <param name="predicate">The predicate.</param>
             <param name="flags">The flags.</param>
             <returns>The item's index or -1 if it was not found.</returns>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentNullException">predicate is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetSelectionState(ShellBoost.Core.WindowsShell.Item)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetSelectionState(ShellBoost.Core.WindowsShell.Item,System.Boolean)">
             <summary>
             Gets the selection state including check state.
             </summary>
             <param name="item">The item.</param>
-            <returns>Zero or one of the following SVSIF constants that specify the current type of selection: SVSI_FOCUSED, SVSI_SELECT, SVSI_CHECK, or SVSI_CHECK2. Other constants are not returned by this method.</returns>
+            <returns>Null or zero or one of the following SVSIF constants that specify the current type of selection: SVSI_FOCUSED, SVSI_SELECT, SVSI_CHECK, or SVSI_CHECK2. Other constants are not returned by this method.</returns>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItem(System.Int32)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItem(System.Int32,System.Boolean)">
             <summary>
             Gets an item by its index.
             </summary>
             <param name="index">The index.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An instance of item or null if it was not found.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemCount(ShellBoost.Core.WindowsShell.SVGIO)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemCount(ShellBoost.Core.WindowsShell.SVGIO,System.Boolean)">
             <summary>
             Gets the number of items in the folder. This can be the number of all items, or a subset such as the number of selected items.
             </summary>
             <param name="options">Flags from the SVGIO enumeration that limit the count to certain types of items.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>The number of items (files and folders) displayed in the folder view.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetRedraw(System.Boolean)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetRedraw(System.Boolean,System.Boolean)">
             <summary>
             Sets redraw on and off.
             </summary>
             <param name="redrawOn">if set to <c>true</c> redraw is set on; otherwise redraw is set to off.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetText(ShellBoost.Core.WindowsShell.FVTEXTTYPE,System.String)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetText(ShellBoost.Core.WindowsShell.FVTEXTTYPE,System.String,System.Boolean)">
             <summary>
             Sets the text for a type of text to be used in a folder view.
             </summary>
             <param name="type">The text type.</param>
             <param name="text">The text to be used.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemPosition(ShellBoost.Core.WindowsShell.Item)">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.GetItemPosition(ShellBoost.Core.WindowsShell.Item,System.Boolean)">
             <summary>
             Gets the position of an item in the folder's view.
             </summary>
             <param name="item">The item.</param>
-            <returns>The position of the item's upper-left corner.</returns>
+            <returns>The position of the item's upper-left corner or null.</returns>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.DoRename">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.DoRename(System.Boolean)">
             <summary>
             Starts a rename operation on the current selection.
             </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetSortColumns(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsShell.SORTCOLUMN})">
+        <member name="M:ShellBoost.Core.WindowsShell.FolderView.SetSortColumns(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsShell.SORTCOLUMN},System.Boolean)">
             <summary>
             Sets all the sort columns.
             </summary>
             <param name="columns">A list of columns.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.FOLDERVIEWMODE">
             <summary>
@@ -17034,35 +17346,39 @@
             </summary>
             <value>The absolute name for Windows Shell editing.</value>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.ToFolder(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG)">
+        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.ToFolder(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
             <summary>
             Converts this object to a ShellFolder.
             </summary>
             <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
             A ShellFolder instance or null.
             </returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetName(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,ShellBoost.Core.WindowsShell.SIGDN)">
+        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetName(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,ShellBoost.Core.WindowsShell.SIGDN,System.Boolean)">
             <summary>
             Gets a name.
             </summary>
             <param name="flags">The flags.</param>
             <param name="name">The name.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A string or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetPath(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG)">
+        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetPath(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
             <summary>
             Gets the path.
             </summary>
             <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A string or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetIdList(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG)">
+        <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetIdList(ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
             <summary>
             Gets the PIDL.
             </summary>
             <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An instance of the ShellItemIdList or null.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetPath(System.Guid,ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
@@ -18239,10 +18555,10 @@
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.IdList">
             <summary>
-            Gets this item's PIDL.
+            Gets this item's absolute PIDL.
             </summary>
             <value>
-            The PIDL.
+            The absolute PIDL.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.Attributes">
@@ -18300,6 +18616,34 @@
             <value>
             The parent item or null.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetPropertyValue``1(ShellBoost.Core.WindowsPropertySystem.PropertyKey,``0)">
+            <summary>
+            Gets a property value for a given property key.
+            </summary>
+            <typeparam name="T">The value expected type.</typeparam>
+            <param name="key">The property key.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>The property value or the default value.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.TryGetPropertyValue``1(ShellBoost.Core.WindowsPropertySystem.PropertyKey,``0@)">
+            <summary>
+            Gets a property value for a given property key.
+            </summary>
+            <typeparam name="T">The value expected type.</typeparam>
+            <param name="key">The property key.</param>
+            <param name="value">The value.</param>
+            <returns>
+            true if the value was successfully retrieved; otherwise false.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.TryGetPropertyValue(ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Object@)">
+            <summary>
+            Gets a property value for a given property key.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The value.</param>
+            <returns>true if the value was successfully retrieved; otherwise false.</returns>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.Properties">
             <summary>
@@ -18361,15 +18705,16 @@
             </summary>
             <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(ShellBoost.Core.ShellItemIdList)">
+        <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(ShellBoost.Core.ShellItemIdList,System.Boolean)">
             <summary>
             Gets an Item instance from a PIDL.
             </summary>
             <param name="idList">The PIDL.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An Item instance of null.</returns>
             <exception cref="T:System.ArgumentNullException">idList is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(System.IntPtr)">
+        <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(System.IntPtr,System.Boolean)">
             <summary>
             Gets an Item instance from a PIDL.
             </summary>
@@ -18377,6 +18722,7 @@
             <returns>
             An Item instance of null.
             </returns>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentException">pidl is IntPtr.Zero.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.FromParsingName(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
@@ -18542,6 +18888,11 @@
             An operation to select or focus an item should not also set focus on the view itself.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SVSIF.SVSI_NOSTATECHANGE">
+            <summary>
+            An operation to edit or position an item should not affect the item's focus or selected state.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.View">
             <summary>
             Exposes properties and methods that present a view in the Windows Explorer or folder windows.
@@ -18611,29 +18962,73 @@
             The windows opened in Windows Explorer.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.View.Refresh">
+        <member name="M:ShellBoost.Core.WindowsShell.View.Refresh(System.Boolean)">
             <summary>
             Refreshes the view's contents in response to user input.
             </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.View.SetVisibleColumns(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellColumn})">
+        <member name="M:ShellBoost.Core.WindowsShell.View.DeselectAllItems(System.Boolean)">
+            <summary>
+            Deselects all items in the view.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.View.SelectItem(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.SVSIF,System.Nullable{ShellBoost.Core.WindowsShell.POINT},System.Boolean)">
+            <summary>
+            Selects and optionally positions an item in a Shell View.
+            </summary>
+            <param name="item">The Shell Item.</param>
+            <param name="flags">The options.</param>
+            <param name="newPosition">The new position or null.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.View.SelectItem(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SVSIF,System.Nullable{ShellBoost.Core.WindowsShell.POINT},System.Boolean)">
+            <summary>
+            Selects and optionally positions an item in a Shell View.
+            </summary>
+            <param name="idList">The Shell Item's relative pidl.</param>
+            <param name="flags">The options.</param>
+            <param name="newPosition">The new position or null.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.View.SelectItem(System.IntPtr,ShellBoost.Core.WindowsShell.SVSIF,System.Nullable{ShellBoost.Core.WindowsShell.POINT},System.Boolean)">
+            <summary>
+            Selects and optionally positions an item in a Shell View.
+            </summary>
+            <param name="pidl">The Shell Item's relative pidl.</param>
+            <param name="flags">The options.</param>
+            <param name="newPosition">The new position or null.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.View.SetVisibleColumns(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellColumn},System.Boolean)">
             <summary>
             Defines all visible columns.
             </summary>
             <param name="columns">A list of columns.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.View.SetVisibleColumn(ShellBoost.Core.ShellColumn)">
+        <member name="M:ShellBoost.Core.WindowsShell.View.SetVisibleColumn(ShellBoost.Core.ShellColumn,System.Boolean)">
             <summary>
             Add a new column to the list of visible columns, or modify an existing column.
             </summary>
             <param name="column">The column.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
             <exception cref="T:System.ArgumentNullException">column is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.WindowsShell.View.RemoveVisibleColumn(ShellBoost.Core.WindowsPropertySystem.PropertyKey)">
+        <member name="M:ShellBoost.Core.WindowsShell.View.RemoveVisibleColumn(ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Boolean)">
             <summary>
             Removes a visible column from the list of columns.
             </summary>
             <param name="key">The column property key.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
             true if the column was removed; otherwise false.
             </returns>
@@ -20233,16 +20628,22 @@
             </summary>
             <value>The data.</value>
         </member>
-        <member name="M:ShellBoost.Core.ShellItemIdList.ClearCache">
-            <summary>
-            Clears the cache.
-            </summary>
-        </member>
         <member name="P:ShellBoost.Core.ShellItemIdList.ContainsKnownId">
             <summary>
             Gets a value indicating whether this instance contains at least one id known by the current Shell Folder Server.
             </summary>
             <value><c>true</c> if this instance contains at least one id known by the current Shell Folder Server; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.ClearCache">
+            <summary>
+            Clears the cache.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.Clone">
+            <summary>
+            Clones this instance.
+            </summary>
+            <returns>An instance of the ShellItemIdList class.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetFileSystemPath">
             <summary>
@@ -40704,14 +41105,6 @@
             Serializes this instance into an array of bytes.
             </summary>
             <returns>The serialized PropVariant.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.Deserialize(System.Byte[])">
-            <summary>
-            Deserializes a PropVariant from the specified bytes.
-            </summary>
-            <param name="bytes">The input bytes.</param>
-            <returns>An instance of the PropVariant type or null if an error occurred.</returns>
-            <exception cref="T:System.ArgumentNullException">bytes is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.Deserialize(System.Byte[],System.Boolean)">
             <summary>

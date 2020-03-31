@@ -32,6 +32,7 @@ namespace ShellBoost.Samples.PhysicalOverview
                 CanDelete = true;
                 CanMove = true;
                 CanCopy = true;
+                CanRename = true;
             }
 
             public MyShellItem(ShellFolder parent, ShellItemId fileSystemId, string fileSystemPath)

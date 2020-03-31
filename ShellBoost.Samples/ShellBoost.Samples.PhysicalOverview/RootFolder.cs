@@ -4,6 +4,7 @@ using System.IO;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsShell;
+using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.PhysicalOverview
 {
@@ -42,6 +43,15 @@ namespace ShellBoost.Samples.PhysicalOverview
         public HelloWorldItem Hello { get; }
         public PhysicalFolder RootPhysical { get; }
         public ChangeNotifier ChangeNotifier { get; }
+
+        protected override void OnManageColumnsEvent(object sender, ManageColumnsEventArgs e)
+        {
+            var col = e.GetColumn(Props.System.DateModified);
+            if (col != null)
+            {
+                col.State |= CM_STATE.CM_STATE_VISIBLE;// | CM_STATE.CM_STATE_ALWAYSVISIBLE;
+            }
+        }
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {

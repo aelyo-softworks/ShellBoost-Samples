@@ -90,6 +90,7 @@ namespace ShellBoost.Samples.RegistryFolder
                     config.NativeDllRegistration = RegistrationMode.User;
                 }
 #if DEBUG
+                // add a logger that outputs to current console
                 config.Logger = new ConsoleLogger { AddThreadId = true };
 #endif
 
