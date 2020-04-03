@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ShellBoost.Core;
 using ShellBoost.Core.Client;
+using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.MultiHost
 {
@@ -14,6 +15,7 @@ namespace ShellBoost.Samples.MultiHost
         static void Main()
         {
             Console.WriteLine("ShellBoost Samples - MultiHost - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
             Console.WriteLine();
 
             // browse all ShellBoost native proxies in the current directory (corresponding to the current bitness)

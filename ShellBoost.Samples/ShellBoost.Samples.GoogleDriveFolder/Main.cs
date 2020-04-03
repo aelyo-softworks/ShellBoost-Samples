@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShellBoost.Core;
 using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
 
@@ -22,6 +23,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Icon = Program.AppIcon;
 
             AddLog("ShellBoost Samples - Drive Local Folder - V" + AssemblyUtilities.GetInformationalVersion() + " Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            AddLog("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
 
             if (!Settings.HasSecretsFile)
             {

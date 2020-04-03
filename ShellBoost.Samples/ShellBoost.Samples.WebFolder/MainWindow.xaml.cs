@@ -51,7 +51,8 @@ namespace ShellBoost.Samples.WebFolder
                 Restart.ToolTip = "Windows Explorer on this machine can only be restarted from a " + (Environment.Is64BitOperatingSystem ? "64" : "32") + "-bit process.";
             }
 
-            TB.Text = "ShellBoost Samples - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved." + Environment.NewLine + Environment.NewLine;
+            TB.Text = "ShellBoost Samples - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved." + Environment.NewLine;
+            TB.Text += "ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion() + Environment.NewLine + Environment.NewLine;
             TB.Text += "Web Drive Folder - " + (IntPtr.Size == 8 ? "64" : "32") + "bit - V" + Assembly.GetExecutingAssembly().GetInformationalVersion() + Environment.NewLine;
             AppendText();
 

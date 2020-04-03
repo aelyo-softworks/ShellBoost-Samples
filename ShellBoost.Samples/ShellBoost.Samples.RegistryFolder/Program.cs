@@ -11,6 +11,7 @@ namespace ShellBoost.Samples.RegistryFolder
         static void Main(string[] args)
         {
             Console.WriteLine("ShellBoost Samples - Registry Folder - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
             Console.WriteLine();
 
             Console.WriteLine("Press a key:");
