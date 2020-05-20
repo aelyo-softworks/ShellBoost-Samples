@@ -357,6 +357,303 @@
             <param name="configuration">The configuration (debug, release, etc.).</param>
             <returns>A file path.</returns>
         </member>
+        <member name="T:ShellBoost.Core.Client.NativeProxy">
+            <summary>
+            Represents a ShellBoost native proxy dll.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DllSearchPattern">
+            <summary>
+            Gets or sets the native proxies search pattern.
+            If unset, ShellBoost will search for ShellBoost.*.dll and of nothing was found, *.dll.
+            </summary>
+            <value>The pattern.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.All">
+            <summary>
+            Gets the list of all native proxies for all processor architectures.
+            </summary>
+            <value>
+            A list of proxies.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.AllForCurrentProcessArchitecture">
+            <summary>
+            Gets the list of all native proxies for the current processor architecture.
+            </summary>
+            <value>
+            A list of proxies.
+            </value>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxy.CurrentProcessArchitecture">
+            <summary>
+            Gets the current process architecture.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxy.CurrentMachineArchitecture">
+            <summary>
+            Gets the current machine architecture.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Default">
+            <summary>
+            Gets the default proxy.
+            The default proxy is the proxy with the first identifier, ordered using alphabetic sort.
+            </summary>
+            <value>
+            The default proxy.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.AddProxy(System.String)">
+            <summary>
+            Adds a native proxy using its dll path.
+            The resulting native proxy instance will be added to the All and possibly to the AllForCurrentArchitecture lists.
+            </summary>
+            <param name="dllPath">The dll path.</param>
+            <returns>
+            A NativeProxy instance.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">dllPath is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DllPath">
+            <summary>
+            Gets the proxy .dll path.
+            </summary>
+            <value>
+            The file path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Id">
+            <summary>
+            Gets the proxy identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Architecture">
+            <summary>
+            Gets the proxy architecture.
+            </summary>
+            <value>
+            The architecture.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.FolderId">
+            <summary>
+            Gets the Shell Namespace Extension folder identifier.
+            </summary>
+            <value>The folder identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.ProxyId">
+            <summary>
+            Gets the ShellBoost proxy identifier..
+            </summary>
+            <value>The proxy identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Attributes">
+            <summary>
+            Gets the Shell Namespace Extension root attributes..
+            </summary>
+            <value>The attributes.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Options">
+            <summary>
+            Gets Shell Namespace Extension options..
+            </summary>
+            <value>The options.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.IpcErrorText">
+            <summary>
+            Gets the Shell Namespace Extension error text..
+            </summary>
+            <value>The error text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.BuildConfiguration">
+            <summary>
+            Gets the Shell Namespace Extension build configuration..
+            </summary>
+            <value>The build configuration.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.RefreshButtonText">
+            <summary>
+            Gets the Shell Namespace Extension refresh button text..
+            </summary>
+            <value>The refresh button text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.ProgId">
+            <summary>
+            Gets the Shell Namespace Extension ProgID..
+            </summary>
+            <value>The prog identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DisplayName">
+            <summary>
+            Gets the Shell Namespace Extension display name..
+            </summary>
+            <value>The display name.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Location">
+            <summary>
+            Gets the Shell Namespace Extension location..
+            </summary>
+            <value>The location.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseExpirationDate">
+            <summary>
+            Gets the license expiration date..
+            </summary>
+            <value>The license expiration date.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseRegisteredCompany">
+            <summary>
+            Gets the license registered company..
+            </summary>
+            <value>The license registered company.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseHasExpired">
+            <summary>
+            Gets a value indicating whether license has expired.
+            </summary>
+            <value><c>true</c> if license has expired; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseDataIsValid">
+            <summary>
+            Gets a value indicating whether license data is valid..
+            </summary>
+            <value><c>true</c> if license data is valid; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LibId">
+            <summary>
+            Gets the ShellBoost library identifier for the current native proxy.
+            </summary>
+            <value>The library identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.TraceId">
+            <summary>
+            Gets the ShellBoost trace identifier for the current native proxy.
+            </summary>
+            <value>The trace identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.IsImpersonatingClient">
+            <summary>
+            Gets a value indicating if ShellBoost is configured to impersonate the Windows Shell user for the current native proxy.
+            </summary>
+            <value>true if if ShellBoost is configured to impersonate the Windows Shell user; false otherwise.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.FolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension folder absolute parsing path for the current native proxy.
+            </summary>
+            <value>The folder absolute parsing path. null for a non-rooted path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LocationFolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension location folder absolute parsing path for the current native proxy.
+            </summary>
+            <value>The location folder absolute parsing path. null for a non-rooted path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.LocationFolderId">
+            <summary>
+            Gets the Shell Namespace Extension location folder identifier for the current native proxy.
+            </summary>
+            <value>The location folder identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.InterfaceId">
+            <summary>
+            Gets the ShellBoost IPC interface identifier for the current native proxy.
+            </summary>
+            <value>The interface identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.ContextMenuId">
+            <summary>
+            Gets the ShellBoost context menu identifier for the current native proxy. Unused.
+            </summary>
+            <value>The context menu identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.PropertySheetHandlerId">
+            <summary>
+            Gets the ShellBoost property sheet handler identifier for the current native proxy. Unused.
+            </summary>
+            <value>The property sheet handler identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.RootPath">
+            <summary>
+            Gets the Shell Namespace Extension root path for the current native proxy.
+            </summary>
+            <value>The root path. Null for non-rooted extensions.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.RootIdList">
+            <summary>
+            Gets the Shell Namespace Extension root PIDL for the current native proxy.
+            </summary>
+            <value>The root identifier list. Null for non-rooted extensions.</value>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.StopListening">
+            <summary>
+            Stops all the native proxy from listening to RPC calls.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.Register(ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Registers the ShellBoost native proxy assembly.
+            </summary>
+            <param name="mode">The registration mode.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.Register(ShellBoost.Core.ShellFolderRegistration)">
+            <summary>
+            Registers the ShellBoost native proxy assembly.
+            </summary>
+            <param name="registration">The registration options.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.Unregister(ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Unregisters the ShellBoost native proxy assembly.
+            </summary>
+            <param name="mode">The registration mode.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.CompareTo(ShellBoost.Core.Client.NativeProxy)">
+            <summary>
+            Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+            </summary>
+            <param name="other">An object to compare with this instance.</param>
+            <returns>
+            A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Client.NativeProxyArchitecture">
+            <summary>
+            Defines supported processor architecture.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxyArchitecture.Invalid">
+            <summary>
+            Invalid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxyArchitecture.x86">
+            <summary>
+            Intel x86.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxyArchitecture.x64">
+            <summary>
+            Intel x64.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Client.NativeProxyArchitecture.arm64">
+            <summary>
+            ARM 64.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.CompareIdReturnValue">
             <summary>
             Defines how two Shell Items compare.
@@ -538,6 +835,29 @@
             </summary>
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.IconLocation">
+            <summary>
+            Defines an icon location.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.IconLocation.Location">
+            <summary>
+            Gets the location.
+            </summary>
+            <value>The location.</value>
+        </member>
+        <member name="P:ShellBoost.Core.IconLocation.Index">
+            <summary>
+            Gets or sets the icon index.
+            </summary>
+            <value>The icon index.</value>
+        </member>
+        <member name="P:ShellBoost.Core.IconLocation.Options">
+            <summary>
+            Gets or sets the options.
+            </summary>
+            <value>The options.</value>
         </member>
         <member name="T:ShellBoost.Core.SelectAndEditItemEventArgs">
             <summary>
@@ -4142,6 +4462,14 @@
             Represents a Shell Item Property Store.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.PropertyStore.FormatId">
+            <summary>
+            Gets the ShellBoost properties format identifier.
+            </summary>
+            <value>
+            The format identifier.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.PropertyStore.AssociationElements">
             <summary>
             Gets the association elements ShellBoost specific property key.
@@ -4483,6 +4811,21 @@
             <param name="info">The information.</param>
             <exception cref="T:System.ArgumentNullException">info is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.RootShellFolder.OnSetFolderServer(ShellBoost.Core.ShellFolderServer)">
+            <summary>
+            Called when the folder server is set.
+            </summary>
+            <param name="Folder">The folder server.</param>
+        </member>
+        <member name="P:ShellBoost.Core.RootShellFolder.FolderServer">
+            <summary>
+            Gets the folder server.
+            Will be automatically set after the folder has been requested by the ShellFolderServer.
+            </summary>
+            <value>
+            The folder server.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.RootShellFolder.FullDisplayName">
             <summary>
             Gets this item's display name, that is, including the parent's full display name.
@@ -4773,6 +5116,14 @@
             </summary>
             <value>
             true if the process is Windows Explorer; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellContext.IsClientProcessPickerHost">
+            <summary>
+            Determines whether the client process corresponds to Windows Picker Host.
+            </summary>
+            <value>
+            true if the process is Picker Host; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).
             </value>
         </member>
         <member name="P:ShellBoost.Core.ShellContext.LastFileDialogEventArgs">
@@ -5427,7 +5778,7 @@
         </member>
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.BuildConfiguration">
             <summary>
-            Gets or sets the build configuration.
+            Gets or sets the build configuration. Unused.
             </summary>
             <value>The build configuration.</value>
         </member>
@@ -5440,8 +5791,17 @@
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.NativeDllPath">
             <summary>
             Gets or sets the native ShellBoost proxy assembly path.
+            Used only if the NativeProxy property value is null.
             </summary>
             <value>The native ShellBoost proxy assembly path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderConfiguration.NativeProxy">
+            <summary>
+            Gets or sets the native ShellBoost proxy.
+            </summary>
+            <value>
+            The native ShellBoost proxy.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.IpcFormat">
             <summary>
@@ -5551,6 +5911,188 @@
             This class must be running for the corresponding Shell Folder to work and be visible in the Windows Explorer.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LoadedNativeDllPath">
+            <summary>
+            Gets the loaded native DLL path for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The loaded native DLL path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseDataIsValid">
+            <summary>
+            Gets a value indicating whether license data is valid for the default native proxy
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value><c>true</c> if license data is valid; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseHasExpired">
+            <summary>
+            Gets a value indicating whether license has expired for the default native proxy
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value><c>true</c> if license has expired; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseRegisteredCompany">
+            <summary>
+            Gets the license registered company for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The license registered company.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseExpirationDate">
+            <summary>
+            Gets the license expiration date for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The license expiration date.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.Location">
+            <summary>
+            Gets the Shell Namespace Extension location for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The location.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.DisplayName">
+            <summary>
+            Gets the Shell Namespace Extension display name for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The display name.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.ProgId">
+            <summary>
+            Gets the Shell Namespace Extension ProgID for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The prog identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.RefreshButtonText">
+            <summary>
+            Gets the Shell Namespace Extension refresh button text for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The refresh button text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.BuildConfiguration">
+            <summary>
+            Gets the Shell Namespace Extension build configuration for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The build configuration.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.IpcErrorText">
+            <summary>
+            Gets the Shell Namespace Extension error text for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The error text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.Options">
+            <summary>
+            Gets Shell Namespace Extension options for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The options.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.Attributes">
+            <summary>
+            Gets the Shell Namespace Extension root attributes for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The attributes.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.ProxyId">
+            <summary>
+            Gets the ShellBoost proxy identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The proxy identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.FolderId">
+            <summary>
+            Gets the Shell Namespace Extension folder identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The folder identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension location folder absolute parsing path for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The location folder absolute parsing path. null for a non-rooted path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.FolderParsingName">
+            <summary>
+            Gets the Shell Namespace Extension folder absolute parsing path for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The folder absolute parsing path. null for a non-rooted path.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.IsImpersonatingClient">
+            <summary>
+            Gets a value indicating if ShellBoost is configured to impersonate the Windows Shell user for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>true if if ShellBoost is configured to impersonate the Windows Shell user; false otherwise.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderId">
+            <summary>
+            Gets the Shell Namespace Extension location folder identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The location folder identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.InterfaceId">
+            <summary>
+            Gets the ShellBoost IPC interface identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The interface identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.TraceId">
+            <summary>
+            Gets the ShellBoost trace identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The trace identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.ContextMenuId">
+            <summary>
+            Gets the ShellBoost context menu identifier for the default native proxy. Unused.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The context menu identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.PropertySheetHandlerId">
+            <summary>
+            Gets the ShellBoost property sheet handler identifier for the default native proxy. Unused.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The property sheet handler identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LibId">
+            <summary>
+            Gets the ShellBoost library identifier for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The library identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.RootPath">
+            <summary>
+            Gets the Shell Namespace Extension root path for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The root path. Null for non-rooted extensions.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.RootIdList">
+            <summary>
+            Gets the Shell Namespace Extension root PIDL for the default native proxy.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
+            </summary>
+            <value>The root identifier list. Null for non-rooted extensions.</value>
+        </member>
         <member name="E:ShellBoost.Core.ShellFolderServer.Licensing">
             <summary>
             Raised when licensing is computed.
@@ -5566,173 +6108,18 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolderServer"/> class.
             </summary>
         </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LoadedNativeDllPath">
+        <member name="P:ShellBoost.Core.ShellFolderServer.NativeProxy">
             <summary>
-            Gets the loaded native DLL path.
+            Gets or sets the native proxy instance.
+            This will be null until the server is started.
             </summary>
-            <value>The loaded native DLL path.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseDataIsValid">
-            <summary>
-            Gets a value indicating whether license data is valid.
-            </summary>
-            <value><c>true</c> if license data is valid; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseHasExpired">
-            <summary>
-            Gets a value indicating whether license has expired.
-            </summary>
-            <value><c>true</c> if license has expired; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseRegisteredCompany">
-            <summary>
-            Gets the license registered company
-            </summary>
-            <value>The license registered company.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LicenseExpirationDate">
-            <summary>
-            Gets the license expiration date.
-            </summary>
-            <value>The license expiration date.</value>
+            <value>An instance of the NativeProxy class.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.Configuration">
             <summary>
             Gets or sets the configuration.
             </summary>
             <value>The configuration.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.Location">
-            <summary>
-            Gets the Shell Namespace Extension location.
-            </summary>
-            <value>The location.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.DisplayName">
-            <summary>
-            Gets the Shell Namespace Extension display name.
-            </summary>
-            <value>The display name.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.ProgId">
-            <summary>
-            Gets the Shell Namespace Extension ProgID
-            </summary>
-            <value>The prog identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.RefreshButtonText">
-            <summary>
-            Gets the Shell Namespace Extension refresh button text.
-            </summary>
-            <value>The refresh button text.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.BuildConfiguration">
-            <summary>
-            Gets the Shell Namespace Extension build configuration.
-            </summary>
-            <value>The build configuration.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.IpcErrorText">
-            <summary>
-            Gets the Shell Namespace Extension error text.
-            </summary>
-            <value>The error text.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.Options">
-            <summary>
-            Gets Shell Namespace Extension options.
-            </summary>
-            <value>The options.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.Attributes">
-            <summary>
-            Gets the Shell Namespace Extension root attributes.
-            </summary>
-            <value>The attributes.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.ProxyId">
-            <summary>
-            Gets the ShellBoost proxy identifier.
-            </summary>
-            <value>The proxy identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.FolderId">
-            <summary>
-            Gets the Shell Namespace Extension folder identifier.
-            </summary>
-            <value>The folder identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderParsingName">
-            <summary>
-            Gets the Shell Namespace Extension location folder absolute parsing path.
-            </summary>
-            <value>The location folder absolute parsing path. null for a non-rooted path.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.FolderParsingName">
-            <summary>
-            Gets the Shell Namespace Extension folder absolute parsing path.
-            </summary>
-            <value>The folder absolute parsing path. null for a non-rooted path.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.IsImpersonatingClient">
-            <summary>
-            Gets a value indicating if ShellBoost is configured to impersonate the Windows Shell user.
-            </summary>
-            <value>true if if ShellBoost is configured to impersonate the Windows Shell user; false otherwise.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LocationFolderId">
-            <summary>
-            Gets the Shell Namespace Extension location folder identifier.
-            </summary>
-            <value>The location folder identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.InterfaceId">
-            <summary>
-            Gets the ShellBoost IPC interface identifier.
-            </summary>
-            <value>The interface identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.TraceId">
-            <summary>
-            Gets the ShellBoost trace identifier.
-            </summary>
-            <value>The trace identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.ContextMenuId">
-            <summary>
-            Gets the ShellBoost context menu identifier. Unused.
-            </summary>
-            <value>The context menu identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.PropertySheetHandlerId">
-            <summary>
-            Gets the ShellBoost property sheet handler identifier. Unused.
-            </summary>
-            <value>The property sheet handler identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.LibId">
-            <summary>
-            Gets the ShellBoost library identifier.
-            </summary>
-            <value>The library identifier.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.RootPath">
-            <summary>
-            Gets the Shell Namespace Extension root path.
-            </summary>
-            <value>The root path. Null for non-rooted extensions.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellFolderServer.RootIdList">
-            <summary>
-            Gets the Shell Namespace Extension root PIDL.
-            </summary>
-            <value>The root identifier list. Null for non-rooted extensions.</value>
-        </member>
-        <member name="M:ShellBoost.Core.ShellFolderServer.CreatePropertyStore">
-            <summary>
-            Creates the property store instance.
-            </summary>
-            <returns>An instance of PropertyStore.</returns>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.IsDisposed">
             <summary>
@@ -5766,6 +6153,12 @@
             The cache instance.
             </value>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.CreatePropertyStore">
+            <summary>
+            Creates the property store instance.
+            </summary>
+            <returns>An instance of PropertyStore.</returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.GetRootFolder(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Gets the root folder.
@@ -5780,6 +6173,13 @@
             <param name="key">The propert key.</param>
             <param name="value">The value.</param>
             <returns><c>true</c> if the property key was read, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.PreviewOnNotify(System.Object,ShellBoost.Core.NotifyEventArgs)">
+            <summary>
+            Called when a notification is sent by Windows Explorer, before the OnNotify method.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.NotifyEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.OnNotify(System.Object,ShellBoost.Core.NotifyEventArgs)">
             <summary>
@@ -5853,6 +6253,7 @@
             <summary>
             Sends a string value trace using ETW, with the specified level.
             The ETW provider guid is given in the TraceId static property of this class.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
             </summary>
             <param name="level">The trace level.</param>
             <param name="value">The value to trace.</param>
@@ -5873,6 +6274,7 @@
             Stops all instances of ShellFolderServer from listening.
             This should only be used after all instances have stop listening.
             Provided for multiple AppDomains support.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.Stop">
@@ -5889,20 +6291,32 @@
         <member name="M:ShellBoost.Core.ShellFolderServer.RegisterNativeDll(ShellBoost.Core.ShellFolderRegistration)">
             <summary>
             Registers the ShellBoost native proxy assembly.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
             </summary>
             <param name="registration">The registration options.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.RegisterNativeDll(ShellBoost.Core.RegistrationMode)">
             <summary>
             Registers the ShellBoost native proxy assembly.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
             </summary>
             <param name="mode">The registration mode.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.UnregisterNativeDll(ShellBoost.Core.RegistrationMode)">
             <summary>
             Unregisters the ShellBoost native proxy assembly.
+            Don't use this member if you are hosting multiple ShellBoost native proxies, but use the NativeProxy instance member instead.
             </summary>
             <param name="mode">The registration mode.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.GetItemIconLocation(ShellBoost.Core.ShellItem,ShellBoost.Core.WindowsShell.GILIN)">
+            <summary>
+            Gets an icon location for a Shell Item.
+            </summary>
+            <param name="item">The shell item.</param>
+            <param name="options">The input options.</param>
+            <returns>An IconLocation instance or null to use default Shell resolution.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.OnDragDropTarget(ShellBoost.Core.DragDropTargetEventArgs)">
             <summary>
@@ -6511,14 +6925,6 @@
             <param name="defaultValue">The default value if the argument is not found.</param>
             <returns>The argument value.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.CommandLine.GetNullifiedArgument(System.String)">
-            <summary>
-            Gets a command line nullified argument value.
-            </summary>
-            <param name="name">The argument name.</param>
-            <returns>A string or null.</returns>
-            <exception cref="T:System.ArgumentNullException">name is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.CommandLine.GetNullifiedArgument(System.String,System.String)">
             <summary>
             Gets a command line nullified argument value.
@@ -6527,6 +6933,14 @@
             <param name="defaultValue">The default value if the argument is not defined.</param>
             <returns>A string or the default value.</returns>
             <exception cref="T:System.ArgumentNullException">name is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.CommandLine.GetNullifiedArgument(System.Int32,System.String)">
+            <summary>
+            Gets a command line nullified argument value.
+            </summary>
+            <param name="index">The argument index.</param>
+            <param name="defaultValue">The default value if the argument is not defined.</param>
+            <returns>A string or the default value.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.CommandLine.GetArgument``1(System.Int32,``0)">
             <summary>
@@ -6845,6 +7259,11 @@
             An ILogger implementation that logs to the Console.
             </summary>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ConsoleLogger"/> class.
+            </summary>
+        </member>
         <member name="P:ShellBoost.Core.Utilities.ConsoleLogger.AddUnmanagedThreadId">
             <summary>
             Gets or sets a value indicating whether to add the unmanaged thread identifier to logs.
@@ -6857,6 +7276,14 @@
             </summary>
             <value><c>true</c> if thread identifier must be added to logs; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.ConsoleLogger.MaximumTraceLevel">
+            <summary>
+            Gets or sets the maximum trace level to output to the console.
+            </summary>
+            <value>
+            The maximum trace level.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
             <summary>
             Logs a value at a specified trace level.
@@ -6864,6 +7291,23 @@
             <param name="level">The trace level.</param>
             <param name="value">The value.</param>
             <param name="methodName">The calling method name.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.WriteLine(System.String)">
+            <summary>
+            Writes the specified string value, followed by the current line terminator.
+            </summary>
+            <param name="msg">The MSG.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.ResetColor">
+            <summary>
+            Sets the foreground and background colors to their defaults.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.SetForegroundColor(System.ConsoleColor)">
+            <summary>
+            Sets the foreground color.
+            </summary>
+            <param name="color">The color.</param>
         </member>
         <member name="T:ShellBoost.Core.Utilities.Conversions">
             <summary>
@@ -7299,6 +7743,20 @@
             <param name="dic2">The second dictionary.</param>
             <param name="comparer">The equality comparer to use. If null is specified, the Default equality comparer will be used.</param>
             <returns><c>true</c> if the two dictionaries contains the same values, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.Replace(System.String,System.String,System.String,System.StringComparison)">
+            <summary>
+            Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string, using the provided comparison type.
+            </summary>
+            <param name="str">The current instance string.</param>
+            <param name="oldValue">The string to be replaced.</param>
+            <param name="newValue">The string to replace all occurrences of oldValue.</param>
+            <param name="comparisonType">The comparison type.</param>
+            <returns>
+            A string that is equivalent to the current string except that all instances of oldValue are replaced with newValue. If oldValue is not found in the current instance, the method returns the current instance unchanged.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">oldValue is null.</exception>
+            <exception cref="T:System.ArgumentException">oldValue is empty.</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.Crc64">
             <summary>
@@ -8889,6 +9347,30 @@
             Return the opened file name (not normalized).
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.Utilities.IconComparer">
+            <summary>
+            A comparer that can sort bitmaps using the color count, size (width * height) and, optionally, index in a file if they were extracted from a common file.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconComparer.Direction">
+            <summary>
+            Gets or sets the direction.
+            </summary>
+            <value>
+            The direction.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconComparer.Compare(System.Drawing.Bitmap,System.Drawing.Bitmap)">
+            <summary>
+            Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>
+            A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">x is null or y is null./// </exception>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.IconInformation">
             <summary>
             Defines a class that contains icon additional information. It's assigned to a Bitmap.Tag property by the IconUtilities methods.
@@ -8915,6 +9397,13 @@
         <member name="P:ShellBoost.Core.Utilities.IconInformation.GroupIndex">
             <summary>
             Gets the icon group index.
+            </summary>
+            <value>An integer.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.IconInformation.ColorCount">
+            <summary>
+            Gets the color count (0, 2, 16 or 256) of the original icon.
+            0 means the icon is RGB.
             </summary>
             <value>An integer.</value>
         </member>
@@ -8956,6 +9445,11 @@
         <member name="F:ShellBoost.Core.Utilities.IconMode.Small">
             <summary>
             Causes the function to retrieve the file's small icon.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.IconMode.SysIconIndex">
+            <summary>
+            Retrieve the index of a system image list icon.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.IconUtilities">
@@ -9015,13 +9509,6 @@
             <param name="language">The language. Use 1033 for en-US.</param>
             <param name="deleteExisting">If set to <c>true</c> the target.DLL path will always be overwritten; otherwise, existing icons will be preserved.</param>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Drawing.Bitmap,System.String)">
-            <summary>
-            Saves a bitmap as a .ICO file.
-            </summary>
-            <param name="bitmap">The input bitmap.</param>
-            <param name="filePath">The target .ICO file path.</param>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Drawing.Bitmap,System.String,System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
             Saves a bitmap as a .ICO file, possibly in multiple sizes.
@@ -9036,7 +9523,7 @@
             </summary>
             <param name="bitmap">The input bitmap.</param>
             <param name="stream">The target stream</param>
-            <param name="sizes">The multiple sizes.</param>
+            <param name="sizes">The optional multiple sizes.</param>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.SaveAsIcon(System.Collections.Generic.IEnumerable{System.Drawing.Bitmap},System.String)">
             <summary>
@@ -9051,21 +9538,6 @@
             </summary>
             <param name="bitmaps">The list of bitmaps to write.</param>
             <param name="stream">The target stream.</param>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String)">
-            <summary>
-            Loads the best icon from a file path.
-            </summary>
-            <param name="iconFilePath">The input file path.</param>
-            <returns>An instance of Bitmap or null.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String,System.Nullable{System.Int32})">
-            <summary>
-            Loads the best icon from a file path.
-            </summary>
-            <param name="iconFilePath">The input file path.</param>
-            <param name="indexOrResourceId">An optional index or resource id.</param>
-            <returns>An instance of Bitmap or null.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIcon(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
@@ -9091,13 +9563,6 @@
             <param name="iconFilePath">The output icon file path.</param>
             <returns>A list of icons, loaded as bitmaps.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIcons(System.String)">
-            <summary>
-            Lods all the icons from an icon file path. Supports .ICO and .DLL files.
-            </summary>
-            <param name="iconFilePath">The icon file path.</param>
-            <returns>A list of icons, loaded as bitmaps.</returns>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIcons(System.String,System.Nullable{System.Int32})">
             <summary>
             Lods all the icons from an icon file path. Supports .ICO and .DLL files.
@@ -9106,20 +9571,16 @@
             <param name="byIndexOrResourceId">An optional index or resource id parameter.</param>
             <returns>A list of icons, loaded as bitmaps.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String)">
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconsFromFileUsingShell(System.String,System.Nullable{System.Int32},System.Int32)">
             <summary>
-            Loads the icon for a given file extension.
+            Loads all icons from a file.
             </summary>
-            <param name="extension">The file extension.</param>
-            <returns>An instance of Bitmap or null.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String,System.String)">
-            <summary>
-            Loads the icon for a given file extension.
-            </summary>
-            <param name="extension">The file extension.</param>
-            <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
-            <returns>An instance of Bitmap or null.</returns>
+            <param name="iconFilePath">The file path.</param>
+            <param name="size">The required icon size.</param>
+            <param name="byIndexOrResourceId">An optional index or resource id parameter.</param>
+            <returns>
+            A list of icons, loaded as bitmaps.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconForExtension(System.String,System.String,System.Nullable{System.Int32})">
             <summary>
@@ -9130,13 +9591,6 @@
             <param name="preferredSize">An optional preferred size argument.</param>
             <returns>An instance of Bitmap or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIconForExtension(System.String)">
-            <summary>
-            Loads the best icon for a given file extension.
-            </summary>
-            <param name="extension">The file extension.</param>
-            <returns>An instance of Bitmap or null.</returns>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadBestIconForExtension(System.String,System.String)">
             <summary>
             Loads the best icon for a given file extension.
@@ -9145,6 +9599,11 @@
             <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
             <returns>An instance of Bitmap or null.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.ClearIconFilePathByExtensionCache">
+            <summary>
+            Clears the icon file path by extension cache.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetIconFilePathForExtension(System.String)">
             <summary>
             Gets the icon file path for a given file extension.
@@ -9152,13 +9611,17 @@
             <param name="extension">The file extension.</param>
             <returns>A file path string or null.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetIconFilePathForExtension(System.String,System.Nullable{System.Int32}@)">
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetIconFilePathForExtension(System.String,System.Nullable{System.Int32}@,System.Boolean)">
             <summary>
             Gets the icon file path for a given file extension.
             </summary>
             <param name="extension">The file extension.</param>
             <param name="indexOrResourceId">An optional index or resource id argument.</param>
-            <returns>A file path string or null.</returns>
+            <param name="useCache">if set to <c>true</c> an internal cache is used.</param>
+            <returns>
+            A file path string or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">extension</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ILogger">
             <summary>
@@ -9302,19 +9765,20 @@
             or
             stream is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ImageUtilities.GetBitmap(System.IntPtr)">
+        <member name="M:ShellBoost.Core.Utilities.ImageUtilities.GetBitmap(System.IntPtr,System.Boolean)">
             <summary>
             Gets a bitmap from a bitmap handle. Unlike the standard Image.FromHbitmap method, this method supports transparency.
             </summary>
             <param name="bitmapHandle">A bitmap handle.</param>
-            <returns>A bitmap instance.</returns>
-            <exception cref="T:System.ArgumentException">
-            bitmapHandle is zero
+            <param name="fallback">if set to <c>true</c>, fallback on Image.FromHbitmap if the bitmap doesn't support this method.</param>
+            <returns>
+            A bitmap instance.
+            </returns>
+            <exception cref="T:System.ArgumentException">bitmapHandle is zero
             or
             the number of bits required to indicate the color of a pixel of input bitmap is not 32
             or
-            input bitmap stride is not supported.
-            </exception>
+            input bitmap stride width is not supported.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ImageUtilities.GetBitmapSize(System.IntPtr)">
             <summary>
@@ -10825,21 +11289,23 @@
             <param name="flags">The flags.</param>
             <returns>The perceived type.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIdList(System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIdList(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
             Gets the PIDL from a path.
             </summary>
             <param name="path">The path.</param>
+            <param name="bindContext">A bind context that controls the parsing operation.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>An instance of the ShellItemIdList type.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIdList(System.String,ShellBoost.Core.WindowsShell.SFGAO@,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIdList(System.String,ShellBoost.Core.WindowsShell.SFGAO@,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
             Gets the PIDL from a path.
             </summary>
             <param name="path">The path.</param>
             <param name="flags">The flags.</param>
+            <param name="bindContext">A bind context that controls the parsing operation.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>An instance of the ShellItemIdList type.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
@@ -10907,6 +11373,18 @@
             <param name="attributes">The attributes.</param>
             <returns>An SFGAO value.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIconHandleFromSystemImageList(System.Int32,ShellBoost.Core.WindowsShell.SHIL,ShellBoost.Core.WindowsShell.ILD)">
+            <summary>
+            Gets an icon handle from the system image list.
+            </summary>
+            <param name="index">The icon index.</param>
+            <param name="shil">The image list type.</param>
+            <param name="flags">A combination of flags that specify the drawing style.</param>
+            <returns>
+            An icon handle.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIconHandle(System.String,ShellBoost.Core.Utilities.IconMode)">
             <summary>
             Gets an icon handle from a file path.
@@ -10946,6 +11424,83 @@
             <param name="index">The icon index.</param>
             <returns><c>true</c> if the icon location path and index was retrieved successfully, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIconLocation(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.GILIN,System.String@,System.Int32@,ShellBoost.Core.WindowsShell.GILOUT@)">
+            <summary>
+            Gets the icon location from a shell item path.
+            </summary>
+            <param name="path">The file path.</param>
+            <param name="bindContext">A bind context that controls the parsing operation.</param>
+            <param name="inFlags">Input flags.</param>
+            <param name="iconLocationPath">The icon location path.</param>
+            <param name="index">The icon index.</param>
+            <param name="outFlags">Output flags.</param>
+            <returns><c>true</c> if the icon location path and index was retrieved successfully, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetImageForExtension(System.String,System.Drawing.Size,ShellBoost.Core.WindowsShell.SIIGBF,System.Boolean)">
+            <summary>
+            Gets a bitmap that represents an extension.
+            </summary>
+            <param name="extension">The extension.</param>
+            <param name="size">The size of the image to be received.</param>
+            <param name="flags">Options that specify how the image will be extracted.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>
+            A bitmap or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetImage(ShellBoost.Core.ShellItemIdList,System.Drawing.Size,ShellBoost.Core.WindowsShell.SIIGBF,System.Boolean)">
+            <summary>
+            Gets a bitmap that represents a Shell Item.
+            The default behavior is to load a thumbnail. If there is no thumbnail for the current IShellItem, it retrieves an HBITMAP for the icon of the item. The thumbnail or icon is extracted if it is not currently cached.
+            </summary>
+            <param name="idList">The item's pidl.</param>
+            <param name="size">The size of the image to be received.</param>
+            <param name="flags">Options that specify how the image will be extracted.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>
+            A bitmap or null.
+            </returns>
+            <exception cref="T:System.ArgumentException">pidl is zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetImage(System.IntPtr,System.Drawing.Size,ShellBoost.Core.WindowsShell.SIIGBF,System.Boolean)">
+            <summary>
+            Gets a bitmap that represents a Shell Item.
+            The default behavior is to load a thumbnail. If there is no thumbnail for the current IShellItem, it retrieves an HBITMAP for the icon of the item. The thumbnail or icon is extracted if it is not currently cached.
+            </summary>
+            <param name="pidl">The item's pidl.</param>
+            <param name="size">The size of the image to be received.</param>
+            <param name="flags">Options that specify how the image will be extracted.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>
+            A bitmap or null.
+            </returns>
+            <exception cref="T:System.ArgumentException">pidl is zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetImageHandle(ShellBoost.Core.ShellItemIdList,System.Drawing.Size,ShellBoost.Core.WindowsShell.SIIGBF,System.Boolean)">
+            <summary>
+            Gets an HBITMAP handle that represents a Shell Item.
+            The default behavior is to load a thumbnail. If there is no thumbnail for the current IShellItem, it retrieves an HBITMAP for the icon of the item. The thumbnail or icon is extracted if it is not currently cached.
+            </summary>
+            <param name="idList">The item's pidl.</param>
+            <param name="size">The size of the image to be received.</param>
+            <param name="flags">Options that specify how the image will be extracted.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An HBITMAP handle or IntPtr.Zero.</returns>
+            <exception cref="T:System.ArgumentException">pidl is zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetImageHandle(System.IntPtr,System.Drawing.Size,ShellBoost.Core.WindowsShell.SIIGBF,System.Boolean)">
+            <summary>
+            Gets an HBITMAP handle that represents a Shell Item.
+            The default behavior is to load a thumbnail. If there is no thumbnail for the current IShellItem, it retrieves an HBITMAP for the icon of the item. The thumbnail or icon is extracted if it is not currently cached.
+            </summary>
+            <param name="pidl">The item's pidl.</param>
+            <param name="size">The size of the image to be received.</param>
+            <param name="flags">Options that specify how the image will be extracted.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An HBITMAP handle.</returns>
+            <exception cref="T:System.ArgumentException">pidl is zero.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyAllEvents">
             <summary>
@@ -11319,6 +11874,15 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">dataObject is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.DestroyIcon(System.IntPtr)">
+            <summary>
+            Destroys an icon and frees any memory the icon occupied.
+            </summary>
+            <param name="handle">A handle to the icon to be destroyed. The icon must not be in use.</param>
+            <returns>
+            true if the function succeeded; otherwise, false.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetApartmentState">
             <summary>
             Determines the state of the current thread's COM apartment
@@ -11333,6 +11897,24 @@
             <param name="access">A constant that determines how the file can be accessed by the FileStream object.</param>
             <param name="share">A constant that determines how the file will be shared by processes.</param>
             <returns>An instance of STGM.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateBindCtx(System.String,System.Nullable{ShellBoost.Core.WindowsShell.STGM},System.Nullable{System.Int64},System.Nullable{System.IO.FileAttributes},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean)">
+            <summary>
+            Returns an implementation of IBindCtx (a bind context object) that doesn't need a an existing Shell Item for binding operations.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="mode">The file access mode.</param>
+            <param name="length">The item length.</param>
+            <param name="attributes">The file attributes.</param>
+            <param name="lastWriteTime">The last write time.</param>
+            <param name="creationTime">The creation time.</param>
+            <param name="lastAccessTime">The last access time.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            An instance of IBindCtx or null if an error occurred.
+            <exception cref="T:System.ArgumentNullException">name is null.</exception>
+            <returns>
+            An instance of IBindCtx or null if an error occurred.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateBindCtx(System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Boolean)">
             <summary>
@@ -11356,6 +11938,26 @@
             An instance of IBindCtx or null if an error occurred.
             </returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractIconsCount(System.String)">
+            <summary>
+            Extracts the count of icons from a file (.ico, .exe, etc.)
+            </summary>
+            <param name="iconFilePath">The icon file path.</param>
+            <returns>The number of icons in the file.</returns>
+            <exception cref="T:System.ArgumentNullException">iconFilePath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractIcon(System.String,System.Int32,System.Int32,ShellBoost.Core.WindowsShell.GILIN,System.Boolean)">
+            <summary>
+            Extracts an icon from a file (.ico, .exe, etc.)
+            </summary>
+            <param name="iconFilePath">The icon file path.</param>
+            <param name="index">The location of the icon within the file named in pszIconFile. If this is a positive number, it refers to the zero-based position of the icon in the file. For instance, 0 refers to the 1st icon in the resource file and 2 refers to the 3rd. If this is a negative number, it refers to the icon's resource ID.</param>
+            <param name="size">The required icon size.</param>
+            <param name="flags">Flags that control icon extraction.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>A handle to the extracted icon or Zero.</returns>
+            <exception cref="T:System.ArgumentNullException">iconFilePath is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotificationLock(System.IntPtr,System.Int32,ShellBoost.Core.ShellItemIdList@,ShellBoost.Core.ShellItemIdList@,ShellBoost.Core.WindowsShell.SHCNE@)">
             <summary>
             Locks the shared memory associated with a Shell change notification event.
@@ -11365,7 +11967,7 @@
             <param name="idList1">The first affected PIDLs.</param>
             <param name="idList2">The second affected PIDLs.</param>
             <param name="event">The Shell change notification ID of the event that took place.</param>
-            <returns>Returns a handle to the locked memory. Pass this value to ChangeNotificationUnlock when finished.</returns>
+            <returns>A handle to the locked memory. Pass this value to ChangeNotificationUnlock when finished.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotificationUnlock(System.IntPtr)">
             <summary>
@@ -11664,16 +12266,10 @@
         <member name="M:ShellBoost.Core.Utilities.StockIcon.GetShieldIcon(ShellBoost.Core.Utilities.StockIcon.SHGSI)">
             <summary>
             Gets the Windows UAC shield icon.
+            You *must* call ShellUtilities.DestroyIcon on the returned icon handle once you have finished to use it.
             </summary>
             <param name="flags">The flags.</param>
             <returns>An instance of the Icon type.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.StockIcon.GetStockImage(ShellBoost.Core.Utilities.StockIconId)">
-            <summary>
-            Gets a stock image by its identifier.
-            </summary>
-            <param name="id">The identifier.</param>
-            <returns>An instance of the Image type.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.StockIcon.GetShieldImage(ShellBoost.Core.Utilities.StockIcon.SHGSI)">
             <summary>
@@ -11690,13 +12286,22 @@
             <param name="flags">The flags.</param>
             <returns>An instance of the Image type.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.StockIcon.GetStockIcon(ShellBoost.Core.Utilities.StockIconId,ShellBoost.Core.Utilities.StockIcon.SHGSI)">
+        <member name="M:ShellBoost.Core.Utilities.StockIcon.GetStockIconHandle(ShellBoost.Core.Utilities.StockIconId,ShellBoost.Core.Utilities.StockIcon.SHGSI)">
             <summary>
-            Gets a stock icon by its identifier.
+            Gets a stock icon handle by its identifier.
             </summary>
             <param name="id">The identifier.</param>
             <param name="flags">The flags.</param>
-            <returns>An instance of the Icon type.</returns>
+            <returns>An handle on the Icon or Zero if it was not found.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.StockIcon.GetStockIcon(ShellBoost.Core.Utilities.StockIconId,ShellBoost.Core.Utilities.StockIcon.SHGSI)">
+            <summary>
+            Gets a stock icon by its identifier.
+            You *must* call ShellUtilities.DestroyIcon on the returned icon handle once you have finished to use it.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="flags">The flags.</param>
+            <returns>An instance of the Icon type or null if it was not found.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.StockIcon.GetStockBitmap(ShellBoost.Core.Utilities.StockIconId,ShellBoost.Core.Utilities.StockIcon.SHGSI)">
             <summary>
@@ -12198,6 +12803,50 @@
             </summary>
             <value>The assembly.</value>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.OSVersion">
+            <summary>
+            Gets the Windows OS version.
+            </summary>
+            <value>The Windows OS version.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.KernelVersion">
+            <summary>
+            Gets the kernel32.dll version.
+            </summary>
+            <value>
+            The kernel32.dll version.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.WindowsVersion">
+            <summary>
+            Gets the Windows version.
+            </summary>
+            <value>The Windows version.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.Caption">
+            <summary>
+            Gets the Windows caption.
+            </summary>
+            <value>The Windows caption.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsTabletPC">
+            <summary>
+            Gets a value indicating whether this machine is a tablet PC.
+            </summary>
+            <value><c>true</c> if this machine is a tablet PC; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsRemotelyControlled">
+            <summary>
+            Gets a value indicating whether this machine is remotely controlled.
+            </summary>
+            <value><c>true</c> if this machine is remotely controlled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsRemoteSession">
+            <summary>
+            Gets a value that indicates whether the calling process is associated with a Terminal Services client session.
+            </summary>
+            <value><c>true</c> if the calling process is associated with a Terminal Services client session; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.VirtualMachineType">
             <summary>
             Gets the type of the virtual machine.
@@ -12234,17 +12883,27 @@
             </summary>
             <value>The processor architecture.</value>
         </member>
-        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.OSVersion">
-            <summary>
-            Gets the Windows OS version.
-            </summary>
-            <value>The Windows OS version.</value>
-        </member>
         <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.InstalledFrameworkVersions">
             <summary>
             Gets the installed framework versions.
             </summary>
             <value>The installed framework versions.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.CorLibVersion">
+            <summary>
+            Gets the mscorlib.dll version.
+            </summary>
+            <value>
+            The mscorlib.dll version.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.SystemVersion">
+            <summary>
+            Gets the system.dll version.
+            </summary>
+            <value>
+            The system.dll version.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.ClrVersion">
             <summary>
@@ -12323,24 +12982,6 @@
             Gets the name of the UX theme.
             </summary>
             <value>The name of the UX theme.</value>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsTabletPC">
-            <summary>
-            Gets a value indicating whether this machine is a tablet PC.
-            </summary>
-            <value><c>true</c> if this machine is a tablet PC; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsRemotelyControlled">
-            <summary>
-            Gets a value indicating whether this machine is remotely controlled.
-            </summary>
-            <value><c>true</c> if this machine is remotely controlled; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.IsRemoteSession">
-            <summary>
-            Gets a value that indicates whether the calling process is associated with a Terminal Services client session.
-            </summary>
-            <value><c>true</c> if the calling process is associated with a Terminal Services client session; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.DiagnosticsInformation.Screens">
             <summary>
@@ -13557,6 +14198,20 @@
             <param name="process">The process instance.</param>
             <returns>true if the process is Windows Explorer; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.IsPickerHost(System.Int32)">
+            <summary>
+            Determines whether the specified process instance corresponds to Windows Picker Host.
+            </summary>
+            <param name="processId">The process identifier.</param>
+            <returns>true if the process is Picker Host; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.IsPickerHost(System.Diagnostics.Process)">
+            <summary>
+            Determines whether the specified process instance corresponds to Windows Picker Host.
+            </summary>
+            <param name="process">The process instance.</param>
+            <returns>true if the process is Picker Host; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).</returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.OpenExplorer(System.String)">
             <summary>
             Opens the Windows Explorer on a given directory path.
@@ -13689,6 +14344,97 @@
             </summary>
             <value>A version instance.</value>
         </member>
+        <member name="T:ShellBoost.Core.WebCacheShellContent">
+            <summary>
+            Defines the content of a Shell Item that's represented by an HTTP(S) file.
+            The file will be downloaded and cached locally using the WebFileCache ShellBoost utilities.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.#ctor(ShellBoost.Core.Utilities.WebFileCache,System.String,ShellBoost.Core.Utilities.WebFileCacheRequestOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent" /> class.
+            </summary>
+            <param name="cache">The WebFileCache cache instance.</param>
+            <param name="url">The url to download the file from.</param>
+            <param name="downloadOptions">Optional download options.</param>
+            <exception cref="T:System.ArgumentNullException">cache is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.Url">
+            <summary>
+            Gets the content url.
+            </summary>
+            <value>
+            The url.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.DownloadOptions">
+            <summary>
+            Gets or sets download options. Must be set before any call to Read or Seek.
+            </summary>
+            <value>
+            The download options.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.LastWriteTime">
+            <summary>
+            Gets the last write time.
+            </summary>
+            <value>
+            The last write time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.LastAccessTime">
+            <summary>
+            Gets the last access time.
+            </summary>
+            <value>
+            The last access time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.CreationTime">
+            <summary>
+            Gets the creation time.
+            </summary>
+            <value>
+            The creation time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.Length">
+            <summary>
+            Gets the content length. It should be 0 for a directory.
+            </summary>
+            <value>
+            The content length.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.GetStream">
+            <summary>
+            Gets the stream.
+            </summary>
+            <returns>A Stream instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.Read(System.Byte[],System.Int32)">
+            <summary>
+            Reads a sequence of bytes from the current content and advances the position within the stream by the number of bytes read.
+            </summary>
+            <param name="array">An array of bytes.</param>
+            <param name="count">The maximum number of bytes to be read from the current content.</param>
+            <returns>
+            The number of bytes read.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream.
+            </summary>
+            <param name="offset">A byte offset relative to the origin parameter.</param>
+            <param name="origin">A value indicating the reference point used to obtain the new position.</param>
+            <returns>
+            The new position within the current stream or null if this information is unknown.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.Browser">
             <summary>
             Exposes methods that provide services for the view it is hosting and other objects that run in the context of the Explorer window.
@@ -13758,6 +14504,87 @@
         <member name="F:ShellBoost.Core.WindowsShell.FVTEXTTYPE.FVST_EMPTYTEXT">
             <summary>
             The text to display when there are no items in the view.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.ILD">
+            <summary>
+            A combination of flags that specify the drawing style.
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/win32/controls/imagelistdrawflags">ILD enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_NORMAL">
+            <summary>
+            Draws the image using the background color for the image list.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_TRANSPARENT">
+            <summary>
+            Draws the image transparently using the mask, regardless of the background color.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_MASK">
+            <summary>
+            Draws the mask.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_IMAGE">
+            <summary>
+            If the overlay does not require a mask to be drawn, set this flag.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_ROP">
+            <summary>
+            Draws the image using the raster operation code.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_BLEND25">
+            <summary>
+            Draws the image, blending 25 percent with the blend color.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_BLEND50">
+            <summary>
+            Draws the image, blending 50 percent with the blend color
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_OVERLAYMASK">
+            <summary>
+            Used to extract the overlay image.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_PRESERVEALPHA">
+            <summary>
+            Preserves the alpha channel in the destination.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_SCALE">
+            <summary>
+            Causes the image to be scaled to cx, cy instead of being clipped.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_DPISCALE">
+            <summary>
+            Scales the image to the current dpi of the display.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_ASYNC">
+            <summary>
+            Windows Vista and later. Draw the image if it is available in the cache. Do not extract it automatically.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_SELECTED">
+            <summary>
+            Same as ILD_BLEND50.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_FOCUS">
+            <summary>
+            Same as ILD_BLEND25.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_BLEND">
+            <summary>
+            Same as ILD_BLEND50.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.NMCSAEI_FLAGS">
@@ -13918,6 +14745,62 @@
         <member name="F:ShellBoost.Core.WindowsShell.SBSP.SBSP_INITIATEDBYHLINKFRAME">
             <summary>
             Initiated by hyperlink frame.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SIIGBF">
+            <summary>
+            A set of flags that specify how an image will be extracted
+            Maps to Windows' <see href="https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ishellitemimagefactory-getimage">SIIGBF enumeration.</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_RESIZETOFIT">
+            <summary>
+            Shrink the bitmap as necessary to fit, preserving its aspect ratio.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_BIGGERSIZEOK">
+            <summary>
+            Passed by callers if they want to stretch the returned image themselves.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_MEMORYONLY">
+            <summary>
+            Return the item only if it is already in memory. Note that this only returns an already-cached icon and can fall back to a per-class icon if an item has a per-instance icon that has not been cached.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_ICONONLY">
+            <summary>
+            Return only the icon, never the thumbnail.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_THUMBNAILONLY">
+            <summary>
+            Return only the thumbnail, never the icon. Note that not all items have thumbnails, so SIIGBF_THUMBNAILONLY will cause the method to fail in these cases.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_INCACHEONLY">
+            <summary>
+            Allows access to the disk, but only to retrieve a cached item. This returns a cached thumbnail if it is available. If no cached thumbnail is available, it returns a cached per-instance icon but does not extract a thumbnail or icon.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_CROPTOSQUARE">
+            <summary>
+            Introduced in Windows 8. If necessary, crop the bitmap to a square.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_WIDETHUMBNAILS">
+            <summary>
+            Introduced in Windows 8. Stretch and crop the bitmap to a 0.7 aspect ratio.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_ICONBACKGROUND">
+            <summary>
+            Introduced in Windows 8. If returning an icon, paint a background using the associated app's registered background color.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIIGBF.SIIGBF_SCALEUP">
+            <summary>
+            Introduced in Windows 8. If necessary, stretch the bitmap so that the height and width fit the given size.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SORTCOLUMN">
@@ -16802,6 +17685,21 @@
             The physical image bits for this icon are not cached by the calling application.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.GILOUT.GIL_ASYNC">
+            <summary>
+            Set this flag to determine whether the icon should be extracted asynchronously. If the icon can be extracted rapidly, this flag is usually ignored.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.GILOUT.GIL_DEFAULTICON">
+            <summary>
+            Retrieve information about the fallback icon. Fallback icons are usually used while the desired icon is extracted and added to the cache.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.GILOUT.GIL_FORSHORTCUT">
+            <summary>
+            The icon indicates a shortcut. However, the icon extractor should not apply the shortcut overlay; that will be done later. Shortcut icons are state-independent.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.GILOUT.GIL_SHIELD">
             <summary>
             <b>Windows Vista only</b>. The calling application must stamp the icon with the UAC shield.
@@ -18542,7 +19440,7 @@
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.Item">
             <summary>
-            Exposes properties methods that retrieve information about a Shell item.
+            Exposes properties methods that retrieve information about a Shell Item.
             </summary>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.NativeObject">
@@ -18663,9 +19561,23 @@
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetIconAsIcon(ShellBoost.Core.WindowsShell.SHIL)">
             <summary>
             Gets the item's icon as a GDI icon.
+            You *must* call ShellUtilities.DestroyIcon on the returned icon handle once you have finished to use it.
             </summary>
             <param name="shil">The Shell's system image list type.</param>
             <returns>An Icon instance or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetThumbnail(System.Int32,ShellBoost.Core.WindowsShell.WTS_FLAGS,System.Boolean,System.Boolean)">
+            <summary>
+            Gets the thumbnail for this item.
+            </summary>
+            <param name="size">The requested size.</param>
+            <param name="flags">A set of optional flags.</param>
+            <param name="preloadBitmap">if set to true the related bitmap will be preloaded.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Thumbnail instance or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.OpenNativeStream(System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
@@ -18892,6 +19804,98 @@
             <summary>
             An operation to edit or position an item should not affect the item's focus or selected state.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.Thumbnail">
+            <summary>
+            Exposes properties methods that retrieve information about a Shell Thumbnail.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.NativeObject">
+            <summary>
+            Gets the underlying Shell native object corresponding to the shared bitmap.
+            </summary>
+            <value>
+            The native object.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.Id">
+            <summary>
+            Gets the identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.CacheFlags">
+            <summary>
+            Gets combination of flags that contain information about this thumnail.
+            </summary>
+            <value>
+            The cache flags.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.RequestedSize">
+            <summary>
+            Gets the requested size.
+            </summary>
+            <value>
+            The requested size.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.Width">
+            <summary>
+            Gets the width, in pixels, of the contained bitmap.
+            </summary>
+            <value>
+            The width.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.Height">
+            <summary>
+            Gets the height, in pixels, of the contained bitmap.
+            </summary>
+            <value>
+            The height.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Thumbnail.AlphaType">
+            <summary>
+            Gets the contained bitmap alpha channel behavior.
+            </summary>
+            <value>
+            The alpha channel behavior.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.GetBitmap(System.Boolean)">
+            <summary>
+            Retrieves the bitmap contained in the thumbnail
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A Bitmap instance or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.Get(System.Guid,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Gets a thumbnail by its identifier
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="size">The requested size.</param>
+            <param name="preloadBitmap">if set to true the related bitmap will be preloaded.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Thumbnail instance or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.Get(ShellBoost.Core.WindowsShell.Item,System.Int32,ShellBoost.Core.WindowsShell.WTS_FLAGS,System.Boolean,System.Boolean)">
+            <summary>
+            Gets the thumbnail for a specific Shell Item.
+            </summary>
+            <param name="item">The Shell Item.</param>
+            <param name="size">The requested size.</param>
+            <param name="flags">A set of optional flags.</param>
+            <param name="preloadBitmap">if set to true the related bitmap will be preloaded.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A Thumbnail instance or null.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.View">
             <summary>
@@ -19502,6 +20506,11 @@
             A combination of the flags to create Uri.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.URI_CREATE_FLAGS.Uri_CREATE_NONE">
+            <summary>
+            No option.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.URI_CREATE_FLAGS.Uri_CREATE_ALLOW_RELATIVE">
             <summary>
             Default. If the scheme is unspecified and not implicitly "file," assume relative.
@@ -19590,6 +20599,136 @@
         <member name="F:ShellBoost.Core.WindowsShell.URI_CREATE_FLAGS.Uri_CREATE_CANONICALIZE_ABSOLUTE">
             <summary>
             Generate a fully UTF-8 encoded value for absolute uri.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.WTS_ALPHATYPE">
+            <summary>
+            Defines the alpha channel behavior.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_ALPHATYPE.WTSAT_UNKNOWN">
+            <summary>
+            The bitmap is an unknown format. The Shell tries nonetheless to detect whether the image has an alpha channel.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_ALPHATYPE.WTSAT_RGB">
+            <summary>
+            The bitmap is an RGB image without alpha. The alpha channel is invalid and the Shell ignores it.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_ALPHATYPE.WTSAT_ARGB">
+            <summary>
+            The bitmap is an ARGB image with a valid alpha channel.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.WTS_CACHEFLAGS">
+            <summary>
+            A combination of flags that contain information about a thumnail.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_CACHEFLAGS.WTS_DEFAULT">
+            <summary>
+            No option is set.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_CACHEFLAGS.WTS_LOWQUALITY">
+            <summary>
+             Set when the returned bitmap dimensions are less than requested thumb size.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_CACHEFLAGS.WTS_CACHED">
+            <summary>
+            Set when the returned image is in the cache.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.WTS_FLAGS">
+            <summary>
+            Values used by thumbnail methods to specify options for the extraction and display of the thumbnail image.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_NONE">
+            <summary>
+            Extract the thumbnail if it is not cached.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_EXTRACT">
+            <summary>
+            Extract the thumbnail if it is not cached.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_INCACHEONLY">
+            <summary>
+             Only return the thumbnail if it is cached.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_FASTEXTRACT">
+            <summary>
+            If not cached, only extract the thumbnail if it is embedded in EXIF format, typically 96x96.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_FORCEEXTRACTION">
+            <summary>
+            Ignore cache and extract thumbnail from source file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_SLOWRECLAIM">
+            <summary>
+            The thumbnail has an extended lifetime. Use for volumes that might go offline, like non-fixed disks.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_EXTRACTDONOTCACHE">
+            <summary>
+            Extract but do not add the thumbnail to the cache.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_SCALETOREQUESTEDSIZE">
+            <summary>
+             Introduced in Windows 7. If the specific thumbnail size requested in the cxyRequestedThumbSize parameter is not available, resize the thumbnail to the requested size. If possible, a larger bitmap is reduced in scale, preserving its aspect ratio, to the width and height required. If the only available cached thumbnail is smaller than the requested size, then it is scaled up using the nearest-neighbor algorithm.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_SKIPFASTEXTRACT">
+            <summary>
+            Introduced in Windows 7. Do not extract a thumbnail embedded in the metadata of an EXIF image.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_EXTRACTINPROC">
+            <summary>
+            Introduced in Windows 7. Ensures that the thumbnail handler is loaded in the same process as the caller. When this flag is not specified, the handler is loaded into a surrogate process to protect the caller from unexpected crashes caused by the processing of the target file. Use this value when debugging thumbnail extractors.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_CROPTOSQUARE">
+            <summary>
+            Introduced in Windows 8. If necessary, crop the bitmap's dimensions so that is square. The length of the shortest side becomes the length of all sides.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_INSTANCESURROGATE">
+            <summary>
+            Introduced in Windows 8. Create a surrogate for this instance of the cache rather than using the shared DLLHost surrogate.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_REQUIRESURROGATE">
+            <summary>
+            Introduced in Windows 8. Require extractions to take place in the surrogate.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_APPSTYLE">
+            <summary>
+            Windows 8 and later. Pass the WTSCF_APPSTYLE flag to IThumbnailSettings::SetContext, if the provider supports it.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_WIDETHUMBNAILS">
+            <summary>
+            Windows 8 and later. Stretch and crop the bitmap so that its height is 0.7 times its width.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_IDEALCACHESIZEONLY">
+            <summary>
+            Windows 8 and later. Return from the ideal cache snap size only. The returned image might be larger, but it will be pulled from the correct cache entry.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.WTS_FLAGS.WTS_SCALEUP">
+            <summary>
+            Windows 8 and later. If necessary, stretch the image so that the height and width fit the given size.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.ShellThumbnail">
@@ -19730,24 +20869,6 @@
             </summary>
             <param name="location">The icon location.</param>
             <exception cref="T:System.ArgumentNullException">location is null.</exception>
-        </member>
-        <member name="P:ShellBoost.Core.ShellThumbnailAsIcon.Location">
-            <summary>
-            Gets the location.
-            </summary>
-            <value>The location.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellThumbnailAsIcon.Index">
-            <summary>
-            Gets or sets the icon index.
-            </summary>
-            <value>The icon index.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellThumbnailAsIcon.Options">
-            <summary>
-            Gets or sets the options.
-            </summary>
-            <value>The options.</value>
         </member>
         <member name="M:ShellBoost.Core.ShellThumbnailAsIcon.ToString">
             <summary>
@@ -21116,6 +22237,12 @@
             Gets or sets the verb.
             </summary>
             <value>The verb.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItem.Help">
+            <summary>
+            Gets or sets the help text, for status bar.
+            </summary>
+            <value>The help text.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.State">
             <summary>
@@ -25550,7 +26677,7 @@
             Defines the content of a Shell Item that's represented by an HTTP(S) file.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.WebFileShellContent.#ctor(System.String,System.Int64)">
+        <member name="M:ShellBoost.Core.WebFileShellContent.#ctor(System.String,System.Nullable{System.Int64})">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent"/> class.
             </summary>

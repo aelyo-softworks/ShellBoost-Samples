@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ShellBoost.Samples.Overview\OverviewShellFolderServer.cs" Link="OverviewShellFolderServer.cs" />
+    <Compile Include="..\ShellBoost.Samples.Overview\Program.cs" Link="Program.cs" />
+    <Compile Include="..\ShellBoost.Samples.Overview\RootFolder.cs" Link="RootFolder.cs" />
+    <Compile Include="..\ShellBoost.Samples.Overview\SimpleFolder.cs" Link="SimpleFolder.cs" />
+    <Compile Include="..\ShellBoost.Samples.Overview\SimpleItem.cs" Link="SimpleItem.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\ShellBoost.Samples.Overview\ShellBoost.Core.xml" Link="ShellBoost.Core.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\ShellBoost.Samples.Overview\ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.ARM64.dll" Link="ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.Overview\ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.x64.dll" Link="ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.Overview\ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.x86.dll" Link="ShellBoost.71b13106c7a34e58a6d2f8e62da4fbfe.x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.Overview\ShellBoost.Core.dll" Link="ShellBoost.Core.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ShellBoost.Core">
+      <HintPath>..\ShellBoost.Samples.Overview\ShellBoost.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

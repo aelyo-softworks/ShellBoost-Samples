@@ -10,7 +10,7 @@ namespace ShellBoost.Samples.Overview
         {
             if (_root == null)
             {
-                _root = new RootFolder(this, idl);
+                _root = new RootFolder(idl);
             }
             return _root;
         }

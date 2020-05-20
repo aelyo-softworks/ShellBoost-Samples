@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.GoogleDr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.MultiHost", "ShellBoost.Samples.MultiHost\ShellBoost.Samples.MultiHost.csproj", "{72501D06-AA4C-4BEE-B6F8-086830AF6C01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.CoreOverview", "ShellBoost.Samples.CoreOverview\ShellBoost.Samples.CoreOverview.csproj", "{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72501D06-AA4C-4BEE-B6F8-086830AF6C01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
