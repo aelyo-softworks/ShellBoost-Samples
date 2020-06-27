@@ -17,6 +17,10 @@ namespace ShellBoost.Samples.MultiHost
             Console.WriteLine("ShellBoost Samples - MultiHost - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
             Console.WriteLine();
+            Console.WriteLine("********************************************************************************************");
+            Console.WriteLine(" This Sample is now obsolete. Use the NativeProxy class to host multiple ShellFolderServers.");
+            Console.WriteLine("********************************************************************************************");
+            Console.WriteLine();
 
             // browse all ShellBoost native proxies in the current directory (corresponding to the current bitness)
             var stopEvents = new List<AutoResetEvent>();

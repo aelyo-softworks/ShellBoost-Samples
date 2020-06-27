@@ -620,6 +620,22 @@
             </summary>
             <param name="mode">The registration mode.</param>
         </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.RefreshShellViews(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.Utilities.RefreshViewsOptions)">
+            <summary>
+            Refreshes Windows Shell views.
+            This method has the same effect independently of the current native proxy instance.
+            </summary>
+            <param name="idl">The Shell Item Id list. If null, all views will be refreshed.</param>
+            <param name="options">The options. Unused if pidl is null.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.RefreshShellViews(System.Byte[],ShellBoost.Core.Utilities.RefreshViewsOptions)">
+            <summary>
+            Refreshes Windows Shell views.
+            This method has the same effect independently of the current native proxy instance.
+            </summary>
+            <param name="pidl">The pidl. If null, all views will be refreshed.</param>
+            <param name="options">The options. Unused if pidl is null.</param>
+        </member>
         <member name="M:ShellBoost.Core.Client.NativeProxy.CompareTo(ShellBoost.Core.Client.NativeProxy)">
             <summary>
             Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
@@ -858,6 +874,26 @@
             Gets or sets the options.
             </summary>
             <value>The options.</value>
+        </member>
+        <member name="T:ShellBoost.Core.ProxyCacheOptions">
+            <summary>
+            Options for the native proxy cache.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProxyCacheOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProxyCacheOptions.DisableCache">
+            <summary>
+            Disable the proxy cache.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProxyCacheOptions.DisableFullSFGAOF">
+            <summary>
+            Disable full SFGAOF usage.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.SelectAndEditItemEventArgs">
             <summary>
@@ -5806,7 +5842,7 @@
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.IpcFormat">
             <summary>
             Gets or sets the RPC protocol endpoint format.
-            This property value should be consistent with ShellFolderRegistration's IpcFormat property value.
+            This property value must be consistent with ShellFolderRegistration's IpcFormat property value.
             </summary>
             <value>The RPC protocol endpoint format.</value>
         </member>
@@ -5820,11 +5856,13 @@
             <summary>
             Gets or sets a value indicating whether to report errors on duplicate RPC endpoints for ShellBoost proxy communication.
             </summary>
-            <value><c>true</c> if the Windows Shell client is impersonated; otherwise, <c>false</c>.</value>
+            <value><c>true</c> if errors should be reported on duplicate RPC endpoints for ShellBoost proxy communication; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderConfiguration.NativeDllRegistration">
             <summary>
             Gets or sets the native ShellBoost proxy registration mode.
+            Note setting this value to something other than None is not the preferred way of registering the native ShellBoost proxy.
+            It is better to use the ShellFolderServer.RegisterNativeDll method.
             </summary>
             <value>The native ShellBoost proxy registration mode.</value>
         </member>
@@ -5901,9 +5939,82 @@
         <member name="P:ShellBoost.Core.ShellFolderRegistration.IpcFormat">
             <summary>
             Gets or sets the RPC protocol endpoint format.
-            This property value should be consistent with ShellFolderConfiguration's IpcFormat property value.
+            This property value must be consistent with ShellFolderConfiguration's IpcFormat property value.
             </summary>
             <value>The RPC protocol endpoint format.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderRegistration.EnumerationBatchSize">
+            <summary>
+            Gets or sets the RPC protocol enumeration batch size.
+            If the value is less or equal to 0, an automatic default value will be used.
+            Note this will not be effective until the client process using the native proxy (for example explorer.exe) is restarted.
+            </summary>
+            <value>The batch size.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.Show(System.Guid,System.String,ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Shows the specified Shell Folder.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="location">The location.</param>
+            <param name="mode">The mode. Only User or Machine are supported.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.Hide(System.Guid,System.String,ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Hides the specified Shell Folder.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="location">The location.</param>
+            <param name="mode">The mode. Only User or Machine are supported.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.Toggle(System.Guid,System.String,ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Toggles the specified Shell Folder, shown or hidden.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="location">The location.</param>
+            <param name="mode">The mode. Only User or Machine are supported.</param>
+            <returns>
+            true if it's shown, false it it's hidden.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">location is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.IsShown(System.Guid,System.String,ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Determines whether the specified Shell Folder is shown or not.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="location">The location.</param>
+            <param name="mode">The mode. Only User or Machine are supported.</param>
+            <returns>
+              <c>true</c> if the specified folder class identifier is shown; otherwise, <c>false</c>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">location is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.GetIsPinnedToNameSpaceTree(System.Guid,ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Gets a value that determines if the specified Shell Folder is pinned to the name space tree.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="mode">The mode.</param>
+            <returns>true if the value is set to 1, false if the value is set to 0, and null if the value is not set.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderRegistration.SetIsPinnedToNameSpaceTree(System.Guid,System.Nullable{System.Boolean},ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Sets a value that determines if the specified Shell Folder is pinned to the name space tree.
+            This method uses registry calls.
+            </summary>
+            <param name="folderClassId">The Shell Folder Class Id.</param>
+            <param name="value">The new value to set. Null will delete the registry value.</param>
+            <param name="mode">The mode.</param>
+            <returns>
+            The old value, true if it was set to 1, false if it was set to 0, and null if it was not set.
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.ShellFolderServer">
             <summary>
@@ -6130,6 +6241,7 @@
         <member name="P:ShellBoost.Core.ShellFolderServer.IsCacheEnabled">
             <summary>
             Gets or sets a value indicating whether the IPC cache is enabled.
+            If set to false, the cache will be cleared.
             </summary>
             <value><c>true</c> if the IPC cache is enabled; otherwise, <c>false</c>.</value>
         </member>
@@ -6144,6 +6256,27 @@
             Gets or sets the IPC cache timeout in milliseconds. The maximum value is 65535.
             </summary>
             <value>The IPC cache timeout.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.LastProxyCacheCount">
+            <summary>
+            Gets the last proxy cache count.
+            </summary>
+            <value>
+            The last proxy cache count.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolderServer.ProxyCacheOptions">
+            <summary>
+            Gets or sets the proxy cache options.
+            </summary>
+            <value>
+            The proxy cache options.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.ClearProxyCache">
+            <summary>
+            Clears the proxy cache.
+            </summary>
         </member>
         <member name="P:ShellBoost.Core.ShellFolderServer.Cache">
             <summary>
@@ -11995,6 +12128,40 @@
             <exception cref="T:System.ArgumentNullException">entries is null.</exception>
             <exception cref="T:System.ArgumentException">entries is empty.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnsureBindCtxPropertyBag(System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Ensures an IBindCtx has a property bag.
+            </summary>
+            <param name="bindContext">The bind context.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error code or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">bindContext is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.EnsureBindCtxPropertyBag(System.Runtime.InteropServices.ComTypes.IBindCtx,System.Object@,System.Boolean)">
+            <summary>
+            Ensures an IBindCtx has a property bag.
+            </summary>
+            <param name="bindContext">The bind context.</param>
+            <param name="store">The property store or property bag instance.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error code or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">bindContext is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.AddToBindCtx(System.Runtime.InteropServices.ComTypes.IBindCtx,System.String,System.Object,System.Boolean)">
+            <summary>
+            Adds a name-value pair to an IBindCtx's property bag.
+            </summary>
+            <param name="bindContext">The bind context.</param>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error code or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            bindContext is null
+            or
+            name is null.
+            </exception>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.SingleInstance">
             <summary>
             A utility class to handle single instance Winforms or WPF applications, based on a Mutex. This class cannot be inherited.
@@ -13762,6 +13929,39 @@
             <summary>
             As set of windows utilities.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.Rename(Microsoft.Win32.RegistryKey,System.String,System.String,System.Boolean)">
+            <summary>
+            Renames the specified registry key.
+            </summary>
+            <param name="key">The registry key.</param>
+            <param name="oldName">The old name.</param>
+            <param name="newName">The new name.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error or 0 if operation was successful.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">oldName is null
+            or
+            newName is null.</exception>
+            <exception cref="T:System.ArgumentException">key has an invalid handle.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RenameRegistryKey(System.IntPtr,System.String,System.String,System.Boolean)">
+            <summary>
+            Renames the specified registry key.
+            </summary>
+            <param name="keyHandle">The registry key.</param>
+            <param name="oldName">The old name.</param>
+            <param name="newName">The new name.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error or 0 if operation was successful.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            oldName is null
+            or
+            newName is null.
+            </exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.GetParentWindow(System.IntPtr)">
             <summary>
@@ -19430,6 +19630,14 @@
             Exposes properties methods that retrieve information about a Shell folder.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.IsFolder">
+            <summary>
+            Gets a value indicating whether this instance is a folder.
+            </summary>
+            <value>
+              <c>true</c> if this instance is folder; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Folder.Children">
             <summary>
             Gets the folder's children.
@@ -19437,6 +19645,13 @@
             <value>
             The children.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.EnumerateChildren(System.Nullable{ShellBoost.Core.WindowsShell.SHCONTF})">
+            <summary>
+            Enumerates the folder's children.
+            </summary>
+            <param name="flags">Optional flags.</param>
+            <returns>A list of children.</returns>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.Item">
             <summary>
@@ -19459,12 +19674,28 @@
             The absolute PIDL.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.Index">
+            <summary>
+            Gets this item's index when it was retrieved from an enumeration.
+            </summary>
+            <value>
+            The index.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.Attributes">
             <summary>
             Attributes that can be retrieved on a Shell item (file or folder) or set of Shell items.
             </summary>
             <value>
             The attributes.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.IsFolder">
+            <summary>
+            Gets a value indicating whether this instance is a folder.
+            </summary>
+            <value>
+              <c>true</c> if this instance is folder; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.SIGDN_NORMALDISPLAY">
@@ -19556,6 +19787,14 @@
             Gets the item's icon as image source.
             </summary>
             <param name="shil">The Shell's system image list type.</param>
+            <returns>An ImageSource instance of null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetThumbnailAsImageSource(System.Int32,ShellBoost.Core.WindowsShell.WTS_FLAGS)">
+            <summary>
+            Gets the item's thumbnail as image source.
+            </summary>
+            <param name="size">The requested size.</param>
+            <param name="flags">A set of optional flags.</param>
             <returns>An ImageSource instance of null.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetIconAsIcon(ShellBoost.Core.WindowsShell.SHIL)">
@@ -19866,12 +20105,32 @@
             The alpha channel behavior.
             </value>
         </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.GetBitmapHandle(System.Boolean)">
+            <summary>
+            Retrieves the bitmap contained in the thumbnail
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Bitmap handle or Zero.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.GetBitmap(System.Boolean)">
             <summary>
             Retrieves the bitmap contained in the thumbnail
             </summary>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A Bitmap instance or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.GetImageSource(System.Nullable{System.Windows.Int32Rect},System.Windows.Media.Imaging.BitmapSizeOptions,System.Boolean)">
+            <summary>
+            Retrieves the bitmap contained in the thumbnail
+            </summary>
+            <param name="rect">The size of the source image.</param>
+            <param name="sizeOptions">Options that specify how to handle conversions.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Bitmap instance or null.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Thumbnail.Get(System.Guid,System.Int32,System.Boolean,System.Boolean)">
             <summary>
@@ -21845,6 +22104,18 @@
             </summary>
             <param name="obj">The object to compare with the current object.</param>
             <returns><c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.GetData">
+            <summary>
+            Gets the data.
+            </summary>
+            <returns>A array of bytes representing the PIDL.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.ComputeHashCode">
+            <summary>
+            Computes the hash code for this instance.
+            </summary>
+            <returns>The hash code for this instance.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetHashCode">
             <summary>
@@ -30417,6 +30688,14 @@
             Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 626</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.ActivationUri">
+            <summary>
+            The <b>System.Activity.ActivationUri</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Activity_ActivationUri</b>.
+            </summary>
+            <value>
+            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 640</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.ActivityId">
             <summary>
             The <b>System.Activity.ActivityId</b> property key. PropVariant type: <b>VT_CLSID</b>. .NET type: System.Guid. Shell name <b>PKEY_Activity_ActivityId</b>.
@@ -30513,12 +30792,28 @@
             Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 606</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.FallbackUri">
+            <summary>
+            The <b>System.Activity.FallbackUri</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Activity_FallbackUri</b>.
+            </summary>
+            <value>
+            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 641</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.HasAdaptiveContent">
             <summary>
             The <b>System.Activity.HasAdaptiveContent</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_Activity_HasAdaptiveContent</b>.
             </summary>
             <value>
             Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 625</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.SetCategory">
+            <summary>
+            The <b>System.Activity.SetCategory</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Activity_SetCategory</b>.
+            </summary>
+            <value>
+            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 639</b>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Activity.SetId">
@@ -30548,14 +30843,6 @@
             </summary>
             <value>
             Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 609</b>.
-            </value>
-        </member>
-        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.ActivityHistory.AnchorStatus">
-            <summary>
-            The <b>System.ActivityHistory.AnchorStatus</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_ActivityHistory_AnchorStatus</b>.
-            </summary>
-            <value>
-            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 636</b>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.ActivityHistory.AppActivityId">
@@ -30644,6 +30931,22 @@
             </summary>
             <value>
             Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 617</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.ActivityHistory.Importance">
+            <summary>
+            The <b>System.ActivityHistory.Importance</b> property key. PropVariant type: <b>VT_UI8</b>. .NET type: System.UInt64. Shell name <b>PKEY_ActivityHistory_Importance</b>.
+            </summary>
+            <value>
+            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 637</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.ActivityHistory.IsHistoryAttributedToSetAnchor">
+            <summary>
+            The <b>System.ActivityHistory.IsHistoryAttributedToSetAnchor</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_ActivityHistory_IsHistoryAttributedToSetAnchor</b>.
+            </summary>
+            <value>
+            Value is <b>{c5043536-932e-219e-5fb9-1c2807d7b03e} 638</b>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.ActivityHistory.IsLocal">
@@ -31005,12 +31308,49 @@
             Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 12</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.TileUniqueId">
+            <summary>
+            The <b>System.AppUserModel.TileUniqueId</b> property key. PropVariant type: <b>VT_CLSID</b>. .NET type: System.Guid. Shell name <b>PKEY_AppUserModel_TileUniqueId</b>. Display name <b>TileUniqueId</b>.
+            </summary>
+            <value>
+            Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 32</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.ToastActivatorCLSID">
             <summary>
             The <b>System.AppUserModel.ToastActivatorCLSID</b> property key. PropVariant type: <b>VT_CLSID</b>. .NET type: System.Guid. Shell name <b>PKEY_AppUserModel_ToastActivatorCLSID</b>. Display name <b>ToastActivatorCLSID</b>.
             </summary>
             <value>
             Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 26</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.VisualElementsManifestHintPath">
+            <summary>
+            The <b>System.AppUserModel.VisualElementsManifestHintPath</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_AppUserModel_VisualElementsManifestHintPath</b>. Display name <b>VisualElementsManifest hint path</b>.
+            </summary>
+            <value>
+            Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 31</b>.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.PinMigration">
+            <summary>
+            The <b>System.AppUserModel.PinMigration</b> properties namespace.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.PinMigration.Executable">
+            <summary>
+            The <b>System.AppUserModel.PinMigration.Executable</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_AppUserModel_PinMigration_Executable</b>.
+            </summary>
+            <value>
+            Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 33</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.PinMigration.PackagedAppId">
+            <summary>
+            The <b>System.AppUserModel.PinMigration.PackagedAppId</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_AppUserModel_PinMigration_PackagedAppId</b>.
+            </summary>
+            <value>
+            Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 34</b>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Audio">
@@ -33354,7 +33694,7 @@
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.DeviceInterface.Sensors.PersistentUniqueId">
             <summary>
-            The <b>System.DeviceInterface.Sensors.PersistentUniqueId</b> property key. PropVariant type: <b>VT_CLSID</b>. .NET type: System.Guid. Shell name <b>DEVPKEY_Sensor_PersistentUniqueId</b>.
+            The <b>System.DeviceInterface.Sensors.PersistentUniqueId</b> property key. PropVariant type: <b>VT_CLSID</b>. .NET type: System.Guid. Shell name <b>PKEY_DeviceInterface_Sensors_PersistentUniqueId</b>.
             </summary>
             <value>
             Value is <b>{d4247382-969d-4f24-bb14-fb9671870bbf} 9</b>.
@@ -34102,7 +34442,7 @@
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.WiaDeviceType">
             <summary>
-            The <b>System.Devices.WiaDeviceType</b> property key. PropVariant type: <b>VT_UI4</b>. .NET type: System.UInt32. Shell name <b>DEVPKEY_WIA_DeviceType</b>.
+            The <b>System.Devices.WiaDeviceType</b> property key. PropVariant type: <b>VT_UI4</b>. .NET type: System.UInt32. Shell name <b>PKEY_Devices_WiaDeviceType</b>.
             </summary>
             <value>
             Value is <b>{6bdd1fc6-810f-11d0-bec7-08002be2092f} 2</b>.
@@ -34770,6 +35110,14 @@
             The <b>System.Devices.AudioDevice.Microphone</b> properties namespace.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.AudioDevice.Microphone.IsFarField">
+            <summary>
+            The <b>System.Devices.AudioDevice.Microphone.IsFarField</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_Devices_AudioDevice_Microphone_IsFarField</b>.
+            </summary>
+            <value>
+            Value is <b>{8943b373-388c-4395-b557-bc6dbaffafdb} 6</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.AudioDevice.Microphone.SensitivityInDbfs">
             <summary>
             The <b>System.Devices.AudioDevice.Microphone.SensitivityInDbfs</b> property key. PropVariant type: <b>VT_R8</b>. .NET type: System.Double. Shell name <b>PKEY_Devices_AudioDevice_Microphone_SensitivityInDbfs</b>.
@@ -34964,6 +35312,40 @@
             </summary>
             <value>
             Value is <b>{a0e00ee1-f0c7-4d41-b8e7-26a7bd8d38b0} 3</b>.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Devices.Panel">
+            <summary>
+            The <b>System.Devices.Panel</b> properties namespace.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.Panel.PanelGroup">
+            <summary>
+            The <b>System.Devices.Panel.PanelGroup</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Devices_Panel_PanelGroup</b>.
+            </summary>
+            <value>
+            Value is <b>{8dbc9c86-97a9-4bff-9bc6-bfe95d3e6dad} 3</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.Panel.PanelId">
+            <summary>
+            The <b>System.Devices.Panel.PanelId</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Devices_Panel_PanelId</b>.
+            </summary>
+            <value>
+            Value is <b>{8dbc9c86-97a9-4bff-9bc6-bfe95d3e6dad} 2</b>.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Devices.PhoneLineTransportDevice">
+            <summary>
+            The <b>System.Devices.PhoneLineTransportDevice</b> properties namespace.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.PhoneLineTransportDevice.Connected">
+            <summary>
+            The <b>System.Devices.PhoneLineTransportDevice.Connected</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_Devices_PhoneLineTransportDevice_Connected</b>.
+            </summary>
+            <value>
+            Value is <b>{aecf2fe8-1d00-4fee-8a6d-a70d719b772b} 2</b>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Devices.SmartCards">
@@ -40828,6 +41210,14 @@
             The <b>System.Supplemental</b> properties namespace.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.Album">
+            <summary>
+            The <b>System.Supplemental.Album</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_Supplemental_Album</b>.
+            </summary>
+            <value>
+            Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 6</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.AlbumID">
             <summary>
             The <b>System.Supplemental.AlbumID</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_Supplemental_AlbumID</b>.
@@ -40836,12 +41226,36 @@
             Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 2</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.Location">
+            <summary>
+            The <b>System.Supplemental.Location</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_Supplemental_Location</b>.
+            </summary>
+            <value>
+            Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 5</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.Person">
+            <summary>
+            The <b>System.Supplemental.Person</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_Supplemental_Person</b>.
+            </summary>
+            <value>
+            Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 7</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.ResourceId">
             <summary>
             The <b>System.Supplemental.ResourceId</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Supplemental_ResourceId</b>.
             </summary>
             <value>
             Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 3</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Supplemental.Tag">
+            <summary>
+            The <b>System.Supplemental.Tag</b> property key. PropVariant type: <b>VT_LPWSTR, VT_VECTOR</b>. .NET type: System.String[]. Shell name <b>PKEY_Supplemental_Tag</b>.
+            </summary>
+            <value>
+            Value is <b>{0c73b141-39d6-4653-a683-cab291eaf95b} 4</b>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Sync">
@@ -41278,6 +41692,22 @@
             </summary>
             <value>
             Value is <b>{86d40b4d-9069-443c-819a-2a54090dccec} 5</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Tile.HoloBoundingBox">
+            <summary>
+            The <b>System.Tile.HoloBoundingBox</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Tile_HoloBoundingBox</b>. Display name <b>HoloBoundingBox</b>.
+            </summary>
+            <value>
+            Value is <b>{86d40b4d-9069-443c-819a-2a54090dccec} 25</b>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Tile.HoloContent">
+            <summary>
+            The <b>System.Tile.HoloContent</b> property key. PropVariant type: <b>VT_LPWSTR</b>. .NET type: System.String. Shell name <b>PKEY_Tile_HoloContent</b>. Display name <b>HoloContent</b>.
+            </summary>
+            <value>
+            Value is <b>{86d40b4d-9069-443c-819a-2a54090dccec} 24</b>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Tile.InstallProgress">
