@@ -8,7 +8,6 @@
   <ItemGroup>
     <Compile Include="..\ShellBoost.Samples.Overview\OverviewShellFolderServer.cs" Link="OverviewShellFolderServer.cs" />
     <Compile Include="..\ShellBoost.Samples.Overview\Program.cs" Link="Program.cs" />
-    <Compile Include="..\ShellBoost.Samples.Overview\RootFolder.cs" Link="RootFolder.cs" />
     <Compile Include="..\ShellBoost.Samples.Overview\SimpleFolder.cs" Link="SimpleFolder.cs" />
     <Compile Include="..\ShellBoost.Samples.Overview\SimpleItem.cs" Link="SimpleItem.cs" />
   </ItemGroup>

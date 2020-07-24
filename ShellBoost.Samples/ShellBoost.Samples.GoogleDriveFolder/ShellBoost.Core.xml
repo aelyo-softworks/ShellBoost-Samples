@@ -4847,21 +4847,6 @@
             <param name="info">The information.</param>
             <exception cref="T:System.ArgumentNullException">info is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.RootShellFolder.OnSetFolderServer(ShellBoost.Core.ShellFolderServer)">
-            <summary>
-            Called when the folder server is set.
-            </summary>
-            <param name="Folder">The folder server.</param>
-        </member>
-        <member name="P:ShellBoost.Core.RootShellFolder.FolderServer">
-            <summary>
-            Gets the folder server.
-            Will be automatically set after the folder has been requested by the ShellFolderServer.
-            </summary>
-            <value>
-            The folder server.
-            </value>
-        </member>
         <member name="P:ShellBoost.Core.RootShellFolder.FullDisplayName">
             <summary>
             Gets this item's display name, that is, including the parent's full display name.
@@ -4885,23 +4870,6 @@
             Gets this item's display name, that is, including the parent's full display name.
             </summary>
             <returns>The full display name.</returns>
-        </member>
-        <member name="M:ShellBoost.Core.RootShellFolder.GetItem(ShellBoost.Core.ShellItemIdList)">
-            <summary>
-            Gets a Shell Item using its PIDL.
-            </summary>
-            <param name="idList">The PIDL.</param>
-            <returns>An instance of the ShellItem type or null if it was not found.</returns>
-            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.RootShellFolder.GetItem``1(ShellBoost.Core.ShellItemIdList)">
-            <summary>
-            Gets a typed Shell Item using its PIDL.
-            </summary>
-            <typeparam name="T">The expected Shell Item type.</typeparam>
-            <param name="idList">The PIDL.</param>
-            <returns>An instance of the ShellItem type or null if it was not found.</returns>
-            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.SByteKeyShellItemId">
             <summary>
@@ -5374,6 +5342,42 @@
             <param name="parent">The parent.</param>
             <param name="info">The information.</param>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
+            This constructor is reserved for root shell folders.
+            </summary>
+            <param name="idList">The identifier list.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetRootFullDisplayName">
+            <summary>
+            Gets this item's display name, that is, including the parent's full display name.
+            </summary>
+            <returns>The full display name.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetRootFullParsingName">
+            <summary>
+            Gets this item's display name, that is, including the parent's full display name.
+            </summary>
+            <returns>The full display name.</returns>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolder.FullDisplayName">
+            <summary>
+            Gets this item's display name, that is, including the parent's full display name.
+            The full disply name is also what is used in the Windows Explorer's Address Bar.
+            </summary>
+            <value>
+            The full display name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolder.FullParsingName">
+            <summary>
+            Gets this item's parsing name, that is, including the parent's full parsing name.
+            </summary>
+            <value>
+            The full parsing name.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.Initialize">
             <summary>
             Initializes this instance.
@@ -5422,6 +5426,40 @@
             Gets or sets the folder view mode.
             </summary>
             <value>The folder view mode.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellFolder.FolderServer">
+            <summary>
+            Gets the folder server.
+            Will be automatically set after the folder has been requested by the ShellFolderServer.
+            </summary>
+            <value>
+            The folder server.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetItem(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Gets a Shell Item using its full PIDL from the root.
+            This method is only supported if this instance is the root folder.
+            </summary>
+            <param name="idList">The PIDL.</param>
+            <returns>An instance of the ShellItem type or null if it was not found.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetItem``1(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Gets a typed Shell Item using its full PIDL from the root.
+            This method is only supported if this instance is the root folder.
+            </summary>
+            <typeparam name="T">The expected Shell Item type.</typeparam>
+            <param name="idList">The PIDL.</param>
+            <returns>An instance of the ShellItem type or null if it was not found.</returns>
+            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnSetFolderServer(ShellBoost.Core.ShellFolderServer)">
+            <summary>
+            Called when the folder server is set.
+            </summary>
+            <param name="Folder">The folder server.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.AddNewMenuToMenu(ShellBoost.Core.ShellMenu)">
             <summary>
@@ -6292,9 +6330,17 @@
             </summary>
             <returns>An instance of PropertyStore.</returns>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.GetFolderAsRoot(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Gets the root folder.
+            </summary>
+            <param name="idList">The root folder PIDL.</param>
+            <returns>An instance of the ShellFolder type.</returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.GetRootFolder(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Gets the root folder.
+            Note this method has been superseded by GetFolderAsRoot that avoids a dead-end specialization of the ShellFolder class.
             </summary>
             <param name="idList">The root folder PIDL.</param>
             <returns>An instance of the RootShellFolder type.</returns>
@@ -11635,6 +11681,88 @@
             <returns>An HBITMAP handle.</returns>
             <exception cref="T:System.ArgumentException">pidl is zero.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetViewStatePropertyBagValue(ShellBoost.Core.ShellItemIdList,System.String,System.String,ShellBoost.Core.WindowsShell.SHGVSPB)">
+            <summary>
+            Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and get a value by its name from it.
+            The user's settings are kept for the next time the user visits the folder.
+            </summary>
+            <param name="idList">A PIDL of the folder for which you are requesting properties. This parameter must be null if the SHGVSPB_ALLFOLDERS flag is passed.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="valueName">The name of the value.</param>
+            <param name="flags">Options that specify how the bag must be retrieved.</param>
+            <returns>The object value or null.</returns>
+            <exception cref="T:System.ArgumentNullException">name is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetViewStatePropertyBagValue(System.IntPtr,System.String,System.String,ShellBoost.Core.WindowsShell.SHGVSPB)">
+            <summary>
+            Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and get a value by its name from it.
+            The user's settings are kept for the next time the user visits the folder.
+            </summary>
+            <param name="pidl">A PIDL of the folder for which you are requesting properties. This parameter must be Zero if the SHGVSPB_ALLFOLDERS flag is passed.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="valueName">The name of the value to get.</param>
+            <param name="flags">Options that specify how the bag must be retrieved.</param>
+            <returns>The object value or null.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            name is null
+            or
+            valueName is null.
+            </exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.SetViewStatePropertyBagValue(ShellBoost.Core.ShellItemIdList,System.String,System.String,System.Object,ShellBoost.Core.WindowsShell.SHGVSPB,System.Boolean)">
+            <summary>
+            Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and write a value by its name to it.
+            The user's settings are kept for the next time the user visits the folder.
+            </summary>
+            <param name="idList">A PIDL of the folder for which you are requesting properties. This parameter must be Zero if the SHGVSPB_ALLFOLDERS flag is passed.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="valueName">The name of the value to get.</param>
+            <param name="value">The value.</param>
+            <param name="flags">Options that specify how the bag must be retrieved.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>
+            An error code or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">name is null
+            or
+            valueName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.SetViewStatePropertyBagValue(System.IntPtr,System.String,System.String,System.Object,ShellBoost.Core.WindowsShell.SHGVSPB,System.Boolean)">
+            <summary>
+            Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and write a value by its name to it.
+            The user's settings are kept for the next time the user visits the folder.
+            </summary>
+            <param name="pidl">A PIDL of the folder for which you are requesting properties. This parameter must be Zero if the SHGVSPB_ALLFOLDERS flag is passed.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="valueName">The name of the value to get.</param>
+            <param name="value">The value.</param>
+            <param name="flags">Options that specify how the bag must be retrieved.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>
+            An error code or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">name is null
+            or
+            valueName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ClearViewStatePropertyBag(ShellBoost.Core.ShellItemIdList,System.String,System.Boolean)">
+            <summary>
+            Clears a property bag in which the view state information for a folder was stored.
+            </summary>
+            <param name="idList">A PIDL of the folder for which you are requesting properties.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error code or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ClearViewStatePropertyBag(System.IntPtr,System.String,System.Boolean)">
+            <summary>
+            Clears a property bag in which the view state information for a folder was stored.
+            </summary>
+            <param name="pidl">A PIDL of the folder for which you are requesting properties.</param>
+            <param name="bagName">The name of the requested property bag.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error code or 0.</returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyAllEvents">
             <summary>
             Notifies the Shell of the SHCNE_ALLEVENTS event. Wraps Windows Shell's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb762118.aspx">SHChangeNotify function</see>.
@@ -14945,6 +15073,71 @@
         <member name="F:ShellBoost.Core.WindowsShell.SBSP.SBSP_INITIATEDBYHLINKFRAME">
             <summary>
             Initiated by hyperlink frame.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SHGVSPB">
+            <summary>
+            Defines options for the SHGetViewStatePropertyBag method.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_NONE">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_PERUSER">
+            <summary>
+            Returns the per-user properties for the specified pidl.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_ALLUSERS">
+            <summary>
+            Returns the All User properties for the specified pidl.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_PERFOLDER">
+            <summary>
+            Returns the property bag for the folder specified by the pidl parameter.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_ALLFOLDERS">
+            <summary>
+            Returns the property bag that applies to all folders.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_INHERIT">
+            <summary>
+            Returns the property bag used to provide defaults for subfolders that do not have their property bag.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_ROAM">
+            <summary>
+            Allows the property bag to roam. This flag cannot be combined with SHGVSPB_ALLFOLDERS.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_NOAUTODEFAULTS">
+            <summary>
+            Suppresses the search for a suitable default when the property bag cannot be found for the specified folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_FOLDER">
+            <summary>
+            Combines SHGVSPB_PERUSER and SHGVSPB_PERFOLDER.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_FOLDERNODEFAULTS">
+            <summary>
+            Combines SHGVSPB_PERUSER, SHGVSPB_PERFOLDER, and SHGVSPB_NOAUTODEFAULTS.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_USERDEFAULTS">
+            <summary>
+            Combines SHGVSPB_PERUSER and SHGVSPB_ALLFOLDERS.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHGVSPB.SHGVSPB_GLOBALDEFAULTS">
+            <summary>
+            Combines SHGVSPB_ALLUSERS and SHGVSPB_ALLFOLDERS.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SIIGBF">
@@ -20859,6 +21052,61 @@
             <summary>
             Generate a fully UTF-8 encoded value for absolute uri.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.ViewEventArgs">
+            <summary>
+            Provides data for the WindowRegistered and WindowRevoked events of ViewEvents.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.ViewEventArgs.Cookie">
+            <summary>
+            Gets the window cookie.
+            </summary>
+            <value>
+            The window cookie.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.ViewEvents">
+            <summary>
+            Listens to Windows View open or close notifications and raises events when a notification is received.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.WindowsShell.ViewEvents.WindowRegistered">
+            <summary>
+            Occurs after a window has been registered.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.WindowsShell.ViewEvents.WindowRevoked">
+            <summary>
+            Occurs after a window has been revoked.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.ViewEvents.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsShell.ViewEvents"/> class.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.ViewEvents.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.ViewEvents.WindowEvents">
+            <summary>
+            A COM utility class that receives Shell Windows events.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.ViewEvents.WindowEvents.Registered(System.Int32)">
+            <summary>
+            Called when a Window is registered.
+            </summary>
+            <param name="cookie">The cookie.</param>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.ViewEvents.WindowEvents.Revoked(System.Int32)">
+            <summary>
+            Called when a Window is revoked.
+            </summary>
+            <param name="cookie">The cookie.</param>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.WTS_ALPHATYPE">
             <summary>

@@ -4,13 +4,13 @@ namespace ShellBoost.Samples.Overview
 {
     public class OverviewShellFolderServer : ShellFolderServer
     {
-        private RootFolder _root;
+        private SimpleFolder _root;
 
-        protected override RootShellFolder GetRootFolder(ShellItemIdList idl)
+        protected override ShellFolder GetFolderAsRoot(ShellItemIdList idList)
         {
             if (_root == null)
             {
-                _root = new RootFolder(idl);
+                _root = new SimpleFolder(idList);
             }
             return _root;
         }
