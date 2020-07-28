@@ -279,9 +279,9 @@ namespace ShellBoost.Samples.RegistryFolder
                     if (key != null)
                     {
                         key.DeleteSubKeyTree(e.Item.DisplayName, false);
-                        e.HResult = ShellUtilities.S_OK;
                     }
                 }
+                e.HResult = ShellUtilities.S_OK;
                 return;
             }
 
@@ -300,12 +300,9 @@ namespace ShellBoost.Samples.RegistryFolder
                         e.HResult = COPYENGINE_E_USER_CANCELLED;
                         e.Item.NotifyUpdate();
                     }
-                    else
-                    {
-                        e.HResult = ShellUtilities.S_OK;
-                    }
                 }
             }
+            e.HResult = ShellUtilities.S_OK;
         }
 
         private async void OnRename(ShellOperationEventArgs e)
