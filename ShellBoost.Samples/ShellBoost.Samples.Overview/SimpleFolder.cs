@@ -10,7 +10,6 @@ namespace ShellBoost.Samples.Overview
             : base(parent, new StringKeyShellItemId(name))
         {
             Level = parent.Level + 1;
-            Attributes |= SFGAO.SFGAO_STORAGE;
         }
 
         // constructor reserved for root
@@ -18,7 +17,6 @@ namespace ShellBoost.Samples.Overview
             : base(idList)
         {
             // level = 0
-            Attributes |= SFGAO.SFGAO_STORAGE;
         }
 
         public new OverviewShellFolderServer FolderServer => (OverviewShellFolderServer)base.FolderServer;
