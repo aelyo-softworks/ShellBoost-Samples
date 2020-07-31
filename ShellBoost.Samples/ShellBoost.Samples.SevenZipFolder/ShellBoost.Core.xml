@@ -724,6 +724,22 @@
             </summary>
             <value>The current state of the SHIFT, CTRL, and ALT keys, as well as the state of the mouse buttons.</value>
         </member>
+        <member name="P:ShellBoost.Core.DragDropTargetEventArgs.StreamsAreRealized">
+            <summary>
+            Gets a value indicating whether streams are realized.
+            </summary>
+            <value>
+              <c>true</c> if streams are realized; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.DragDropTargetEventArgs.BufferSize">
+            <summary>
+            Gets the size of the buffer.
+            </summary>
+            <value>
+            The size of the buffer.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.DragDropTargetEventArgs.X">
             <summary>
             Gets the x-coordinate of the mouse pointer, in screen coordinates.
@@ -852,6 +868,97 @@
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
         </member>
+        <member name="T:ShellBoost.Core.GetNameMaxLengthEventArgs">
+            <summary>
+            Provides data for the GetNameMaxLength event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameMaxLengthEventArgs.Item">
+            <summary>
+            Gets the Shell Item instance
+            </summary>
+            <value>The Shell Item instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameMaxLengthEventArgs.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameMaxLengthEventArgs.MaxLength">
+            <summary>
+            Gets or sets the maximum length.
+            </summary>
+            <value>
+            The maximum length.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.GetNameValidCharactersEventArgs">
+            <summary>
+            Provides data for the GetNameValidCharacters event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameValidCharactersEventArgs.Folder">
+            <summary>
+            Gets the Shell Folder instance.
+            </summary>
+            <value>The Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameValidCharactersEventArgs.ValidCharacters">
+            <summary>
+            Gets or sets the valid characters.
+            Contains all valid characters in the namespace.
+            As an example, the standard file system returns null here.
+            </summary>
+            <value>
+            The valid characters.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetNameValidCharactersEventArgs.InvalidCharacters">
+            <summary>
+            Gets or sets the invalid characters.
+            Contains all invalid characters in the namespace.
+            As an example, the standard file system returns the string "/:*?"&lt;&gt;|" here.
+            </summary>
+            <value>
+            The invalid characters.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.GetDragDropParametersEventArgs">
+            <summary>
+            Provides data for the GetDragDropParameters event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetDragDropParametersEventArgs.Folder">
+            <summary>
+            Gets the opened Shell Folder instance.
+            </summary>
+            <value>The opened Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDragDropParametersEventArgs.Type">
+            <summary>
+            Gets the type of drag and drop event.
+            </summary>
+            <value>The type of event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDragDropParametersEventArgs.StreamsAreRealized">
+            <summary>
+            Gets or sets a value indicating whether streams are realized.
+            </summary>
+            <value>
+              <c>true</c> if streams are realized; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDragDropParametersEventArgs.BufferSize">
+            <summary>
+            Gets or sets the size of the buffer.
+            </summary>
+            <value>
+            The size of the buffer.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.IconLocation">
             <summary>
             Defines an icon location.
@@ -875,6 +982,33 @@
             </summary>
             <value>The options.</value>
         </member>
+        <member name="T:ShellBoost.Core.IShellItemEnumerator">
+            <summary>
+            Defines an interface with additional options for Shell Item enumeration.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.IShellItemEnumerator.EnumItems(ShellBoost.Core.ShellItemEnumerationOptions)">
+            <summary>
+            Enumerates Shell Items.
+            </summary>
+            <param name="options">The options.</param>
+            <returns>
+            A list of ShellItem instances.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.IWithIdList">
+            <summary>
+            Defines an object that has a PIDL.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.IWithIdList.IdList">
+            <summary>
+            Gets the PIDL.
+            </summary>
+            <value>
+            The PIDL.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.ProxyCacheOptions">
             <summary>
             Options for the native proxy cache.
@@ -894,6 +1028,70 @@
             <summary>
             Disable full SFGAOF usage.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.GetDataObjectEventArgs">
+            <summary>
+            Provides data for the GetDataObject event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetDataObjectEventArgs.Folder">
+            <summary>
+            Gets the opened Shell Folder instance.
+            </summary>
+            <value>The opened Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDataObjectEventArgs.Items">
+            <summary>
+            Gets the context shell items.
+            </summary>
+            <value>The shell items.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDataObjectEventArgs.DataObjects">
+            <summary>
+            Gets the data objects PIDLs.
+            </summary>
+            <value>
+            The data objects PIDLs.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.GetDataObjectEventArgs.Formats">
+            <summary>
+            Gets the optional formats.
+            </summary>
+            <value>
+            The optional formats.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.GetDataObjectEventArgs.AddDataObject(ShellBoost.Core.IWithIdList)">
+            <summary>
+            Adds a data object to the list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.GetDataObjectEventArgs.AddDataObject(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Adds a data object to the list using its PIDL.
+            All PIDLs added to the collection must share the same parent PIDL.
+            The first PIDL added will determine the common parent PIDL.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <exception cref="T:System.ArgumentNullException">idList is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.GetDataObjectEventArgs.AddFormat(System.String,System.Byte[])">
+            <summary>
+            Adds a format to the data object.
+            </summary>
+            <param name="format">The format name.</param>
+            <param name="data">The data.</param>
+            <exception cref="T:System.ArgumentNullException">format is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.GetDataObjectEventArgs.AddFormat(System.Int32,System.Byte[])">
+            <summary>
+            Adds a format to the data object.
+            </summary>
+            <param name="format">The format.</param>
+            <param name="data">The data.</param>
         </member>
         <member name="T:ShellBoost.Core.SelectAndEditItemEventArgs">
             <summary>
@@ -5283,11 +5481,26 @@
             </summary>
             <value>The typed data.</value>
         </member>
+        <member name="M:ShellBoost.Core.ShellDataObjectFormat.GetClipboardFormatName(System.Int32)">
+            <summary>
+            Retrieves from the clipboard the name of the specified registered format.
+            </summary>
+            <param name="format">The type of format to be retrieved.</param>
+            <returns>A string of null if the format does not exist or is predefined.</returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellDataObjectFormat.ToString">
             <summary>
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
             <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellDataObjectFormat.RegisterClipboardFormat(System.String)">
+            <summary>
+            Registers a new clipboard format. This format can then be used as a valid clipboard format.
+            If a registered format with the specified name already exists, a new format is not registered and the return value identifies the existing format.
+            </summary>
+            <param name="format">The name of the new format.</param>
+            <returns>The new format or 0 if the function failed.</returns>
         </member>
         <member name="T:ShellBoost.Core.ShellFolder">
             <summary>
@@ -5317,6 +5530,26 @@
         <member name="E:ShellBoost.Core.ShellFolder.SelectAndEditItem">
             <summary>
             Raised when a Shell Item has been created with the New menu.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetDataObject">
+            <summary>
+            Raised when a Shell Item has been created with the New menu.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetDragDropParameters">
+            <summary>
+            Raised when a Shell Item is preparing a drag &amp; drop operation.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetNameValidCharacters">
+            <summary>
+            Raised to validate a Shell Item name.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetNameMaxLength">
+            <summary>
+            Raised to validate a Shell Item name.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
@@ -5761,12 +5994,40 @@
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.GetDynamicColumnDetailsEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:ShellBoost.Core.ShellFolder.SelectAndEditItemEvent(System.Object,ShellBoost.Core.SelectAndEditItemEventArgs)">
+        <member name="M:ShellBoost.Core.ShellFolder.OnSelectAndEditItemEvent(System.Object,ShellBoost.Core.SelectAndEditItemEventArgs)">
             <summary>
             Called when a shell item has been created with the New menu.
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.SelectAndEditItemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetDataObjectEvent(System.Object,ShellBoost.Core.GetDataObjectEventArgs)">
+            <summary>
+            Called when a data object is requested for a shell item.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetDataObjectEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetDragDropParametersEvent(System.Object,ShellBoost.Core.GetDragDropParametersEventArgs)">
+            <summary>
+            Called before a drag &amp; drop operation is executed.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetDragDropParametersEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetNameMaxLengthEvent(System.Object,ShellBoost.Core.GetNameMaxLengthEventArgs)">
+            <summary>
+            Called for validating a Shell Item's name.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetNameMaxLengthEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetNameValidCharactersEvent(System.Object,ShellBoost.Core.GetNameValidCharactersEventArgs)">
+            <summary>
+            Called for validating a Shell Item's name.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetNameValidCharactersEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnGetFolderSettingsEvent(System.Object,ShellBoost.Core.GetFolderSettingsEventArgs)">
             <summary>
@@ -6387,8 +6648,7 @@
             Gets a Shell Item using its PIDL.
             </summary>
             <param name="idList">The item's PIDL.</param>
-            <returns>An instance of the ShellItem instance or null if it was not found.</returns>
-            <exception cref="T:System.ArgumentNullException">idl is null.</exception>
+            <returns>An instance of the ShellItem instance or null if it was not found or if idList is null.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.AddToCache(ShellBoost.Core.ShellItem)">
             <summary>
@@ -6497,6 +6757,19 @@
             <returns>An IconLocation instance or null to use default Shell resolution.</returns>
             <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.EnumerateItems(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemEnumerationOptions)">
+            <summary>
+            Enumerates Shell Items from a Shell Folder instance.
+            </summary>
+            <param name="folder">The folder instance.</param>
+            <param name="options">The options instance.</param>
+            <returns>
+            A list of Shell Items.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">folder
+            or
+            options is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.OnDragDropTarget(ShellBoost.Core.DragDropTargetEventArgs)">
             <summary>
             Called when a drag and drop event occurs.
@@ -6526,6 +6799,26 @@
             <summary>
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ShellItemEnumerationOptions">
+            <summary>
+            Defines options to use when enumerating Shell Items.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.ShellItemEnumerationOptions.Types">
+            <summary>
+            Gets or sets the types of items included in the enumeration.
+            </summary>
+            <value>
+            The types of items included in the enumeration.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellItemEnumerationOptions.Hwnd">
+            <summary>
+            If user input is required to perform the enumeration, this window handle can be used by the enumeration object as the parent window to take user input.
+            May be IntPtr.Zero.
+            </summary>
+            <value>The window handle.</value>
         </member>
         <member name="T:ShellBoost.Core.ShellMenuItemList">
             <summary>
@@ -8346,6 +8639,7 @@
         <member name="T:ShellBoost.Core.Utilities.FileOperation">
             <summary>
             Represents a Windows Shell file operation. This class cannot be inherited.
+            This class requires an STA thread to operate properly.
             </summary>
         </member>
         <member name="E:ShellBoost.Core.Utilities.FileOperation.PauseTimer">
@@ -8495,8 +8789,8 @@
             </summary>
             <param name="folderPath">The folder path.</param>
             <param name="attributes">The attributes.</param>
-            <param name="name">The name.</param>
-            <param name="templateName">The template name.</param>
+            <param name="name">The name of the new item.</param>
+            <param name="templateName">The template name. Pass null to specify a new, blank file.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">folderPath is null.</exception>
@@ -8507,11 +8801,11 @@
             </summary>
             <param name="folderIdl">The folder PIDL.</param>
             <param name="attributes">The attributes.</param>
-            <param name="name">The name.</param>
-            <param name="templateName">The template name.</param>
+            <param name="name">The name of the new item.</param>
+            <param name="templateName">The template name. Pass null to specify a new, blank file.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
-            <exception cref="T:System.ArgumentNullException">folderIdl is null.</exception>
+            <exception cref="T:System.ArgumentNullException">folderIdl or name is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.FileOperation.MoveItems(System.Collections.Generic.IEnumerable{System.String},System.String,System.Boolean)">
             <summary>
@@ -8538,7 +8832,7 @@
             Declares a single item that is to be moved to a specified destination.
             </summary>
             <param name="path">The item path.</param>
-            <param name="newPath">The new path.</param>
+            <param name="newPath">The new item path.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">path is null
@@ -8551,7 +8845,7 @@
             </summary>
             <param name="path">The item path.</param>
             <param name="folderPath">The folder path.</param>
-            <param name="name">The name. Can be null if the item is moved but not renamed.</param>
+            <param name="name">The new name for the item after it has been copied. If null, the name of the destination item is the same as the source.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">path is null
@@ -8564,7 +8858,7 @@
             </summary>
             <param name="idList">The item PIDL.</param>
             <param name="folderIdList">The folder PIDL.</param>
-            <param name="name">The name.</param>
+            <param name="name">The new name for the item after it has been copied. If null, the name of the destination item is the same as the source.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">idl is null
@@ -8597,7 +8891,7 @@
             </summary>
             <param name="path">The item path.</param>
             <param name="folderPath">The folder path.</param>
-            <param name="name">The name.</param>
+            <param name="name">The new name for the item after it has been copied. If null, the name of the destination item is the same as the source.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">path is null
@@ -8610,7 +8904,7 @@
             </summary>
             <param name="idList">The item PIDL.</param>
             <param name="folderIdList">The folder PIDL.</param>
-            <param name="name">The name.</param>
+            <param name="name">The new name for the item after it has been copied. If null, the name of the destination item is the same as the source.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
             <returns>The result of Windows Shell last operation.</returns>
             <exception cref="T:System.ArgumentNullException">idl is null
@@ -11713,6 +12007,7 @@
             <summary>
             Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and write a value by its name to it.
             The user's settings are kept for the next time the user visits the folder.
+            Note this method requires a STA thread to work.
             </summary>
             <param name="idList">A PIDL of the folder for which you are requesting properties. This parameter must be Zero if the SHGVSPB_ALLFOLDERS flag is passed.</param>
             <param name="bagName">The name of the requested property bag.</param>
@@ -11731,6 +12026,7 @@
             <summary>
             Retrieves a property bag in which the view state information for a folder can be stored and subsequently retrieved and write a value by its name to it.
             The user's settings are kept for the next time the user visits the folder.
+            Note this method requires a STA thread to work.
             </summary>
             <param name="pidl">A PIDL of the folder for which you are requesting properties. This parameter must be Zero if the SHGVSPB_ALLFOLDERS flag is passed.</param>
             <param name="bagName">The name of the requested property bag.</param>
@@ -11748,6 +12044,7 @@
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ClearViewStatePropertyBag(ShellBoost.Core.ShellItemIdList,System.String,System.Boolean)">
             <summary>
             Clears a property bag in which the view state information for a folder was stored.
+            Note this method requires a STA thread to work.
             </summary>
             <param name="idList">A PIDL of the folder for which you are requesting properties.</param>
             <param name="bagName">The name of the requested property bag.</param>
@@ -11757,6 +12054,7 @@
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ClearViewStatePropertyBag(System.IntPtr,System.String,System.Boolean)">
             <summary>
             Clears a property bag in which the view state information for a folder was stored.
+            Note this method requires a STA thread to work.
             </summary>
             <param name="pidl">A PIDL of the folder for which you are requesting properties.</param>
             <param name="bagName">The name of the requested property bag.</param>
@@ -12244,7 +12542,7 @@
             <param name="id">A value that specifies the registration ID returned by ChangeNotifyRegister.</param>
             <returns>true if the specified client was found and removed; false otherwise.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyRegister(System.IntPtr,ShellBoost.Core.WindowsShell.SHCNE,System.Int32,System.Collections.Generic.IEnumerable{ShellBoost.Core.Utilities.ChangeNotifyEntry})">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ChangeNotifyRegister(System.IntPtr,ShellBoost.Core.WindowsShell.SHCNE,System.Int32,System.Collections.Generic.IEnumerable{ShellBoost.Core.Utilities.ChangeNotifyEntry},ShellBoost.Core.WindowsShell.SHCNRF)">
             <summary>
             Registers a window to receive notifications from the file system or Shell, if the file system supports notifications.
             </summary>
@@ -12252,7 +12550,12 @@
             <param name="events">A combination of values that indicate the type of events for which to receive notifications.</param>
             <param name="message">Message to be posted to the window procedure.</param>
             <param name="entries">A list of ChangeNotifyEntry structures that contain the notifications.</param>
-            <returns>A positive integer registration ID. 0 if an error ocrurred.</returns>
+            <param name="flags">Flags that indicate the type of events for which to receive notifications. Note SHCNRF_NewDelivery is always set implicitly.</param>
+            <returns>
+            A positive integer registration ID. 0 if an error ocrurred.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">entries</exception>
+            <exception cref="T:System.ArgumentException">null - entries</exception>
             <exception cref="T:System.ArgumentNullException">entries is null.</exception>
             <exception cref="T:System.ArgumentException">entries is empty.</exception>
         </member>
@@ -15073,6 +15376,31 @@
         <member name="F:ShellBoost.Core.WindowsShell.SBSP.SBSP_INITIATEDBYHLINKFRAME">
             <summary>
             Initiated by hyperlink frame.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SHCNRF">
+            <summary>
+            Flags that indicate the type of events for which to receive notifications.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNRF.SHCNRF_InterruptLevel">
+            <summary>
+            Interrupt level notifications from the file system.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNRF.SHCNRF_ShellLevel">
+            <summary>
+            Shell-level notifications from the shell.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNRF.SHCNRF_RecursiveInterrupt">
+            <summary>
+            Interrupt events on the whole subtree. This flag must be combined with the SHCNRF_InterruptLevel flag.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCNRF.SHCNRF_NewDelivery">
+            <summary>
+            Messages received use shared memory.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SHGVSPB">
@@ -22299,6 +22627,14 @@
             <param name="parent">The potential parent instance.</param>
             <returns><c>true</c> if this instance is a child of the parent instance; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="P:ShellBoost.Core.ShellItemIdList.RelativeFromParent">
+            <summary>
+            Gets this PIDL relative from its parent.
+            </summary>
+            <value>
+            This PIDL relative from its parent.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Get this PIDL relatively from a parent PIDL.
@@ -22635,6 +22971,7 @@
         <member name="P:ShellBoost.Core.ShellMenuInvokeEventArgs.Verb">
             <summary>
             Gets the verb.
+            It can also be the menu identifier offset of the command to carry out, converted to a string.
             </summary>
             <value>The verb.</value>
         </member>
@@ -22655,6 +22992,12 @@
             Gets the invoke location.
             </summary>
             <value>The invoke location.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuInvokeEventArgs.IconHandle">
+            <summary>
+            Gets the icon handle.
+            </summary>
+            <value>The icon handle.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellMenuInvokeEventArgs.HResult">
             <summary>
