@@ -1596,43 +1596,44 @@
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.CurrentSelectionIdList">
             <summary>
-            Gets the current selection id list.
+            Gets the user's current selection in the dialog.
             </summary>
             <value>The current selection id list.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.ResultsIdLists">
             <summary>
-            Gets the results id list array.
+            Gets the user's choices in a dialog that allows multiple selection.
             </summary>
             <value>The results id list array.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.ItemsIdLists">
             <summary>
-            Gets the items id list array.
+            Gets the currently selected items in the dialog. These items may be items selected in the view, or text selected in the file name edit box.
             </summary>
             <value>The items id list array.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.ItemIdList">
             <summary>
-            Gets the item id list.
+            Gets the currently selected item in the dialog. This item may be an item selected in the view, or text selected in the file name edit box.
             </summary>
             <value>The item id list.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.ResultIdList">
             <summary>
-            Gets the result id list.
+            Gets the choice that the user made in the dialog.
             </summary>
             <value>The result id list.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.FileTypeIndex">
             <summary>
-            Gets the file type index.
+            Gets the currently selected file type.
             </summary>
-            <value>The file type index.</value>
+            <value>The currently selected file type.</value>
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.FileName">
             <summary>
-            Gets the file name.
+            Gets the text currently entered in the dialog's File name edit box.
+            The text in the File name edit box does not necessarily reflect the item the user chose. To get the item the user chose, use the ResultsIdLists or ResultsIdList properties.
             </summary>
             <value>The file name.</value>
         </member>
@@ -1650,7 +1651,7 @@
         </member>
         <member name="P:ShellBoost.Core.FileDialogEventArgs.Options">
             <summary>
-            Gets the options.
+            Gets the current flags that are set to control dialog behavior.
             </summary>
             <value>The options.</value>
         </member>
