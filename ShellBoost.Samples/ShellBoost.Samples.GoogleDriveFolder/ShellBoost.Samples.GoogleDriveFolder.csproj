@@ -113,7 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.48.0.2021</Version>
+      <Version>1.48.0.2030</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

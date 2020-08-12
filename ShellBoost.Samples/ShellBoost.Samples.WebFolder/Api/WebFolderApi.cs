@@ -15,7 +15,7 @@ namespace ShellBoost.Samples.WebFolder.Api
     public static class WebFolderApi
     {
         // TODO: change this if you run the WebFolderSite project on another url
-        public const string ApiBaseUrl = "http://localhost:60311/api/drive/";
+        public const string ApiBaseUrl = "http://localhost:33456/api/drive/";
 
         private static Lazy<string> _cacheDirectoryPath = new Lazy<string>(() => Path.GetFullPath("cache"), true);
         public static string CacheDirectoryPath => _cacheDirectoryPath.Value;
