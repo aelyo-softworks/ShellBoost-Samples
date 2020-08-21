@@ -10,7 +10,6 @@ using System.Windows.Interop;
 using System.Windows.Threading;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
-using ShellBoost.Core.WindowsShell;
 using ShellBoost.Samples.WebFolder.Api;
 using ShellBoost.Samples.WebFolder.Folder;
 
@@ -19,9 +18,9 @@ namespace ShellBoost.Samples.WebFolder
     public partial class MainWindow : Window
     {
         private HwndSource _source;
-        private Thread _serverThread;
-        private AutoResetEvent _serverStopEvent;
-        private System.Windows.Forms.NotifyIcon _nicon = new System.Windows.Forms.NotifyIcon();
+        private readonly Thread _serverThread;
+        private readonly AutoResetEvent _serverStopEvent;
+        private readonly System.Windows.Forms.NotifyIcon _nicon = new System.Windows.Forms.NotifyIcon();
 
         public MainWindow()
         {
@@ -135,17 +134,14 @@ namespace ShellBoost.Samples.WebFolder
 
         private class Logger : ILogger
         {
-            private MainWindow _window;
+            private readonly MainWindow _window;
 
             public Logger(MainWindow window)
             {
                 _window = window;
             }
 
-            public void Log(TraceLevel level, object value, string methodName)
-            {
-                _window.AppendText("[" + level + "]" + methodName + ": " + value);
-            }
+            public void Log(TraceLevel level, object value, string methodName) => _window.AppendText("[" + level + "]" + methodName + ": " + value);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -224,18 +220,15 @@ namespace ShellBoost.Samples.WebFolder
 
         private void Quit_Click(object sender, RoutedEventArgs e) => Close(null, null);
 
-        private void Restart_Click(object sender, RoutedEventArgs e)
+        private void Restart_Click(object sender, RoutedEventArgs e) => ThreadPool.QueueUserWorkItem((state) =>
         {
-            ThreadPool.QueueUserWorkItem((state) =>
+            var rm = new RestartManager();
+            rm.RestartExplorerProcesses((s) =>
             {
-                var rm = new RestartManager();
-                rm.RestartExplorerProcesses((s) =>
-                {
-                    AppendText("Windows Explorer was stopped...");
-                }, false, out Exception error);
-                AppendText("Windows Explorer was restarted...");
-            });
-        }
+                AppendText("Windows Explorer was stopped...");
+            }, false, out Exception error);
+            AppendText("Windows Explorer was restarted...");
+        });
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
@@ -253,14 +246,10 @@ namespace ShellBoost.Samples.WebFolder
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            var id = ShellFolderServer.LocationFolderId;
-            var kn = KnownFolder.Get(id);
-            var idl = kn.GetIdList(Core.WindowsShell.KNOWN_FOLDER_FLAG.KF_FLAG_DEFAULT);
-
             dynamic window = new ShellUtilities.ShellBrowserWindow();
             ShellUtilities.CoAllowSetForegroundWindow(window);
             window.Visible = true;
-            window.Navigate2(idl.Data);
+            window.Navigate2(ShellFolderServer.RootIdList.Data);
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e) => TB.Clear();

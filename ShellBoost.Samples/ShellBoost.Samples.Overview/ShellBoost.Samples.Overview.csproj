@@ -63,5 +63,10 @@
     <Content Include="ShellBoost.Core.dll" />
     <Content Include="ShellBoost.Core.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

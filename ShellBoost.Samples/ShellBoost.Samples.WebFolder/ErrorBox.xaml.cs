@@ -60,7 +60,7 @@ namespace ShellBoost.Samples.WebFolder
 
         private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            bool quit = HandleException(e.Exception);
+            var quit = HandleException(e.Exception);
             e.Handled = true;
             if (quit || !Debugger.IsAttached)
             {
@@ -70,11 +70,10 @@ namespace ShellBoost.Samples.WebFolder
 
         private static void OnCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var ex = e.ExceptionObject as Exception;
-            if (ex == null)
+            if (e.ExceptionObject as Exception == null)
                 return;
 
-            bool quit = HandleException(ex);
+            var quit = HandleException(e.ExceptionObject as Exception);
             if (quit || !Debugger.IsAttached)
             {
                 Environment.Exit(0);

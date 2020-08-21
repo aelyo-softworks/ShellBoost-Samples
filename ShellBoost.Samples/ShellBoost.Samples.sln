@@ -23,7 +23,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.GoogleDr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.MultiHost", "ShellBoost.Samples.MultiHost\ShellBoost.Samples.MultiHost.csproj", "{72501D06-AA4C-4BEE-B6F8-086830AF6C01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.CoreOverview", "ShellBoost.Samples.CoreOverview\ShellBoost.Samples.CoreOverview.csproj", "{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.CoreOverview", "ShellBoost.Samples.CoreOverview\ShellBoost.Samples.CoreOverview.csproj", "{13B6BD77-E0CC-4ACC-81CB-83941BC5C718}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1C64E83-58D6-4F6F-AF72-6D2476227E53}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
