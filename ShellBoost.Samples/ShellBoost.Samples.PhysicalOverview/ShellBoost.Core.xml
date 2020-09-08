@@ -439,6 +439,14 @@
             The architecture.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.Icons">
+            <summary>
+            Gets the native proxy embedded icons.
+            </summary>
+            <value>
+            The icons.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.FolderId">
             <summary>
             Gets the Shell Namespace Extension folder identifier.
@@ -776,6 +784,21 @@
             </summary>
             <value>The Windows HRESULT for operation.</value>
         </member>
+        <member name="M:ShellBoost.Core.DragDropTargetEventArgs.AddFormat(System.String,System.Byte[])">
+            <summary>
+            Adds a format to the data object.
+            </summary>
+            <param name="format">The format name.</param>
+            <param name="data">The data.</param>
+            <exception cref="T:System.ArgumentNullException">format is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.DragDropTargetEventArgs.AddFormat(System.Int32,System.Byte[])">
+            <summary>
+            Adds a format to the data object.
+            </summary>
+            <param name="format">The format.</param>
+            <param name="data">The data.</param>
+        </member>
         <member name="T:ShellBoost.Core.DragDropTargetEventType">
             <summary>
             Defines a drag and drop event type.
@@ -804,6 +827,13 @@
         <member name="F:ShellBoost.Core.DragDropTargetEventType.Prepare">
             <summary>
             Occurs when a drag and drop operation is being prepared.
+            This is a callback event.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.DragDropTargetEventType.Begin">
+            <summary>
+            Occurs when a drag and drop operation begins.
+            This is a callback event.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.ExplorerPanes">
@@ -867,6 +897,101 @@
             </summary>
             <param name="guid">The unique identifier.</param>
             <returns>The pane's name or the identifier as a string if the pane is unknown.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.FileDialogEventProperties">
+            <summary>
+            Defines required properties for a future FileDialogEventArgs event.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.None">
+            <summary>
+            No property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.CurrentSelection">
+            <summary>
+            The CurrentSelection property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.FileName">
+            <summary>
+            The FileName property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.FileTypeIndex">
+            <summary>
+            The FileTypeIndex property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Folder">
+            <summary>
+            The Folder property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Options">
+            <summary>
+            The Options property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Result">
+            <summary>
+            The Result property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Results">
+            <summary>
+            The Results property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Properties">
+            <summary>
+            The Properties property. Currently unused.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.ItemsIdLists">
+            <summary>
+            The ItemsIdLists property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.ViewFlags">
+            <summary>
+            The ViewFlags property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.Hwnd">
+            <summary>
+            The Hwnd property.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.FileDialogEventProperties.All">
+            <summary>
+            All properties
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.GetFileDialogPropertiesEventArgs">
+            <summary>
+            Provides data for the GetFileDialogProperties event of the ShellFolder type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.GetFileDialogPropertiesEventArgs.Folder">
+            <summary>
+            Gets the Shell Folder instance
+            </summary>
+            <value>The Shell Folder instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFileDialogPropertiesEventArgs.Type">
+            <summary>
+            Gets the type of FileDialog event.
+            </summary>
+            <value>The type of event.</value>
+        </member>
+        <member name="P:ShellBoost.Core.GetFileDialogPropertiesEventArgs.Properties">
+            <summary>
+            Gets or sets the properties.
+            </summary>
+            <value>
+            The properties.
+            </value>
         </member>
         <member name="T:ShellBoost.Core.GetNameMaxLengthEventArgs">
             <summary>
@@ -1027,6 +1152,11 @@
         <member name="F:ShellBoost.Core.ProxyCacheOptions.DisableFullSFGAOF">
             <summary>
             Disable full SFGAOF usage.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ProxyCacheOptions.NoCommonDialogsHook">
+            <summary>
+            Disable Common Dialogs hook.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.GetDataObjectEventArgs">
@@ -1675,61 +1805,73 @@
         <member name="F:ShellBoost.Core.FileDialogEventType.FileOk">
             <summary>
             Called just before the dialog is about to return with a result.
+            Corresponds to IFileDialogEvents::OnFileOk event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.FolderChange">
             <summary>
             Called when the user navigates to a new folder.
+            Corresponds to IFileDialogEvents::OnFolderChange event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.FolderChanging">
             <summary>
             Called before FolderChange. This allows the implementer to stop navigation to a particular location.
+            Corresponds to IFileDialogEvents::OnFolderChanging event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.Overwrite">
             <summary>
             Called from the save dialog when the user chooses to overwrite a file.
+            Corresponds to IFileDialogEvents::OnOverwrite event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.SelectionChange">
             <summary>
             Called when the user changes the selection in the dialog's view.
+            Corresponds to IFileDialogEvents::OnSelectionChange event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.ShareViolation">
             <summary>
             Enables an application to respond to sharing violations that arise from Open or Save operations.
+            Corresponds to IFileDialogEvents::OnShareViolation event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.TypeChange">
             <summary>
             Called when the dialog is opened to notify the application of the initial chosen filetype.
+            Corresponds to IFileDialogEvents::OnTypeChange event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.OnButtonOk">
             <summary>
             Called when the default button is pressed.
+            Only raised if Common Dialog hooks are enabled.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.OnButtonCancel">
             <summary>
             Called when the cancel button is pressed.
+            Only raised if Common Dialog hooks are enabled.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.OnClose">
             <summary>
             Called when the window is closed.
+            Only raised if Common Dialog hooks are enabled.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.OnClosed">
             <summary>
             Called when ShellBoost stops monitoring the Common Dialog.
+            Only raised if Common Dialog hooks are enabled.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.FileDialogEventType.OnOpened">
             <summary>
             Called when ShellBoost starts monitoring the Common Dialog.
+            Only raised if Common Dialog hooks are enabled.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.FileShellContent">
@@ -1744,6 +1886,20 @@
             </summary>
             <param name="filePath">The file path.</param>
             <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.FileShellContent.Info">
+            <summary>
+            Gets the FileInfo instance.
+            </summary>
+            <value>
+            The FileInfo instance.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.FileShellContent.OpenRead">
+            <summary>
+            Opens the file for reading.
+            </summary>
+            <returns>A stream.</returns>
         </member>
         <member name="P:ShellBoost.Core.FileShellContent.Stream">
             <summary>
@@ -5553,12 +5709,30 @@
             Raised to validate a Shell Item name.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.ShellFolder.GetFileDialogProperties">
+            <summary>
+            Raised to determine what properties to gather for a future file dialog event.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.Refresh">
+            <summary>
+            Raised when the view is refreshed, for example when the end-user presses the F5 key from the list view.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
             </summary>
             <param name="parent">The parent folder.</param>
             <param name="id">The item identifier.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
+            This folders's PIDL will be constructed using the parent's root PIDL (instead of the parent pidl) plus the passed in uniqueGuid.
+            </summary>
+            <param name="parent">The parent folder.</param>
+            <param name="uniqueGuid">A guid that represents the folder. The guid must be unique in the whole hierarchy, otherwise use the constructor that takes a ShellItemId instance as input.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId,System.String)">
             <summary>
@@ -5640,6 +5814,11 @@
             Gets or sets the add 'New' menu template path.
             </summary>
             <value>The add new menu template path.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.InitializeFileSystem">
+            <summary>
+            Initializes the file system. Called when the FileSystemPath property is set.
+            </summary>
         </member>
         <member name="P:ShellBoost.Core.ShellFolder.InitializeOptions">
             <summary>
@@ -6022,6 +6201,20 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.GetNameMaxLengthEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnGetFileDialogPropertiesEvent(System.Object,ShellBoost.Core.GetFileDialogPropertiesEventArgs)">
+            <summary>
+            Called for determining what properties to gather for a future file dialog event.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.GetFileDialogPropertiesEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnRefresh(System.Object,System.EventArgs)">
+            <summary>
+            Called when the view is refreshed, for example when the end-user presses the F5 key from the list view.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnGetNameValidCharactersEvent(System.Object,ShellBoost.Core.GetNameValidCharactersEventArgs)">
             <summary>
@@ -6821,150 +7014,236 @@
             </summary>
             <value>The window handle.</value>
         </member>
-        <member name="T:ShellBoost.Core.ShellMenuItemList">
+        <member name="T:ShellBoost.Core.Utilities.FolderShortcut">
             <summary>
-            Represents a list of ShellMenuItems.
+            Represents a Shell Folder shortcut.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.#ctor(ShellBoost.Core.ShellMenu)">
+        <member name="F:ShellBoost.Core.Utilities.FolderShortcut.Clsid">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellMenuItemList"/> class.
-            </summary>
-            <param name="menu">The parent menu.</param>
-            <exception cref="T:System.ArgumentNullException">menu is null.</exception>
-        </member>
-        <member name="P:ShellBoost.Core.ShellMenuItemList.Count">
-            <summary>
-            Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
-            </summary>
-            <value>The count.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellMenuItemList.Menu">
-            <summary>
-            Gets the parent menu.
-            </summary>
-            <value>The parent menu or null if ther's not parent menu.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellMenuItemList.IsReadOnly">
-            <summary>
-            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
-            </summary>
-            <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:ShellBoost.Core.ShellMenuItemList.Item(System.Int32)">
-            <summary>
-            Gets or sets the <see cref="T:ShellBoost.Core.ShellMenuItem" /> at the specified index.
-            </summary>
-            <param name="index">The index.</param>
-            <returns>An instance of the ShellMenuItem type.</returns>
-            <value>An instance of the ShellMenuItem type.</value>
-        </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellMenuItem})">
-            <summary>
-            Adds a list of items.
-            </summary>
-            <param name="items">The items to add.</param>
-        </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Add(ShellBoost.Core.ShellMenuItem)">
-            <summary>
-            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
-            </summary>
-            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-        </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Clear">
-            <summary>
-            Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            The CLSID_FolderShortcut class id.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Remove(ShellBoost.Core.ShellMenuItem)">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.#ctor(System.String)">
             <summary>
-            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.FolderShortcut"/> class.
             </summary>
-            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-            <returns>true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+            <param name="targetPath">The target path.</param>
+            <exception cref="T:System.ArgumentNullException">targetPath is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.RemoveAt(System.Int32)">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.#ctor(ShellBoost.Core.ShellItemIdList)">
             <summary>
-            Removes the <see cref="T:System.Collections.Generic.IList`1" /> item at the specified index.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.FolderShortcut"/> class.
             </summary>
-            <param name="index">The zero-based index of the item to remove.</param>
+            <param name="targetIdList">The target PIDL.</param>
+            <exception cref="T:System.ArgumentNullException">targetIdList is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Insert(System.Int32,ShellBoost.Core.ShellMenuItem)">
+        <member name="P:ShellBoost.Core.Utilities.FolderShortcut.TargetIdList">
             <summary>
-            Inserts an item to the <see cref="T:System.Collections.Generic.IList`1" /> at the specified index.
+            Gets the target PIDL.
             </summary>
-            <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
-            <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+            <value>
+            The target PIDL.
+            </value>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Trace(System.Int32,System.IO.TextWriter)">
+        <member name="P:ShellBoost.Core.Utilities.FolderShortcut.TargetPath">
             <summary>
-            Traces This instance. Useful for developers.
+            Gets the target path.
             </summary>
-            <param name="indent">The indent to add.</param>
-            <param name="writer">The writer.</param>
-            <exception cref="T:System.ArgumentNullException">writer is null.</exception>
+            <value>
+            The target path.
+            </value>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.Contains(ShellBoost.Core.ShellMenuItem)">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.ToString">
             <summary>
-            Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+            Converts to string.
             </summary>
-            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-            <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.CopyTo(ShellBoost.Core.ShellMenuItem[],System.Int32)">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.Remove(System.String,System.Boolean)">
             <summary>
-            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+            Removes the folder shortcut.
             </summary>
-            <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
-            <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+            <param name="path">The path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.GetEnumerator">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.Load(System.String,System.Boolean)">
             <summary>
-            Returns an enumerator that iterates through the collection.
+            Loads a folder shortcut from the specified path.
             </summary>
-            <returns>An enumerator that can be used to iterate through the collection.</returns>
+            <param name="path">The path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An instance of FolderShortcut or null.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.ShellMenuItemList.IndexOf(ShellBoost.Core.ShellMenuItem)">
+        <member name="M:ShellBoost.Core.Utilities.FolderShortcut.Save(System.String,System.Boolean)">
             <summary>
-            Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
+            Saves the specified folder shortcut.
             </summary>
-            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
-            <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
+            <param name="path">The path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
-        <member name="T:ShellBoost.Core.ShellMenuMergeType">
+        <member name="T:ShellBoost.Core.Utilities.ShellFolderCustomSettings">
             <summary>
-            Defines the context for merge operations.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.None">
-            <summary>
-            There is no specific merge context associated with this menu.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.Menu">
-            <summary>
-            The menu is merged to the item menu.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenu">
-            <summary>
-            The menu is merged to the context menu.
+            Represents a Shell Folder custom settings (desktop.ini).
             </summary>
         </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuTop">
+        <member name="M:ShellBoost.Core.Utilities.ShellFolderCustomSettings.Remove(System.String,System.Boolean)">
             <summary>
-            The menu is merged to the top of the context menu.
+            Removes custom Shell Folder settings. This function deletes the Desktop.ini.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellFolderCustomSettings.Get(System.String,System.Boolean)">
+            <summary>
+            Retrieves a custom Shell Folder settings. This function reads from the Desktop.ini.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellFolderCustomSettings.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ShellFolderCustomSettings"/> class.
             </summary>
         </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuBottom">
+        <member name="P:ShellBoost.Core.Utilities.ShellFolderCustomSettings.InfoTip">
             <summary>
-            The menu is merged to the bottom of the context menu.
+            Gets or sets the text of the folder's infotip.
+            </summary>
+            <value>
+            The infotip.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ShellFolderCustomSettings.Clsid">
+            <summary>
+            Gets or sets the CLSID used to identify the Shell Folder in the Windows registry.
+            </summary>
+            <value>
+            The CLSID.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ShellFolderCustomSettings.IconFile">
+            <summary>
+            Gets or sets a string containing the path to file containing the folder's icon.
+            </summary>
+            <value>
+            The icon file.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ShellFolderCustomSettings.IconIndex">
+            <summary>
+            Gets or sets the index of the icon within the file named in IconFile.
+            </summary>
+            <value>
+            The index of the icon.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ShellFolderCustomSettings.Logo">
+            <summary>
+            Gets or sets a string containing the path to the file containing the folder's logo image. This is the image used in thumbnail views.
+            </summary>
+            <value>
+            The logo.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellFolderCustomSettings.Set(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Sets a custom Shell Folder settings. This function writes to Desktop.ini.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="forceWrite">if set to <c>true</c> the custom folder's settings will be set regardless of whether the values are already present.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of Windows Shell errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.DynamicComObject">
+            <summary>
+            Defines a dynamic wrapper class over a COM object. Only useful for supporting .NET Core code.
             </summary>
         </member>
-        <member name="F:ShellBoost.Core.ShellMenuMergeType.InformationBar">
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.#ctor(System.Object)">
             <summary>
-            The menu is merged to the information bar.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.DynamicComObject"/> class.
             </summary>
+            <param name="nativeObject">The native object.</param>
+            <exception cref="T:System.ArgumentNullException">nativeObject is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.DynamicComObject.NativeObject">
+            <summary>
+            Gets the underlying native COM object.
+            </summary>
+            <value>
+            The native object.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.Create(System.String,System.Boolean)">
+            <summary>
+            Creates a COM object from a progID.
+            </summary>
+            <param name="progID">The progID.</param>
+            <param name="throwOnError">true to throw any exception that occurs.-or- false to ignore any exception that occurs.</param>
+            <returns>An instance of a COM object or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.Create(System.Guid,System.Boolean)">
+            <summary>
+            Creates a COM object from a CLSID.
+            </summary>
+            <param name="clsid">The CLSID.</param>
+            <param name="throwOnError">true to throw any exception that occurs.-or- false to ignore any exception that occurs.</param>
+            <returns>An instance of a COM object or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+            <summary>
+            Provides the implementation for operations that get member values. Classes derived from the <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for operations such as getting a value for a property.
+            </summary>
+            <param name="binder">Provides information about the object that called the dynamic operation. The binder.Name property provides the name of the member on which the dynamic operation is performed. For example, for the Console.WriteLine(sampleObject.SampleProperty) statement, where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleProperty". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+            <param name="result">The result of the get operation. For example, if the method is called for a property, you can assign the property value to <paramref name="result" />.</param>
+            <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a run-time exception is thrown.)
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.TryGetIndex(System.Dynamic.GetIndexBinder,System.Object[],System.Object@)">
+            <summary>
+            Provides the implementation for operations that get a value by index. Classes derived from the <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for indexing operations.
+            </summary>
+            <param name="binder">Provides information about the operation.</param>
+            <param name="indexes">The indexes that are used in the operation.</param>
+            <param name="result">The result of the index operation.</param>
+            <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a run-time exception is thrown.)
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+            <summary>
+            Provides the implementation for operations that set member values. Classes derived from the <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for operations such as setting a value for a property.
+            </summary>
+            <param name="binder">Provides information about the object that called the dynamic operation. The binder.Name property provides the name of the member to which the value is being assigned. For example, for the statement sampleObject.SampleProperty = "Test", where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleProperty". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+            <param name="value">The value to set to the member. For example, for sampleObject.SampleProperty = "Test", where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, the <paramref name="value" /> is "Test".</param>
+            <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a language-specific run-time exception is thrown.)
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.DynamicComObject.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
+            <summary>
+            Provides the implementation for operations that invoke a member. Classes derived from the <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for operations such as calling a method.
+            </summary>
+            <param name="binder">Provides information about the dynamic operation. The binder.Name property provides the name of the member on which the dynamic operation is performed. For example, for the statement sampleObject.SampleMethod(100), where sampleObject is an instance of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, binder.Name returns "SampleMethod". The binder.IgnoreCase property specifies whether the member name is case-sensitive.</param>
+            <param name="args">The arguments that are passed to the object member during the invoke operation.</param>
+            <param name="result">The result of the member invocation.</param>
+            <returns>
+            true if the operation is successful; otherwise, false. If this method returns false, the run-time binder of the language determines the behavior. (In most cases, a language-specific run-time exception is thrown.)
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.NameFormat">
             <summary>
@@ -7155,12 +7434,14 @@
             Note events can arrive from any thread.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.#ctor(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.#ctor(ShellBoost.Core.ShellItemIdList,System.Boolean,ShellBoost.Core.WindowsShell.SHCNE)">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ChangeNotifier"/> class.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ChangeNotifier" /> class.
             </summary>
             <param name="idList">The PIDL for which to receive notifications.</param>
             <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
+            <param name="events">A combination of values that indicate the type of events for which to receive notifications.</param>
+            <exception cref="T:System.ArgumentNullException">idList</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.OnNotify(System.Object,ShellBoost.Core.Utilities.ChangeNotifyEventArgs)">
             <summary>
@@ -7737,6 +8018,12 @@
             Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ConsoleLogger"/> class.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.ConsoleLogger.AddCounter">
+            <summary>
+            Gets or sets a value indicating whether to add a counter in front of calls.
+            </summary>
+            <value><c>true</c> if a counter must be added to logs; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ShellBoost.Core.Utilities.ConsoleLogger.AddUnmanagedThreadId">
             <summary>
             Gets or sets a value indicating whether to add the unmanaged thread identifier to logs.
@@ -7755,6 +8042,14 @@
             </summary>
             <value>
             The maximum trace level.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ConsoleLogger.Counter">
+            <summary>
+            Gets or sets a counter to use.
+            </summary>
+            <value>
+            The counter.
             </value>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
@@ -7829,6 +8124,13 @@
             </summary>
             <param name="dt">The DateTime.</param>
             <returns>true if the DateTime is a valid file time; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.RemoveMilliseconds(System.DateTime)">
+            <summary>
+            Removes the milliseconds from a DateTime instance.
+            </summary>
+            <param name="dateTime">The input DateTime.</param>
+            <returns>A new DateTime instance</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.Conversions.ComputeUInt64Hash(System.String)">
             <summary>
@@ -8230,6 +8532,32 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">oldValue is null.</exception>
             <exception cref="T:System.ArgumentException">oldValue is empty.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.GetNewFileName(System.String,System.Func{System.String,System.Boolean})">
+            <summary>
+            Compute a new name from a tentative name and a function that tests if a name exists.
+            </summary>
+            <param name="tentativeName">The tentative name.</param>
+            <param name="testNameFunc">The name check function.</param>
+            <returns>A string representing a new name.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            tentativeName is null
+            or
+            testNameFunc is null.
+            </exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.GetNewFileNameAsync(System.String,System.Func{System.String,System.Threading.Tasks.Task{System.Boolean}})">
+            <summary>
+            Compute a new name from a tentative name and a function that tests if a name exists.
+            </summary>
+            <param name="tentativeName">The tentative name.</param>
+            <param name="testNameFunc">The name check function.</param>
+            <returns>
+            A string representing a new name.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">tentativeName is null
+            or
+            testNameFunc is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.Utilities.Crc64">
             <summary>
@@ -8641,6 +8969,7 @@
             <summary>
             Represents a Windows Shell file operation. This class cannot be inherited.
             This class requires an STA thread to operate properly.
+            Interesting error results are located in Windows SKD's sherrors.h.
             </summary>
         </member>
         <member name="E:ShellBoost.Core.Utilities.FileOperation.PauseTimer">
@@ -8723,12 +9052,21 @@
             Occurs when performing caller-implemented actions after the rename process for each item is complete.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.FileOperation.#ctor(System.Boolean,System.Boolean)">
+        <member name="M:ShellBoost.Core.Utilities.FileOperation.#ctor(System.Boolean,System.Boolean,System.Object)">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.FileOperation"/> class.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.FileOperation" /> class.
             </summary>
             <param name="eventsEnabled">if set to <c>true</c> events are enabled.</param>
             <param name="performOperationsOnDispose">if set to <c>true</c> perform is closed on disposal.</param>
+            <param name="site">An optional COM object site.</param>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FileOperation.NativeObject">
+            <summary>
+            Gets the underlying Shell native object.
+            </summary>
+            <value>
+            The native object.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.FileOperation.EventsEnabled">
             <summary>
@@ -9236,6 +9574,20 @@
             <param name="options">The options</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
             <returns>The final path for the specified handle.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.DirectoryExistsByPath(System.String)">
+            <summary>
+            Determines whether the specified directory exists.
+            </summary>
+            <param name="path">The path to check.</param>
+            <returns>true if the path contains the name of an existing directory; otherwise, false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.FileExistsByPath(System.String)">
+            <summary>
+            Determines whether the specified file exists.
+            </summary>
+            <param name="path">The path to check.</param>
+            <returns>true if the path contains the name of an existing file; otherwise, false.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.ExistsByPath(System.String)">
             <summary>
@@ -10045,6 +10397,44 @@
             <param name="byIndexOrResourceId">An optional index or resource id parameter.</param>
             <returns>A list of icons, loaded as bitmaps.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconsFromStream(System.IO.Stream)">
+            <summary>
+            Lods all the icons from an .ICO stream.
+            </summary>
+            <param name="stream">The stream.</param>
+            <returns>
+            A list of icons, loaded as bitmaps.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">stream is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.UseAsIcon``1(System.Drawing.Bitmap,System.Func{System.Drawing.Icon,``0})">
+            <summary>
+            Uses the bitmap as an Icon.
+            Ensures allocated resources will be freed.
+            </summary>
+            <typeparam name="T">The returned value type.</typeparam>
+            <param name="bitmap">The bitmap.</param>
+            <param name="func">The function.</param>
+            <returns>The returned value from the function call.</returns>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.UseAsIcon(System.Drawing.Bitmap,System.Action{System.Drawing.Icon})">
+            <summary>
+            Uses the bitmap as an Icon.
+            Ensures allocated resources will be freed.
+            </summary>
+            <param name="bitmap">The bitmap.</param>
+            <param name="action">The action.</param>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.ToIcon(System.Drawing.Bitmap)">
+            <summary>
+            Converts a Bitmap to an Icon.
+            You *must* call ShellUtilities.DestroyIcon on the returned icon handle once you have finished to use it.
+            </summary>
+            <param name="bitmap">The bitmap.</param>
+            <returns>An Icon instance of null if the bitmap was null.</returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.LoadIconsFromFileUsingShell(System.String,System.Nullable{System.Int32},System.Int32)">
             <summary>
             Loads all icons from a file.
@@ -10288,9 +10678,7 @@
             </summary>
             <param name="path">The folder path.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
-            <returns>
-              <c>true</c> if the operation succeeded, <c>false</c> otherwise.
-            </returns>
+            <returns>An error number or 0.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathUnmakeSystemFolder(System.String,System.Boolean)">
@@ -10299,9 +10687,110 @@
             </summary>
             <param name="path">The folder path.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathGetSize(System.String)">
+            <summary>
+            Gets the size of a file or directory. Always returns null for a directory.
+            If there's no file at the given path, returns null.
+            </summary>
+            <param name="path">The path.</param>
             <returns>
-              <c>true</c> if the operation succeeded, <c>false</c> otherwise.
+            The size of a file or null.
             </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathGetAttributes(System.String)">
+            <summary>
+            Gets the attributes of a file or directory.
+            If there's no file at the given path, returns null.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+            The attributes or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathGetCreationTime(System.String)">
+            <summary>
+            Gets the creation time of a file or directory.
+            If there's nothing at the given path, returns null.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>The creation time or null.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathGetLastAccessTime(System.String)">
+            <summary>
+            Gets the last access time of a file or directory.
+            If there's nothing at the given path, returns null.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>The last access time or null.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathGetLastWriteTime(System.String)">
+            <summary>
+            Gets the last write time of a file or directory.
+            If there's nothing at the given path, returns null.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>The last write time or null.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetCreationTime(System.String,System.DateTime)">
+            <summary>
+            Sets the creation time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetLastAccessTime(System.String,System.DateTime)">
+            <summary>
+            Sets the last access time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetLastWriteTime(System.String,System.DateTime)">
+            <summary>
+            Sets the last write time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetCreationTimeUtc(System.String,System.DateTime)">
+            <summary>
+            Sets the creation time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetLastAccessTimeUtc(System.String,System.DateTime)">
+            <summary>
+            Sets the last access time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathSetLastWriteTimeUtc(System.String,System.DateTime)">
+            <summary>
+            Sets the last write time of a file or directory.
+            Does nothing if there's nothing a t the given path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="dateTime">The date time.</param>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FindContentType(System.Byte[])">
@@ -10315,9 +10804,9 @@
             <summary>
             Determines the MIME type from a file path. Based on Windows FindMimeFromData function.
             </summary>
-            <param name="filePath">The file path.</param>
+            <param name="path">The file path.</param>
             <returns>The content type or null if it cannot be determined.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.GetFileExtensionFromContentType(System.String)">
             <summary>
@@ -10343,10 +10832,10 @@
             <summary>
             Create the directory needed to contain a specified file path.
             </summary>
-            <param name="filePath">The file path.</param>
+            <param name="path">The file path.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <returns><c>true</c> if a directory was created, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.DirectoryDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -10361,9 +10850,9 @@
             <summary>
             Creates the specified directory.
             </summary>
-            <param name="directoryPath">The path of the directory to remove.</param>
+            <param name="path">The path of the directory to remove.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
-            <exception cref="T:System.ArgumentNullException">directoryPath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileSetEnd(System.String,System.Int64,System.Boolean)">
             <summary>
@@ -10406,20 +10895,20 @@
             <summary>
             Unprotects a file.
             </summary>
-            <param name="filePath">The file path.</param>
+            <param name="path">The file path.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <returns><c>true</c> if the file was unprotected, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
             Deletes a file.
             </summary>
-            <param name="filePath">The file path.</param>
+            <param name="path">The file path.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <returns><c>true</c> if the file was deleted, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.FileOverwrite(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -10531,23 +11020,45 @@
             <param name="retryCount">The retry count.</param>
             <param name="maxRetryCount">The maximum retry count.</param>
             <param name="waitTime">The wait time.</param>
-            <returns><c>true</c> if the method must wait after this call, <c>false</c> otherwise.</returns>
+            <returns><c>true</c> if the method must stop the retry loop, <c>false</c> otherwise.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations(System.Action)">
+        <member name="T:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallback`1">
             <summary>
-            Calls IO code under a sharing violations handling system.
+            Represents the method that handles sharing violation exception calls.
             </summary>
-            <param name="action">The action.</param>
-            <exception cref="T:System.ArgumentNullException">action is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations(System.Action,System.Int32,System.Int32)">
-            <summary>
-            Calls IO code under a sharing violations handling system.
-            </summary>
-            <param name="action">The action.</param>
+            <typeparam name="T">The return type.</typeparam>
+            <param name="exception">The exception.</param>
+            <param name="retryCount">The retry count.</param>
             <param name="maxRetryCount">The maximum retry count.</param>
             <param name="waitTime">The wait time.</param>
-            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+            <param name="value">The value.</param>
+            <returns>
+              <c>true</c> if the method must stop the retry loop, <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallbackAsync">
+            <summary>
+            Represents the method that handles sharing violation exception calls.
+            </summary>
+            <param name="exception">The exception.</param>
+            <param name="retryCount">The retry count.</param>
+            <param name="maxRetryCount">The maximum retry count.</param>
+            <param name="waitTime">The wait time.</param>
+            <returns><c>true</c> if the method must stop the retry loop, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallbackAsync`1">
+            <summary>
+            Represents the method that handles sharing violation exception calls.
+            </summary>
+            <typeparam name="T">The return type.</typeparam>
+            <param name="exception">The exception.</param>
+            <param name="retryCount">The retry count.</param>
+            <param name="maxRetryCount">The maximum retry count.</param>
+            <param name="waitTime">The wait time.</param>
+            <param name="task">The task.</param>
+            <returns>
+              <c>true</c> if the method must stop the retry loop, <c>false</c> otherwise.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations(System.Action,ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallback,System.Int32,System.Int32)">
             <summary>
@@ -10559,27 +11070,20 @@
             <param name="waitTime">The wait time.</param>
             <exception cref="T:System.ArgumentNullException">action is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations``1(System.Func{``0})">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsAsync(System.Func{System.Threading.Tasks.Task},ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallbackAsync,System.Int32,System.Int32)">
             <summary>
             Calls IO code under a sharing violations handling system.
             </summary>
-            <typeparam name="T">The return type.</typeparam>
-            <param name="func">The function.</param>
-            <returns>The result of a func() call.</returns>
-            <exception cref="T:System.ArgumentNullException">func is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations``1(System.Func{``0},System.Int32,System.Int32)">
-            <summary>
-            Calls IO code under a sharing violations handling system.
-            </summary>
-            <typeparam name="T">The return type.</typeparam>
-            <param name="func">The function.</param>
+            <param name="action">The action.</param>
+            <param name="exceptionsCallback">The exceptions callback.</param>
             <param name="maxRetryCount">The maximum retry count.</param>
             <param name="waitTime">The wait time.</param>
-            <returns>The result of a func() call.</returns>
-            <exception cref="T:System.ArgumentNullException">func is null.</exception>
+            <returns>
+            A Task instance.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations``1(System.Func{``0},ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallback,System.Int32,System.Int32)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolations``1(System.Func{``0},ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallback{``0},System.Int32,System.Int32)">
             <summary>
             Calls IO code under a sharing violations handling system.
             </summary>
@@ -10588,7 +11092,23 @@
             <param name="exceptionsCallback">The exceptions callback.</param>
             <param name="maxRetryCount">The maximum retry count.</param>
             <param name="waitTime">The wait time.</param>
-            <returns>The result of a func() call.</returns>
+            <returns>
+            The result of the func() call.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">func is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsAsync``1(System.Func{System.Threading.Tasks.Task{``0}},ShellBoost.Core.Utilities.IOUtilities.WrapSharingViolationsExceptionsCallbackAsync{``0},System.Int32,System.Int32)">
+            <summary>
+            Calls IO code under a sharing violations handling system.
+            </summary>
+            <typeparam name="T">The return type.</typeparam>
+            <param name="func">The function.</param>
+            <param name="exceptionsCallback">The exceptions callback.</param>
+            <param name="maxRetryCount">The maximum retry count.</param>
+            <param name="waitTime">The wait time.</param>
+            <returns>
+            The Task result of the func() call.
+            </returns>
             <exception cref="T:System.ArgumentNullException">func is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsSharingViolation(System.Exception)">
@@ -10609,11 +11129,11 @@
             <summary>
             Converts a text into a valid file path.
             </summary>
-            <param name="filePath">The file path.</param>
+            <param name="path">The file path.</param>
             <param name="reservedNameFormat">The reserved format to use for reserved names. If null '_{0}_' will be used.</param>
             <param name="reservedCharFormat">The reserved format to use for reserved characters. If null '_x{0}_%' will be used.</param>
             <returns>A valid file name.</returns>
-            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFileName(System.String,System.String,System.String)">
             <summary>
@@ -10625,12 +11145,28 @@
             <returns>A valid file name.</returns>
             <exception cref="T:System.ArgumentNullException">fileName is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.IOUtilities.IsPathDirectory(System.String)">
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathIsDirectory(System.String)">
             <summary>
             Determines if a path points to an existing directory.
             </summary>
             <param name="path">The input path. If null, false will be returned.</param>
             <returns>true if the path points to an existing directory; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathExists(System.String)">
+            <summary>
+            Determines if a path points to an existing directory or file.
+            </summary>
+            <param name="path">The input path. If null, false will be returned.</param>
+            <returns>true if the path points to an existing directory or file; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathDelete(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Deletes the specified directory or file and, if indicated, any subdirectories and files in the directory.
+            </summary>
+            <param name="path">The path of the directory or file to remove.</param>
+            <param name="recursive">true to remove directories, subdirectories, and files in path; otherwise, false.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathHasInvalidChars(System.String)">
             <summary>
@@ -11583,6 +12119,15 @@
             <param name="process">The process.</param>
             <returns><c>true</c> if the specified process is Windows Explorer; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.RestartManager.GetLockingProcesses(System.String,System.Boolean)">
+            <summary>
+            Gets a list of processes locking a specific file.
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="onlyRestartable">if set to <c>true</c> list only restartable processes.</param>
+            <returns>A list of processes.</returns>
+            <exception cref="T:System.ArgumentNullException">filePath is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.RestartManager.GetLockingProcesses(System.String,System.Boolean,System.Boolean,System.Exception@)">
             <summary>
             Gets a list of processes locking a specific file.
@@ -11687,6 +12232,11 @@
         <member name="F:ShellBoost.Core.Utilities.ShellUtilities.ERROR_MORE_DATA">
             <summary>
             The Windows ERROR_MORE_DATA  error value (0x800700EA).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.ShellUtilities.ERROR_RETRY">
+            <summary>
+            The Windows ERROR_RETRY  error value (0x800704D5).
             </summary>
         </member>
         <member name="F:ShellBoost.Core.Utilities.ShellUtilities.E_NOTFOUND">
@@ -12162,13 +12712,6 @@
             <param name="size">The size.</param>
             <returns>A string.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractNewMenu(System.Boolean)">
-            <summary>
-            Extracts information from the Windows Shell 'New' menu. Uses the TEMP directory to build the content of the 'New' menu.
-            </summary>
-            <param name="includeNewMenuItem">if set to <c>true</c> include the 'New' menu item itself.</param>
-            <returns>An instance of the ShellMenuItemList type.</returns>
-        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractNewMenu(System.Boolean,System.Boolean)">
             <summary>
             Extracts information from the Windows Shell 'New' menu. Uses the TEMP directory to build the content of the 'New' menu.
@@ -12231,7 +12774,7 @@
             <param name="predicate">The filter that determine wich item should be invoked in the list of available items.</param>
             <exception cref="T:System.ArgumentException">path or predicate is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.InvokeMenuItem(System.String,System.IntPtr,System.Func{ShellBoost.Core.ShellMenuItem,System.Boolean})">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.InvokeMenuItem(System.String,System.IntPtr,System.Func{ShellBoost.Core.ShellMenuItem,System.Boolean},System.Boolean)">
             <summary>
             Invokes a shell item's context menu item.
             </summary>
@@ -12241,6 +12784,7 @@
             <param name="path">The shell item's path.</param>
             <param name="hwnd">A handle to the window that is the owner of the displayed UI. Callers must specify a legitimate value that can be used as the owner window for any UI that may be displayed. Failing to specify a value when calling from a UI thread (one with windows already created) will result in reentrancy and possible bugs.</param>
             <param name="predicate">The filter that determine wich item should be invoked in the list of available items.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentException">path or predicate is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.ExtractMenu(System.IntPtr,System.Boolean)">
@@ -12433,6 +12977,14 @@
             true if the property sheet was successfully created; otherwise, false.
             </returns>
             <exception cref="T:System.ArgumentNullException">dataObject is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.LoadIndirectString(System.String,System.Int32)">
+            <summary>
+            Extracts a specified text resource when given that resource in the form of an indirect string (a string that begins with the '@' symbol).
+            </summary>
+            <param name="source">An input string from which the resource will be retrieved.</param>
+            <param name="bufferSize">Size of the buffer.</param>
+            <returns>The text resource.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.DestroyIcon(System.IntPtr)">
             <summary>
@@ -13714,7 +14266,7 @@
         </member>
         <member name="M:ShellBoost.Core.Utilities.TaskUtilities.StartSTAThreadTask``1(System.Func{``0})">
             <summary>
-            Starts an STA thread task.
+            Starts a a new STA thread and run the specified function.
             </summary>
             <typeparam name="T">The return type</typeparam>
             <param name="func">The function.</param>
@@ -13723,7 +14275,24 @@
         </member>
         <member name="M:ShellBoost.Core.Utilities.TaskUtilities.StartSTAThreadTask(System.Action)">
             <summary>
-            Starts an STA thread task.
+            Starts a a new STA thread and run the specified action.
+            </summary>
+            <param name="action">The action.</param>
+            <returns>An instance of the Task type.</returns>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.TaskUtilities.EnsureSTAThreadTask``1(System.Func{``0})">
+            <summary>
+            If the current thread is STA, run the specified function, otherwise start an STA thread and run the function in this new thread.
+            </summary>
+            <typeparam name="T">The return type</typeparam>
+            <param name="func">The function.</param>
+            <returns>An instance of the Task type.</returns>
+            <exception cref="T:System.ArgumentNullException">func is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.TaskUtilities.EnsureSTAThreadTask(System.Action)">
+            <summary>
+            If the current thread is STA, run the specified action, otherwise start an STA thread and run the action in this new thread.
             </summary>
             <param name="action">The action.</param>
             <returns>An instance of the Task type.</returns>
@@ -14669,14 +15238,38 @@
             <param name="alternateOwner">An alternate owner window handle.</param>
             <exception cref="T:System.ArgumentException">handle is zero.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RunForm(System.Windows.Forms.Form,System.IntPtr)">
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RunForm(System.Windows.Forms.Form,System.Boolean)">
+            <summary>
+            Shows the form as a modal dialog box.
+            </summary>
+            <param name="form">The form.</param>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
+            <returns>
+            One of the DialogResult values.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">form is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RunForm(System.Windows.Forms.Form,System.IntPtr,System.Boolean)">
             <summary>
             Shows the form as a modal dialog box.
             </summary>
             <param name="form">The form.</param>
             <param name="ownerHandle">The owner window handle.</param>
-            <returns>One of the DialogResult values.</returns>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
+            <returns>
+            One of the DialogResult values.
+            </returns>
             <exception cref="T:System.ArgumentNullException">form is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RunWindow(System.Windows.Window)">
+            <summary>
+            Shows the window as a modal dialog box.
+            </summary>
+            <param name="window">The window.</param>
+            <returns>
+            A nullable bool value that specifies whether the activity was accepted (true) or canceled (false).
+            </returns>
+            <exception cref="T:System.ArgumentNullException">window is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.RunWindow(System.Windows.Window,System.IntPtr)">
             <summary>
@@ -14704,20 +15297,22 @@
             <returns>A nullable bool value that specifies whether the activity was accepted (true) or canceled (false).</returns>
             <exception cref="T:System.ArgumentNullException">window is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModelessAsync(System.Windows.Forms.Form)">
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModelessAsync(System.Windows.Forms.Form,System.Boolean)">
             <summary>
             Shows the form as a modeless dialog box.
             </summary>
             <param name="form">The form.</param>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
             <returns>One of the DialogResult values.</returns>
             <exception cref="T:System.ArgumentNullException">form is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModelessAsync(System.Windows.Forms.Form,System.IntPtr)">
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModelessAsync(System.Windows.Forms.Form,System.IntPtr,System.Boolean)">
             <summary>
             Shows the form as a modeless dialog box.
             </summary>
             <param name="form">The form.</param>
             <param name="ownerHandle">The owner window handle.</param>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
             <returns>One of the DialogResult values.</returns>
             <exception cref="T:System.ArgumentNullException">form is null.</exception>
         </member>
@@ -14755,20 +15350,22 @@
             <returns>A nullable bool value that specifies whether the activity was accepted (true) or canceled (false).</returns>
             <exception cref="T:System.ArgumentNullException">window is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModal(System.Windows.Forms.Form)">
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModal(System.Windows.Forms.Form,System.Boolean)">
             <summary>
             Shows the form as a modal dialog box.
             </summary>
             <param name="form">The form.</param>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
             <returns>One of the DialogResult values.</returns>
             <exception cref="T:System.ArgumentNullException">form is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModal(System.Windows.Forms.Form,System.IntPtr)">
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.ShowModal(System.Windows.Forms.Form,System.IntPtr,System.Boolean)">
             <summary>
             Shows the form as a modal dialog box.
             </summary>
             <param name="form">The form.</param>
             <param name="ownerHandle">The owner window handle.</param>
+            <param name="centerWindow">if set to <c>true</c> the window will be centered.</param>
             <returns>One of the DialogResult values.</returns>
             <exception cref="T:System.ArgumentNullException">form is null.</exception>
         </member>
@@ -14976,96 +15573,167 @@
             </summary>
             <value>A version instance.</value>
         </member>
-        <member name="T:ShellBoost.Core.WebCacheShellContent">
+        <member name="T:ShellBoost.Core.WindowsShell.NSTCGNI">
             <summary>
-            Defines the content of a Shell Item that's represented by an HTTP(S) file.
-            The file will be downloaded and cached locally using the WebFileCache ShellBoost utilities.
+            Defines the type of the next item.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.WebCacheShellContent.#ctor(ShellBoost.Core.Utilities.WebFileCache,System.String,ShellBoost.Core.Utilities.WebFileCacheRequestOptions)">
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_NEXT">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent" /> class.
+            The next sibling of the given item.
             </summary>
-            <param name="cache">The WebFileCache cache instance.</param>
-            <param name="url">The url to download the file from.</param>
-            <param name="downloadOptions">Optional download options.</param>
-            <exception cref="T:System.ArgumentNullException">cache is null.</exception>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.Url">
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_NEXTVISIBLE">
             <summary>
-            Gets the content url.
+            The next visible item in the tree that has any relationship to the given item. This includes a child (if there is one), the next sibling, or even one of the ancestor's siblings.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_PREV">
+            <summary>
+            The previous sibling item of the given item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_PREVVISIBLE">
+            <summary>
+            The previous visible item that is a sibling item, sibling descendent item or a parent item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_PARENT">
+            <summary>
+            The parent item of the given item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_CHILD">
+            <summary>
+            The first child item of the given item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_FIRSTVISIBLE">
+            <summary>
+            The absolute first visible item in the tree (not relative to the given item).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCGNI.NSTCGNI_LASTVISIBLE">
+            <summary>
+            The absolute last visible item in the tree (not relative to the given item).
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.CreateNewItemOptions">
+            <summary>
+            Defines options when creating a new shell item.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CreateNewItemOptions.TargetPath">
+            <summary>
+            Gets or sets the target path. If null, a new temp directory will be created. If a new directory is created, you will have to delete it if needed, including the files in it.
             </summary>
             <value>
-            The url.
+            The target path.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.DownloadOptions">
+        <member name="P:ShellBoost.Core.WindowsShell.CreateNewItemOptions.ExistingFileNames">
             <summary>
-            Gets or sets download options. Must be set before any call to Read or Seek.
+            An optional list of existing file names to let the Shell find a non colliding name. Only used if targetPath is null.
             </summary>
             <value>
-            The download options.
+            The existing file names.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.LastWriteTime">
+        <member name="P:ShellBoost.Core.WindowsShell.CreateNewItemOptions.ExistingFolderNames">
             <summary>
-            Gets the last write time.
+            An optional list of existing folder names to let the Shell find a non colliding name. Only used if targetPath is null.
             </summary>
             <value>
-            The last write time.
+            The existing file names.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.LastAccessTime">
+        <member name="T:ShellBoost.Core.WindowsShell.MenuInvokeOptions">
             <summary>
-            Gets the last access time.
+            Defines options when invoking a shell menu 
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.MenuInvokeOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsShell.MenuInvokeOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Hwnd">
+            <summary>
+            Gets or sets a handle to the window that is the owner of the shortcut menu. An extension can also use this handle as the owner of any message boxes or dialog boxes it displays.
+            </summary>
+            <value>The window handle.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.IconHandle">
+            <summary>
+            Gets or sets a handle to an icon to use for any application activated by the command.
             </summary>
             <value>
-            The last access time.
+            The icon handle.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.CreationTime">
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Parameters">
             <summary>
-            Gets the creation time.
+            Gets or sets a string that specifies optional parameters that are passed to the command. The format of this string is determined by the command that is to be invoked.
             </summary>
             <value>
-            The creation time.
+            The parameters.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.WebCacheShellContent.Length">
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Directory">
             <summary>
-            Gets the content length. It should be 0 for a directory.
+            Gets or sets a string that specifies an optional working directory name.
             </summary>
             <value>
-            The content length.
+            The parameters.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.WebCacheShellContent.GetStream">
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Verb">
             <summary>
-            Gets the stream.
+            Gets or sets a string that specifies the verb to invoke.
             </summary>
-            <returns>A Stream instance.</returns>
+            <value>
+            The parameters.
+            </value>
         </member>
-        <member name="M:ShellBoost.Core.WebCacheShellContent.Read(System.Byte[],System.Int32)">
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.VerbAsid">
             <summary>
-            Reads a sequence of bytes from the current content and advances the position within the stream by the number of bytes read.
+            Gets or sets an identifier that specifies the item to invoke.
             </summary>
-            <param name="array">An array of bytes.</param>
-            <param name="count">The maximum number of bytes to be read from the current content.</param>
-            <returns>
-            The number of bytes read.
-            </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <value>
+            The parameters.
+            </value>
         </member>
-        <member name="M:ShellBoost.Core.WebCacheShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.HotKey">
             <summary>
-            Sets the position within the current stream.
+            Gets or sets an optional keyboard shortcut to assign to any application activated by the command.
             </summary>
-            <param name="offset">A byte offset relative to the origin parameter.</param>
-            <param name="origin">A value indicating the reference point used to obtain the new position.</param>
-            <returns>
-            The new position within the current stream or null if this information is unknown.
-            </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <value>
+            The hot key.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Show">
+            <summary>
+            Gets or sets a a value to pass to the ShowWindow function if the command displays a window or starts an application.
+            </summary>
+            <value>
+            The hot key.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Mask">
+            <summary>
+            Gets or sets the mask and options.
+            </summary>
+            <value>
+            The mask.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuInvokeOptions.Point">
+            <summary>
+            Gets or sets the point where the command is invoked.
+            </summary>
+            <value>
+            The point.
+            </value>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.Browser">
             <summary>
@@ -15079,6 +15747,14 @@
             <value>
             The window handle.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.SetStatusText(System.String,System.Boolean)">
+            <summary>
+            Sets and displays status text about the in-place object in the container's frame-window status bar.
+            </summary>
+            <param name="text">The message to display.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Browser.GetControlHwnd(ShellBoost.Core.WindowsShell.FCW,System.Boolean)">
             <summary>
@@ -15217,6 +15893,525 @@
         <member name="F:ShellBoost.Core.WindowsShell.ILD.ILD_BLEND">
             <summary>
             Same as ILD_BLEND50.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.Menu">
+            <summary>
+            Exposes properties and methods that retrieve information about a Shell menu.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Menu.Items">
+            <summary>
+            Gets the menu items.
+            </summary>
+            <value>
+            The items.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Menu.AllItems">
+            <summary>
+            Gets all child items.
+            </summary>
+            <value>The child items.</value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.GetItemFromNewMenuVerb(System.String)">
+            <summary>
+            Gets an item in the menu from its verb.
+            The verb is supposed to be a verb from a "new item" Shell call.
+            </summary>
+            <param name="verb">The verb. If null is pass, null will be returned.</param>
+            <returns>An item or null if no matching item was found.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.CreateNewItem(System.String,ShellBoost.Core.WindowsShell.CreateNewItemOptions,System.Boolean)">
+            <summary>
+            This utility method invokes the shell "New" menu and creates a new file or folder corresponding to a Shell-initiated item invoke.
+            </summary>
+            <param name="verb">The menu item verb.</param>
+            <param name="options">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The path to a new file or folder that was created or null if there was an error.
+            The file may be empty (of size 0) or not.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">verb is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.Invoke(ShellBoost.Core.WindowsShell.MenuInvokeOptions,System.Boolean)">
+            <summary>
+            Invokes the specified menu.
+            </summary>
+            <param name="options">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The result of the underlying IContextMenu::InvokeCommand method call. 0 if it succeeded, otherwise an error code.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.ContextFromItem(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.ContextMenuOptions,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the context menu from a shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="options">The options.</param>
+            <param name="context">The COM bind context.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of menu or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.ContextFromIDList(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.ContextMenuOptions,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the context menu from a PIDL.
+            </summary>
+            <param name="idList">The PIDL.</param>
+            <param name="options">The options.</param>
+            <param name="context">The COM bind context.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of menu or null.
+            </returns>
+            <exception cref="T:System.ArgumentException">pidl is Zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.ContextFromIDList(System.IntPtr,ShellBoost.Core.WindowsShell.ContextMenuOptions,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the context menu from a PIDL.
+            </summary>
+            <param name="pidl">The pidl.</param>
+            <param name="options">The options.</param>
+            <param name="context">The COM bind context.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of menu or null.
+            </returns>
+            <exception cref="T:System.ArgumentException">pidl is Zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.NewFromItem(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NewMenuOptions,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the "New" menu from a shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="options">The options.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of menu or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.NewFromIDList(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.NewMenuOptions,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the "New" menu from a PIDL.
+            </summary>
+            <param name="idList">The PIDL.</param>
+            <param name="options">The options.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of menu or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">idList is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.NewFromIDList(System.IntPtr,ShellBoost.Core.WindowsShell.NewMenuOptions,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the "New" menu from a PIDL.
+            </summary>
+            <param name="pidl">The pidl.</param>
+            <param name="options">The options.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An instance of menu or null.</returns>
+            <exception cref="T:System.ArgumentException">pidl is Zero.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Menu.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.MenuItem">
+            <summary>
+            Exposes properties and methods that retrieve information about a Shell menu item.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Menu">
+            <summary>
+            Gets the parent menu.
+            </summary>
+            <value>The parent menu.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Items">
+            <summary>
+            Gets the menu items.
+            </summary>
+            <value>
+            The items.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.AllItems">
+            <summary>
+            Gets all child items.
+            </summary>
+            <value>The child items.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Id">
+            <summary>
+            Gets this item menu identifier.
+            </summary>
+            <value>The identifier.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Index">
+            <summary>
+            Gets this item menu index.
+            </summary>
+            <value>The index.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Text">
+            <summary>
+            Gets or sets this menu item's text.
+            </summary>
+            <value>The text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.DisplayText">
+            <summary>
+            Gets the display text.
+            </summary>
+            <value>The display text.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Verb">
+            <summary>
+            Gets or sets the verb.
+            </summary>
+            <value>The verb.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.State">
+            <summary>
+            Gets or sets the state.
+            </summary>
+            <value>The state.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+            <value>The type.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsRadioCheck">
+            <summary>
+            Gets or sets a value indicating whether this instance is a radio check.
+            </summary>
+            <value><c>true</c> if this instance is a radio check; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsChecked">
+            <summary>
+            Gets or sets a value indicating whether this instance is checked.
+            </summary>
+            <value><c>true</c> if this instance is checked; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsGrayed">
+            <summary>
+            Gets or sets a value indicating whether this instance is grayed.
+            </summary>
+            <value><c>true</c> if this instance is grayed; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsHilite">
+            <summary>
+            Gets or sets a value indicating whether this instance is hilite.
+            </summary>
+            <value><c>true</c> if this instance is hilite; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsDefault">
+            <summary>
+            Gets or sets a value indicating whether this instance is the default menu item.
+            </summary>
+            <value><c>true</c> if this instance is the default menu item; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.IsSeparator">
+            <summary>
+            Gets or sets a value indicating whether this instance is a separator.
+            </summary>
+            <value><c>true</c> if this instance is a separator; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.Bitmap">
+            <summary>
+            Gets the bitmap instance.
+            </summary>
+            <value>The bitmap instance.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.BitmapHandle">
+            <summary>
+            Gets the bitmap handle.
+            </summary>
+            <value>The bitmap handle.</value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.MenuItem.BitmapCode">
+            <summary>
+            Gets the bitmap code.
+            </summary>
+            <value>The bitmap code.</value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.MenuItem.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.MenuItem.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.ContextMenuOptions">
+            <summary>
+            Defines options when extracting a shell context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ContextMenuOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.ContextMenuOptions.IncludeBitmaps">
+            <summary>
+            Include bitmaps instance when possible. Note this means you will need to call Dispose on the holding instance(s).
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.NamespaceTreeControl">
+            <summary>
+            Exposes properties and methods that represent the tree control in the Windows Explorer.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.CollapseAll(System.Boolean)">
+            <summary>
+            Collapses all of the items in the given tree.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.EnsureItemVisible(ShellBoost.Core.WindowsShell.Item,System.Boolean)">
+            <summary>
+            Ensures that the given item is visible.
+            The tree view must already be opened on the item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemCustomState(ShellBoost.Core.WindowsShell.Item)">
+            <summary>
+            Gets the state of the checkbox associated with a given Shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <returns>
+            The state of the checkbox for the Shell item or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemCustomState(ShellBoost.Core.WindowsShell.Item,System.Int32@,System.Boolean)">
+            <summary>
+            Gets the state of the checkbox associated with a given Shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="state">The state of the checkbox for the Shell item.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemRect(ShellBoost.Core.WindowsShell.Item)">
+            <summary>
+            Gets the Rectangle structure that describes the size and position of a given item.
+            </summary>
+            <param name="item">The item.</param>
+            <returns>
+            The Rectangle structure that describes the size and position of the item or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemRect(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.RECT@,System.Boolean)">
+            <summary>
+            Gets the Rectangle structure that describes the size and position of a given item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="rect">The Rectangle structure that describes the size and position of the item.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemState(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCITEMSTATE)">
+            <summary>
+            Gets state information about a Shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="mask">Specifies which information is being requested, in the form of a bitmap. One or more of the NSTCITEMSTATE constants.</param>
+            <returns>
+            Contains the values requested in mask or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetItemState(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCITEMSTATE,ShellBoost.Core.WindowsShell.NSTCITEMSTATE@,System.Boolean)">
+            <summary>
+            Gets state information about a Shell item.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="mask">Specifies which information is being requested, in the form of a bitmap. One or more of the NSTCITEMSTATE constants.</param>
+            <param name="state">Contains the values requested in mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetNextItem(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCGNI)">
+            <summary>
+            Retrieves the next item in the tree according to which method is requested.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="type">The type of the next item.</param>
+            <returns>
+            The next item that fits the criteria for the next item that was requested or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetNextItem(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCGNI,ShellBoost.Core.WindowsShell.Item@,System.Boolean)">
+            <summary>
+            Retrieves the next item in the tree according to which method is requested.
+            </summary>
+            <param name="item">The item.</param>
+            <param name="type">The type of the next item.</param>
+            <param name="nextItem">The next item that fits the criteria for the next item that was requested.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetRootItems">
+            <summary>
+            Enumerates the root items.
+            </summary>
+            <returns>
+            A collection of root items
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetRootItems(ShellBoost.Core.WindowsShell.Item[]@,System.Boolean)">
+            <summary>
+            Gets an array of the root items.
+            </summary>
+            <param name="items">The items.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetSelectedItems">
+            <summary>
+            Enumerates the selected items.
+            </summary>
+            <returns>
+            A collection of selected items
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.GetSelectedItems(ShellBoost.Core.WindowsShell.Item[]@,System.Boolean)">
+            <summary>
+            Gets an array of the selected items.
+            </summary>
+            <param name="items">The selected items.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.HitTest(ShellBoost.Core.WindowsShell.POINT)">
+            <summary>
+            Retrieves the item that a given point is in, if any.
+            </summary>
+            <param name="point">The point to be tested.</param>
+            <returns>
+            The item in which the point exists or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.HitTest(ShellBoost.Core.WindowsShell.POINT,ShellBoost.Core.WindowsShell.Item@,System.Boolean)">
+            <summary>
+            Retrieves the item that a given point is in, if any.
+            </summary>
+            <param name="point">The point to be tested.</param>
+            <param name="item">The item in which the point exists.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.SetItemCustomState(ShellBoost.Core.WindowsShell.Item,System.Int32,System.Boolean)">
+            <summary>
+            Sets the state of the checkbox associated with the Shell item.
+            </summary>
+            <param name="item">The Shell item for which checkbox state is being set.</param>
+            <param name="state">The desired state of the checkbox for the Shell item.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.SetItemState(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCITEMSTATE,System.Boolean)">
+            <summary>
+            Sets state information for a Shell item.
+            </summary>
+            <param name="item">The Shell item for which to set the state.</param>
+            <param name="state">Contains the values to set for the flags specified in mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.SetItemState(ShellBoost.Core.WindowsShell.Item,ShellBoost.Core.WindowsShell.NSTCITEMSTATE,ShellBoost.Core.WindowsShell.NSTCITEMSTATE,System.Boolean)">
+            <summary>
+            Sets state information for a Shell item.
+            </summary>
+            <param name="item">The Shell item for which to set the state.</param>
+            <param name="mask">Specifies which information is being set, in the form of a bitmap. One or more of the NSTCITEMSTATE constants.</param>
+            <param name="state">Contains the values to set for the flags specified in mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.SetTheme(System.String,System.Boolean)">
+            <summary>
+            The name of the desktop theme to which the current window is being set.
+            </summary>
+            <param name="name">The name of the desktop theme to which the current window is being set.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">item</exception>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.NewMenuOptions">
+            <summary>
+            Defines options when extracting a shell "New" menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NewMenuOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NewMenuOptions.IncludeBitmaps">
+            <summary>
+            Include bitmaps instance when possible. Note this means you will need to call Dispose on the holding instance(s).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NewMenuOptions.DontIncludeNewMenuItem">
+            <summary>
+            Don't include the "New" top menu.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.NMCSAEI_FLAGS">
@@ -15896,9 +17091,24 @@
             Invocation implementation can spin off a new thread or process to handle the call and does not need to block on completion of the function being invoked.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CMIC_MASK.CMIC_MASK_HOTKEY">
+            <summary>
+            A hotkey has been specified.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CMIC_MASK.CMIC_MASK_ICON">
+            <summary>
+            An icon handle has been specified.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.CMIC_MASK.CMIC_MASK_FLAG_NO_UI">
             <summary>
             Invocation implementation is prevented from displaying user interface elements (for example, error messages) while carrying out a command.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CMIC_MASK.CMIC_MASK_UNICODE">
+            <summary>
+            Uses unicode strings.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.CMIC_MASK.CMIC_MASK_NO_CONSOLE">
@@ -19998,7 +21208,7 @@
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCOLSTATE.SHCOLSTATE_TYPEMASK">
             <summary>
-            A mask for display type values SHCOLSTATE_TYPE_STR, SHCOLSTATE_TYPE_STR, and SHCOLSTATE_TYPE_DATE.
+            A mask for display type values SHCOLSTATE_TYPE_STR, SHCOLSTATE_TYPE_INT, and SHCOLSTATE_TYPE_DATE.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT">
@@ -20212,12 +21422,61 @@
             The attributes.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.FileAttributes">
+            <summary>
+            Gets the file attributes.
+            </summary>
+            <value>
+            The file attributes.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.Size">
+            <summary>
+            Gets the file size.
+            </summary>
+            <value>
+            The file size.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.DateAccessed">
+            <summary>
+            Get the last time the item was accessed.
+            </summary>
+            <value>
+            The last time the item was accessed.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.DateCreated">
+            <summary>
+            Get the date and time the item was created on the file system where it is currently located.
+            </summary>
+            <value>
+            The date and time the item was created on the file system where it is currently located.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.DateModified">
+            <summary>
+            Get the date and time of the last modification to the item.
+            </summary>
+            <value>
+            The date and time of the last modification to the item.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.IsFolder">
             <summary>
             Gets a value indicating whether this instance is a folder.
+            Note a Shell Folder can be a physical file (like .zip files for example).
             </summary>
             <value>
-              <c>true</c> if this instance is folder; otherwise, <c>false</c>.
+              <c>true</c> if this instance is a folder; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.IsFileSystemFolder">
+            <summary>
+            Gets a value indicating whether this instance is a physical folder.
+            </summary>
+            <value>
+              <c>true</c> if this instance is a physical folder; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.SIGDN_NORMALDISPLAY">
@@ -20338,7 +21597,29 @@
             <returns>
             A Thumbnail instance or null.
             </returns>
-            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetNewMenu(ShellBoost.Core.WindowsShell.NewMenuOptions,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the Shell's New menu from this item.
+            </summary>
+            <param name="options">The options.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Menu instance or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetContextMenu(ShellBoost.Core.WindowsShell.ContextMenuOptions,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.CMF,System.Boolean)">
+            <summary>
+            Gets the Shell's New menu from this item.
+            </summary>
+            <param name="options">The options.</param>
+            <param name="context">The bind context.</param>
+            <param name="flags">Optional flags that specify how the shortcut menu can be changed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            A Menu instance or null.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.OpenNativeStream(System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
@@ -20366,6 +21647,28 @@
             </summary>
             <param name="mode">The A constant that determines how to open or create the file.</param>
             <param name="access">A constant that determines how the file can be accessed by the FileStream object.</param>
+            <param name="share">A constant that determines how the file will be shared by processes.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of Stream or null if an error occurred.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.OpenRead(System.IO.FileShare,System.Boolean)">
+            <summary>
+            Opens a read stream from the item.
+            Note all items don't support streaming.
+            </summary>
+            <param name="share">A constant that determines how the file will be shared by processes.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An instance of Stream or null if an error occurred.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.OpenWrite(System.IO.FileShare,System.Boolean)">
+            <summary>
+            Opens a write stream from the item.
+            Note all items don't support streaming.
+            </summary>
             <param name="share">A constant that determines how the file will be shared by processes.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
@@ -20566,6 +21869,116 @@
             An operation to edit or position an item should not affect the item's focus or selected state.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SW">
+            <summary>
+            Controls how a window is to be shown. 
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_HIDE">
+            <summary>
+            Hides the window and activates another window.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWNORMAL">
+            <summary>
+            Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when displaying the window for the first time.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWMINIMIZED">
+            <summary>
+            Activates the window and displays it as a minimized window.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWMAXIMIZED">
+            <summary>
+            Activates the window and displays it as a maximized window.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_MAXIMIZE">
+            <summary>
+            Maximizes the specified window.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWNOACTIVATE">
+            <summary>
+            Displays a window in its most recent size and position. This value is similar to SW_SHOWNORMAL, except that the window is not activated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOW">
+            <summary>
+            Activates the window and displays it in its current size and position.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_MINIMIZE">
+            <summary>
+            Minimizes the specified window and activates the next top-level window in the Z order.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWMINNOACTIVE">
+            <summary>
+            Displays the window as a minimized window. This value is similar to SW_SHOWMINIMIZED, except the window is not activated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWNA">
+            <summary>
+            Displays the window in its current size and position. This value is similar to SW_SHOW, except that the window is not activated.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_RESTORE">
+            <summary>
+            Activates and displays the window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when restoring a minimized window.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_SHOWDEFAULT">
+            <summary>
+            Sets the show state based on the SW_ value specified in the STARTUPINFO structure passed to the CreateProcess function by the program that started the application.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SW.SW_FORCEMINIMIZE">
+            <summary>
+            Minimizes a window, even if the thread that owns the window is not responding. This flag should only be used when minimizing windows from a different thread.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.RECT">
+            <summary>
+            The RECT structure defines a rectangle by the coordinates of its upper-left and lower-right corners.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.RECT.left">
+            <summary>
+            Specifies the x-coordinate of the upper-left corner of the rectangle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.RECT.top">
+            <summary>
+            Specifies the y-coordinate of the upper-left corner of the rectangle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.RECT.right">
+            <summary>
+            Specifies the x-coordinate of the lower-right corner of the rectangle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.RECT.bottom">
+            <summary>
+            Specifies the y-coordinate of the lower-right corner of the rectangle.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SIZE">
+            <summary>
+            The SIZE structure defines the width and height of a rectangle.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIZE.cx">
+            <summary>
+            Specifies the rectangle's width. The units depend on which function uses this structure.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SIZE.cy">
+            <summary>
+            Specifies the rectangle's height. The units depend on which function uses this structure.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.Thumbnail">
             <summary>
             Exposes properties methods that retrieve information about a Shell Thumbnail.
@@ -20691,6 +22104,14 @@
             The native object.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.View.NamespaceTreeControl">
+            <summary>
+            Gets the namespace tree control instance.
+            </summary>
+            <value>
+            The tree control instance.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.View.Browser">
             <summary>
             Gets the browser instance.
@@ -20738,6 +22159,13 @@
             <value>
             The visible columns.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.View.GetOwnerViewHandle(System.IntPtr)">
+            <summary>
+            Gets the handle of the view's top window.
+            </summary>
+            <param name="windowHandle">A window handle.</param>
+            <returns>A window handle or Zero if it was not found.</returns>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.View.Windows">
             <summary>
@@ -21567,6 +22995,283 @@
             Windows 8 and later. If necessary, stretch the image so that the height and width fit the given size.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.NSTCITEMSTATE">
+            <summary>
+            Specifies the state of a tree item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_NONE">
+            <summary>
+            The item has default state; it is not selected, expanded, bolded or disabled.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_SELECTED">
+            <summary>
+            The item is selected.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_EXPANDED">
+            <summary>
+            The item is expanded.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_BOLD">
+            <summary>
+            The item is bold.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_DISABLED">
+            <summary>
+            The item is disabled.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.NSTCITEMSTATE.NSTCIS_SELECTEDNOEXPAND">
+            <summary>
+            The item is selected, but not expanded.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.ShellMenuItemList">
+            <summary>
+            Represents a list of ShellMenuItems.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.#ctor(ShellBoost.Core.ShellMenu)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellMenuItemList"/> class.
+            </summary>
+            <param name="menu">The parent menu.</param>
+            <exception cref="T:System.ArgumentNullException">menu is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItemList.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            </summary>
+            <value>The count.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItemList.Menu">
+            <summary>
+            Gets the parent menu.
+            </summary>
+            <value>The parent menu or null if ther's not parent menu.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItemList.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
+            </summary>
+            <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItemList.AllItems">
+            <summary>
+            Gets all child items.
+            </summary>
+            <value>The child items.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellMenuItemList.Item(System.Int32)">
+            <summary>
+            Gets or sets the <see cref="T:ShellBoost.Core.ShellMenuItem" /> at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns>An instance of the ShellMenuItem type.</returns>
+            <value>An instance of the ShellMenuItem type.</value>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellMenuItem})">
+            <summary>
+            Adds a list of items.
+            </summary>
+            <param name="items">The items to add.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Add(ShellBoost.Core.ShellMenuItem)">
+            <summary>
+            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            </summary>
+            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Clear">
+            <summary>
+            Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Remove(ShellBoost.Core.ShellMenuItem)">
+            <summary>
+            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+            </summary>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+            <returns>true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.RemoveAt(System.Int32)">
+            <summary>
+            Removes the <see cref="T:System.Collections.Generic.IList`1" /> item at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the item to remove.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Insert(System.Int32,ShellBoost.Core.ShellMenuItem)">
+            <summary>
+            Inserts an item to the <see cref="T:System.Collections.Generic.IList`1" /> at the specified index.
+            </summary>
+            <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
+            <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Trace(System.Int32,System.IO.TextWriter)">
+            <summary>
+            Traces This instance. Useful for developers.
+            </summary>
+            <param name="indent">The indent to add.</param>
+            <param name="writer">The writer.</param>
+            <exception cref="T:System.ArgumentNullException">writer is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.Contains(ShellBoost.Core.ShellMenuItem)">
+            <summary>
+            Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+            </summary>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+            <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.CopyTo(ShellBoost.Core.ShellMenuItem[],System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenuItemList.IndexOf(ShellBoost.Core.ShellMenuItem)">
+            <summary>
+            Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
+            </summary>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+            <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.ShellMenuMergeType">
+            <summary>
+            Defines the context for merge operations.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.None">
+            <summary>
+            There is no specific merge context associated with this menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.Menu">
+            <summary>
+            The menu is merged to the item menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenu">
+            <summary>
+            The menu is merged to the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuTop">
+            <summary>
+            The menu is merged to the top of the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.ContextMenuBottom">
+            <summary>
+            The menu is merged to the bottom of the context menu.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellMenuMergeType.InformationBar">
+            <summary>
+            The menu is merged to the information bar.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WebCacheShellContent">
+            <summary>
+            Defines the content of a Shell Item that's represented by an HTTP(S) file.
+            The file will be downloaded and cached locally using the WebFileCache ShellBoost utilities.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.#ctor(ShellBoost.Core.Utilities.WebFileCache,System.String,ShellBoost.Core.Utilities.WebFileCacheRequestOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.StreamShellContent" /> class.
+            </summary>
+            <param name="cache">The WebFileCache cache instance.</param>
+            <param name="url">The url to download the file from.</param>
+            <param name="downloadOptions">Optional download options.</param>
+            <exception cref="T:System.ArgumentNullException">cache is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.Url">
+            <summary>
+            Gets the content url.
+            </summary>
+            <value>
+            The url.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.DownloadOptions">
+            <summary>
+            Gets or sets download options. Must be set before any call to Read or Seek.
+            </summary>
+            <value>
+            The download options.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.LastWriteTime">
+            <summary>
+            Gets the last write time.
+            </summary>
+            <value>
+            The last write time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.LastAccessTime">
+            <summary>
+            Gets the last access time.
+            </summary>
+            <value>
+            The last access time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.CreationTime">
+            <summary>
+            Gets the creation time.
+            </summary>
+            <value>
+            The creation time.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WebCacheShellContent.Length">
+            <summary>
+            Gets the content length. It should be 0 for a directory.
+            </summary>
+            <value>
+            The content length.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.GetStream">
+            <summary>
+            Gets the stream.
+            </summary>
+            <returns>A Stream instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.Read(System.Byte[],System.Int32)">
+            <summary>
+            Reads a sequence of bytes from the current content and advances the position within the stream by the number of bytes read.
+            </summary>
+            <param name="array">An array of bytes.</param>
+            <param name="count">The maximum number of bytes to be read from the current content.</param>
+            <returns>
+            The number of bytes read.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:ShellBoost.Core.WebCacheShellContent.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream.
+            </summary>
+            <param name="offset">A byte offset relative to the origin parameter.</param>
+            <param name="origin">A value indicating the reference point used to obtain the new position.</param>
+            <returns>
+            The new position within the current stream or null if this information is unknown.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="T:ShellBoost.Core.ShellThumbnail">
             <summary>
             A class that ShellBoost uses to represent a Windows Shell thumbnail.
@@ -21726,6 +23431,17 @@
             <exception cref="T:System.ArgumentNullException">parent is null
             or
             id is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItem.#ctor(ShellBoost.Core.ShellFolder,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellItem" /> class.
+            This item's PIDL will be constructed using the parent's root PIDL (instead of the parent pidl) plus the passed in uniqueGuid.
+            </summary>
+            <param name="parent">The parent folder.</param>
+            <param name="uniqueGuid">A guid that represents the item. The guid must be unique in the whole hierarchy, otherwise use the constructor that takes a ShellItemId instance as input.</param>
+            <exception cref="T:System.ArgumentNullException">parent is null
+            or
+            uniqueGuid is empty.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellItem.#ctor(ShellBoost.Core.ShellFolder,System.IO.FileInfo)">
             <summary>
@@ -22249,8 +23965,8 @@
         <member name="M:ShellBoost.Core.ShellItem.FreezePropertyStore(ShellBoost.Core.PropertyStore)">
             <summary>
             Freezes the property store.
-            The property store can be frozen when a client asks for the property store.
-            Properties can be added to the frozen store.
+            The property store can be frozen when a client asks for the property store as a whole.
+            Overriding this method allows you to add properties to the frozen store.
             </summary>
             <param name="frozenStore">The frozen store. Contains properties that were prepared by the system.</param>
         </member>
@@ -22430,6 +24146,7 @@
         <member name="M:ShellBoost.Core.ShellItemId.FromFileSystem(System.IO.FileSystemInfo)">
             <summary>
             Creates an instance of a ShellItemId from a FileSystemInfo instance.
+            Note the PIDL created is internal to ShellBoost, it cannot be used as a standard Windows Shell PIDL.
             </summary>
             <param name="info">The FileSystemInfo instance.</param>
             <returns>An instance of the ShellItemId type.</returns>
@@ -22558,6 +24275,7 @@
         <member name="P:ShellBoost.Core.ShellItemIdList.Last">
             <summary>
             Gets the last SHITEMID of this instance.
+            This is not the terminator.
             </summary>
             <value>The last identifier.</value>
         </member>
@@ -22633,7 +24351,7 @@
             Gets this PIDL relative from its parent.
             </summary>
             <value>
-            This PIDL relative from its parent.
+            This PIDL relative from its parent or null.
             </value>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList)">
@@ -22922,6 +24640,26 @@
             <returns>A string.</returns>
             <exception cref="T:System.ArgumentNullException">writer is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.ShellMenu.TraceNetFramework(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellMenuItem},System.Int32,System.IO.TextWriter)">
+            <summary>
+            Utility method to trace the specified items. Useful for developers.
+            </summary>
+            <param name="items">The items to trace.</param>
+            <param name="indent">The indent to add.</param>
+            <param name="writer">The text writer.</param>
+            <returns>A string.</returns>
+            <exception cref="T:System.ArgumentNullException">writer is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellMenu.TraceNetCore(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellMenuItem},System.Int32,System.IO.TextWriter)">
+            <summary>
+            Utility method to trace the specified items. Useful for developers.
+            </summary>
+            <param name="items">The items to trace.</param>
+            <param name="indent">The indent to add.</param>
+            <param name="writer">The text writer.</param>
+            <returns>A string.</returns>
+            <exception cref="T:System.ArgumentNullException">writer is null.</exception>
+        </member>
         <member name="T:ShellBoost.Core.ShellMenuInvokeEventArgs">
             <summary>
             Provides data for the InvokeItem event of the ShellMenu type.
@@ -22936,6 +24674,7 @@
         <member name="P:ShellBoost.Core.ShellMenuInvokeEventArgs.Command">
             <summary>
             Gets the menu item command.
+            Note -1 or DFM_CMD_DELETE is often used as a placeholder for "undefined" for example when called after a command mapping that didn't set another identifier.
             </summary>
             <value>The command.</value>
         </member>
@@ -23371,17 +25110,24 @@
             </summary>
             <value>The owner window handle.</value>
         </member>
-        <member name="P:ShellBoost.Core.ShellOperationEventArgs.ParentId">
+        <member name="P:ShellBoost.Core.ShellOperationEventArgs.ParentIdList">
             <summary>
-            Gets the parent identifier.
+            Gets the parent PIDL.
             </summary>
-            <value>The parent identifier or null.</value>
+            <value>The parent PIDL or null.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellOperationEventArgs.NewId">
             <summary>
-            Gets or sets the new identifier
+            Gets or sets the new relative PIDL. Only used for the SetNameOf operation.
             </summary>
-            <value>The new identifier or null.</value>
+            <value>The new PIDL or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.ShellOperationEventArgs.NewIdList">
+            <summary>
+            Gets or sets the new PIDL.
+            For the SetNameOf operation, only the last segment will be used.
+            </summary>
+            <value>The new PIDL or null.</value>
         </member>
         <member name="P:ShellBoost.Core.ShellOperationEventArgs.HResult">
             <summary>
@@ -27601,7 +29347,7 @@
             Gets or sets the text to be used when there are no items in the view.
             </summary>
             <value>
-            The the text to be used when there are no items in the view.
+            The text to be used when there are no items in the view.
             </value>
         </member>
         <member name="P:ShellBoost.Core.GetFolderSettingsEventArgs.GroupSubsetCount">
@@ -31748,6 +33494,14 @@
             Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 23</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.FeatureOnDemand">
+            <summary>
+            The <b>System.AppUserModel.FeatureOnDemand</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_AppUserModel_FeatureOnDemand</b>.
+            </summary>
+            <value>
+            Value is <b>{9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3} 35</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.AppUserModel.HostEnvironment">
             <summary>
             The <b>System.AppUserModel.HostEnvironment</b> property key. PropVariant type: <b>VT_UI4</b>. .NET type: System.UInt32. Shell name <b>PKEY_AppUserModel_HostEnvironment</b>. Display name <b>Host environment</b>.
@@ -34456,6 +36210,14 @@
             Value is <b>{78c34fc8-104a-4aca-9ea4-524d52996e57} 92</b>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.ChallengeAep">
+            <summary>
+            The <b>System.Devices.ChallengeAep</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_Devices_ChallengeAep</b>.
+            </summary>
+            <value>
+            Value is <b>{0774315e-b714-48ec-8de8-8125c077ac11} 2</b>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.ChargingState">
             <summary>
             The <b>System.Devices.ChargingState</b> property key. PropVariant type: <b>VT_UI1</b>. .NET type: System.Byte. Shell name <b>PKEY_StatusSvc_ChargingState</b>. Display name <b>Battery charging state</b>.
@@ -35732,6 +37494,19 @@
             </summary>
             <value>
             Value is <b>{8943b373-388c-4395-b557-bc6dbaffafdb} 4</b>.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Devices.AudioPosture">
+            <summary>
+            The <b>System.Devices.AudioPosture</b> properties namespace.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.System.Devices.AudioPosture.Support">
+            <summary>
+            The <b>System.Devices.AudioPosture.Support</b> property key. PropVariant type: <b>VT_BOOL</b>. .NET type: System.Boolean. Shell name <b>PKEY_Devices_AudioPosture_Support</b>.
+            </summary>
+            <value>
+            Value is <b>{766148e8-87ee-490c-8f9b-1c3686f2d121} 2</b>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.WindowsPropertySystem.System.Devices.DialProtocol">

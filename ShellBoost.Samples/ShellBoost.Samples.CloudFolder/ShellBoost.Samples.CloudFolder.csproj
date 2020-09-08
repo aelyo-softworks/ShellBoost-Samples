@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll" />
+    <None Remove="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll" />
+    <None Remove="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll" />
+    <None Remove="UI\CloudFolder.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="UI\CloudFolder.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ShellBoost.Core">
+      <HintPath>ShellBoost.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

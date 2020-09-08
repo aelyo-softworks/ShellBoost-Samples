@@ -1,5 +1,6 @@
 ﻿using System;
 using ShellBoost.Core;
+using ShellBoost.Core.Client;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsPropertySystem;
 
@@ -27,6 +28,6 @@ namespace ShellBoost.Samples.Overview
         }
 
         // give back some dynamic content
-        public override ShellContent GetContent() => new MemoryShellContent(DisplayName + " - this is dynamic content created " + DateTime.Now);
+        public override ShellContent GetContent() => new MemoryShellContent(DisplayName + " - this is dynamic content created from .NET " + (Installer.IsNetCore ? "Core" : "Framework") + " at " + DateTime.Now);
     }
 }
