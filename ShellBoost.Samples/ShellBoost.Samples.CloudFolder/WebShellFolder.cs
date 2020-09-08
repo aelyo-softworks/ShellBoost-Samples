@@ -33,7 +33,7 @@ namespace ShellBoost.Samples.CloudFolder
 
             // root is a "physical" shell item
             FileSystemPath = WebApi.LocalDirectory.FullName;
-            DisplayName = "ShellBoost";
+            DisplayName = "Samples.CloudFolder";
             DefineExtraColumns();
         }
 
