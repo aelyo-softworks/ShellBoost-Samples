@@ -151,6 +151,26 @@ namespace ShellBoost.Samples.CloudFolder
             return ShellItemFromApi(apiItem);
         }
 
+        protected override ShellItemIdList GetRelativeIdList(ShellItemIdList idList)
+        {
+            if (idList == null)
+                throw new ArgumentNullException(nameof(idList));
+
+            // because we use unique guids, we need to handle pidls constructed by the Shell that have guids concatenated
+            for (var i = 0; i < idList.Count; i++)
+            {
+                // find this folder
+                var guidPidl = KeyShellItemId.From(idList[i].Data, false) as GuidKeyShellItemId;
+                if (guidPidl != null && guidPidl.Value == ApiItem.Id)
+                {
+                    // just add the rest
+                    var clone = new ShellItemIdList(idList.Skip(i + 1));
+                    return clone;
+                }
+            }
+            return base.GetRelativeIdList(idList);
+        }
+
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
             var items = ApiItem.EnumerateChildren(options);

@@ -126,7 +126,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (filePath == null)
                 throw new ArgumentNullException(nameof(filePath));
 
-            string dir = Path.GetDirectoryName(filePath);
+            var dir = Path.GetDirectoryName(filePath);
             if (dir != null && !Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -171,13 +171,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     if (dateName.Length != 3)
                         continue;
 
-                    int month = 0, day = 0;
+                    var month = 0;
+                    var day = 0;
                     if (!int.TryParse(dateName[0], out var year) &&
                         !int.TryParse(dateName[1], out month) &&
                         !int.TryParse(dateName[2], out day))
                         continue;
 
-                    var dt = DateTime.MinValue;
+                    DateTime dt;
                     try
                     {
                         dt = new DateTime(year, month, day);

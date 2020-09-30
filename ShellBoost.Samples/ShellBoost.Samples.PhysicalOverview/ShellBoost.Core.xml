@@ -5730,6 +5730,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolder"/> class.
             This folders's PIDL will be constructed using the parent's root PIDL (instead of the parent pidl) plus the passed in uniqueGuid.
+            You may also need to override the containing ShellFolder's GetRelativeIdList method to ensure absolute PIDL consistency.
             </summary>
             <param name="parent">The parent folder.</param>
             <param name="uniqueGuid">A guid that represents the folder. The guid must be unique in the whole hierarchy, otherwise use the constructor that takes a ShellItemId instance as input.</param>
@@ -5979,6 +5980,16 @@
             <param name="id">The identifier.</param>
             <returns>An instance of the ShellItem type or null if the item was not found.</returns>
             <exception cref="T:System.ArgumentNullException">id is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.GetRelativeIdList(ShellBoost.Core.ShellItemIdList)">
+            <summary>
+            Get a PIDL relatively from this folder's PIDL.
+            </summary>
+            <param name="idList">The child list.</param>
+            <returns>
+            A relative PIDL or null if idList is not a child of this.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">list is null</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.GetItemByPath(System.String)">
             <summary>
@@ -16664,6 +16675,31 @@
             Combines SHGVSPB_ALLUSERS and SHGVSPB_ALLFOLDERS.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SICHINTF">
+            <summary>
+            Used to determine how to compare two Shell items.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SICHINTF.SICHINT_DISPLAY">
+            <summary>
+            Indicates that the comparison is based on the display in a folder view.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SICHINTF.SICHINT_ALLFIELDS">
+            <summary>
+            Exact comparison of two instances of a Shell item.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SICHINTF.SICHINT_CANONICAL">
+            <summary>
+            Indicates that the comparison is based on a canonical name.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SICHINTF.SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL">
+            <summary>
+            Windows 7 and later. If the Shell items are not the same, test the file system paths.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.SIIGBF">
             <summary>
             A set of flags that specify how an image will be extracted
@@ -19992,6 +20028,14 @@
             A utility class to use Windows Shell's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb776911.aspx">Known Folders concept</see>.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.KnownFolder.Desktop">
+            <summary>
+            Gets the desktop folder.
+            </summary>
+            <value>
+            The desktop folder.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.KnownFolder.GetAll">
             <summary>
             Gets a list of all known folders.
@@ -21362,6 +21406,22 @@
             Exposes properties methods that retrieve information about a Shell folder.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.Desktop">
+            <summary>
+            Gets the desktop folder.
+            </summary>
+            <value>
+            The desktop folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.NativeFolderObject">
+            <summary>
+            Gets the underlying Shell native object.
+            </summary>
+            <value>
+            The native object.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Folder.IsFolder">
             <summary>
             Gets a value indicating whether this instance is a folder.
@@ -21377,6 +21437,66 @@
             <value>
             The children.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareAbsoluteIdLists(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders, given their absolute item identifier lists.
+            </summary>
+            <param name="idList1">The first relative pidl.</param>
+            <param name="idList2">The second relative pidl.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
+            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
+            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareAbsoluteIdLists(System.IntPtr,System.IntPtr,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders, given their absolute item identifier lists.
+            </summary>
+            <param name="relativePidl1">The first relative pidl.</param>
+            <param name="relativePidl2">The second relative pidl.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
+            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
+            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIds(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders, in this folder, given their item identifier.
+            </summary>
+            <param name="id1">The first id.</param>
+            <param name="id2">The second id.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
+            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
+            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIdLists(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders, in this folder, given their item identifier lists.
+            </summary>
+            <param name="idList1">The first relative pidl.</param>
+            <param name="idList2">The second relative pidl.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
+            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
+            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIdLists(System.IntPtr,System.IntPtr,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders, given their item identifier lists.
+            </summary>
+            <param name="relativePidl1">The first relative pidl.</param>
+            <param name="relativePidl2">The second relative pidl.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
+            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
+            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.EnumerateChildren(System.Nullable{ShellBoost.Core.WindowsShell.SHCONTF})">
             <summary>
@@ -21526,6 +21646,15 @@
             <value>
             The parent item or null.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.Compares(System.Object,ShellBoost.Core.WindowsShell.SICHINTF,System.Boolean)">
+            <summary>
+            Compares this item to the specified shell item.
+            </summary>
+            <param name="shellItem">The shell item.</param>
+            <param name="comparison">The comparison.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns></returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetPropertyValue``1(ShellBoost.Core.WindowsPropertySystem.PropertyKey,``0)">
             <summary>
@@ -23436,6 +23565,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellItem" /> class.
             This item's PIDL will be constructed using the parent's root PIDL (instead of the parent pidl) plus the passed in uniqueGuid.
+            You may also need to override the containing ShellFolder's GetRelativeIdList method to ensure absolute PIDL consistency.
             </summary>
             <param name="parent">The parent folder.</param>
             <param name="uniqueGuid">A guid that represents the item. The guid must be unique in the whole hierarchy, otherwise use the constructor that takes a ShellItemId instance as input.</param>
@@ -24354,12 +24484,15 @@
             This PIDL relative from its parent or null.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList)">
+        <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList,System.Boolean)">
             <summary>
             Get this PIDL relatively from a parent PIDL.
             </summary>
             <param name="parent">The parent PIDL.</param>
-            <returns>A relative PIDL or null if this is not a child of parent.</returns>
+            <param name="testIdListBeginningOnly">if set to <c>true</c> IdList equality test uses EqualsOrSameBeginning; otherwise it uses Equals.</param>
+            <returns>
+            A relative PIDL or null if this is not a child of parent.
+            </returns>
             <exception cref="T:System.ArgumentNullException">parent is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellItemIdList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.ShellItemId})">
