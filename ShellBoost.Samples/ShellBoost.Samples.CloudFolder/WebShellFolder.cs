@@ -39,7 +39,7 @@ namespace ShellBoost.Samples.CloudFolder
 
         // child folder
         public WebShellFolder(WebShellFolder parent, WebItem apiItem)
-            : base(parent, apiItem.Id)
+            : base(parent, new GuidKeyShellItemId(apiItem.Id))
         {
             // this is reserved for non-root folders
             if (apiItem.Id == Guid.Empty)
@@ -151,24 +151,23 @@ namespace ShellBoost.Samples.CloudFolder
             return ShellItemFromApi(apiItem);
         }
 
-        protected override ShellItemIdList GetRelativeIdList(ShellItemIdList idList)
+        // note this is not optimal as we only do this to refresh views (from ServerEvents).
+        // we could therefore check if a view is not opened on the folder first in ServerEvents (using ShellBoost.Core.WindowsShell.View.Windows)
+        // we could also add a cache here
+        // etc.
+        public ShellItem GetItem(Guid id)
         {
-            if (idList == null)
-                throw new ArgumentNullException(nameof(idList));
+            var item = EnumItems(SHCONTF.SHCONTF_NONFOLDERS).OfType<IObjectWithApiItem>().FirstOrDefault(o => o.ApiItem.Id == id);
+            if (item != null)
+                return (ShellItem)item;
 
-            // because we use unique guids, we need to handle pidls constructed by the Shell that have guids concatenated
-            for (var i = 0; i < idList.Count; i++)
+            foreach (var child in EnumItems(SHCONTF.SHCONTF_FOLDERS).OfType<WebShellFolder>())
             {
-                // find this folder
-                var guidPidl = KeyShellItemId.From(idList[i].Data, false) as GuidKeyShellItemId;
-                if (guidPidl != null && guidPidl.Value == ApiItem.Id)
-                {
-                    // just add the rest
-                    var clone = new ShellItemIdList(idList.Skip(i + 1));
-                    return clone;
-                }
+                var item2 = child.GetItem(id);
+                if (item2 != null)
+                    return item2;
             }
-            return base.GetRelativeIdList(idList);
+            return null;
         }
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
@@ -408,8 +407,27 @@ namespace ShellBoost.Samples.CloudFolder
         #region Copy/Paste and Drag/Drop support
         protected override void OnDragDropTarget(DragDropTargetEventArgs e)
         {
-            // tailor what we support
-            e.Effect = DragDropEffects.Copy | DragDropEffects.Move;
+            // set the effect based upon KeyState
+            // adapted from https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.drageventargs.keystate (we don't support link in that sample)
+            if ((e.KeyState & 4) == 4 && e.AllowedEffect.HasFlag(DragDropEffects.Move))
+            {
+                // SHIFT state for move.
+                e.Effect = DragDropEffects.Move;
+            }
+            else if ((e.KeyState & 8) == 8 && e.AllowedEffect.HasFlag(DragDropEffects.Copy))
+            {
+                // CTL state for copy.
+                e.Effect = DragDropEffects.Copy;
+            }
+            else if (e.AllowedEffect.HasFlag(DragDropEffects.Move))
+            {
+                // by default, the drop action should be move, if allowed.
+                e.Effect = DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
 
             // usually, the most complete information is from the "CFSTR_SHELLIDLIST" or ""Shell IDList Array" clipboard format
             // this is reflected into the ItemsIdLists property or e's DataObject
@@ -463,7 +481,7 @@ namespace ShellBoost.Samples.CloudFolder
                         if (sourceId != Guid.Empty)
                         {
                             requestItem.Id = sourceId;
-                            newItem = await requestItem.MoveAsync(ApiItem.Id, new MoveOptions { Copy = e.AllowedEffect.HasFlag(DragDropEffects.Copy) }).ConfigureAwait(false);
+                            newItem = await requestItem.MoveAsync(ApiItem.Id, new MoveOptions { Copy = e.Effect.HasFlag(DragDropEffects.Copy) }).ConfigureAwait(false);
                         }
                         else
                         {

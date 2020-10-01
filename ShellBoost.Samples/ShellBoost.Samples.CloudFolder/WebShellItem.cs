@@ -11,7 +11,7 @@ namespace ShellBoost.Samples.CloudFolder
     public class WebShellItem : ShellItem, IObjectWithApiItem
     {
         public WebShellItem(WebShellFolder parent, WebItem apiItem)
-            : base(parent, apiItem.Id)
+            : base(parent, new GuidKeyShellItemId(apiItem.Id))
         {
             ApiItem = apiItem;
             ItemType = IOUtilities.PathGetExtension(apiItem.Name);

@@ -253,7 +253,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             var oldParent = item.Parent;
             var sql = "UPDATE Item SET ParentId = @parentId WHERE Id = @id";
-            await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { it = item.Id, parentId = newParentId }).ConfigureAwait(false);
+            await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { id = item.Id, parentId = newParentId }).ConfigureAwait(false);
             var newItem = await GetItemAsync(item.Id).ConfigureAwait(false);
 
             if (oldParent != null)

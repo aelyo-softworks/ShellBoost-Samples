@@ -43,16 +43,16 @@ namespace ShellBoost.Samples.CloudFolder.Events
 
                 // tell the Shell that this pidl has changed
                 // which will eventually call back in views that may be opened to our folders
-                var pidl = server.GetItemPidl(id);
-                if (pidl != null)
+                var item = server.GetItem(id);
+                if (item != null)
                 {
-                    ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEITEM, 0, pidl);
+                    ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEITEM, 0, item.IdList);
                 }
 
-                pidl = server.GetItemPidl(pid);
-                if (pidl != null)
+                item = server.GetItem(pid);
+                if (item != null)
                 {
-                    ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEDIR, 0, pidl);
+                    ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEDIR, 0, item.IdList);
                 }
             });
 

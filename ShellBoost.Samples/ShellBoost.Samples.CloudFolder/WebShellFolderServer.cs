@@ -16,7 +16,7 @@ namespace ShellBoost.Samples.CloudFolder
         private static readonly Lazy<WebShellFolderServer> _current = new Lazy<WebShellFolderServer>(() => new WebShellFolderServer());
         public static WebShellFolderServer Current => _current.Value;
 
-        private ShellFolder _root;
+        private WebShellFolder _root;
         private readonly Lazy<string> _menuIconBitmapPath;
         private readonly ServerEvents _serverEvents;
 
@@ -41,12 +41,12 @@ namespace ShellBoost.Samples.CloudFolder
 
         public new void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null) => base.Log(level, value, methodName);
 
-        public ShellItemIdList GetItemPidl(Guid apiItemId)
+        public ShellItem GetItem(Guid apiItemId)
         {
             if (apiItemId == Guid.Empty)
-                return _root.IdList;
+                return _root;
 
-            return new ShellItemIdList(_root.IdList, new GuidKeyShellItemId(apiItemId));
+            return _root.GetItem(apiItemId);
         }
 
         public ShellItem GetRemoteItem(string fileSystemPath)
