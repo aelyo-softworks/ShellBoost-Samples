@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
-using ShellBoost.Samples.RegistryFolder.UI;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsPropertySystem;
 using ShellBoost.Core.WindowsShell;
+using ShellBoost.Samples.RegistryFolder.UI;
 using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.RegistryFolder
@@ -46,7 +47,7 @@ namespace ShellBoost.Samples.RegistryFolder
         {
             get
             {
-                string parent = ((RegistryKeyFolder)Parent).Path;
+                var parent = ((RegistryKeyFolder)Parent).Path;
                 if (parent == null)
                     return DisplayName;
 
@@ -91,7 +92,7 @@ namespace ShellBoost.Samples.RegistryFolder
         {
             var bp = BaseParent;
             var bk = RegistryKey.OpenBaseKey(bp.Hive, RegistryView.Default);
-            string path = Path;
+            var path = Path;
             if (string.IsNullOrEmpty(path))
                 return bk; // always writable
 
@@ -192,9 +193,10 @@ namespace ShellBoost.Samples.RegistryFolder
                     {
                         if (key != null)
                         {
-                            string newName = GetNewName("New Key #", key.GetSubKeyNames());
+                            var newName = GetNewName("New Key #", key.GetSubKeyNames());
                             key.CreateSubKey(newName);
                             e.Folder.RefreshShellViews();
+                            await SelectAndEdit(newName);
                         }
                     }
                     break;
@@ -210,12 +212,43 @@ namespace ShellBoost.Samples.RegistryFolder
                     {
                         if (key != null)
                         {
-                            string newName = GetNewName("New Value #", key.GetValueNames());
+                            var newName = GetNewName("New Value #", key.GetValueNames());
                             key.SetValue(newName, GetDefaultValue(kind), kind);
                             e.Folder.RefreshShellViews();
                         }
                     }
                     break;
+            }
+        }
+
+        private async Task SelectAndEdit(string name)
+        {
+            var view = await ShellContext.Current.GetShellBoostViewAsync(this);
+            var fv = view?.FolderView;
+            if (fv != null)
+            {
+                // we use a retry loop since we don't exactly know when the item appears
+                // experience shows retries is usually between 0 to 2
+                const int maxRetries = 50;
+                const int timeSlice = 100; // ms
+                var index = -1;
+                var retries = 0;
+                do
+                {
+                    index = fv.GetItemIndex(i => i.SIGDN_NORMALDISPLAY.EqualsIgnoreCase(name), throwOnError: false);
+                    if (index >= 0 || retries > maxRetries)
+                        break;
+
+                    await Task.Delay(timeSlice);
+                    retries++;
+                }
+                while (true);
+
+                if (index >= 0)
+                {
+                    fv.DeselectAllItems(false);
+                    fv.SelectItem(index, SVSIF.SVSI_SELECT | SVSIF.SVSI_EDIT, false);
+                }
             }
         }
 
@@ -243,10 +276,10 @@ namespace ShellBoost.Samples.RegistryFolder
 
         private static string GetNewName(string baseName, string[] names)
         {
-            int i = 1;
+            var i = 1;
             do
             {
-                string name = baseName + i;
+                var name = baseName + i;
                 if (!names.Contains(name, StringComparer.OrdinalIgnoreCase))
                     return name;
 
@@ -259,6 +292,7 @@ namespace ShellBoost.Samples.RegistryFolder
         {
             switch (e.Operation)
             {
+                case ShellOperation.SetNameOf:
                 case ShellOperation.RenameItem:
                     OnRename(e);
                     break;
@@ -290,7 +324,7 @@ namespace ShellBoost.Samples.RegistryFolder
             {
                 if (key != null)
                 {
-                    string keyName = ((RegistryValueItem)e.Item).KeyName;
+                    var keyName = ((RegistryValueItem)e.Item).KeyName;
                     key.DeleteValue(keyName, false);
 
                     // deleting the default value will in fact unset its value, so we don't want explorer to remove the item visually
@@ -314,8 +348,10 @@ namespace ShellBoost.Samples.RegistryFolder
                 {
                     if (key != null)
                     {
-                        NtRenameKey(key.Handle, e.NewName);
+                        var path = System.IO.Path.Combine(Path ?? string.Empty, e.Item.DisplayName);
+                        RegRenameKey(key.Handle, path, e.NewName);
                         e.NewId = new StringKeyShellItemId(e.NewName);
+                        e.Item.NotifyRename(e.NewId);
                         e.HResult = ShellUtilities.S_OK;
                     }
                 }
@@ -356,9 +392,9 @@ namespace ShellBoost.Samples.RegistryFolder
             }
         }
 
-        // Note: there's no easier way to rename a key
-        // https://msdn.microsoft.com/en-us/library/cc512138.aspx
-        [DllImport("ntdll.dll")]
-        private static extern int NtRenameKey(SafeRegistryHandle hKey, [MarshalAs(UnmanagedType.LPWStr)] string newname);
+        // note: there's no easier way to rename a key
+        // https://stackoverflow.com/questions/1516312/registry-how-to-rename-key-in-registry-using-c
+        [DllImport("advapi32")]
+        private static extern int RegRenameKey(SafeRegistryHandle hKey, [MarshalAs(UnmanagedType.LPWStr)] string oldname, [MarshalAs(UnmanagedType.LPWStr)] string newname);
     }
 }

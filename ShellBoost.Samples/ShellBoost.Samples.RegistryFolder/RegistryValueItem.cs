@@ -19,7 +19,7 @@ namespace ShellBoost.Samples.RegistryFolder
             CanRename = true;
             KeyName = name;
             DisplayName = name;
-            bool iconIsString = true;
+            var iconIsString = true;
             using (var key = Parent.OpenKey(false))
             {
                 if (key != null)
