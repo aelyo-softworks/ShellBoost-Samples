@@ -52,9 +52,6 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             if (!options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
                 return Enumerable.Empty<ShellItem>();
 
-            if (!options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN))
-                return _deviceFolders.Values.Where(d => !d.IsHidden);
-
             return _deviceFolders.Values;
         }
 

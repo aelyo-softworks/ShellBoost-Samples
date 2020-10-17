@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using ShellBoost.Core;
-using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsShell;
 using Windows.Devices.Enumeration;
 using Props = ShellBoost.Core.WindowsPropertySystem;
@@ -69,7 +67,28 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             if (!deviceInterface.Properties.TryGetValue("System.Devices.InterfaceEnabled", out var obj) || !(obj is bool enabled))
                 return;
 
-            Console.WriteLine("id:" + deviceInterface.Id + " enabled:" + enabled);
+            if (!_items.TryGetValue(deviceInterface.Id, out var item))
+                return;
+
+            item.IsEnabled = enabled;
+            item.NotifyUpdate();
+
+            var atts = Attributes;
+            var newAtts = atts;
+            if (_items.Any(i => i.Value.IsEnabled))
+            {
+                newAtts &= ~SFGAO.SFGAO_HIDDEN;
+            }
+            else
+            {
+                newAtts |= SFGAO.SFGAO_HIDDEN;
+            }
+            
+            if (newAtts != atts)
+            {
+                Attributes = newAtts;
+                NotifyUpdate();
+            }
         }
 
         internal bool RemoveDeviceInterface(DeviceInformationUpdate deviceInterface)

@@ -46,10 +46,5 @@ namespace ShellBoost.Samples.LocalFolder
             }
             return _root;
         }
-
-        protected override void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null)
-        {
-            Console.WriteLine(level + ":" + methodName + ":" + value);
-        }
     }
 }

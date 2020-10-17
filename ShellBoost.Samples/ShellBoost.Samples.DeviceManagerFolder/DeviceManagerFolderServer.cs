@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShellBoost.Core;
-using ShellBoost.Core.Utilities;
-using ShellBoost.Samples.DeviceManagerFolder.UI;
 using Windows.Devices.Enumeration;
 
 namespace ShellBoost.Samples.DeviceManagerFolder
@@ -19,8 +17,6 @@ namespace ShellBoost.Samples.DeviceManagerFolder
 
         public DeviceManagerFolderServer()
         {
-            Settings = new Settings();
-            Settings.PropertyChanged += OnSettingsChanged;
             DeviceInterfaceWatcher = DeviceInformation.CreateWatcher(string.Empty, Array.Empty<string>(), DeviceInformationKind.DeviceInterface);
             DeviceInterfaceWatcher.Added += OnDeviceAdded;
             DeviceInterfaceWatcher.Removed += OnDeviceRemoved;
@@ -29,7 +25,6 @@ namespace ShellBoost.Samples.DeviceManagerFolder
         }
 
         public DeviceWatcher DeviceInterfaceWatcher { get; }
-        public Settings Settings { get; }
 
         protected override void Dispose(bool disposing)
         {
@@ -80,22 +75,8 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             return _root;
         }
 
-        private void OnSettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var ctx = ShellContext.Current.Clone(); // if we change threads, we must clone the context
-            TaskUtilities.EnsureSTAThreadTask(async () =>
-            {
-                var view = await ctx.GetShellBoostViewAsync(_root);
-                if (view != null)
-                {
-                    //view.FolderView.Flags = Core.WindowsShell.FOLDERFLAGS.
-                }
-            });
-        }
-
         private void OnDeviceUpdated(DeviceWatcher sender, DeviceInformationUpdate args)
         {
-            Console.WriteLine("OnDeviceUpdated id:" + args.Id);
             if (_root == null) // folder not yet created
             {
                 _updated.Add(args);
@@ -107,7 +88,6 @@ namespace ShellBoost.Samples.DeviceManagerFolder
 
         private void OnDeviceRemoved(DeviceWatcher sender, DeviceInformationUpdate args)
         {
-            Console.WriteLine("OnDeviceRemoved id:" + args.Id);
             if (_root == null) // folder not yet created
             {
                 _removed.Add(args);

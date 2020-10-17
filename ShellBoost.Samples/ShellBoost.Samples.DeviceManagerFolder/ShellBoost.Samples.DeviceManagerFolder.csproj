@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,12 +27,6 @@
     <None Update="ShellBoost.77e2266d3ca74bb095bcb2477bec7856.x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="UI\RootProperties.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 
 </Project>
