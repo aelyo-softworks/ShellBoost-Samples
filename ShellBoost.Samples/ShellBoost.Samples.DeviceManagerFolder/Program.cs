@@ -1,14 +1,15 @@
 ﻿using System;
+using System.IO;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 
-namespace ShellBoost.Samples.PhysicalOverview
+namespace ShellBoost.Samples.DeviceManagerFolder
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("ShellBoost Samples - Physical Overview - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            Console.WriteLine("ShellBoost Samples - Device Manager Folder - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
             Console.WriteLine();
 
@@ -21,40 +22,33 @@ namespace ShellBoost.Samples.PhysicalOverview
             Console.WriteLine();
             Console.WriteLine("   Any other key will exit.");
             Console.WriteLine();
-            do
+            var key = Console.ReadKey(true);
+            switch (key.KeyChar)
             {
-                var key = Console.ReadKey(true);
-                switch (key.KeyChar)
-                {
-                    case '1':
-                        Run(true);
-                        ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
-                        break;
+                case '1':
+                    Run(true);
+                    ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
+                    break;
 
-                    case '2':
-                        ShellFolderServer.RegisterNativeDll(RegistrationMode.User);
-                        Console.WriteLine("Registered");
-                        break;
+                case '2':
+                    ShellFolderServer.RegisterNativeDll(RegistrationMode.User);
+                    Console.WriteLine("Registered");
+                    break;
 
-                    case '3':
-                        Run(false);
-                        break;
+                case '3':
+                    Run(false);
+                    break;
 
-                    case '4':
-                        ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
-                        Console.WriteLine("Unregistered");
-                        break;
-
-                    default:
-                        return;
-
-                }
-            } while (true);
+                case '4':
+                    ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
+                    Console.WriteLine("Unregistered");
+                    break;
+            }
         }
 
         static void Run(bool register)
         {
-            using (var server = new PhysicalOverviewShellFolderServer())
+            using (var server = new DeviceManagerFolderServer())
             {
                 var config = new ShellFolderConfiguration();
                 if (register)
@@ -63,12 +57,11 @@ namespace ShellBoost.Samples.PhysicalOverview
                 }
 
 #if DEBUG
-                config.Logger = new Core.Utilities.ConsoleLogger();
+                config.Logger = new ConsoleLogger();
 #endif
                 server.Licensing += OnLicensing;
 
                 server.Start(config);
-                Console.WriteLine("Folder id " + ShellFolderServer.FolderId);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
                 Console.WriteLine("If you open Windows Explorer and have registered, you should now see the extension.");
                 while (Console.ReadKey(true).Key != ConsoleKey.Escape)

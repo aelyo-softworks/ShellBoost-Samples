@@ -135,7 +135,7 @@ namespace ShellBoost.Samples.LocalFolder
 
                 var idl = ShellFolderServer.RootIdList;
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ", folder id " + ShellFolderServer.FolderId + ". Press ESC key to stop serving folders.");
-                Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
+                Console.WriteLine("If you open Windows Explorer and have registered, you should now see the extension."); 
                 do
                 {
                     var key = Console.ReadKey(true);

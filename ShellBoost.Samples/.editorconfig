@@ -2,3 +2,6 @@
 
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
+
+# IDE0063: Use simple 'using' statement
+csharp_prefer_simple_using_statement = true:none

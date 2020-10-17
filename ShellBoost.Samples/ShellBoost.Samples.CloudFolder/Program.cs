@@ -79,7 +79,7 @@ namespace ShellBoost.Samples.CloudFolder
                 Console.WriteLine("Folder id " + ShellFolderServer.FolderId);
                 Console.WriteLine("Trace id " + ShellFolderServer.TraceId);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
-                Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
+                Console.WriteLine("If you open Windows Explorer and have registered, you should now see the extension.");
                 ConsoleKeyInfo key;
                 do
                 {
