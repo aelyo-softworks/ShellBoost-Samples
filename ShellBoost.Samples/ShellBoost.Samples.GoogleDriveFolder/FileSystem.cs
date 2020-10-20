@@ -100,7 +100,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (webViewLink != null)
             {
                 var content = GetUrlFileContent(webViewLink);
-                return output.WriteAsync(content, 0, Math.Min((int)options.Count, content.Length));
+                return output.WriteAsync(content, (int)options.Offset, (int)Math.Min(options.Count, content.Length));
             }
 
             var sink = context.ProgressSink;
