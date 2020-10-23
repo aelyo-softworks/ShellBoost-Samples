@@ -441,6 +441,7 @@ namespace ShellBoost.Samples.CloudFolder
 
                 // make sure items are present locally
                 // note if the drop action is too fast, items may not be here yet (user will have to press "Retry")
+                // copies could be made synchronously to avoid that
                 foreach (var idList in e.DataObject.ItemsIdLists)
                 {
                     // check it's a WebShellItem or WebShellFolder
@@ -452,7 +453,8 @@ namespace ShellBoost.Samples.CloudFolder
                         continue;
 
                     // this is a callback event, no need to wait
-                    Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath));
+                    // we do this recursively, if there are folders
+                    Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath, true));
                 }
                 return;
             }
