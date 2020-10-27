@@ -103,7 +103,10 @@ namespace ShellBoost.Samples.PhysicalOverview
 
             // this is for Common Dialog Save As support
             // here, we create a non-existing item.
-            return new MyShellItem(this, new FileInfo(Path.Combine(FileSystemPath, displayName)));
+            if (IOUtilities.PathIsValidFileName(displayName))
+                return new MyShellItem(this, new FileInfo(Path.Combine(FileSystemPath, displayName)));
+
+            return null;
         }
 
         public override ShellItem GetItem(ShellItemId id)
