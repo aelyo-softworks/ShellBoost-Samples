@@ -193,12 +193,24 @@ namespace ShellBoost.Samples.CloudFolder
         #endregion
 
         #region Save As Support
+        private static bool IsValidDisplayName(string displayName)
+        {
+            if (displayName == null)
+                return false;
+
+            var split = displayName.Split(Path.DirectorySeparatorChar);
+            if (split.Length == 0 || split.Any(p => !IOUtilities.PathIsValidFileName(p)))
+                return false;
+
+            return true;
+        }
+
         public override bool TryParseItem(string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
         {
             // ShellBoost is calling us because it found no item
             // This may be called in the context of a common dialog box 
             // so let's see if display name is a valid name
-            if (displayName != null && IOUtilities.PathIsValidFileName(displayName))
+            if (IsValidDisplayName(displayName))
             {
                 // we parsed the whole file
                 eatenCharacters = displayName.Length;
