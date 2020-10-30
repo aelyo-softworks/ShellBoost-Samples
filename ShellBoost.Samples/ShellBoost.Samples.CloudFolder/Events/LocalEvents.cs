@@ -126,10 +126,6 @@ namespace ShellBoost.Samples.CloudFolder.Events
             if (name == null)
                 return false;
 
-            // prevent Excel's EE44A700 to go remote
-            if (string.IsNullOrEmpty(Path.GetExtension(name)))
-                return false;
-
             // Powerpoint does this
             if (name.StartsWith("ppt") && name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase))
                 return false;
@@ -140,6 +136,8 @@ namespace ShellBoost.Samples.CloudFolder.Events
 
             if (name.StartsWith("~$"))
                 return false;
+
+            // TODO: add more apps heuristics
 
             return true;
         }

@@ -205,26 +205,31 @@ namespace ShellBoost.Samples.CloudFolder
             return true;
         }
 
-        public override bool TryParseItem(string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
+        public override bool TryParseItem(ShellBindContext bindContext, string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
         {
             // ShellBoost is calling us because it found no item
-            // This may be called in the context of a common dialog box 
-            // so let's see if display name is a valid name
-            if (IsValidDisplayName(displayName))
+            // we may be called in the context of a common dialog box
+
+            // only do this if the STGM_CREATE flag is set
+            if (bindContext.Mode.HasFlag(STGM.STGM_CREATE))
             {
-                // we parsed the whole file
-                eatenCharacters = displayName.Length;
+                // so let's see if display name is a valid name
+                if (IsValidDisplayName(displayName))
+                {
+                    // we parsed the whole file
+                    eatenCharacters = displayName.Length;
 
-                // so far use the default SFGAO for an item (+ SFGAO_FILESYSTEM)
-                attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM | SFGAO.SFGAO_FILESYSTEM;
+                    // so far use the default SFGAO for an item (+ SFGAO_FILESYSTEM)
+                    attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM | SFGAO.SFGAO_FILESYSTEM;
 
-                // come up with some PIDL that we'll be able to recognize later (using ValidateNotExistingPidl)
-                relativeIdl = new ShellItemIdList();
-                relativeIdl.Add(new StringKeyShellItemId(displayName));
-                return true;
+                    // come up with some PIDL that we'll be able to recognize later (using ValidateNotExistingPidl)
+                    relativeIdl = new ShellItemIdList();
+                    relativeIdl.Add(new StringKeyShellItemId(displayName));
+                    return true;
+                }
             }
 
-            return base.TryParseItem(displayName, out eatenCharacters, out attributes, out relativeIdl);
+            return base.TryParseItem(bindContext, displayName, out eatenCharacters, out attributes, out relativeIdl);
         }
 
         private string ValidateNotExistingPidl(ShellItemIdList pidl)
@@ -253,20 +258,6 @@ namespace ShellBoost.Samples.CloudFolder
 
             displayName = name;
             return true;
-        }
-
-        protected override void OnFileDialogEvent(object sender, FileDialogEventArgs e)
-        {
-            // because we told the Shell a file with that name was ok, it's calling to overwrite
-            if (e.Type == FileDialogEventType.Overwrite)
-            {
-                var name = ValidateNotExistingPidl(e.ItemIdList);
-                if (name != null)
-                {
-                    var ov = (OverwriteFileDialogEventArgs)e;
-                    ov.Response = FDE_OVERWRITE_RESPONSE.FDEOR_ACCEPT;
-                }
-            }
         }
         #endregion
 
