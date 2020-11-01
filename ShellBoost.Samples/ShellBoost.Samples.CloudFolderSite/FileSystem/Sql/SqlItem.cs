@@ -23,6 +23,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         [JsonIgnore]
         public bool IsFolder => Attributes.HasFlag(FileAttributes.Directory);
 
+        [JsonIgnore]
+        public bool IsHidden => Attributes.HasFlag(FileAttributes.Hidden);
+
         // IFileSystemInfo
         [JsonIgnore]
         public IFolderInfo Parent => _parent.Value;

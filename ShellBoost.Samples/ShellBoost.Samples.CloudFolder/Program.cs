@@ -92,6 +92,10 @@ namespace ShellBoost.Samples.CloudFolder
                         case ConsoleKey.C:
                             Console.Clear();
                             break;
+
+                        case ConsoleKey.S:
+                            server.LocalEvents.Synchronize();
+                            break;
                     }
                 } while (key.Key != ConsoleKey.Escape);
                 Console.WriteLine("Stopped");

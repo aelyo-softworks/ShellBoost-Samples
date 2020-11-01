@@ -22,6 +22,9 @@ namespace ShellBoost.Samples.CloudFolder.Api
         public bool IsFolder => Attributes.HasFlag(FileAttributes.Directory);
 
         [JsonIgnore]
+        public bool IsHidden => Attributes.HasFlag(FileAttributes.Hidden);
+
+        [JsonIgnore]
         public string Extension => Name != null ? Path.GetExtension(Name) : null;
 
         public override string ToString() => Id + " - " + Name;

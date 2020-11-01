@@ -34,6 +34,8 @@ namespace ShellBoost.Samples.CloudFolder.Events
         public int SynchronizePeriod { get; }
         public WebShellFolderServer Server { get; }
 
+        public void Synchronize() => SynchronizeCallback(null);
+
         private void OnWatcherEvent(object sender, LocalFileSystemWatcherEventArgs e)
         {
             // basic checks
@@ -142,12 +144,33 @@ namespace ShellBoost.Samples.CloudFolder.Events
             return true;
         }
 
+        private static FileAttributes Filter(FileAttributes atts)
+        {
+            var at = atts;
+            if (atts.HasFlag(FileAttributes.Directory))
+            {
+                at |= FileAttributes.Directory;
+            }
+
+            if (atts.HasFlag(FileAttributes.Hidden))
+            {
+                at |= FileAttributes.Hidden;
+            }
+            return at;
+        }
+
         private bool ShouldUpload(Win32FindData file, WebItem item)
         {
             // note we could use other stuff if the server supports it (server version, etag, etc.)
             if (file.LastWriteTimeUtc > item.LastWriteTimeUtc)
             {
                 Server.Log(TraceLevel.Verbose, file.FullName + " LastWriteTimeUtc/content is different file: " + file.LastWriteTimeUtc + " remote: " + item.LastWriteTimeUtc);
+                return true;
+            }
+
+            if (Filter(file.Attributes) != Filter(item.Attributes))
+            {
+                Server.Log(TraceLevel.Verbose, file.FullName + " Attributes is different file: " + file.Attributes + " remote: " + item.Attributes);
                 return true;
             }
 
@@ -161,8 +184,8 @@ namespace ShellBoost.Samples.CloudFolder.Events
             if (file == null)
                 return;
 
-            // we're not interested by folders or hidden files
-            if (file.IsDirectory || file.Attributes.HasFlag(FileAttributes.Hidden))
+            // we're not interested by folders
+            if (file.IsDirectory)
                 return;
 
             Server.Log(TraceLevel.Info, "File " + file.FullName);
@@ -187,6 +210,16 @@ namespace ShellBoost.Samples.CloudFolder.Events
             item.CreationTimeUtc = file.CreationTimeUtc;
             item.LastAccessTimeUtc = file.LastAccessTimeUtc;
             item.LastWriteTimeUtc = file.LastWriteTimeUtc;
+
+            if (file.Attributes.HasFlag(FileAttributes.Hidden) && !item.IsHidden)
+            {
+                item.Attributes |= FileAttributes.Hidden;
+            }
+            else if (!file.Attributes.HasFlag(FileAttributes.Hidden) && item.IsHidden)
+            {
+                item.Attributes &= ~FileAttributes.Hidden;
+            }
+
             // note if a sharing violation occurs, we'll retry later
             using (var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {

@@ -39,7 +39,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
         private async IAsyncEnumerable<object> Enumerate(Guid id, EnumerateOptions options = null)
         {
-            Log("id: " + id + " includeFiles: " + options?.IncludeFiles + " includeFolders: " + options?.IncludeFolders);
+            Log("id: " + id + " includeFiles: " + options?.IncludeFiles + " includeFolders: " + options?.IncludeFolders + " includeHidden: " + options?.IncludeHidden);
             var item = await FileSystem.GetItemAsync(id).ConfigureAwait(false);
             if (item == null)
                 yield break;
@@ -53,6 +53,19 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 Log(" child: " + child);
                 yield return child;
             }
+        }
+
+        private static EnumerateOptions GetEnumerateOptions(string s, bool folders, bool files)
+        {
+            var options = new EnumerateOptions();
+            if (s != null && s.IndexOf("includehidden:true", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                options.IncludeHidden = true;
+            }
+
+            options.IncludeFolders = folders;
+            options.IncludeFiles = files;
+            return options;
         }
 
         [HttpGet]
@@ -81,14 +94,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             return Json(item); // if item is null, this will return the null json, instead of a null string which will cause client's JsonSerializer to fail
         }
 
-        [Route("api/get/{id}/all")]
-        public IAsyncEnumerable<object> GetAll(Guid id) => Enumerate(id);
+        [Route("api/get/{id}/all/{options?}")]
+        public IAsyncEnumerable<object> GetAll(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, true, true));
 
-        [Route("api/get/{id}/folders")]
-        public IAsyncEnumerable<object> GetFolders(Guid id) => Enumerate(id, new EnumerateOptions { IncludeFiles = false });
+        [Route("api/get/{id}/folders/{options?}")]
+        public IAsyncEnumerable<object> GetFolders(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, true, false));
 
-        [Route("api/get/{id}/files")]
-        public IAsyncEnumerable<object> GetFiles(Guid id) => Enumerate(id, new EnumerateOptions { IncludeFolders = false });
+        [Route("api/get/{id}/files/{options?}")]
+        public IAsyncEnumerable<object> GetFiles(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, false, true));
 
         private string GetContentType(string path)
         {

@@ -54,6 +54,7 @@ namespace ShellBoost.Samples.CloudFolder
             CanLink = true;
             CanPaste = true;
             CanRename = true;
+            IsHidden = apiItem.IsHidden;
 
             // for some reason, this is necessary to support "New" menu
             Attributes |= SFGAO.SFGAO_STORAGE;

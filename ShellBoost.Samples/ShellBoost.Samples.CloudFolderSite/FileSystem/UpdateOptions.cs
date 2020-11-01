@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ShellBoost.Samples.CloudFolderSite.Controllers;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem
@@ -10,6 +11,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
         public DateTime? LastAccessTimeUtc { get; set; }
         public DateTime? CreationTimeUtc { get; set; }
         public DateTime? LastWriteTimeUtc { get; set; }
+        public FileAttributes? Attributes { get; set; }
 
         public static UpdateOptions FromUpdateRequest(UpdateRequest request)
         {
@@ -38,6 +40,12 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
                 if (request.LastWriteTimeUtc.HasValue)
                 {
                     options.LastWriteTimeUtc = request.LastWriteTimeUtc.Value;
+                    needed = true;
+                }
+
+                if (request.Attributes != 0)
+                {
+                    options.Attributes = request.Attributes;
                     needed = true;
                 }
             }

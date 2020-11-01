@@ -517,7 +517,13 @@ namespace ShellBoost.Samples.CloudFolder.Api
                     return Enumerable.Empty<WebItem>();
             }
 
-            var key = "get/" + parent.Id + "/" + apiSuffix;
+            string soptions = null;
+            if (options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN))
+            {
+                soptions = "/includehidden:true";
+            }
+
+            var key = "get/" + parent.Id + "/" + apiSuffix + soptions;
             if (TryGetFromCache(parent.Id, key, out var items))
                 return items.Select(i => i.Value);
 

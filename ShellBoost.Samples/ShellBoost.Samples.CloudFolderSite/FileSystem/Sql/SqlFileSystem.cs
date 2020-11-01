@@ -316,6 +316,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 changed = true;
             }
 
+            if (options.Attributes.HasValue)
+            {
+                parameters["attributes"] = (int)options.Attributes.Value;
+                sets.Add("Attributes = @attributes");
+                changed = true;
+            }
+
             if (sets.Count == 0) // nothing to do
                 return item;
 
@@ -440,7 +447,12 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                     yield break;
             }
 
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @id and Id <> '00000000-0000-0000-0000-000000000000'" + and, new { id = parentItem.Id }).ConfigureAwait(false))
+            if (!options.IncludeHidden)
+            {
+                and += " AND (Attributes & " + (int)FileAttributes.Hidden + ") = 0";
+            }
+
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @id AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { id = parentItem.Id }).ConfigureAwait(false))
             {
                 while (reader.Read())
                 {

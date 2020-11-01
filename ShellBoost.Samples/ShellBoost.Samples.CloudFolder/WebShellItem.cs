@@ -26,6 +26,7 @@ namespace ShellBoost.Samples.CloudFolder
             CanMove = true;
             CanPaste = true;
             CanRename = true;
+            IsHidden = apiItem.IsHidden;
 
             // this is a "physical" shell item
             if (parent.IsRoot)
