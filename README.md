@@ -22,4 +22,6 @@ ShellBoost comes with the following samples:
 
 *	**Device Manager Folder**: A .NET Core console application folder that mimics the official Windows Device Manager application. Demonstrates asynchronous hierarchy building.
 
+*	**Mirror**: A .NET Core console application that demonstrates a namespace application mirroring a physical folder present on the disk. It’s implemented in only a few lines of code.
+
 *	**Amalga Drive**: A WPF application shell folder. Demonstrates the File On-Demand feature. Also comes with a custom WebDAV Server for demonstration purposes. *Note: this sample uses ShellBoost legacy technology and should not be used for new projects*.

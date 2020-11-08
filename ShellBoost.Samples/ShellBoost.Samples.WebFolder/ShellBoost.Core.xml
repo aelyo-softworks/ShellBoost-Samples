@@ -310,6 +310,13 @@
             <param name="value">The value.</param>
             <param name="methodName">The calling method name.</param>
         </member>
+        <member name="M:ShellBoost.Core.Client.Installer.WantsFORPARSING(System.Guid)">
+            <summary>
+            Determines the 'WantsFORPARSING' registry value.
+            </summary>
+            <param name="folderClassId">The folder CLSID.</param>
+            <returns>true if WantsFORPARSING is set; otherwise false.</returns>
+        </member>
         <member name="M:ShellBoost.Core.Client.Installer.GetBitnessString(System.Reflection.ProcessorArchitecture)">
             <summary>
             Gets a string representing the current process bitness.
@@ -466,79 +473,119 @@
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.ProxyId">
             <summary>
-            Gets the ShellBoost proxy identifier..
+            Gets the ShellBoost proxy identifier.
             </summary>
             <value>The proxy identifier.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.Attributes">
             <summary>
-            Gets the Shell Namespace Extension root attributes..
+            Gets the Shell Namespace Extension root attributes.
             </summary>
             <value>The attributes.</value>
         </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.WantsFORPARSING">
+            <summary>
+            Determines the 'WantsFORPARSING' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'WantsFORPARSING' is set; otherwise, <c>false</c>.     
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.EnumerationBatchSize">
+            <summary>
+            Gets the RPC protocol effective enumeration batch size.
+            </summary>
+            <value>
+            The effective batch size.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DefaultEnumerationBatchSize">
+            <summary>
+            Gets the RPC protocol default enumeration batch size.
+            </summary>
+            <value>
+            The default batch size.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.IpcFormat">
+            <summary>
+            Gets the RPC protocol endpoint format.
+            </summary>
+            <value>The RPC protocol endpoint format.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.IpcStringBinding">
+            <summary>
+            Gets the RPC protocol effective string binding.
+            </summary>
+            <value>The RPC protocol effective string binding.</value>
+        </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.Options">
             <summary>
-            Gets Shell Namespace Extension options..
+            Gets Shell Namespace Extension options.
             </summary>
             <value>The options.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.IpcErrorText">
             <summary>
-            Gets the Shell Namespace Extension error text..
+            Gets the Shell Namespace Extension error text.
             </summary>
             <value>The error text.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.BuildConfiguration">
             <summary>
-            Gets the Shell Namespace Extension build configuration..
+            Gets the Shell Namespace Extension build configuration.
             </summary>
             <value>The build configuration.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.RefreshButtonText">
             <summary>
-            Gets the Shell Namespace Extension refresh button text..
+            Gets the Shell Namespace Extension refresh button text.
             </summary>
             <value>The refresh button text.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.ProgId">
             <summary>
-            Gets the Shell Namespace Extension ProgID..
+            Gets the Shell Namespace Extension ProgID.
             </summary>
             <value>The prog identifier.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.DisplayName">
             <summary>
-            Gets the Shell Namespace Extension display name..
+            Gets the Shell Namespace Extension display name.
             </summary>
             <value>The display name.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.Location">
             <summary>
-            Gets the Shell Namespace Extension location..
+            Gets the Shell Namespace Extension location.
             </summary>
             <value>The location.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseExpirationDate">
             <summary>
-            Gets the license expiration date..
+            Gets the license expiration date.
+            Note this value will only be meaningful once the license has been evaluated, not immediately at startup.
             </summary>
             <value>The license expiration date.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseRegisteredCompany">
             <summary>
-            Gets the license registered company..
+            Gets the license registered company.
+            Note this value will only be meaningful once the license has been evaluated, not immediately at startup.
             </summary>
             <value>The license registered company.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseHasExpired">
             <summary>
             Gets a value indicating whether license has expired.
+            Note this value will only be meaningful once the license has been evaluated, not immediately at startup.
             </summary>
             <value><c>true</c> if license has expired; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.LicenseDataIsValid">
             <summary>
-            Gets a value indicating whether license data is valid..
+            Gets a value indicating whether license data is valid.
+            Note this value will only be meaningful once the license has been evaluated, not immediately at startup.
             </summary>
             <value><c>true</c> if license data is valid; otherwise, <c>false</c>.</value>
         </member>
@@ -837,13 +884,15 @@
         </member>
         <member name="F:ShellBoost.Core.DragDropTargetEventType.Prepare">
             <summary>
-            Occurs when a drag and drop operation is being prepared.
+            Occurs when a drag and drop operation is being prepared, result of the Shell view SFVM_DIDDRAGDROP callback message.
+            This is only sent when dragging from the Shell view, not the Explorer's tree view.
             This is a callback event.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.DragDropTargetEventType.Begin">
             <summary>
-            Occurs when a drag and drop operation begins.
+            Occurs when a drag and drop operation begins, result of a Shell view callback message.
+            This is only sent when dragging from the Shell view, not the Explorer's tree view.
             This is a callback event.
             </summary>
         </member>
@@ -1002,6 +1051,53 @@
             </summary>
             <value>
             The properties.
+            </value>
+        </member>
+        <member name="T:ShellBoost.Core.FolderInitEventArgs">
+            <summary>
+            Provides data for the FolderInit event of the ShellFolderServer type.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.FolderInitEventArgs.IdList">
+            <summary>
+            Gets the folder's PIDL.
+            </summary>
+            <value>
+            The folder's PIDL.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.FolderInitEventArgs.Folder">
+            <summary>
+            Gets or sets the ShellFolder instance.
+            </summary>
+            <value>
+            The ShellFolder instance.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.FolderInitEventArgs.HResult">
+            <summary>
+            Gets or sets the operation HResult.
+            Only used if Folder property is null.
+            Only negative values (errors) are taken into account.
+            </summary>
+            <value>The operation HResult.</value>
+        </member>
+        <member name="P:ShellBoost.Core.FolderInitEventArgs.InitializeOptions">
+            <summary>
+            Gets or sets the options used when the folder instance is initialized.
+            If not null, the folder initialization will use these options instead of the folder's InitializeOptions property.
+            </summary>
+            <value>
+            The initialize options.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.FolderInitEventArgs.ProxyCacheOptions">
+            <summary>
+            Gets or sets the proxy cache options.
+            If not null, the folder initialization will use these options instead of the server's ProxyCacheOptions property.
+            </summary>
+            <value>
+            The proxy cache options.
             </value>
         </member>
         <member name="T:ShellBoost.Core.GetNameMaxLengthEventArgs">
@@ -5883,6 +5979,16 @@
             The CFSTR CFSTR_PREFERREDDROPEFFECT ('Preferred DropEffect') format.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_PERFORMEDDROPEFFECT">
+            <summary>
+            The CFSTR CFSTR_PERFORMEDDROPEFFECT ('Performed DropEffect') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_LOGICALPERFORMEDDROPEFFECT">
+            <summary>
+            The CFSTR CFSTR_LOGICALPERFORMEDDROPEFFECT ('Logical Performed DropEffect') format.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_INDRAGLOOP">
             <summary>
             The CFSTR CFSTR_INDRAGLOOP ('InShellDragLoop') format.
@@ -5891,6 +5997,31 @@
         <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_INETURL">
             <summary>
             The CFSTR CFSTR_INETURLW ('UniformResourceLocatorW') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_TARGETCLSID">
+            <summary>
+            The CFSTR CFSTR_TARGETCLSID ('TargetCLSID') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_DROPDESCRIPTION">
+            <summary>
+            The CFSTR CFSTR_DROPDESCRIPTION ('DropDescription') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_SHELLDROPHANDLER">
+            <summary>
+            The CFSTR CFSTR_SHELLDROPHANDLER ('DropHandlerCLSID') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_INVOKECOMMAND_DROPPARAM">
+            <summary>
+            The CFSTR CFSTR_INVOKECOMMAND_DROPPARAM ('InvokeCommand DropParam') format.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_PASTESUCCEEDED">
+            <summary>
+            The CFSTR CFSTR_PASTESUCCEEDED ('Paste Succeeded') format.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.ShellDataObjectFormat.CFSTR_FILECONTENTS">
@@ -5972,6 +6103,13 @@
             <param name="data">The data.</param>
             <returns>A list of FILEDESCRIPTORs.</returns>
         </member>
+        <member name="M:ShellBoost.Core.ShellDataObjectFormat.ParseCFSTR_DROPDESCRIPTION(System.Byte[])">
+            <summary>
+            Parses the CFSTR_DROPDESCRIPTION format.
+            </summary>
+            <param name="data">The data.</param>
+            <returns>An instance of DROPDESCRIPTION or null if the data is invalid.</returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellDataObjectFormat.GetClipboardFormatName(System.Int32)">
             <summary>
             Retrieves from the clipboard the name of the specified registered format.
@@ -5996,6 +6134,11 @@
         <member name="T:ShellBoost.Core.ShellFolder">
             <summary>
             Represents a Windows Shell Folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellFolder.DefaultFolderAttributes">
+            <summary>
+            The default folder attributes.
             </summary>
         </member>
         <member name="E:ShellBoost.Core.ShellFolder.FileDialogEvent">
@@ -6227,87 +6370,95 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.ParseItem(System.String)">
             <summary>
-            Parses a display name.
+            Gets an item using its relative path from this folder.
+            The path is a list of display names separated by the '\' character.
+            If path is null or empty, this folder is returned.
             </summary>
-            <param name="displayName">The display name.</param>
-            <returns>An instance of the ShellItem type or null if parsing failed.</returns>
-            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+            <param name="displayName">A relative path from this folder. Each segment can be separated by the '\' character.</param>
+            <returns>
+            An instance of the ShellItem type or null if the item was not found or some intermediary folder was not found.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.ParseItem(System.String,ShellBoost.Core.ShellItemIdList@)">
             <summary>
-            Parses a display name.
+            Gets an item using its relative path from this folder.
+            The path is a list of display names separated by the '\' character.
+            If path is null or empty, this folder is returned.
             </summary>
-            <param name="displayName">The display name.</param>
-            <param name="relativeIdl">The relative PIDL.</param>
-            <returns>An instance of the ShellItem type or null if parsing failed.</returns>
-            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+            <param name="displayName">A relative path from this folder. Each segment can be separated by the '\' character.</param>
+            <param name="relativeIdList">The relative IDL.</param>
+            <returns>
+            An instance of the ShellItem type or null if the item was not found or some intermediary folder was not found.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryParseItem(ShellBoost.Core.ShellBindContext,System.String,System.Int32@,ShellBoost.Core.WindowsShell.SFGAO@,ShellBoost.Core.ShellItemIdList@)">
             <summary>
             Parses a display name for a Shell Item that may not exist.
-            This method returns false. If you override it, make sure you also override TryGetDisplayName, TryGetAttributes and TryGetPropertyValue in a consistent manner.
+            This method is only implemented for file system Shell Items.
+            It will use the CreateFileSystemItem and CreateFileSystemFolder that you can override if you want it to use your derived classes instead.
+            If you override it, make sure you also override TryGetDisplayName, TryGetAttributes and TryGetPropertyValue in a consistent manner.
             </summary>
             <param name="context">The context corresponding to the original IBindCxt interface.</param>
             <param name="displayName">The display name.</param>
             <param name="eatenCharacters">The number of characters of the display name that was parsed.</param>
             <param name="attributes">Attributes of the virtual item that was parsed.</param>
-            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
             <returns>
               <c>true</c> if parsing was successful, <c>false</c> otherwise.
             </returns>
-            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+            <exception cref="T:System.ArgumentNullException">context or displayName is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryParseItem(System.String,System.Int32@,ShellBoost.Core.WindowsShell.SFGAO@,ShellBoost.Core.ShellItemIdList@)">
             <summary>
             Parses a display name for a Shell Item that may not exist.
-            This method returns false. If you override it, make sure you also override TryGetDisplayName, TryGetAttributes and TryGetPropertyValue in a consistent manner.
+            This method returns false and is obsolete. You should override TryParseItem with a ShellBindContext parameter instead.
             </summary>
             <param name="displayName">The display name.</param>
             <param name="eatenCharacters">The number of characters of the display name that was parsed.</param>
             <param name="attributes">Attributes of the virtual item that was parsed.</param>
-            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
             <returns><c>true</c> if parsing was successful, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryGetDisplayName(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHGDNF,System.String@)">
             <summary>
             Gets the display name for a PIDL that may not represent an existing Shell Item.
-            This method returns false. If you override it, make sure you also override TryParseItem, TryGetAttributes and TryGetPropertyValue in a consistent manner.
-            Use this method if you need to disambiguate display names and parsing names, otherwise use the other TryGetDisplayName method without a SHGDNF parameter.
+            This method is only implemented for file system Shell Items with PIDLs created from the ShellItemIdList.FromFileSystem method.
+            If you override it, make sure you also override TryParseItem, TryGetAttributes and TryGetPropertyValue in a consistent manner.
             </summary>
-            <param name="relativeIdl">The relative PIDL.</param>
-            <param name="displayName">The displau name.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
+            <param name="displayName">The display name.</param>
             <param name="designName">Options used to get the name.</param>
             <returns>The display name or null.</returns>
-            <exception cref="T:System.ArgumentNullException">relativeIdl is null.</exception>
+            <exception cref="T:System.ArgumentNullException">relativeIdList is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryGetDisplayName(ShellBoost.Core.ShellItemIdList,System.String@)">
             <summary>
             Gets the display name for a PIDL that may not represent an existing Shell Item.
-            This method returns false. If you override it, make sure you also override TryParseItem, TryGetAttributes and TryGetPropertyValue in a consistent manner.
-            Use this method if you don't need to disambiguate display names and parsing names, otherwise use the other TryGetDisplayName method with a SHGDNF parameter.
+            This method returns false and is obsolete. You should use or override TryGetDisplayName with a SHGDNF parameter instead.
             </summary>
-            <param name="relativeIdl">The relative PIDL.</param>
-            <param name="displayName">The displau name.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
+            <param name="displayName">The display name.</param>
             <returns>The display name or null.</returns>
-            <exception cref="T:System.ArgumentNullException">relativeIdl is null.</exception>
+            <exception cref="T:System.ArgumentNullException">relativeIdList is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryGetAttributes(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SFGAO@)">
             <summary>
             Gets the attributes for a PIDL that may not represent an existing Shell Item.
-            This method returns false. If you override it, make sure you also override TryParseItem, TryGetDisplayName and TryGetPropertyValue in a consistent manner.
+            This method is only implemented for file system Shell Items with PIDLs created from the ShellItemIdList.FromFileSystem method.
+            If you override it, make sure you also override TryParseItem, TryGetDisplayName and TryGetPropertyValue in a consistent manner.
             </summary>
-            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
             <param name="attributes">The attributes.</param>
             <returns>The display name or null.</returns>
-            <exception cref="T:System.ArgumentNullException">relativeIdl is null.</exception>
+            <exception cref="T:System.ArgumentNullException">relativeIdList is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.TryGetPropertyValue(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Object@)">
             <summary>
             Gets a property key value. or a PIDL that may not represent an existing Shell Item.
             This method returns false. If you override it, make sure you also override TryParseItem and TryGetDisplayName and TryGetAttributesin a consistent manner.
             </summary>
-            <param name="relativeIdl">The relative PIDL.</param>
+            <param name="relativeIdList">The relative PIDL.</param>
             <param name="key">The property key.</param>
             <param name="value">The value.</param>
             <returns><c>true</c> if the value was read, <c>false</c> otherwise.</returns>
@@ -6330,29 +6481,33 @@
             <returns>An instance of the ShellItem type or null if the item was not found.</returns>
             <exception cref="T:System.ArgumentNullException">id is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.ShellFolder.GetRelativeIdList(ShellBoost.Core.ShellItemIdList)">
-            <summary>
-            Get a PIDL relatively from this folder's PIDL.
-            </summary>
-            <param name="idList">The child list.</param>
-            <returns>
-            A relative PIDL or null if idList is not a child of this.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">list is null</exception>
-        </member>
         <member name="M:ShellBoost.Core.ShellFolder.GetItemByPath(System.String)">
             <summary>
             Gets an item using its relative path from this folder.
-            The path is a list of display names.
-            The separator used is the '\' character.
-            If path is null or empty, this folder is returned.
+            This method should not be used, use or override ParseItem instead.
             </summary>
             <param name="path">A relative path from this folder. Each segment can be separated by the '\' character.</param>
-            <returns>An instance of the ShellItem type or null if the item was not found.</returns>
+            <returns>
+            An instance of the ShellItem type or null if the item was not found or some intermediary folder was not found.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemItem(System.IO.FileSystemInfo,ShellBoost.Core.ShellItemIdList@)">
+            <summary>
+            Creates a file system ShellItem or ShellFolder instance for a file system entry.
+            The file system entry path must be a child at any level of this full path.
+            </summary>
+            <param name="info">The file system entry information.</param>
+            <param name="relativePidl">The PIDL of the returned instance relative to this PIDL.</param>
+            <returns>
+            An instance of the ShellItem or ShellFolder type.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">info is null.</exception>
+            <exception cref="T:System.ArgumentException">info's path is not a child of this path.</exception>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemItem(ShellBoost.Core.ShellItemId,System.String)">
             <summary>
-            Creates a file system ShellItem instance for a file.
+            Creates a file system ShellItem instance for a file under this folder
+            The file system path must a direct child of this full path.
             </summary>
             <param name="fileSystemId">The file system identifier.</param>
             <param name="fileSystemPath">The file system file path.</param>
@@ -6360,7 +6515,8 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemFolder(ShellBoost.Core.ShellItemId,System.String)">
             <summary>
-            Creates a file system ShellItem instance for a folder.
+            Creates a file system ShellItem instance for a folder under this folder.
+            The file system path must a direct child of this full path.
             </summary>
             <param name="fileSystemId">The file system identifier.</param>
             <param name="fileSystemPath">The file system folder path.</param>
@@ -6368,14 +6524,16 @@
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemItem(System.IO.FileInfo)">
             <summary>
-            Creates a file system ShellItem instance for a file.
+            Creates a file system ShellItem instance for a file under this folder.
+            The info's full path must a direct child of this full path.
             </summary>
             <param name="info">The file information.</param>
             <returns>An instance of the ShellItem type.</returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.CreateFileSystemFolder(System.IO.DirectoryInfo)">
             <summary>
-            Creates a file system ShellItem instance for a folder.
+            Creates a file system ShellItem instance for a folder under this folder.
+            The info's full path must a direct child of this full path.
             </summary>
             <param name="info">The folder information.</param>
             <returns>An instance of the ShellItem type.</returns>
@@ -7067,6 +7225,11 @@
             Raised when notification are received from the Windows Shell.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.ShellFolderServer.FolderInit">
+            <summary>
+            Raised when a ShellFolder is initialized by the Windows Shell.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellFolderServer"/> class.
@@ -7181,6 +7344,13 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.NotifyEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.OnFolderInit(System.Object,ShellBoost.Core.FolderInitEventArgs)">
+            <summary>
+            Called when a ShellFolder is initialized by the Windows Shell.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.FolderInitEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.OnLicensing(System.Object,ShellBoost.Core.LicensingEventArgs)">
             <summary>
@@ -7323,6 +7493,19 @@
             <exception cref="T:System.ArgumentNullException">folder
             or
             options is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolderServer.TryCompareIdLists(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,ShellBoost.Core.CompareIdReturnValue@)">
+            <summary>
+            Compares two PIDls.
+            This method currently returns false. Comparison is delegated to ShellItem's TryCompare method.
+            </summary>
+            <param name="idList1">The identifier list1.</param>
+            <param name="idList2">The identifier list2.</param>
+            <param name="options">The options.</param>
+            <param name="value">The comparison result.</param>
+            <returns>
+              <c>true</c> if comparison succeeded, <c>false</c> otherwise.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.ShellFolderServer.OnDragDropTarget(ShellBoost.Core.DragDropTargetEventArgs)">
             <summary>
@@ -7736,6 +7919,14 @@
             </summary>
             <value>
               <c>true</c> if file monitored system events must be processed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizerOptions.StartEventMonitoring">
+            <summary>
+            Gets or sets a value indicating whether event monitoring must be started immediately.
+            </summary>
+            <value>
+              <c>true</c> if event monitoring must be started immediately; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.EnumerationLevel">
@@ -8789,6 +8980,14 @@
               <c>true</c> if this instance is a directory; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateSyncChange.IsHidden">
+            <summary>
+            Gets a value indicating whether this instance is hidden.
+            </summary>
+            <value>
+              <c>true</c> if this instance is hidden; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.StateSyncChange.FilePathSegments">
             <summary>
             Gets the file path represented as a list of segments.
@@ -9348,6 +9547,14 @@
               <c>true</c> if this instance is a directory; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateSyncEntry.IsHidden">
+            <summary>
+            Gets a value indicating whether this instance is hidden.
+            </summary>
+            <value>
+              <c>true</c> if this instance is hidden; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.StateSyncEntry.FileName">
             <summary>
             Gets or sets the file name. Settings this property value automatically sets the Name property value.
@@ -9785,6 +9992,14 @@
               <c>true</c> if the specified event must be filtered; otherwise, <c>false</c>.
             </returns>
             <exception cref="T:System.ArgumentNullException">e is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.ToEntry(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
+            <summary>
+            Converts an event to an entry.
+            </summary>
+            <param name="localEvent">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs"/> instance containing the event data.</param>
+            <returns>A StateSyncEntry instance or null to discard this event.</returns>
+            <exception cref="T:System.ArgumentNullException">localEvent is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.NewWatcher">
             <summary>
@@ -11179,6 +11394,11 @@
         <member name="F:ShellBoost.Core.Synchronization.SyncEntryAttributes.Directory">
             <summary>
             The entry is a directory or folder, or can contain children entries.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.SyncEntryAttributes.Hidden">
+            <summary>
+            The entry is hidden.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.SyncEnumerateEntriesOptions">
@@ -12630,6 +12850,15 @@
             <returns>A type or null if the collection type is not identified as a collection type.</returns>
             <exception cref="T:System.ArgumentNullException">collectionType is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.IsFlagsEnum(System.Type)">
+            <summary>
+            Determines whether a type is Flags (multi-valued) enum type.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>
+              <c>true</c> if the type is Flags (multi-valued); otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.Conversions.ToPositiveFileTime(System.DateTime)">
             <summary>
             Converts a DateTime to an always positive or zero file time.
@@ -13440,6 +13669,13 @@
             </summary>
             <param name="exception">The exception.</param>
             <returns>The interesting exception message.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Extensions.ToStringNoZero(System.Enum)">
+            <summary>
+            Converts an enum value to a string without using the possible zero values.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>A string representing the enum value.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.Extensions.ToHex(System.IntPtr)">
             <summary>
@@ -15084,6 +15320,29 @@
             <param name="extension">The file extension.</param>
             <param name="fallbackExtension">Another extension to use if the icon was not found.</param>
             <returns>An instance of Bitmap or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetPreferredSizeBitmap(System.Collections.Generic.IEnumerable{System.Drawing.Bitmap},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean)">
+            <summary>
+            Gets the closest bitmap that matches a given size from a list of bitmaps.
+            At least one of preferredWidth or preferredHeight values must be defined.
+            </summary>
+            <param name="bitmaps">The list of bitmaps.</param>
+            <param name="preferredWidth">The preferred bitmap width.</param>
+            <param name="preferredHeight">The preferred bitmap height.</param>
+            <param name="exactMatch">if set to <c>true</c> only a bitmap that exactly matches the preffered size will be returned.</param>
+            <param name="disposeOthers">if set to <c>true</c> other bitmaps are disposed.</param>
+            <returns>
+            A Bitmap instance or null if the list contains nothing.
+            </returns>
+            <exception cref="T:System.ArgumentException">null - preferredWidth</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IconUtilities.GetLargestBitmap(System.Collections.Generic.IEnumerable{System.Drawing.Bitmap},System.Boolean)">
+            <summary>
+            Gets the largest bitmap in a list.
+            </summary>
+            <param name="bitmaps">The list of bitmaps.</param>
+            <param name="disposeOthers">if set to <c>true</c> other bitmaps are disposed.</param>
+            <returns>A Bitmap instance or null if the list contains nothing.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IconUtilities.ClearIconFilePathByExtensionCache">
             <summary>
@@ -20562,6 +20821,427 @@
             Used for loading Proxy/Stub DLLs. This flag is reserved for internal use and is not intended to be used directly from your code.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CLSCTX.CLSCTX_INPROC">
+            <summary>
+            A combination of CLSCTX_INPROC_SERVER and CLSCTX_INPROC_HANDLER.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CLSCTX.CLSCTX_ALL">
+            <summary>
+            A combination of CLSCTX_INPROC_SERVER, CLSCTX_INPROC_HANDLER, CLSCTX_LOCAL_SERVER and CLSCTX_REMOTE_SERVER.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.CLSCTX.CLSCTX_SERVER">
+            <summary>
+            A combination of CLSCTX_INPROC_SERVER, CLSCTX_LOCAL_SERVER and CLSCTX_REMOTE_SERVER.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.DROPDESCRIPTION">
+            <summary>
+            Describes the image and accompanying text for a drop object.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPDESCRIPTION.type">
+            <summary>
+            A DROPIMAGETYPE indicating the stock image to use.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPDESCRIPTION.szMessage">
+            <summary>
+            Text such as "Move to %1".
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPDESCRIPTION.szInsert">
+            <summary>
+            Text such as "Documents", inserted as specified by szMessage.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.DROPDESCRIPTION.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.DROPIMAGETYPE">
+            <summary>
+            Values used with the DROPDESCRIPTION structure to specify the drop image.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_INVALID">
+            <summary>
+            No drop image preference; use the default image.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_NONE">
+            <summary>
+            A red bisected circle such as that found on a "no smoking" sign.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_COPY">
+            <summary>
+            A plus sign (+) that indicates a copy operation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_MOVE">
+            <summary>
+            An arrow that indicates a move operation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_LINK">
+            <summary>
+            An arrow that indicates a link.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_LABEL">
+            <summary>
+            A tag icon that indicates that the metadata will be changed.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_WARNING">
+            <summary>
+            A yellow exclamation mark that indicates that a problem has been encountered in the operation.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.DROPIMAGETYPE.DROPIMAGE_NOIMAGE">
+            <summary>
+            Windows 7 and later. Use no drop image.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.FolderSettings">
+            <summary>
+            Exposes settings for a Shell folder.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderSettings.#ctor(System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsShell.FolderSettings"/> class.
+            </summary>
+            <param name="clsid">The CLSID.</param>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.All">
+            <summary>
+            Gets a list of all registered Shell Folders.
+            </summary>
+            <value>
+            A list of all registered Shell Folders.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.ClassId">
+            <summary>
+            Gets the class identifier.
+            </summary>
+            <value>
+            The class identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.WantsFORPARSING">
+            <summary>
+            Determines the 'WantsFORPARSING' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'WantsFORPARSING' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.WantsParseDisplayName">
+            <summary>
+            Determines the 'WantsParseDisplayName' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'WantsParseDisplayName' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.PinToNameSpaceTree">
+            <summary>
+            Determines the 'PinToNameSpaceTree' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'PinToNameSpaceTree' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.UseDropHandler">
+            <summary>
+            Determines the 'UseDropHandler' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'UseDropHandler' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.EnableThumbnails">
+            <summary>
+            Determines the 'EnableThumbnails' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'EnableThumbnails' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.QueryForInfoTip">
+            <summary>
+            Determines the 'QueryForInfoTip' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'QueryForInfoTip' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.QueryForOverlay">
+            <summary>
+            Determines the 'QueryForOverlay' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'QueryForOverlay' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HasNavigationEnum">
+            <summary>
+            Determines the 'HasNavigationEnum' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HasNavigationEnum' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.WantsUniversalDelegate">
+            <summary>
+            Determines the 'WantsUniversalDelegate' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'WantsUniversalDelegate' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HideFolderVerbs">
+            <summary>
+            Determines the 'HideFolderVerbs' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HideFolderVerbs' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HideAsDelete">
+            <summary>
+            Determines the 'HideAsDelete' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HideAsDelete' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HideAsDeletePerUser">
+            <summary>
+            Determines the 'HideAsDeletePerUser' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HideAsDeletePerUser' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HideOnDesktop">
+            <summary>
+            Determines the 'HideOnDesktop' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HideOnDesktop' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.HideOnDesktopPerUser">
+            <summary>
+            Determines the 'HideAsHideOnDesktopPerUserDeletePerUser' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'HideOnDesktopPerUser' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.FolderValueFlags">
+            <summary>
+            Determines the 'FolderValueFlags' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'FolderValueFlags' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.SortOrderIndex">
+            <summary>
+            Determines the 'SortOrderIndex' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'SortOrderIndex' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.CallForAttributes">
+            <summary>
+            Determines the 'CallForAttributes' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'CallForAttributes' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.RestrictedAttributes">
+            <summary>
+            Determines the 'RestrictedAttributes' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'RestrictedAttributes' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.DescriptionID">
+            <summary>
+            Determines the 'DescriptionID' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'DescriptionID' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.FolderType">
+            <summary>
+            Determines the 'FolderType' registry value.
+            </summary>
+            <value>
+              <c>true</c> if 'FolderType' is set; null if the folder cannot be queried for; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.RegeditPath">
+            <summary>
+            Gets a path that can be used to navigate to that key using Windows' Regedit tool.
+            </summary>
+            <value>
+            The regedit path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.DisplayName">
+            <summary>
+            Gets the display name.
+            </summary>
+            <value>
+            The display name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.DisplayNameString">
+            <summary>
+            Gets the display name.
+            If will be different of the DisplayName only if the DisplayName is a Shell indirect string.
+            </summary>
+            <value>
+            The display name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.InfoTip">
+            <summary>
+            Gets the tooltip.
+            </summary>
+            <value>
+            The tooltip.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.InfoTipString">
+            <summary>
+            Gets the tooltip.
+            If will be different of the InfoTip only if the InfoTip is a Shell indirect string.
+            </summary>
+            <value>
+            The tooltip.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.LocalizedString">
+            <summary>
+            Gets the localized string.
+            </summary>
+            <value>
+            The localized string.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.LocalizedStringString">
+            <summary>
+            Gets the localized string.
+            If will be different of the LocalizedString only if the LocalizedString is a Shell indirect string.
+            </summary>
+            <value>
+            The localized string.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.ServerPath">
+            <summary>
+            Gets the COM component server path.
+            </summary>
+            <value>
+            The COM component server path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.ThreadingModel">
+            <summary>
+            Gets the COM component threading model.
+            </summary>
+            <value>
+            The COM component threading model.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.DefaultIcon">
+            <summary>
+            Gets the default icon.
+            </summary>
+            <value>
+            The default icon.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.InstanceClsid">
+            <summary>
+            Gets the instance COM component's CLSID.
+            </summary>
+            <value>
+            The instance COM component's CLSID.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.InstanceInitPropertyBagValues">
+            <summary>
+            Gets the list of custom values.
+            </summary>
+            <value>
+            The list of custom values.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.Values">
+            <summary>
+            Gets the list of custom values.
+            </summary>
+            <value>
+            The list of custom values.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.ImplementedCategories">
+            <summary>
+            Gets the list of implemented COM categories.
+            </summary>
+            <value>
+            The list of implemented COM categories.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.TargetKnownFolder">
+            <summary>
+            Gets the target known folder.
+            </summary>
+            <value>
+            The target known folder or null.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.FolderSettings.ResolvedDisplayName">
+            <summary>
+            Gets a final display name that's not empty.
+            </summary>
+            <value>
+            A display name.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderSettings.GetDefaultIconAsBitmaps">
+            <summary>
+            Gets the item's default icon as a list of bitmaps.
+            The returned Bitmaps are allocated and must be disposed when not used.
+            </summary>
+            <returns>A list of bitmaps.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.FolderSettings.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.FOLDERVIEWOPTIONS">
             <summary>
             Used the FolderView.SetOptions method to activate Windows Vista options not supported by default in Windows 7 and later systems as well as deactivating new Windows 7 options.
@@ -20906,6 +21586,39 @@
             <param name="flags">The flags.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.BrowseTo(ShellBoost.Core.IWithIdList,ShellBoost.Core.WindowsShell.SBSP,System.Boolean)">
+            <summary>
+            Informs Windows Explorer to browse to another folder.
+            </summary>
+            <param name="item">The item to browse to.</param>
+            <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.BrowseTo(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SBSP,System.Boolean)">
+            <summary>
+            Informs Windows Explorer to browse to another folder.
+            </summary>
+            <param name="idList">The PIDL representing the item to browse to.</param>
+            <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An error number or 0.</returns>
+            <exception cref="T:System.ArgumentNullException">item is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Browser.BrowseTo(System.IntPtr,ShellBoost.Core.WindowsShell.SBSP,System.Boolean)">
+            <summary>
+            Informs Windows Explorer to browse to another folder.
+            </summary>
+            <param name="pidl">The PIDL representing the item to browse to.</param>
+            <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An error number or 0.
+            </returns>
+            <exception cref="T:System.ArgumentException">null - pidl</exception>
             <exception cref="T:System.ArgumentNullException">item is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Browser.ToString">
@@ -21347,6 +22060,11 @@
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An error number or 0.</returns>
         </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.NamespaceTreeControl.EnsureItemVisible(ShellBoost.Core.WindowsShell.Item,System.Boolean)">
             <summary>
             Ensures that the given item is visible.
@@ -21587,6 +22305,31 @@
             Edit the item.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.OLECMDEXECOPT">
+            <summary>
+            Specifies command execution options.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT">
+            <summary>
+            Prompt the user for input or not, whichever is the default behavior.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER">
+            <summary>
+            Execute the command after obtaining user input.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER">
+            <summary>
+            Execute the command without prompting the user. For example, clicking the Print toolbar button causes a document to be immediately printed without user input.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP">
+            <summary>
+            Show help for the corresponding command, but do not execute.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.SBSP">
             <summary>
             Flags specifying options to browse.
@@ -21755,6 +22498,126 @@
         <member name="F:ShellBoost.Core.WindowsShell.SHCNRF.SHCNRF_NewDelivery">
             <summary>
             Messages received use shared memory.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.SHDID">
+            <summary>
+            Determines what type a Shell Item is.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_UNKNOWN">
+            <summary>
+            The type is unknown.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_ROOT_REGITEM">
+            <summary>
+            The item is a registered item on the desktop.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_FS_FILE">
+            <summary>
+            The item is a file.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_FS_DIRECTORY">
+            <summary>
+            The item is a folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_FS_OTHER">
+            <summary>
+            The item is an unidentified item in the file system.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_DRIVE35">
+            <summary>
+            The item is a 3.5-inch floppy drive.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_DRIVE525">
+            <summary>
+            The item is a 5.25-inch floppy drive.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_REMOVABLE">
+            <summary>
+            The item is a removable disk.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_FIXED">
+            <summary>
+            The item is a fixed hard disk.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_NETDRIVE">
+            <summary>
+            The item is a drive that is mapped to a network share.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_CDROM">
+            <summary>
+            The item is a CD-ROM drive.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_RAMDISK">
+            <summary>
+            The item is a RAM disk.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_OTHER">
+            <summary>
+            The item is an unidentified system device.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_NET_DOMAIN">
+            <summary>
+            The item is a network domain.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_NET_SERVER">
+            <summary>
+            The item is a network server.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_NET_SHARE">
+            <summary>
+            The item is a network share.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_NET_RESTOFNET">
+            <summary>
+            Not currently used.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_NET_OTHER">
+            <summary>
+            The item is an unidentified network resource.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_IMAGING">
+            <summary>
+            Windows XP and later. Not currently used.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_AUDIO">
+            <summary>
+            Windows XP and later. Not currently used.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_COMPUTER_SHAREDDOCS">
+            <summary>
+            Windows XP and later. The item is the system shared documents folder.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_MOBILE_DEVICE">
+            <summary>
+            Windows Vista and later. The item is a mobile device, such as a personal digital assistant (PDA).
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHDID.SHDID_REMOTE_DESKTOP_DRIVE">
+            <summary>
+            Windows Vista and later. The item is a remote desktop drive.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.SHGVSPB">
@@ -26195,6 +27058,11 @@
             A value that specifies how Shell Items comparison should be performed.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.WindowsShell.SHCIDS.SHCIDS_NONE">
+            <summary>
+            No options.
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.WindowsShell.SHCIDS.SHCIDS_ALLFIELDS">
             <summary>
             Compare all the information in the item, not just the display names.
@@ -26676,6 +27544,22 @@
               <c>true</c> if this instance is folder; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.ClassId">
+            <summary>
+            Gets the class identifier.
+            </summary>
+            <value>
+            The class identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.Settings">
+            <summary>
+            Gets folder settings.
+            </summary>
+            <value>
+            The settings.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Folder.Children">
             <summary>
             Gets the folder's children.
@@ -26689,7 +27573,7 @@
             Translates the display name of a file object or a folder into a PIDL.
             </summary>
             <param name="displayName">A string with the display name.</param>
-            <param name="idList">The PIDL for the object.</param>
+            <param name="relativeIdList">The PIDL for the object.</param>
             <param name="bindContext">The bind context.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
@@ -26701,7 +27585,7 @@
             Translates the display name of a file object or a folder into a PIDL.
             </summary>
             <param name="displayName">A string with the display name.</param>
-            <param name="pidl">The PIDL for the object.</param>
+            <param name="relativePidl">The PIDL for the object.</param>
             <param name="bindContext">The bind context.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
@@ -26715,7 +27599,7 @@
             <param name="hwnd">A window handle.</param>
             <param name="bindContext">A, optional bind context used to pass parameters as inputs and outputs to the parsing function.</param>
             <param name="displayName">A string with the display name.</param>
-            <param name="idList">The PIDL for the object.</param>
+            <param name="relativeIdList">The PIDL for the object.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
             An error number or 0.
@@ -26728,7 +27612,7 @@
             <param name="hwnd">A window handle.</param>
             <param name="bindContext">A, optional bind context used to pass parameters as inputs and outputs to the parsing function.</param>
             <param name="displayName">A string with the display name.</param>
-            <param name="pidl">The PIDL for the object.</param>
+            <param name="relativePidl">The PIDL for the object.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>
             An error number or 0.
@@ -26742,7 +27626,7 @@
             <param name="bindContext">A, optional bind context used to pass parameters as inputs and outputs to the parsing function.</param>
             <param name="displayName">A string with the display name.</param>
             <param name="eaten">Receives the number of characters of the display name that was parsed.</param>
-            <param name="idList">The PIDL for the object.</param>
+            <param name="relativeIdList">The PIDL for the object.</param>
             <param name="attributes">To query for one or more attributes, initialize this parameter with the SFGAO flags that represent the attributes of interest. On return, those attributes that are true and were requested will be set.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An error number or 0.</returns>
@@ -26755,7 +27639,7 @@
             <param name="bindContext">A, optional bind context used to pass parameters as inputs and outputs to the parsing function.</param>
             <param name="displayName">A string with the display name.</param>
             <param name="eaten">Receives the number of characters of the display name that was parsed.</param>
-            <param name="pidl">The PIDL for the object.</param>
+            <param name="relativePidl">The PIDL for the object.</param>
             <param name="attributes">To query for one or more attributes, initialize this parameter with the SFGAO flags that represent the attributes of interest. On return, those attributes that are true and were requested will be set.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>An error number or 0.</returns>
@@ -26764,56 +27648,56 @@
             <summary>
             Determines the relative order of two file objects or folders, given their absolute item identifier lists.
             </summary>
-            <param name="idList1">The first relative pidl.</param>
-            <param name="idList2">The second relative pidl.</param>
+            <param name="idList1">The first absolute PIDL.</param>
+            <param name="idList2">The second absolute PIDL.</param>
             <param name="comparison">Specifies how the comparison should be performed.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
-            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
-            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+            <returns>A negative return value indicates that the first item should precede the second (idList1 &lt; idList2).
+            A positive return value indicates that the first item should follow the second (idList1 &gt; idList2).
+            A return value of zero indicates that the two items are the same (idList1 = idList2).</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareAbsoluteIdLists(System.IntPtr,System.IntPtr,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
             <summary>
             Determines the relative order of two file objects or folders, given their absolute item identifier lists.
             </summary>
-            <param name="relativePidl1">The first relative pidl.</param>
-            <param name="relativePidl2">The second relative pidl.</param>
+            <param name="idList1">The first absolute PIDL.</param>
+            <param name="idList2">The second absolute PIDL.</param>
             <param name="comparison">Specifies how the comparison should be performed.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
-            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
-            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+            <returns>A negative return value indicates that the first item should precede the second (idList1 &lt; idList2).
+            A positive return value indicates that the first item should follow the second (idList1 &gt; idList2).
+            A return value of zero indicates that the two items are the same (idList1 = idList2).</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIds(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
             <summary>
             Determines the relative order of two file objects or folders, in this folder, given their item identifier.
             </summary>
-            <param name="id1">The first id.</param>
-            <param name="id2">The second id.</param>
+            <param name="relativeIdList1">The first relative pidl.</param>
+            <param name="relativeIdList2">The second relative pidl.</param>
             <param name="comparison">Specifies how the comparison should be performed.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
-            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
-            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+            <returns>A negative return value indicates that the first item should precede the second (relativeIdList1 &lt; relativeIdList2).
+            A positive return value indicates that the first item should follow the second (relativeIdList1 &gt; relativeIdList2).
+            A return value of zero indicates that the two items are the same (relativeIdList1 = relativeIdList2).</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIdLists(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
             <summary>
             Determines the relative order of two file objects or folders, in this folder, given their item identifier lists.
             </summary>
-            <param name="idList1">The first relative pidl.</param>
-            <param name="idList2">The second relative pidl.</param>
+            <param name="relativeIdList1">The first relative pidl.</param>
+            <param name="relativeIdList2">The second relative pidl.</param>
             <param name="comparison">Specifies how the comparison should be performed.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
-            A positive return value indicates that the first item should follow the second (relativePidl1 &gt; relativePidl2).
-            A return value of zero indicates that the two items are the same (relativePidl1 = relativePidl2).</returns>
+            <returns>A negative return value indicates that the first item should precede the second (relativeIdList1 &lt; relativeIdList2).
+            A positive return value indicates that the first item should follow the second (relativeIdList1 &gt; relativeIdList2).
+            A return value of zero indicates that the two items are the same (relativeIdList1 = relativeIdList2).</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.CompareRelativeIdLists(System.IntPtr,System.IntPtr,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
             <summary>
             Determines the relative order of two file objects or folders, given their item identifier lists.
             </summary>
-            <param name="relativePidl1">The first relative pidl.</param>
-            <param name="relativePidl2">The second relative pidl.</param>
+            <param name="relativePidl1">The first relative PIDL.</param>
+            <param name="relativePidl2">The second relative PIDL.</param>
             <param name="comparison">Specifies how the comparison should be performed.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <returns>A negative return value indicates that the first item should precede the second (relativePidl1 &lt; relativePidl2).
@@ -26862,6 +27746,14 @@
             </summary>
             <value>
             The attributes.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.PlaceholderStatus">
+            <summary>
+            Gets the placeholder status.
+            </summary>
+            <value>
+            The placeholder status.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.FileAttributes">
@@ -29218,6 +30110,11 @@
             Represents a Windows Shell Item. An item can be a simple item or a folder.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.ShellItem.DefaultItemAttributes">
+            <summary>
+            The default item attributes.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.ShellItem.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.ShellItem" /> class.
@@ -29933,6 +30830,17 @@
             <param name="name">The name.</param>
             <returns><c>true</c> if this instance represents a file system name created by ShellBoost, <c>false</c> otherwise.</returns>
         </member>
+        <member name="M:ShellBoost.Core.ShellItemId.TryGetFileSystemName(System.String@,ShellBoost.Core.WindowsShell.SFGAO@)">
+            <summary>
+            Tries to get a file system name and attributes from this instance.
+            Only supported for file system PIDLs created by ShellBoost, using ShellItemId.FromFileSystem or ShellItem's constructors with FileInfo or DirectoryInfo parameters.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="attributes">The attributes.</param>
+            <returns>
+              <c>true</c> if this instance represents a file system name created by ShellBoost, <c>false</c> otherwise.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.ShellItemId.CheckedSize(System.Int32)">
             <summary>
             Gets a checked data size.
@@ -30034,7 +30942,7 @@
             </summary>
             <param name="pidl">The PIDL.</param>
             <param name="pidlSize">The PIDL full size.</param>
-            <param name="freePidl">if set to <c>true</c> the pidl will be freed using Marshal.FreeCoTaskMem.</param>
+            <param name="freePidl">if set to <c>true</c> the PIDL will be freed using Marshal.FreeCoTaskMem.</param>
             <returns>
             An instance of the ShellItemIdList type or null.
             </returns>
@@ -30149,17 +31057,28 @@
         <member name="P:ShellBoost.Core.ShellItemIdList.RelativeFromParent">
             <summary>
             Gets this PIDL relative from its parent.
+            This is like the Last id with a terminator.
             </summary>
             <value>
             This PIDL relative from its parent or null.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList,System.Boolean)">
+        <member name="M:ShellBoost.Core.ShellItemIdList.ComparesAsAbsolute(ShellBoost.Core.ShellItemIdList,ShellBoost.Core.WindowsShell.SHCIDS,System.Boolean)">
+            <summary>
+            Determines the relative order this instance to another.
+            </summary>
+            <param name="idList">The PIDL to compare with.</param>
+            <param name="comparison">Specifies how the comparison should be performed.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative return value indicates that this should precede the other one (this &lt; idList).
+            A positive return value indicates that the first item should follow the other one (this &gt; idList).
+            A return value of zero indicates that the two items are the same (this = idList).</returns>
+        </member>
+        <member name="M:ShellBoost.Core.ShellItemIdList.GetAsRelativeFrom(ShellBoost.Core.ShellItemIdList)">
             <summary>
             Get this PIDL relatively from a parent PIDL.
             </summary>
             <param name="parent">The parent PIDL.</param>
-            <param name="testIdListBeginningOnly">if set to <c>true</c> IdList equality test uses EqualsOrSameBeginning; otherwise it uses Equals.</param>
             <returns>
             A relative PIDL or null if this is not a child of parent.
             </returns>

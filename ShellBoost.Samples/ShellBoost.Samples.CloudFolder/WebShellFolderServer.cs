@@ -60,7 +60,7 @@ namespace ShellBoost.Samples.CloudFolder
                 relative = relative.Substring(1);
             }
 
-            return _root.GetItemByPath(relative);
+            return _root.ParseItem(relative);
         }
 
         private string GetMenuIconBitmapPath()

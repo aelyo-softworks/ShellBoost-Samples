@@ -34,7 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.CloudFol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.CloudFolderSite", "ShellBoost.Samples.CloudFolderSite\ShellBoost.Samples.CloudFolderSite.csproj", "{3C115557-0EF5-4C96-B287-E1D7F38CF92B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.DeviceManagerFolder", "ShellBoost.Samples.DeviceManagerFolder\ShellBoost.Samples.DeviceManagerFolder.csproj", "{7A5D1D37-43C8-42F2-B7DE-D87F1822F5F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.DeviceManagerFolder", "ShellBoost.Samples.DeviceManagerFolder\ShellBoost.Samples.DeviceManagerFolder.csproj", "{7A5D1D37-43C8-42F2-B7DE-D87F1822F5F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellBoost.Samples.Mirror", "ShellBoost.Samples.Mirror\ShellBoost.Samples.Mirror.csproj", "{D004D3CF-F667-4CFA-8533-B0D4285D4CE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{7A5D1D37-43C8-42F2-B7DE-D87F1822F5F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A5D1D37-43C8-42F2-B7DE-D87F1822F5F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A5D1D37-43C8-42F2-B7DE-D87F1822F5F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D004D3CF-F667-4CFA-8533-B0D4285D4CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D004D3CF-F667-4CFA-8533-B0D4285D4CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D004D3CF-F667-4CFA-8533-B0D4285D4CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D004D3CF-F667-4CFA-8533-B0D4285D4CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

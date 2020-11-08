@@ -194,43 +194,39 @@ namespace ShellBoost.Samples.CloudFolder
         #endregion
 
         #region Save As Support
-        private static bool IsValidDisplayName(string displayName)
+        public override bool TryParseItem(ShellBindContext context, string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
         {
-            if (displayName == null)
-                return false;
+            eatenCharacters = 0;
+            attributes = SFGAO.SFGAO_NONE;
 
-            var split = displayName.Split(Path.DirectorySeparatorChar);
-            if (split.Length == 0 || split.Any(p => !IOUtilities.PathIsValidFileName(p)))
-                return false;
+            // Windows Shell is calling us because it found no item
+            // This may be called in the context of a common dialog box 
 
-            return true;
-        }
-
-        public override bool TryParseItem(ShellBindContext bindContext, string displayName, out int eatenCharacters, out SFGAO attributes, out ShellItemIdList relativeIdl)
-        {
-            // ShellBoost is calling us because it found no item
-            // we may be called in the context of a common dialog box
-
-            // only do this if the STGM_CREATE flag is set
-            if (bindContext.Mode.HasFlag(STGM.STGM_CREATE))
+            // is it for creation? item does not necessarily exist
+            if (context.Mode.HasFlag(STGM.STGM_CREATE))
             {
-                // so let's see if display name is a valid name
-                if (IsValidDisplayName(displayName))
-                {
-                    // we parsed the whole file
-                    eatenCharacters = displayName.Length;
+                // the default SFGAO for an item (+ SFGAO_FILESYSTEM)
+                // note for creation mode we only send items back, not folders.
+                attributes = DefaultItemAttributes | SFGAO.SFGAO_FILESYSTEM;
 
-                    // so far use the default SFGAO for an item (+ SFGAO_FILESYSTEM)
-                    attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM | SFGAO.SFGAO_FILESYSTEM;
-
-                    // come up with some PIDL that we'll be able to recognize later (using ValidateNotExistingPidl)
-                    relativeIdl = new ShellItemIdList();
-                    relativeIdl.Add(new StringKeyShellItemId(displayName));
-                    return true;
-                }
+                // come up with some PIDL that we'll be able to recognize later (using ValidateNotExistingPidl)
+                // you can use your usual "real" ShellItemIdList but in this sample, we use fake ones because we don't want to create guids that don't exist in the web (api).
+                relativeIdl = new ShellItemIdList();
+                relativeIdl.Add(new StringKeyShellItemId(displayName));
+                return true;
             }
 
-            return base.TryParseItem(bindContext, displayName, out eatenCharacters, out attributes, out relativeIdl);
+            // here, item must exist
+            // displayName can be a name or a path (relative) and can ends with \ so we normalize it
+            var path = IOUtilities.StripTerminatingPathSeparators(displayName);
+            var item = ParseItem(path, out relativeIdl); // this will call into our GetItem implementation recursively
+            if (item != null)
+            {
+                attributes = item.Attributes;
+                return true;
+            }
+
+            return false; // don't go to base, we know better
         }
 
         private string ValidateNotExistingPidl(ShellItemIdList pidl)
@@ -246,8 +242,8 @@ namespace ShellBoost.Samples.CloudFolder
             if (name == null) // ? this is not ours
                 return base.TryGetAttributes(relativeIdl, out attributes);
 
-            // so far use the default SFGAO for an item (+ SFGAO_FILESYSTEM)
-            attributes = SFGAO.SFGAO_CANLINK | SFGAO.SFGAO_HASPROPSHEET | SFGAO.SFGAO_STORAGE | SFGAO.SFGAO_STREAM | SFGAO.SFGAO_FILESYSTEM;
+            // the default SFGAO for an item (+ SFGAO_FILESYSTEM)
+            attributes = DefaultItemAttributes | SFGAO.SFGAO_FILESYSTEM;
             return true;
         }
 

@@ -80,7 +80,7 @@ namespace ShellBoost.Samples.PhysicalOverview
                             break;
                     }
 
-                    var item = RootPhysical.GetItemByPath(relPath);
+                    var item = RootPhysical.ParseItem(relPath);
                     if (item != null)
                     {
                         // note we could be smarter and handle event one by one
