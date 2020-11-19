@@ -9,7 +9,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 {
     public class SqlItem : IFileInfo, IFolderInfo
     {
-        private Lazy<SqlItem> _parent;
+        private readonly Lazy<SqlItem> _parent;
 
         public SqlItem()
         {
@@ -37,6 +37,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         public string Name { get; set; }
         public FileAttributes Attributes { get; set; }
         IFileSystem IFileSystemInfo.System => System;
+
+        public async Task<IFileSystemInfo> GetByNameAsync(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            return await System.GetByNameAsync(this, name).ConfigureAwait(false);
+        }
 
         public async Task<bool> DeleteAsync(DeleteOptions options = null)
         {

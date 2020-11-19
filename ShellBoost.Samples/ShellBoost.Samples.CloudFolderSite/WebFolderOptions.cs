@@ -2,6 +2,11 @@
 {
     public class WebFolderOptions
     {
-        public virtual bool ServeHidden { get; set; }
+        public WebFolderOptions()
+        {
+            MaxChangesDays = 7;
+        }
+
+        public virtual int MaxChangesDays { get; set; }
     }
 }

@@ -33,23 +33,64 @@ namespace ShellBoost.Samples.CloudFolder.Events
             };
 
             // must match server's IFileSystemEvents method signature
-            // Change(Guid id, Guid parentId, WatcherChangeTypes types);
-            _connection.On<Guid, Guid, WatcherChangeTypes>("Change", (id, pid, action) =>
+            // Change(Guid id, Guid itemId, Guid parentId, WatcherChangeTypes types, DateTime creationTimeUtc, string oldName);
+            _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string>("Change", (id, itemId, parentId, type, creationTimeUtc, oldName) =>
             {
                 // invalidate the cache using server information
                 // note we don't force files update. this will be done when the use opens it
-                server.Log(System.Diagnostics.TraceLevel.Warning, "UpdateCache id: " + id + " pid: " + pid + " action: " + action);
-                WebApi.UpdateCache(id, pid, action);
+                server.Log(System.Diagnostics.TraceLevel.Warning, "UpdateCache id: " + id + " itemId: " + itemId + " parentId: " + parentId + " type: " + type + " oldName: " + oldName);
+                WebApi.UpdateCache(itemId, parentId, type);
 
                 // tell the Shell that this pidl has changed
                 // which will eventually call back in views that may be opened to our folders
-                var item = server.GetItem(id);
+                var item = server.GetItem(itemId);
                 if (item != null)
                 {
-                    ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEITEM, 0, item.IdList);
+                    if (item.IsFolder)
+                    {
+                        switch (type)
+                        {
+                            case WatcherChangeTypes.Changed:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEDIR, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Created:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_MKDIR, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Deleted:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_RMDIR, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Renamed:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_RENAMEFOLDER, 0, item.IdList);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (type)
+                        {
+                            case WatcherChangeTypes.Changed:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEITEM, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Created:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_CREATE, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Deleted:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_DELETE, 0, item.IdList);
+                                break;
+
+                            case WatcherChangeTypes.Renamed:
+                                ShellUtilities.ChangeNotify(SHCNE.SHCNE_RENAMEITEM, 0, item.IdList);
+                                break;
+                        }
+                    }
                 }
 
-                item = server.GetItem(pid);
+                item = server.GetItem(parentId);
                 if (item != null)
                 {
                     ShellUtilities.ChangeNotify(SHCNE.SHCNE_UPDATEDIR, 0, item.IdList);

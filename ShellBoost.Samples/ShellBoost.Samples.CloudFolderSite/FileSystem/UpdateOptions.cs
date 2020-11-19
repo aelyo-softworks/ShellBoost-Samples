@@ -43,7 +43,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
                     needed = true;
                 }
 
-                if (request.Attributes != 0)
+                if (request.Attributes.HasValue)
                 {
                     options.Attributes = request.Attributes;
                     needed = true;

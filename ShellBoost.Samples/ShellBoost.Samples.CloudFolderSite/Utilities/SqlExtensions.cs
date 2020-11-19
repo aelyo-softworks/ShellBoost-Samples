@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 
 namespace ShellBoost.Samples.CloudFolderSite.Utilities
 {
@@ -40,6 +43,63 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             return;
         }
 
+        private static object CoalesceValue(object value)
+        {
+            if (value == null)
+                return null;
+
+            if (value is DateTime dt)
+            {
+                if (dt < SqlDateTime.MinValue.Value)
+                {
+                    value = SqlDateTime.MinValue.Value;
+                }
+                else if (dt > SqlDateTime.MaxValue.Value)
+                {
+                    value = SqlDateTime.MaxValue.Value;
+                }
+            }
+
+            if (value is DateTimeOffset dto)
+            {
+                if (dto < SqlDateTime.MinValue.Value)
+                {
+                    value = SqlDateTime.MinValue.Value;
+                }
+                else if (dto > SqlDateTime.MaxValue.Value)
+                {
+                    value = SqlDateTime.MaxValue.Value;
+                }
+            }
+
+            return value;
+        }
+
+        private static string GetParametersLog(object parameters)
+        {
+            if (parameters == null)
+                return null;
+
+            var dic = new Dictionary<string, object>();
+            if (parameters is IEnumerable<KeyValuePair<string, object>> enumerable)
+            {
+                foreach (var kv in enumerable)
+                {
+                    dic["@" + kv.Key] = CoalesceValue(kv.Value);
+                }
+            }
+            else
+            {
+                var type = parameters.GetType();
+                foreach (var property in type.GetProperties())
+                {
+                    dic["@" + property.Name] = CoalesceValue(property.GetValue(parameters));
+                }
+            }
+
+            return string.Join(", ", dic.Select(kv => kv.Key + " = " + kv.Value));
+        }
+
         private static void AddParameters(SqlCommand cmd, object parameters)
         {
             if (parameters == null)
@@ -51,7 +111,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
                 {
                     var p = cmd.CreateParameter();
                     p.ParameterName = "@" + kv.Key;
-                    p.Value = kv.Value;
+                    p.Value = CoalesceValue(kv.Value);
                     cmd.Parameters.Add(p);
                 }
                 return;
@@ -62,12 +122,12 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             {
                 var p = cmd.CreateParameter();
                 p.ParameterName = "@" + property.Name;
-                p.Value = property.GetValue(parameters);
+                p.Value = CoalesceValue(property.GetValue(parameters));
                 cmd.Parameters.Add(p);
             }
         }
 
-        public static async Task<int> ExecuteNonQueryAsync(string connectionString, string sql, object parameters = null)
+        public static async Task<int> ExecuteNonQueryAsync(string connectionString, string sql, object parameters = null, ILogger logger = null)
         {
             if (connectionString == null)
                 throw new ArgumentNullException(nameof(connectionString));
@@ -85,12 +145,15 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
 #pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
                     cmd.CommandType = System.Data.CommandType.Text;
                     AddParameters(cmd, parameters);
+#if DEBUG
+                    logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
+#endif
                     return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                 }
             }
         }
 
-        public static async Task<SqlDataReader> ExecuteReaderAsync(string connectionString, string sql, object parameters = null)
+        public static async Task<SqlDataReader> ExecuteReaderAsync(string connectionString, string sql, object parameters = null, ILogger logger = null)
         {
             if (connectionString == null)
                 throw new ArgumentNullException(nameof(connectionString));
@@ -107,11 +170,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
 #pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
                 cmd.CommandType = System.Data.CommandType.Text;
                 AddParameters(cmd, parameters);
+#if DEBUG
+                logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
+#endif
                 return await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection).ConfigureAwait(false);
             }
         }
 
-        public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string sql, object parameters = null)
+        public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string sql, object parameters = null, ILogger logger = null)
         {
             if (connectionString == null)
                 throw new ArgumentNullException(nameof(connectionString));
@@ -128,6 +194,9 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
 #pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
                 cmd.CommandType = System.Data.CommandType.Text;
                 AddParameters(cmd, parameters);
+#if DEBUG
+                logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
+#endif
                 var obj = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
                 if (Convert.IsDBNull(obj))
                     return default;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -17,10 +16,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Events
         public IHubContext<FileSystemHub> Hub { get; }
         public ILogger<FileSystemEvents> Logger { get; }
 
-        public void Change(Guid id, Guid parentId, WatcherChangeTypes types)
+        public void Change(IFileSystemEvent @event)
         {
-            Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ": Change event id: " + id + " parentId: " + parentId + " action: " + types);
-            Hub.Clients.All.SendAsync(nameof(Change), id, parentId, types);
+            if (@event == null)
+                throw new ArgumentNullException(nameof(@event));
+
+            Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ": Change id " + @event.Id + " + itemId: " + @event.ItemId + " parentId: " + @event.ParentId + " type: " + @event.Type + " oldName: " + @event.OldName);
+            Hub.Clients.All.SendAsync(nameof(Change), @event.Id, @event.ItemId, @event.ParentId, @event.Type, @event.CreationTimeUtc, @event.OldName);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
     {
         public Guid Id { get; set; }
         public Guid ParentId { get; set; }
-        public FileAttributes Attributes { get; set; }
+        public FileAttributes? Attributes { get; set; }
         public string Name { get; set; }
         public DateTime? LastAccessTimeUtc { get; set; }
         public DateTime? CreationTimeUtc { get; set; }
