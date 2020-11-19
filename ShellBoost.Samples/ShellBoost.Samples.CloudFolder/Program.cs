@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShellBoost.Core;
+using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.CloudFolder
 {
@@ -9,6 +10,7 @@ namespace ShellBoost.Samples.CloudFolder
     {
         static void Main()
         {
+            WindowsUtilities.AllocConsole(); // see https://github.com/dotnet/winforms/issues/4246
             Console.WriteLine("ShellBoost Samples - CloudFolder - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
 
             Console.WriteLine("Press a key:");

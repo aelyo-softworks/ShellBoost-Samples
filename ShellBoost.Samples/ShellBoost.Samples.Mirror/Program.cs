@@ -1,5 +1,6 @@
 ﻿using System;
 using ShellBoost.Core;
+using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.Mirror
 {
@@ -8,6 +9,8 @@ namespace ShellBoost.Samples.Mirror
         [STAThread]
         static void Main()
         {
+            WindowsUtilities.AllocConsole(); // see https://github.com/dotnet/winforms/issues/4246
+
             Console.WriteLine("ShellBoost Samples - Mirror - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
 
             Console.WriteLine("Press a key:");

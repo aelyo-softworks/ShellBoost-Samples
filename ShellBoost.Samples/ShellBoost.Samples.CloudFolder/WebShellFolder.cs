@@ -426,7 +426,7 @@ namespace ShellBoost.Samples.CloudFolder
             }
             else
             {
-                e.Effect = DragDropEffects.None;
+                e.Effect = DragDropEffects.Copy;
             }
 
             // usually, the most complete information is from the "CFSTR_SHELLIDLIST" or ""Shell IDList Array" clipboard format
