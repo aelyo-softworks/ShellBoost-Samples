@@ -20,6 +20,10 @@ ShellBoost comes with the following samples:
 
 *	**Cloud Folder**: A .NET Core console application shell folder. Demonstrates file system features (Copy/Paste, Drag/Drop, New menus). The server app is an ASP.NET Core web application using SQL Server as a storage backend.
 
+*	**Cloud Folder Site**: An ASP.NET Core application companion of the Cloud Folder sample that implements an API-only file system over the web. It uses an SQL Database.
+
+*   **Cloud Folder Sync**: A .NET 5 console application that is an equivalent of One Drive for the Cloud Folder Site sample. It demonstrates the File On-Demand ShellBoost feature. It’s not currently exposing a Shell Namespace Extension, but you can use the Cloud Folder sample as a namespace extension to test synchronization.
+
 *	**Device Manager Folder**: A .NET Core console application folder that mimics the official Windows Device Manager application. Demonstrates asynchronous hierarchy building.
 
 *	**Mirror**: A .NET Core console application that demonstrates a namespace application mirroring a physical folder present on the disk. It’s implemented in only a few lines of code.

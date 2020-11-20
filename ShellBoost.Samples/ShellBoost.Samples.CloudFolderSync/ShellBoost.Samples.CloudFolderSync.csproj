@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\DeleteOptions.cs" Link="Api\DeleteOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\MoveOptions.cs" Link="Api\MoveOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\ServerInfo.cs" Link="Api\ServerInfo.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\UpdateRequest.cs" Link="Api\UpdateRequest.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebChange.cs" Link="Api\WebChange.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.xml" Link="ShellBoost.Core.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll" Link="ShellBoost.Core.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ShellBoost.Core">
+      <HintPath>..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

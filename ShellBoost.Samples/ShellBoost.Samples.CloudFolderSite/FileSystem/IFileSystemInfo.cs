@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem
 {
+    // defines an abstract file system entry
     public interface IFileSystemInfo
     {
         IFileSystem System { get; }

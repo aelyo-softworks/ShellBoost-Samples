@@ -158,11 +158,12 @@ namespace ShellBoost.Samples.CloudFolder
         // etc.
         public ShellItem GetItem(Guid id)
         {
-            var item = EnumItems(SHCONTF.SHCONTF_NONFOLDERS).OfType<IObjectWithApiItem>().FirstOrDefault(o => o.ApiItem.Id == id);
+            var options = SHCONTF.SHCONTF_NONFOLDERS | SHCONTF.SHCONTF_FOLDERS | SHCONTF.SHCONTF_INCLUDEHIDDEN;
+            var item = EnumItems(options).OfType<IObjectWithApiItem>().FirstOrDefault(o => o.ApiItem.Id == id);
             if (item != null)
                 return (ShellItem)item;
 
-            foreach (var child in EnumItems(SHCONTF.SHCONTF_FOLDERS).OfType<WebShellFolder>())
+            foreach (var child in EnumItems(options).OfType<WebShellFolder>())
             {
                 var item2 = child.GetItem(id);
                 if (item2 != null)

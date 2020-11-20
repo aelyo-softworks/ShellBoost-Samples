@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -15,6 +14,7 @@ using ShellBoost.Samples.CloudFolderSite.Utilities;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 {
+    // the implementation of a file system for an SQL Server database
     public class SqlFileSystem : IFileSystem
     {
         private ConcurrentDictionary<string, Event> _events = new ConcurrentDictionary<string, Event>();
@@ -67,6 +67,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 var now = DateTime.UtcNow.RemoveMilliseconds();
                 await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "IF (NOT EXISTS(SELECT * FROM Item WHERE Id = '00000000-0000-0000-0000-000000000000')) INSERT INTO Item (Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes) VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', '', @now, @now, @now, 16)", new { now }).ConfigureAwait(false);
 
+                // clear old changes
                 var max = Options.MaxChangesDays;
                 if (max > 0)
                 {

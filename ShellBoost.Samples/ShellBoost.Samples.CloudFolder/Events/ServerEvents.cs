@@ -28,8 +28,8 @@ namespace ShellBoost.Samples.CloudFolder.Events
             _connection.Closed += async (error) =>
             {
                 // restart
-                await Task.Delay(new Random().Next(0, 5) * 1000);
-                await _connection.StartAsync();
+                await Task.Delay(new Random().Next(0, 5) * 1000).ConfigureAwait(false);
+                await _connection.StartAsync().ConfigureAwait(false);
             };
 
             // must match server's IFileSystemEvents method signature
@@ -101,6 +101,12 @@ namespace ShellBoost.Samples.CloudFolder.Events
         }
 
         public WebShellFolderServer Server { get; }
-        public void Dispose() => _connection?.DisposeAsync();
+        public async void Dispose()
+        {
+            if (_connection != null)
+            {
+                await _connection.DisposeAsync().ConfigureAwait(false);
+            }
+        }
     }
 }

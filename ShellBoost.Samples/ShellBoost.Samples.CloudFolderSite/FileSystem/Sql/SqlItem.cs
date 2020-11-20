@@ -7,6 +7,7 @@ using System.Transactions;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 {
+    // implementation of files and folders for an SQL Server database
     public class SqlItem : IFileInfo, IFolderInfo
     {
         private readonly Lazy<SqlItem> _parent;

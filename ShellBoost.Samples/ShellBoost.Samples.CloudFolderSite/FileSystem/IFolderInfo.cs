@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem
 {
+    // defines an abstract folder entry
     public interface IFolderInfo : IFileSystemInfo
     {
         bool IsRoot { get; }

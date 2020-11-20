@@ -7717,12 +7717,28 @@
             Some content changes are still being moved.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Synchronization.ContentMover.JobMovingState.WaitingForParents">
+            <summary>
+            Some movings are waiting for their parents.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.ContentMover.EnsureParentCreationJob(ShellBoost.Core.Synchronization.SyncJobChange)">
+            <summary>
+            Ensures there is a parent creation job for this change.
+            </summary>
+            <param name="jobChange">The job change.</param>
+            <returns>true if the job exists or was created.</returns>
+            <exception cref="T:System.ArgumentNullException">jobChange is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.ContentMover.GetJobState(ShellBoost.Core.Synchronization.SyncJob)">
             <summary>
             Gets a job state with regards to its content changes.
             </summary>
             <param name="job">The job instance.</param>
-            <returns>The status of a job with regards to its content changes.</returns>
+            <returns>
+            The status of a job with regards to its content changes.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">job is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.ContentMover.CreateDestinationEntry(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.SyncJobChange,System.Boolean)">
             <summary>
@@ -7927,6 +7943,14 @@
             </summary>
             <value>
               <c>true</c> if event monitoring must be started immediately; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizerOptions.UploadsWaitForParents">
+            <summary>
+            Gets or sets a value indicating whether uploads operation must wait for parent entries.
+            </summary>
+            <value>
+              <c>true</c> if uploads operation must wait for parent entries; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.EnumerationLevel">
@@ -10350,12 +10374,20 @@
             <param name="options">The options.</param>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.Identifier">
-            <summary>Gets the identifier.</summary>
-            <value>The identifier.</value>
+            <summary>
+            Gets the identifier.
+            </summary>
+            <value>
+            The identifier.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.FileSystem">
-            <summary>Gets the file system.</summary>
-            <value>The file system.</value>
+            <summary>
+            Gets the file system.
+            </summary>
+            <value>
+            The file system.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.FileSystemRead">
             <summary>
@@ -10407,11 +10439,19 @@
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.ChecksEntryIdsUnicity">
             <summary>
-            Gets or sets a value indicating whether entry ids unicity is checked.
+            Gets a value indicating whether entry ids unicity is checked.
             This is set by default to help diagnostics.
             </summary>
             <value>
               <c>true</c> if entry ids unicity is checked; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.UploadsWaitForParents">
+            <summary>
+            Gets a value indicating whether uploads operation must wait for parent entries.
+            </summary>
+            <value>
+              <c>true</c> if uploads operation must wait for parent entries; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.StateProvider">
@@ -10574,7 +10614,7 @@
             <param name="entry">The entry.</param>
             <param name="oldEntry">The optional old entry.</param>
             <param name="event">The optional related file system event.</param>
-            <exception cref="T:System.ArgumentNullException">entry is null</exception>
+            <exception cref="T:System.ArgumentNullException">entry is null.</exception>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizer.StateEvent.Entry">
             <summary>
@@ -10707,7 +10747,18 @@
             <param name="oldEntry">The optional old entry related to the change.</param>
             <param name="event">The optional related file system event.</param>
             <returns>The change instance or null if because the entry parent path could not be computed.</returns>
-            <exception cref="T:System.ArgumentNullException">entry is null</exception>
+            <exception cref="T:System.ArgumentNullException">entry is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.ToChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateEvent)">
+            <summary>
+            Converts an event to a sync change.
+            </summary>
+            <param name="type">The even ttype.</param>
+            <param name="stateEvent">The event.</param>
+            <returns>
+            A new instance of the StateSyncChange class or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">stateEvent is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.SaveStateDiff(ShellBoost.Core.Synchronization.ISyncEventsSink,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateDiff)">
             <summary>
@@ -10751,6 +10802,16 @@
             </summary>
             <param name="eventArgs">The event data.</param>
             <exception cref="T:System.ArgumentNullException">eventArgs is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.IsContentChange(ShellBoost.Core.Synchronization.StateSyncChange)">
+            <summary>
+            Determines whether a change corresponds to a content change.
+            </summary>
+            <param name="change">The change.</param>
+            <returns>
+              <c>true</c> if a change corresponds to a content change; otherwise, <c>false</c>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">change is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.HasEntryMoved(ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.StateSyncEntry)">
             <summary>
@@ -14970,6 +15031,12 @@
             </summary>
             <value>The item path.</value>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.FileTransferEventArgs.HResult">
+            <summary>
+            Gets or sets the operation HResult.
+            </summary>
+            <value>The operation HResult.</value>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.FileUpdateProgressEventArgs">
             <summary>
             Provides data for the UpdateProgress event of a FileOperation.
@@ -16866,12 +16933,6 @@
             Gets the new object.
             </summary>
             <value>The new object.</value>
-        </member>
-        <member name="P:ShellBoost.Core.Utilities.PostFileTransferEventArgs.HResult">
-            <summary>
-            Gets the Windows HRESULT code.
-            </summary>
-            <value>The h result.</value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.PostFileTransferEventArgs.FileAttributes">
             <summary>
@@ -20560,6 +20621,11 @@
             <returns>
             true if the call succeeded; false otherwise.
             </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.WindowsUtilities.SetConsoleStandardStreams">
+            <summary>
+            Sets In, Out and Error Console streams.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.BIND_FLAGS">
             <summary>

@@ -15,12 +15,12 @@ namespace ShellBoost.Samples.CloudFolderSite
         }
 
         public WebFolderException(string message)
-            : base(message)
+            : base(Prefix + message)
         {
         }
 
         public WebFolderException(string message, Exception innerException)
-            : base(message, innerException)
+            : base(Prefix + message, innerException)
         {
         }
 

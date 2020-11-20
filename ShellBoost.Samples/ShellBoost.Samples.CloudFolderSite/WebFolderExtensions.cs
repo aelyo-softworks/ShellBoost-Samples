@@ -30,7 +30,7 @@ namespace ShellBoost.Samples.CloudFolderSite
                 }
 
                 if (!(Activator.CreateInstance(Type.GetType(typeName, true)) is IFileSystem fs))
-                    throw new WebFolderException("0005: Type '" + typeName + "' is not an " + nameof(IFileSystem) + ".");
+                    throw new WebFolderException("0002: Type '" + typeName + "' is not an " + nameof(IFileSystem) + ".");
 
                 var fse = sp.GetService<IFileSystemEvents>();
                 fs.Initialize(setupAction, fse, GetProperties(configuration));

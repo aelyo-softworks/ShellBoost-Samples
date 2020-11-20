@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem
 {
+    // defines an abstract file entry
     public interface IFileInfo : IFileSystemInfo
     {
         // item's content size

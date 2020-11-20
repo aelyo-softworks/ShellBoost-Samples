@@ -6,6 +6,7 @@ using ShellBoost.Samples.CloudFolderSite.FileSystem.Events;
 
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem
 {
+    // defines an abstract file system
     public interface IFileSystem
     {
         // a unique id that can be used as a cache root key by clients
