@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
   </PropertyGroup>
 
   <ItemGroup>

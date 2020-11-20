@@ -16,7 +16,6 @@ namespace ShellBoost.Samples.CloudFolderSync
 
         static void Main()
         {
-            WindowsUtilities.AllocConsole();
             Console.WriteLine("ShellBoost Samples - Cloud Folder Sync - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
             Console.WriteLine();

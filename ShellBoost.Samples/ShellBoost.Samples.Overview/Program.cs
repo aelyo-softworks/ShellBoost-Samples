@@ -8,7 +8,6 @@ namespace ShellBoost.Samples.Overview
     {
         static void Main()
         {
-            WindowsUtilities.AllocConsole(); // see https://github.com/dotnet/winforms/issues/4246
             // this source is used by two projects: Overview (.NET Framework) and CoreOverview (.NET Core 3+)
             Console.WriteLine("ShellBoost Samples - " + (Core.Client.Installer.IsNetCore? "Core" : null) + "Overview - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
