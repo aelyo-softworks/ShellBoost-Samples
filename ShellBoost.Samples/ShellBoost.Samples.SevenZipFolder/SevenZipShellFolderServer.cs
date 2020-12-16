@@ -18,7 +18,7 @@ namespace ShellBoost.Samples.SevenZipFolder
             if (!_cache.TryGetValue(idList, out var folder))
             {
                 // this check to ensure we're not being called for anything else than what we expect (like a folder, etc.)
-                var path = idList.GetPath();
+                var path = idList.GetFileSystemPath();
                 if (IOUtilities.FileExists(path))
                 {
                     folder = new ArchiveRootShellFolder(this, idList);

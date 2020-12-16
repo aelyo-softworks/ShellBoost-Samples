@@ -79,6 +79,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             foreach (var file in Account.GetFolderFiles(parentEntry.Id, options.Level == EnumerationLevel.AllChildren))
             {
                 var entry = ToEntry(file);
+                Account.Log(TraceLevel.Verbose, "entry " + entry.Id + " '" + entry.Name + "'");
                 yield return entry;
             }
         }

@@ -10,7 +10,7 @@ namespace ShellBoost.Samples.SevenZipFolder
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("ShellBoost Samples - SevenZip Folder - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
@@ -93,7 +93,7 @@ namespace ShellBoost.Samples.SevenZipFolder
             }
         }
 
-        // you must install 7-Zip for this sample to work
+        // you *must* install 7-Zip for this sample to work
         // this is a utility method to set 7z dll path
         // make sure you compile "any cpu" to ease this out
         public static void SetSevenZipLibraryPath()
@@ -190,6 +190,7 @@ namespace ShellBoost.Samples.SevenZipFolder
             {
                 key.SetValue(typeof(Program).Namespace + name, oldValue);
             }
+
             key.SetValue(name, value);
         }
 
@@ -198,11 +199,11 @@ namespace ShellBoost.Samples.SevenZipFolder
             if (key == null)
                 return;
 
-            var value = key.GetValue(typeof(Program).Namespace + name) as string;
-            if (value != null)
+            if (key.GetValue(typeof(Program).Namespace + name) is string value)
             {
                 key.SetValue(name, value);
             }
+
             key.DeleteValue(typeof(Program).Namespace + name, false);
         }
 

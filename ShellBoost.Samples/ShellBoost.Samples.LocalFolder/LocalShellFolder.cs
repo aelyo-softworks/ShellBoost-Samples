@@ -116,6 +116,7 @@ namespace ShellBoost.Samples.LocalFolder
                         }
                         fo.SetOperationFlags(FOF.FOF_ALLOWUNDO | FOF.FOF_NOCONFIRMMKDIR | FOF.FOF_RENAMEONCOLLISION);
                         fo.PerformOperations();
+                        NotifyUpdate();
                     }
                 });
             }

@@ -23,6 +23,20 @@ namespace ShellBoost.Samples.PhysicalOverview
             CanDelete = true;
         }
 
+        //enable this for folder deletion / can have border effects...
+        protected override void OnGetDataObjectEvent(object sender, GetDataObjectEventArgs e)
+        {
+            foreach (var item in e.Items)
+            {
+                var obj = Item.FromParsingName(item.FileSystemPath, throwOnError: false);
+                if (obj != null)
+                {
+                    e.AddDataObject(obj);
+                }
+            }
+            base.OnGetDataObjectEvent(sender, e);
+        }
+
         private class MyShellItem : ShellItem
         {
             // this item is backed by a physical file
@@ -181,7 +195,7 @@ namespace ShellBoost.Samples.PhysicalOverview
                     return;
                 }
 
-                if (e.DataObject[ShellDataObjectFormat.CFSTR_FILEDESCRIPTOR] != null)
+                if (e.DataObject[ShellDataObjectFormat.CFSTR_FILEDESCRIPTORW] != null)
                 {
                     // this format can be seen when drag & dropping attachments from outlook (files) or from chrome (data) for example
                     if (e.Type == DragDropTargetEventType.DragDrop)

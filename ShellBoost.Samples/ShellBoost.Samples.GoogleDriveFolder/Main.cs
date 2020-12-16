@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -332,7 +333,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     t.Name = string.Format("_gd_logger{0}", Environment.TickCount);
                     return true;
                 });
-                string name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
+
+                var name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
                 _logPath = Path.Combine(Settings.LogsDirectoryPath, name);
                 IOUtilities.FileCreateDirectory(_logPath);
             }

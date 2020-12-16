@@ -66,8 +66,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             UserCredential credential;
             using (var stream = File.OpenRead(Settings.SecretsFilePath))
             {
-                var receiver = noReceiver ? new NullReceiver() : AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies);
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath), receiver).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath)).Result;
             }
 
             Service = GetService(credential);
@@ -85,6 +84,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true, StateProviderTraceLevel = Settings.Current.StateProviderLogLevel });
             Synchronizer.AddEndPoint("Local", new OnDemandLocalFileSystem(DataDirectoryPath));
             Synchronizer.AddEndPoint("GDrive", FileSystem);
+
+            Log(TraceLevel.Info, "State file path: " + Synchronizer.StateProvider.ExecuteCommand(new Dictionary<string, object> { ["command"] = "filepath" }));
         }
 
         // a receive that doesn't to anything on purpose
@@ -672,7 +673,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             {
                 IOUtilities.FileCreateDirectory(tempPath);
                 var store = new FileStore(tempPath);
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store, AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies)).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store).Result;
             }
 
             using (var service = GetService(credential))
@@ -763,7 +764,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                         break;
 
                     case LogLevel.Warning:
-                        // hack remove this bogus warning
+                        // hack: remove this bogus warning
                         if (formattedMessage != null && formattedMessage.IndexOf("Add parameter should not get null values. type=Query, name=key", StringComparison.OrdinalIgnoreCase) >= 0)
                             return;
 

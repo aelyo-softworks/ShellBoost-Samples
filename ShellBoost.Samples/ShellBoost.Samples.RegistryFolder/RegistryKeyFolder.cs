@@ -115,6 +115,7 @@ namespace ShellBoost.Samples.RegistryFolder
             appendMenu.AddInvokeItemHandler(OnShellMenuItemInvoke);
             if (items.Count == 1 && !items[0].IsFolder)
             {
+                // only for one non-folder item 
                 var modifyItem = new ShellMenuItem(appendMenu, "Modify...");
                 modifyItem.Tag = MenuCommand.Modify;
                 modifyItem.IsDefault = true;
@@ -136,6 +137,12 @@ namespace ShellBoost.Samples.RegistryFolder
                     newItem.Items.Add(new ShellMenuItem(appendMenu, "Multi-String Value") { Tag = MenuCommand.NewValueMultiString });
                     newItem.Items.Add(new ShellMenuItem(appendMenu, "Expandable String Value") { Tag = MenuCommand.NewValueExpandString });
                 }
+            }
+
+            if (items.Count > 0)
+            {
+                // add the "Send To" menu
+                appendMenu.Items.Add(new ShellMenuSendToItem());
             }
         }
 
@@ -179,7 +186,7 @@ namespace ShellBoost.Samples.RegistryFolder
                                     using (var key = OpenKey(true))
                                     {
                                         key.SetValue(valueItem.KeyName, form.NewValue);
-                                        e.Folder.RefreshShellViews();
+                                        valueItem.Parent?.NotifyUpdate();
                                     }
                                 }
                             });
@@ -194,9 +201,20 @@ namespace ShellBoost.Samples.RegistryFolder
                         if (key != null)
                         {
                             var newName = GetNewName("New Key #", key.GetSubKeyNames());
-                            key.CreateSubKey(newName);
-                            e.Folder.RefreshShellViews();
-                            await SelectAndEdit(newName);
+                            try
+                            {
+                                key.CreateSubKey(newName);
+                                e.Folder.RefreshShellViews();
+                                await SelectAndEdit(newName);
+                            }
+                            catch (Exception ex)
+                            {
+                                // probably an access denied error
+                                await WindowsUtilities.DoModelessAsync(() =>
+                                {
+                                    MessageBox.Show(new Win32Window(e.HwndOwner), "The Registry Folder cannot set a value here: " + ex.Message, "Registry Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                });
+                            }
                         }
                     }
                     break;
@@ -213,8 +231,20 @@ namespace ShellBoost.Samples.RegistryFolder
                         if (key != null)
                         {
                             var newName = GetNewName("New Value #", key.GetValueNames());
-                            key.SetValue(newName, GetDefaultValue(kind), kind);
-                            e.Folder.RefreshShellViews();
+                            try
+                            {
+                                key.SetValue(newName, GetDefaultValue(kind), kind);
+                                e.Folder.RefreshShellViews();
+                                await SelectAndEdit(newName);
+                            }
+                            catch (Exception ex)
+                            {
+                                // probably an access denied error
+                                await WindowsUtilities.DoModelessAsync(() =>
+                                {
+                                    MessageBox.Show(new Win32Window(e.HwndOwner), "The Registry Folder cannot set a value here: " + ex.Message, "Registry Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                });
+                            }
                         }
                     }
                     break;
@@ -372,7 +402,7 @@ namespace ShellBoost.Samples.RegistryFolder
                     }
                     else
                     {
-                        object value = key.GetValue(e.Item.DisplayName);
+                        var value = key.GetValue(e.Item.DisplayName);
                         if (value == null)
                         {
                             await WindowsUtilities.DoModelessAsync(() =>
@@ -386,6 +416,7 @@ namespace ShellBoost.Samples.RegistryFolder
                             key.DeleteValue(e.Item.DisplayName, false);
                             e.NewId = new StringKeyShellItemId(e.NewName);
                             e.HResult = ShellUtilities.S_OK;
+                            e.Item.Parent?.NotifyUpdate();
                         }
                     }
                 }

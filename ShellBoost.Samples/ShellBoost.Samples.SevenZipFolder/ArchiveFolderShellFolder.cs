@@ -23,7 +23,7 @@ namespace ShellBoost.Samples.SevenZipFolder
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
-            if ((options & SHCONTF.SHCONTF_FOLDERS) == SHCONTF.SHCONTF_FOLDERS)
+            if (options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
             {
                 foreach (var folder in Folder.Folders)
                 {
@@ -31,7 +31,7 @@ namespace ShellBoost.Samples.SevenZipFolder
                 }
             }
 
-            if ((options & SHCONTF.SHCONTF_NONFOLDERS) == SHCONTF.SHCONTF_NONFOLDERS)
+            if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
             {
                 foreach (var file in Folder.Files)
                 {

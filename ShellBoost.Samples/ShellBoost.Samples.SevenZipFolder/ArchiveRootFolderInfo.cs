@@ -89,7 +89,7 @@ namespace ShellBoost.Samples.SevenZipFolder
             using (var extractor = new SevenZipExtractor(FilePath))
             {
                 var content = new ArchiveFileContent(file);
-                
+
                 // unfortunately, the extractor doesn't seem to support a pull model.
                 // so we push the data into memory first
                 // we could also use a physical file as a temporary cache. it maybe better...

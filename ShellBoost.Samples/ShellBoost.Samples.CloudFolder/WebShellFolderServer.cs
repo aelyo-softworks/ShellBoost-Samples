@@ -73,7 +73,7 @@ namespace ShellBoost.Samples.CloudFolder
                     if (stream == null)
                         throw new InvalidOperationException();
                     
-                    // note the 16 size is a 256 colors, not a full RGB color as it seems the Shell's context menu doesn't like that
+                    // note the 16 size is a 256 colors, not a full RGB color as the Shell's context menu doesn't like that
                     var bmps = IconUtilities.LoadIconsFromStream(stream);
                     var bmp = bmps.FirstOrDefault(i => i.Height == 16);
                     bmp.Save(cachePath);

@@ -13,6 +13,7 @@ namespace ShellBoost.Samples.Overview
         {
             // this is needed for icon
             ItemType = IOUtilities.PathGetExtension(text);
+            CanCopy = true;
         }
 
         public override bool TryGetPropertyValue(PropertyKey key, out object value)

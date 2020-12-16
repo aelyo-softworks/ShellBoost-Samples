@@ -230,7 +230,7 @@ namespace ShellBoost.Samples.CloudFolder
             return false; // don't go to base, we know better
         }
 
-        private string ValidateNotExistingPidl(ShellItemIdList pidl)
+        private static string ValidateNotExistingPidl(ShellItemIdList pidl)
         {
             // this must be compatible with what we sent in TryParseItem method
             var stringPidl = KeyShellItemId.From(pidl?.Last?.Data, false) as StringKeyShellItemId;
@@ -322,7 +322,7 @@ namespace ShellBoost.Samples.CloudFolder
                 // note if the past action is too fast, items may not be here yet (user will have to press "Retry")
                 foreach (var si in e.Items)
                 {
-                    if (!(si is IObjectWithApiItem apiItem))
+                    if (si is not IObjectWithApiItem apiItem)
                         continue;
 
                     Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath));
@@ -450,7 +450,7 @@ namespace ShellBoost.Samples.CloudFolder
                     if (si == null || si.FileSystemPath == null)
                         continue;
 
-                    if (!(si is IObjectWithApiItem apiItem))
+                    if (si is not IObjectWithApiItem apiItem)
                         continue;
 
                     // this is a callback event, no need to wait
@@ -539,18 +539,24 @@ namespace ShellBoost.Samples.CloudFolder
                     folderItem.BitmapPath = FolderServer.MenuIconBitmapPath;
 
                     var clearLocal = new ShellMenuItem(appendMenu, "Free up space");
+                    clearLocal.Verb = "CloudFolder.free";
                     clearLocal.Invoke += OnClearLocal;
                     folderItem.Items.Add(clearLocal);
 
                     var downloadLocally = new ShellMenuItem(appendMenu, "Download on this device");
+                    downloadLocally.Verb = "CloudFolder.download";
                     downloadLocally.Invoke += DownloadLocally;
                     folderItem.Items.Add(downloadLocally);
 
                     var pushToServer = new ShellMenuItem(appendMenu, "Push to server");
+                    pushToServer.Verb = "CloudFolder.push";
                     pushToServer.Invoke += PushToServer;
                     folderItem.Items.Add(pushToServer);
 
                     appendMenu.Items.Add(folderItem);
+
+                    // add the "Sent To" menu
+                    appendMenu.Items.Add(new ShellMenuSendToItem());
                 }
             }
         }
@@ -559,7 +565,7 @@ namespace ShellBoost.Samples.CloudFolder
         {
             foreach (var si in e.Items)
             {
-                if (si.FileSystemPath == null || !(si is IObjectWithApiItem apiItem))
+                if (si.FileSystemPath == null || si is not IObjectWithApiItem apiItem)
                     continue;
 
                 // already only on server,
@@ -575,7 +581,7 @@ namespace ShellBoost.Samples.CloudFolder
         {
             foreach (var si in e.Items)
             {
-                if (si.FileSystemPath == null || !(si is IObjectWithApiItem apiItem))
+                if (si.FileSystemPath == null || si is not IObjectWithApiItem apiItem)
                     continue;
 
                 Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath));
