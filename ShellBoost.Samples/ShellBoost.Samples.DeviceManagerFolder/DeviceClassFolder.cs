@@ -22,6 +22,8 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             : base(parent, new GuidKeyShellItemId(classGuid))
         {
             ClassGuid = classGuid;
+
+            // come up with the display name for class
             var sb = new StringBuilder(1024);
             var size = sb.Capacity;
             SetupDiGetClassDescription(classGuid, sb, sb.Capacity, ref size);
@@ -33,11 +35,14 @@ namespace ShellBoost.Samples.DeviceManagerFolder
                 Thumbnail = new ShellThumbnail(NormalizeIconPath(iconPath), iconIndex.Value);
             }
 
+            // remove default columns we don't need here
             RemoveColumn(Props.System.ItemType);
             RemoveColumn(Props.System.Size);
             RemoveColumn(Props.System.DateModified);
             RemoveColumn(Props.System.PerceivedType);
             RemoveColumn(Props.System.Kind);
+
+            // add these ones, already defined by Windows
             AddColumn(Props.System.Devices.DeviceInstanceId, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
             AddColumn(Props.System.Devices.ClassGuid, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
             AddColumn(Props.System.Devices.ContainerId, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
@@ -47,6 +52,7 @@ namespace ShellBoost.Samples.DeviceManagerFolder
         public new DeviceManagerFolder Parent => (DeviceManagerFolder)base.Parent;
         public new DeviceManagerFolderServer FolderServer => (DeviceManagerFolderServer)base.FolderServer;
 
+        // we have no folders here, only items
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
             if (!options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
@@ -79,6 +85,7 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             // add the device interface to the device folder
             deviceFolder.AddDeviceInterface(deviceInterface);
 
+            // notify the Shell something has changed
             if (created)
             {
                 deviceFolder.NotifyCreate();
@@ -89,6 +96,7 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             }
         }
 
+        // gets an icon path for a class (guid)
         private int? GetIconPath(out string filePath)
         {
             filePath = null;
@@ -109,6 +117,7 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             }
         }
 
+        // some tool that normalizes devices icon path
         internal static string NormalizeIconPath(string path)
         {
             if (string.IsNullOrWhiteSpace(path))

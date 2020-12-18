@@ -12940,6 +12940,26 @@
             The task cancellation token.
             </value>
         </member>
+        <member name="T:ShellBoost.Core.Utilities.BitDepth">
+            <summary>
+            Defines bit depth for OctreeQuantizer.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.BitDepth.Bits8">
+            <summary>
+            8 bits.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.BitDepth.Bits16">
+            <summary>
+            16 bits.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.BitDepth.Bits24">
+            <summary>
+            24 bits.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.ComServer">
             <summary>
             Represents a COM server
@@ -13602,6 +13622,225 @@
             <param name="y">The second object to compare.</param>
             <returns>
             A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.OctreeQuantizer">
+            <summary>
+            Defines an Octree Quantizer.
+            The code is from Morgan Skinner's article on optimizing color quantization at http://msdn2.microsoft.com/en-us/library/aa479306.aspx.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OctreeQuantizer.#ctor(ShellBoost.Core.Utilities.BitDepth)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.OctreeQuantizer"/> class.
+            </summary>
+            <param name="bitDepth">The bit depth.</param>
+            <remarks>
+            The Octree quantizer is a two pass algorithm. The initial pass sets up the octree, the second pass quantizes a color based on the nodes in the tree.
+            </remarks>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OctreeQuantizer.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.OctreeQuantizer"/> class.
+            </summary>
+            <param name="maxColors">The maximum number of colors to return</param>
+            <param name="maxColorBits">The number of significant bits</param>
+            <remarks>
+            The Octree quantizer is a two pass algorithm. The initial pass sets up the octree, the second pass quantizes a color based on the nodes in the tree.
+            </remarks>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OctreeQuantizer.InitialQuantizePixel(ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Process the pixel in the first pass of the algorithm
+            </summary>
+            <param name="pixel">The pixel to quantize</param>
+            <remarks>
+            This function need only be overridden if your quantize algorithm needs two passes,
+            such as an Octree quantizer.
+            </remarks>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OctreeQuantizer.QuantizePixel(ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Override this to process the pixel in the second pass of the algorithm
+            </summary>
+            <param name="pixel">The pixel to quantize</param>
+            <returns>The quantized value</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.OctreeQuantizer.GetPalette(System.Drawing.Imaging.ColorPalette)">
+            <summary>
+            Retrieve the palette for the quantized image
+            </summary>
+            <param name="original">Any old palette, this is overrwritten</param>
+            <returns>The new color palette</returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.Quantizer">
+            <summary>
+            Defines an abstract class for Quantization.
+            The code is from Morgan Skinner's article on optimizing color quantization at http://msdn2.microsoft.com/en-us/library/aa479306.aspx.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.#ctor(System.Boolean)">
+            <summary>
+            Construct the quantizer
+            </summary>
+            <param name="singlePass">If true, the quantization only needs to loop through the source pixels once</param>
+            <remarks>
+            If you construct this class with a true value for singlePass, then the code will, when quantizing your image, only call the 'QuantizeImage' function.
+            If two passes are required, the code will call 'InitialQuantizeImage' and then 'QuantizeImage'.
+            </remarks>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Quantize(System.Drawing.Image)">
+            <summary>
+            Quantize an image and return the resulting output bitmap
+            </summary>
+            <param name="source">The image to quantize</param>
+            <returns>
+            A quantized version of the image
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.FirstPass(System.Drawing.Imaging.BitmapData,System.Int32,System.Int32)">
+            <summary>
+            Execute the first pass through the pixels in the image
+            </summary>
+            <param name="sourceData">The source data</param>
+            <param name="width">The width in pixels of the image</param>
+            <param name="height">The height in pixels of the image</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.SecondPass(System.Drawing.Imaging.BitmapData,System.Drawing.Bitmap,System.Int32,System.Int32,System.Drawing.Rectangle)">
+            <summary>
+            Execute a second pass through the bitmap
+            </summary>
+            <param name="sourceData">The source bitmap, locked into memory</param>
+            <param name="output">The output bitmap</param>
+            <param name="width">The width in pixels of the image</param>
+            <param name="height">The height in pixels of the image</param>
+            <param name="bounds">The bounding rectangle</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.InitialQuantizePixel(ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Override this to process the pixel in the first pass of the algorithm
+            </summary>
+            <param name="pixel">The pixel to quantize</param>
+            <remarks>
+            This function need only be overridden if your quantize algorithm needs two passes,
+            such as an Octree quantizer.
+            </remarks>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.QuantizePixel(ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Override this to process the pixel in the second pass of the algorithm
+            </summary>
+            <param name="pixel">The pixel to quantize</param>
+            <returns>The quantized value</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.GetPalette(System.Drawing.Imaging.ColorPalette)">
+            <summary>
+            Retrieve the palette for the quantized image
+            </summary>
+            <param name="original">Any old palette, this is overrwritten</param>
+            <returns>The new color palette</returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.Quantizer.Color32">
+            <summary>
+            Struct that defines a 32 bpp colour
+            </summary>
+            <remarks>
+            This struct is used to read data from a 32 bits per pixel image
+            in memory, and is ordered in this manner as this is the way that
+            the data is layed out in memory
+            </remarks>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.Quantizer.Color32.Blue">
+            <summary>
+            Holds the blue component of the colour
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.Quantizer.Color32.Green">
+            <summary>
+            Holds the green component of the colour
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.Quantizer.Color32.Red">
+            <summary>
+            Holds the red component of the colour
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.Quantizer.Color32.Alpha">
+            <summary>
+            Holds the alpha component of the colour
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.Quantizer.Color32.Argb">
+            <summary>
+            Holds the color as an Int32.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.Quantizer.Color32.Color">
+            <summary>
+            Return the color for this Color32 object
+            </summary>
+            <value>
+            The color.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.Quantizer.Color32"/> struct.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.Read(System.IntPtr)">
+            <summary>
+            Reads a Color32 from a pointer.
+            </summary>
+            <param name="ptr">The pointer.</param>
+            <returns>A Color32 instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.Equals(ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object" />, is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.op_Equality(ShellBoost.Core.Utilities.Quantizer.Color32,ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Implements the operator ==.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>
+            The result of the operator.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.Quantizer.Color32.op_Inequality(ShellBoost.Core.Utilities.Quantizer.Color32,ShellBoost.Core.Utilities.Quantizer.Color32)">
+            <summary>
+            Implements the operator !=.
+            </summary>
+            <param name="left">The left.</param>
+            <param name="right">The right.</param>
+            <returns>
+            The result of the operator.
             </returns>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ShellStringComparer">

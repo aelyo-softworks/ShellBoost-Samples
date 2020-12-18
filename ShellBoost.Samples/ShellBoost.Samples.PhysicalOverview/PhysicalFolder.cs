@@ -15,12 +15,18 @@ namespace ShellBoost.Samples.PhysicalOverview
             : base(parent, info)
         {
             CanPaste = true;
+
+            // this enables the "New" menus
+            Attributes |= SFGAO.SFGAO_STORAGEANCESTOR | SFGAO.SFGAO_STORAGE;
         }
 
         public PhysicalFolder(ShellFolder parent, ShellItemId fileSystemId, string fileSystemPath)
             : base(parent, fileSystemId, fileSystemPath)
         {
             CanDelete = true;
+
+            // this enables the "New" menus
+            Attributes |= SFGAO.SFGAO_STORAGEANCESTOR | SFGAO.SFGAO_STORAGE;
         }
 
         //enable this for folder deletion / can have border effects...

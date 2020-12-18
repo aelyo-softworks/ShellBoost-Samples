@@ -12,6 +12,8 @@ namespace ShellBoost.Samples.Mirror
             if (rootPath == null)
                 throw new ArgumentNullException(nameof(rootPath));
 
+            // this sample works just because of this line
+            // all the rest will be automatically built because we're using file system
             FileSystemPath = rootPath;
         }
     }

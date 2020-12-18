@@ -20,11 +20,15 @@ namespace ShellBoost.Samples.DeviceManagerFolder
 
             // we start hidden and will show if any deviceinterface is visible
             Attributes |= SFGAO.SFGAO_HIDDEN;
+
+            // remove default columns we don't need here
             RemoveColumn(Props.System.ItemType);
             RemoveColumn(Props.System.Size);
             RemoveColumn(Props.System.DateModified);
             RemoveColumn(Props.System.PerceivedType);
             RemoveColumn(Props.System.Kind);
+
+            // add these ones, already defined by Windows
             AddColumn(Props.System.Devices.InterfaceClassGuid, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
             AddColumn(Props.System.Devices.IsDefault, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
             AddColumn(Props.System.Devices.InterfaceEnabled, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);

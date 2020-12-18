@@ -8,7 +8,7 @@ using Props = ShellBoost.Core.WindowsPropertySystem;
 
 namespace ShellBoost.Samples.PhysicalOverview
 {
-    // this folder is not backed by a directory
+    // this folder is not backed by a physical directory
     public class RootFolder : RootShellFolder
     {
         public RootFolder(PhysicalOverviewShellFolderServer server, ShellItemIdList idList)
@@ -33,7 +33,7 @@ namespace ShellBoost.Samples.PhysicalOverview
             Server = server;
 
             // we want to know when something changes in the real folder so we can update ours
-            // note we don't use .NET's FileSystemWatcher but a Shell-oriented ShellBoost-provider tool instead.
+            // note we don't use .NET's FileSystemWatcher but a Shell-oriented ShellBoost-provider tool instead base on native Shell's APIs.
             ChangeNotifier = new ChangeNotifier(ShellUtilities.GetIdList(RootPath), true);
             ChangeNotifier.Notify += OnChangeNotifierNotify;
         }

@@ -19,11 +19,14 @@ namespace ShellBoost.Samples.DeviceManagerFolder
         public DeviceManagerFolder(ShellItemIdList idList)
             : base(idList)
         {
+            // remove default columns we don't need here
             RemoveColumn(Props.System.ItemType);
             RemoveColumn(Props.System.Size);
             RemoveColumn(Props.System.DateModified);
             RemoveColumn(Props.System.PerceivedType);
             RemoveColumn(Props.System.Kind);
+
+            // add this one, already defined by Windows
             AddColumn(Props.System.Devices.ClassGuid, SHCOLSTATE.SHCOLSTATE_ONBYDEFAULT);
         }
 
@@ -66,6 +69,7 @@ namespace ShellBoost.Samples.DeviceManagerFolder
             // add the device (and interfaces) to the class folder
             deviceClassFolder.AddDeviceInterface(device, deviceInterface);
 
+            // notify the Shell something has changed
             if (created)
             {
                 deviceClassFolder.NotifyCreate();

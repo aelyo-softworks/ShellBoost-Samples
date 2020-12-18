@@ -17,6 +17,8 @@ namespace ShellBoost.Samples.DeviceManagerFolder
 
         public DeviceManagerFolderServer()
         {
+            // hook up events
+            // note the tree may take some time to build itself
             DeviceInterfaceWatcher = DeviceInformation.CreateWatcher(string.Empty, Array.Empty<string>(), DeviceInformationKind.DeviceInterface);
             DeviceInterfaceWatcher.Added += OnDeviceAdded;
             DeviceInterfaceWatcher.Removed += OnDeviceRemoved;
