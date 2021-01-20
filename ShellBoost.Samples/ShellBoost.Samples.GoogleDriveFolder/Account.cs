@@ -288,6 +288,10 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 throw new ArgumentNullException(nameof(parentId));
 
             Log(TraceLevel.Info, "name:'" + name + "' parentId:" + parentId + " createdTime:" + createdTime + " modifiedTime:" + modifiedTime + " mimeType:" + mimeType);
+
+            // note google drive allows multiple files with the same name, so we must delete conflicting targets
+            DeleteFilesByName(parentId, name);
+
             var file = new GDriveData.File();
             var request = Service.Files.Create(file);
             file.Name = name;
