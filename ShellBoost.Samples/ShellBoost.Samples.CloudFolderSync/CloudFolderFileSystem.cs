@@ -282,8 +282,8 @@ namespace ShellBoost.Samples.CloudFolderSync
                 entry.Attributes != ToAttributes(item))
             {
                 item.Attributes = ToAttributes(entry);
-                item.LastWriteTimeUtc = entry.LastWriteTime.DateTime;
-                item.CreationTimeUtc = entry.CreationTime.DateTime;
+                item.LastWriteTimeUtc = entry.LastWriteTime.UtcDateTime;
+                item.CreationTimeUtc = entry.CreationTime.UtcDateTime;
                 item = await WebApi.UploadAsync(item).ConfigureAwait(false);
             }
 
@@ -306,8 +306,8 @@ namespace ShellBoost.Samples.CloudFolderSync
                 return;
 
             item.Attributes = ToAttributes(entry);
-            item.CreationTimeUtc = entry.CreationTime.ToUniversalTime().DateTime;
-            item.LastWriteTimeUtc = entry.LastWriteTime.ToUniversalTime().DateTime;
+            item.CreationTimeUtc = entry.CreationTime.ToUniversalTime().UtcDateTime;
+            item.LastWriteTimeUtc = entry.LastWriteTime.ToUniversalTime().UtcDateTime;
             item.Length = entry.Size;
             item.Name = entry.Name;
             item.ParentId = ToId(entry.ParentId);

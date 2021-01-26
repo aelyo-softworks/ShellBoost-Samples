@@ -114,19 +114,26 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         public void InvokeAddLog(string text = null, bool addDate = false) => BeginInvoke(new Action(() => AddLog(text, addDate)));
         public void AddLog(string text = null, bool addDate = false)
         {
-            if (text == null)
+            try
             {
-                textBoxMain.AppendText(Environment.NewLine);
-                return;
-            }
+                if (text == null)
+                {
+                    textBoxMain.AppendText(Environment.NewLine);
+                    return;
+                }
 
-            if (addDate)
-            {
-                textBoxMain.AppendText(DateTime.Now + ": " + text + Environment.NewLine);
+                if (addDate)
+                {
+                    textBoxMain.AppendText(DateTime.Now + ": " + text + Environment.NewLine);
+                }
+                else
+                {
+                    textBoxMain.AppendText(text + Environment.NewLine);
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                textBoxMain.AppendText(text + Environment.NewLine);
+                // late logs, nothing to do
             }
         }
 

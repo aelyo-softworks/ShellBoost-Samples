@@ -34,7 +34,7 @@ namespace ShellBoost.Samples.CloudFolderSite
             services.AddFileSystem(Configuration, options =>
             {
                 // TODO: configure some options here
-                // options.ServeHidden = true;
+                // options.MaxTempFilesDays = 0;
             });
 
 

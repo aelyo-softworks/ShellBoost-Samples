@@ -69,10 +69,16 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
                 // clear old changes
                 var max = Options.MaxChangesDays;
-                if (max > 0)
+                if (max >= 0)
                 {
                     var deleteStartTime = DateTime.Now.AddDays(-max);
-                    await ClearOldChanges(deleteStartTime).ConfigureAwait(false);
+                    await ClearOldChanges(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
+                }
+
+                max = Options.MaxTempFilesDays;
+                if (max >= 0)
+                {
+                    await ClearOldTempFiles(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
                 }
             }).Wait();
         }
@@ -118,13 +124,25 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }
         }
 
+        public async Task<int> ClearOldTempFiles(DateTime startTime)
+        {
+            // these are files that were uploaded but never finished for some reason
+            var sql = "DELETE FROM Item WHERE Name LIKE @temp AND CreationTimeUtc < @startTime";
+            var count = await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { temp = Core.Synchronization.ContentMover.DefaultTemporaryEntryMarker + "%", startTime = startTime.ToUniversalTime() }, Logger).ConfigureAwait(false);
+            Log("Deleted:" + count);
+            return count;
+        }
+
         public async Task<int> ClearOldChanges(DateTime startTime)
         {
+            // remove old changes
             var sql = "DELETE FROM Change WHERE CreationTimeUtc < @startTime";
             var count = await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { startTime = startTime.ToUniversalTime() }, Logger).ConfigureAwait(false);
             Log("Deleted:" + count);
             return count;
         }
+
+        private static bool IsTempFile(string name) => name?.IndexOf(Core.Synchronization.ContentMover.DefaultTemporaryEntryMarker, StringComparison.OrdinalIgnoreCase) >= 0;
 
         public async IAsyncEnumerable<IFileSystemEvent> EnumerateChangesAsync(DateTime startTime)
         {
@@ -235,8 +253,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 item = await GetSqlItemAsync(item.Id).ConfigureAwait(false);
             }
 
-            AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Created);
-            AddEvent(item.ParentId, (item.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
+            if (!IsTempFile(name))
+            {
+                AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Created);
+                AddEvent(item.ParentId, (item.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
+            }
             return item;
         }
 
@@ -317,8 +338,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 }
             }
 
-            AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created);
-            AddEvent(parentItem.Id, parentItem.ParentId, WatcherChangeTypes.Changed);
+            if (!IsTempFile(item.Name))
+            {
+                AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created);
+                AddEvent(parentItem.Id, parentItem.ParentId, WatcherChangeTypes.Changed);
+            }
             return newItem;
         }
 
@@ -341,11 +365,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { id = item.Id, parentId = newParentId }, Logger).ConfigureAwait(false);
             var newItem = await GetItemAsync(item.Id).ConfigureAwait(false);
 
-            if (oldParent != null)
+            if (!IsTempFile(item.Name))
             {
-                AddEvent(oldParent.Id, oldParent.ParentId, WatcherChangeTypes.Changed);
+                if (oldParent != null)
+                {
+                    AddEvent(oldParent.Id, oldParent.ParentId, WatcherChangeTypes.Changed);
+                }
+                AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
             }
-            AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
             return newItem;
         }
 
@@ -416,15 +443,26 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, parameters, Logger).ConfigureAwait(false);
             var newItem = await GetItemAsync(item.Id).ConfigureAwait(false);
 
-            if (newName != null)
+            if (!IsTempFile(item.Name))
             {
-                AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName);
+                if (newName != null)
+                {
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName);
+                }
+
+                if (changed)
+                {
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed);
+                }
+            }
+            else
+            {
+                if (newName != null)
+                {
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created, newName);
+                }
             }
 
-            if (changed)
-            {
-                AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed);
-            }
             AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
             return newItem;
         }
@@ -461,10 +499,13 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             var deleted = await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { id = item.Id }, Logger).ConfigureAwait(false) != 0;
             if (deleted)
             {
-                AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Deleted);
-                if (parent != null)
+                if (!IsTempFile(item.Name))
                 {
-                    AddEvent(parent.Id, parent.ParentId, WatcherChangeTypes.Changed);
+                    AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Deleted);
+                    if (parent != null)
+                    {
+                        AddEvent(parent.Id, parent.ParentId, WatcherChangeTypes.Changed);
+                    }
                 }
             }
             return deleted;
@@ -509,7 +550,11 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             {
                 await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "UPDATE Item SET Data = @data WHERE Id = @id", new { id = item.Id, data = stream }, Logger).ConfigureAwait(false);
             }
-            AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Changed);
+
+            if (!IsTempFile(item.Name))
+            {
+                AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Changed);
+            }
         }
 
         public async IAsyncEnumerable<SqlItem> EnumerateAsync(SqlItem parentItem, EnumerateOptions options = null)

@@ -39,7 +39,7 @@ namespace ShellBoost.Samples.CloudFolder
             return _root;
         }
 
-        public new void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null) => Configuration.Logger?.Log(level, value, methodName);
+        public new void Log(TraceLevel level, object value, [CallerMemberName] string methodName = null) => Configuration?.Logger?.Log(level, value, methodName);
 
         public ShellItem GetItem(Guid apiItemId)
         {
