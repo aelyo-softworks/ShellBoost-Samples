@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
 using ShellBoost.Core.WindowsShell;
 
@@ -125,7 +126,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiPostAsync<WebItem>("upload", (Stream)null, json);
         }
 
-        public static async Task DownloadAsync(this WebItem item, Stream outputStream)
+        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -137,7 +138,30 @@ namespace ShellBoost.Samples.CloudFolder.Api
             var resp = await _client.GetAsync(_baseUrl + "download/" + item.Id).ConfigureAwait(false);
             if (resp != null)
             {
-                await resp.Content.CopyToAsync(outputStream).ConfigureAwait(false);
+                if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
+                {
+                    using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    {
+                        var completed = 0L;
+                        var buffer = new byte[65536]; // below 85K (LOH)
+
+                        do
+                        {
+                            var read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length)).ConfigureAwait(false);
+                            if (read == 0)
+                                break;
+
+                            completed += read;
+                            await outputStream.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
+                            context.ProgressSink.Progress(context, resp.Content.Headers.ContentLength.Value, completed);
+                        }
+                        while (true);
+                    }
+                }
+                else
+                {
+                    await resp.Content.CopyToAsync(outputStream).ConfigureAwait(false);
+                }
             }
         }
 
