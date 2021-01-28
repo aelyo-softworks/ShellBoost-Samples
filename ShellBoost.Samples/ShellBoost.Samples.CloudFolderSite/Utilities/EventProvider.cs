@@ -28,7 +28,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             var handle = Interlocked.Exchange(ref _handle, 0);
             if (handle != 0)
             {
-                EventUnregister(handle);
+                _ = EventUnregister(handle);
             }
         }
 

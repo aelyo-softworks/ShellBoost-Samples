@@ -45,28 +45,28 @@ namespace ShellBoost.Samples.CloudFolderSync.Utilities
             if ((int)MaximumTraceLevel < (int)level)
                 return;
 
-            var msg = string.Format("{0}", value).Nullify();
-            if (msg != null)
-            {
-                msg = DateTime.Now + " | " + msg;
-            }
-
             if (LogToConsole)
             {
                 base.Log(level, value, methodName);
             }
 
-            if (msg != null && LogToFile)
+            if (LogToFile)
             {
-                Task.Factory.StartNew(() =>
+                var msg = string.Format("{0}", value).Nullify();
+                if (msg != null)
                 {
-                    using (var writer = new StreamWriter(FilePath, true, Encoding.UTF8))
+                    var tid = Thread.CurrentThread.ManagedThreadId;
+                    Task.Factory.StartNew(() =>
                     {
-                        writer.WriteLine(level.ToString().PadRight(7) + " | #" + _counter + " | T" + Thread.CurrentThread.ManagedThreadId + " | " + msg);
-                        writer.Flush();
-                        _counter++;
-                    }
-                }, CancellationToken.None, TaskCreationOptions.None, _scheduler);
+                        methodName ??= string.Empty;
+                        using (var writer = new StreamWriter(FilePath, true, Encoding.UTF8))
+                        {
+                            writer.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffff") + "|#" + _counter + "|T" + tid.ToString().PadRight(3) + "|" + methodName.PadRight(33) + "|" + level.ToString().PadRight(7) + "| " + msg);
+                            writer.Flush();
+                            _counter++;
+                        }
+                    }, CancellationToken.None, TaskCreationOptions.None, _scheduler);
+                }
             }
         }
     }

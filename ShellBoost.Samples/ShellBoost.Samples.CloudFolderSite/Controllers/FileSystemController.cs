@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using ShellBoost.Core.Utilities;
 using ShellBoost.Samples.CloudFolderSite.FileSystem;
 using ShellBoost.Samples.CloudFolderSite.Utilities;
 
@@ -38,6 +39,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
         private void Log(string text, [CallerMemberName] string methodName = null) => Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
         private void LogWarning(string text, [CallerMemberName] string methodName = null) => Logger.LogWarning(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
 
+        private static IDictionary<string, string> ParseOptions(string options) => DictionarySerializer<string>.Deserialize(options, separator: '|', assignment: ':');
+
         private async IAsyncEnumerable<object> Enumerate(Guid id, EnumerateOptions options = null)
         {
             Log("id: " + id + " includeFiles: " + options?.IncludeFiles + " includeFolders: " + options?.IncludeFolders + " includeHidden: " + options?.IncludeHidden);
@@ -56,17 +59,13 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        private static EnumerateOptions GetEnumerateOptions(string s, bool folders, bool files)
+        private static EnumerateOptions GetEnumerateOptions(string options, bool folders, bool files)
         {
-            var options = new EnumerateOptions();
-            if (s != null && s.IndexOf("includehidden:true", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                options.IncludeHidden = true;
-            }
-
-            options.IncludeFolders = folders;
-            options.IncludeFiles = files;
-            return options;
+            var enumOptions = new EnumerateOptions();
+            enumOptions.IncludeHidden = ParseOptions(options).GetValue("includehidden", false);
+            enumOptions.IncludeFolders = folders;
+            enumOptions.IncludeFiles = files;
+            return enumOptions;
         }
 
         [HttpGet]
@@ -195,10 +194,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 }
 
                 var moveOptions = new MoveOptions();
-                if (options != null && options.IndexOf("copy:true", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    moveOptions.Copy = true;
-                }
+                moveOptions.Copy = ParseOptions(options).GetValue("copy", false);
                 return await item.MoveToAsync(newParentId, moveOptions).ConfigureAwait(false);
             }
             catch (UnauthorizedAccessException)
@@ -207,12 +203,12 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        [Route("api/rename/{id}/{newName}")]
-        public async Task<object> Rename(Guid id, string newName)
+        [Route("api/rename/{id}/{newName}/{options?}")]
+        public async Task<object> Rename(Guid id, string newName, string options)
         {
             try
             {
-                Log("id: " + id + " newName: " + newName);
+                Log("id: " + id + " newName: " + newName + " options: " + options);
                 var item = await FileSystem.GetItemAsync(id).ConfigureAwait(false);
                 if (item == null)
                 {
@@ -223,9 +219,17 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 if (string.IsNullOrWhiteSpace(newName))
                     return BadRequest();
 
-                var options = new UpdateOptions { Name = newName.Nullify() };
-                options.EnsureUniqueName = true;
-                return await item.UpdateAsync(options).ConfigureAwait(false);
+                var op = ParseOptions(options);
+                var updateOptions = new UpdateOptions { Name = newName.Nullify() };
+                updateOptions.EnsureUniqueName = true; // this is currently not an option
+
+                // move?
+                if (op.TryGetValue("pid", out var pid) & Conversions.TryChangeType(pid, out Guid parentId) && parentId != Guid.Empty)
+                {
+                    updateOptions.ParentId = parentId;
+                }
+                updateOptions.RenameOverwrite = op.GetValue("overwrite", false);
+                return await item.UpdateAsync(updateOptions).ConfigureAwait(false);
             }
             catch (UnauthorizedAccessException)
             {
@@ -247,10 +251,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 }
 
                 var deleteOptions = new DeleteOptions();
-                if (options != null && options.IndexOf("recursive:true", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    deleteOptions.Recursive = true;
-                }
+                deleteOptions.Recursive = ParseOptions(options).GetValue("recursive", false);
 
                 var result = await item.DeleteAsync(deleteOptions).ConfigureAwait(false);
                 Log("Deleted item " + item.Id + " result: " + result);
@@ -262,7 +263,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        private static bool IsMultipartContentType(string contentType) => !string.IsNullOrEmpty(contentType) && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
+        private static bool IsMultipartContentType(string contentType) => !string.IsNullOrEmpty(contentType) && contentType.Contains("multipart/", StringComparison.OrdinalIgnoreCase);
         private static string GetBoundary(MediaTypeHeaderValue contentType)
         {
             var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary).Value;

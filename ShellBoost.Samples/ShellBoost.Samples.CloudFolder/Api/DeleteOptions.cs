@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.CloudFolder.Api
 {
@@ -8,12 +9,13 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
         public override string ToString()
         {
-            var list = new List<string>();
+            var op = new Dictionary<string, object>();
             if (Recursive)
             {
-                list.Add("recursive:true");
+                op["recursive"] = Recursive;
             }
-            return string.Join("|", list);
+
+            return DictionarySerializer<object>.Serialize((IDictionary<string, object>)op, separator: '|', assignment: ':');
         }
     }
 }

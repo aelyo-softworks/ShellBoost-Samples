@@ -415,7 +415,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiGetAsync<WebItem>("move/" + item.Id + "/" + newParentId + "/" + options);
         }
 
-        public static async Task<WebItem> RenameAsync(this WebItem item, string newName, string oldPath)
+        public static async Task<WebItem> RenameAsync(this WebItem item, string newName, string oldPath, RenameOptions options = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -426,7 +426,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (string.IsNullOrWhiteSpace(newName))
                 return null;
 
-            var newItem = await ApiGetAsync<WebItem>("rename/" + item.Id + "/" + newName);
+            var newItem = await ApiGetAsync<WebItem>("rename/" + item.Id + "/" + newName + "/" + options);
             if (newItem != null)
             {
                 // delete old path
@@ -517,13 +517,13 @@ namespace ShellBoost.Samples.CloudFolder.Api
                     return Enumerable.Empty<WebItem>();
             }
 
-            string soptions = null;
+            var enumOptions = new EnumerateOptions();
             if (options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN))
             {
-                soptions = "/includehidden:true";
+                enumOptions.IncludeHidden = true;
             }
 
-            var key = "get/" + parent.Id + "/" + apiSuffix + soptions;
+            var key = "get/" + parent.Id + "/" + apiSuffix + "/" + enumOptions;
             if (TryGetFromCache(parent.Id, key, out var items))
                 return items.Select(i => i.Value);
 

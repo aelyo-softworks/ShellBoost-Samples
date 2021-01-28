@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -38,6 +39,34 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         public string Name { get; set; }
         public FileAttributes Attributes { get; set; }
         IFileSystem IFileSystemInfo.System => System;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append('[');
+
+            sb.Append("Id=");
+            sb.Append(Id);
+
+            sb.Append(" PId=");
+            sb.Append(ParentId);
+
+            sb.Append(" Name='");
+            sb.Append(Name);
+            sb.Append('\'');
+
+            sb.Append(" Atts=");
+            sb.Append(Attributes);
+
+            sb.Append(" CreationTime=");
+            sb.Append(CreationTimeUtc.ToLocalTime());
+
+            sb.Append(" LastWriteTime=");
+            sb.Append(LastWriteTimeUtc.ToLocalTime());
+
+            sb.Append(']');
+            return sb.ToString();
+        }
 
         public async Task<IFileSystemInfo> GetByNameAsync(string name)
         {

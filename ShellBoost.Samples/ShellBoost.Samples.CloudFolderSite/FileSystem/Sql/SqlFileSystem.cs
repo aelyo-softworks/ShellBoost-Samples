@@ -36,12 +36,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         public void Initialize(Action<WebFolderOptions> setupAction, IFileSystemEvents events, IDictionary<string, string> properties)
         {
-            if (properties == null)
-                throw new ArgumentNullException(nameof(properties));
-
-            if (events == null)
-                throw new ArgumentNullException(nameof(events));
-
             var cnx = properties.GetNullifiedValue(nameof(ConnectionString));
             if (string.IsNullOrWhiteSpace(cnx))
                 throw new WebFolderException("0001: Configuration is missing parameter '" + nameof(ConnectionString) + "'.");
@@ -72,13 +66,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 if (max >= 0)
                 {
                     var deleteStartTime = DateTime.Now.AddDays(-max);
-                    await ClearOldChanges(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
+                    await ClearOldChangesAsync(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
                 }
 
                 max = Options.MaxTempFilesDays;
                 if (max >= 0)
                 {
-                    await ClearOldTempFiles(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
+                    await ClearOldTempFilesAsync(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
                 }
             }).Wait();
         }
@@ -124,7 +118,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }
         }
 
-        public async Task<int> ClearOldTempFiles(DateTime startTime)
+        public async Task<int> ClearOldTempFilesAsync(DateTime startTime)
         {
             // these are files that were uploaded but never finished for some reason
             var sql = "DELETE FROM Item WHERE Name LIKE @temp AND CreationTimeUtc < @startTime";
@@ -133,7 +127,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             return count;
         }
 
-        public async Task<int> ClearOldChanges(DateTime startTime)
+        public async Task<int> ClearOldChangesAsync(DateTime startTime)
         {
             // remove old changes
             var sql = "DELETE FROM Change WHERE CreationTimeUtc < @startTime";
@@ -171,7 +165,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                         await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc, OldName) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc, @oldName)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc, oldName = evt.OldName }).ConfigureAwait(false);
                     }
 
-                    Events.Change(evt);
+                    Events?.Change(evt);
                 }
             });
         }
@@ -263,7 +257,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private async Task<SqlItem> GetSqlItemAsync(Guid parentId, string name)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @id AND Name=@name", new { id = parentId, name }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
             {
                 if (reader.Read())
                     return NewItem(reader);
@@ -274,20 +268,18 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private async Task<bool> ExistsNameAsync(Guid parentId, string name)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT 1 FROM Item WHERE ParentId = @id AND Name=@name", new { id = parentId, name }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT 1 FROM Item WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
             {
-                return await reader.ReadAsync();
+                return await reader.ReadAsync().ConfigureAwait(false);
             }
         }
 
-        private async Task<string> GetNewChildNameAsync(SqlItem parentItem, string tentativeName)
-        {
+        private async Task<string> GetNewChildNameAsync(SqlItem parentItem, string tentativeName) =>
             // come up with some unique name but that still looks like the original name
-            return await Conversions.GetNewFileNameAsync(tentativeName, async (s) =>
+            await Conversions.GetNewFileNameAsync(tentativeName, async (s) =>
             {
                 return await ExistsNameAsync(parentItem.Id, s).ConfigureAwait(false);
-            });
-        }
+            }).ConfigureAwait(false);
 
         public async Task<IFileSystemInfo> GetByNameAsync(SqlItem parentItem, string name)
         {
@@ -361,8 +353,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             Log("New Parent: " + newParentId + " item: " + item.Id + " '" + item.Name + "'");
 
             var oldParent = item.Parent;
-            var sql = "UPDATE Item SET ParentId = @parentId WHERE Id = @id";
-            await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { id = item.Id, parentId = newParentId }, Logger).ConfigureAwait(false);
+            var sql = "UPDATE Item SET ParentId = @pid WHERE Id = @id";
+            await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, new { id = item.Id, pid = newParentId }, Logger).ConfigureAwait(false);
             var newItem = await GetItemAsync(item.Id).ConfigureAwait(false);
 
             if (!IsTempFile(item.Name))
@@ -387,25 +379,81 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
-            Log("Item : " + item.Id + " '" + item.Name + "' attributes: " + item.Attributes);
+            Log("Item: " + item.Id + " '" + item.Name + "' attributes: " + item.Attributes);
 
             var sql = "UPDATE Item SET ";
             var parameters = new Dictionary<string, object>();
             parameters["id"] = item.Id;
+            var finalId = item.Id;
 
             var sets = new List<string>();
             string newName = null;
             var changed = false;
+            var renamed = false;
+
             if (options.Name != null && options.Name != item.Name)
             {
+                renamed = true;
                 newName = options.Name;
-                if (options.EnsureUniqueName && item.Parent is SqlItem parent)
-                {
-                    newName = await GetNewChildNameAsync(parent, newName).ConfigureAwait(false);
-                }
-
                 parameters["name"] = newName;
                 sets.Add("Name = @name");
+
+                // new parent (move)?
+                var pid = item.ParentId;
+                var parent = item.Parent as SqlItem;
+                if (options.ParentId.HasValue)
+                {
+                    pid = options.ParentId.Value;
+                    parent = await GetSqlItemAsync(pid).ConfigureAwait(false);
+                    parameters["pid"] = pid;
+                    sets.Add("ParentId = @pid");
+                }
+
+                if (options.RenameOverwrite)
+                {
+                    var existingItem = await GetSqlItemAsync(pid, newName).ConfigureAwait(false);
+                    if (existingItem != null)
+                    {
+                        // delete existing
+                        await DeleteAsync(existingItem, new DeleteOptions { Recursive = true }).ConfigureAwait(false);
+
+                        // but copy data from it
+                        if (!options.CreationTimeUtc.HasValue)
+                        {
+                            options.CreationTimeUtc = existingItem.CreationTimeUtc;
+                        }
+
+                        if (!options.LastAccessTimeUtc.HasValue)
+                        {
+                            options.LastAccessTimeUtc = existingItem.LastAccessTimeUtc;
+                        }
+
+                        if (!options.LastWriteTimeUtc.HasValue)
+                        {
+                            options.LastWriteTimeUtc = existingItem.LastWriteTimeUtc;
+                        }
+
+                        if (!options.Attributes.HasValue)
+                        {
+                            options.Attributes = existingItem.Attributes;
+                        }
+
+                        renamed = false;
+                        changed = true;
+                        parameters["eid"] = existingItem.Id;
+                        finalId = existingItem.Id;
+                        sets.Add("Id = @eid");
+
+                        parameters["pid"] = pid;
+                        sets.Add("ParentId = @pid");
+                    }
+                }
+                else if (options.EnsureUniqueName && parent != null)
+                {
+                    // from a file named "file.txt", this may create files like "file (2).txt", "file (3).txt", etc.
+                    newName = await GetNewChildNameAsync(parent, newName).ConfigureAwait(false);
+                    parameters["name"] = newName;
+                }
             }
 
             if (options.CreationTimeUtc.HasValue)
@@ -441,11 +489,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             sql += string.Join(", ", sets) + " WHERE Id = @id";
             await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, sql, parameters, Logger).ConfigureAwait(false);
-            var newItem = await GetItemAsync(item.Id).ConfigureAwait(false);
 
-            if (!IsTempFile(item.Name))
+            // reload what we changed
+            var newItem = await GetItemAsync(finalId).ConfigureAwait(false);
+
+            if (!IsTempFile(newItem.Name))
             {
-                if (newName != null)
+                if (renamed)
                 {
                     AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName);
                 }
@@ -454,20 +504,15 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 {
                     AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed);
                 }
-            }
-            else
-            {
-                if (newName != null)
-                {
-                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created, newName);
-                }
-            }
 
-            AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
+                AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
+            }
             return newItem;
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         public async Task<bool> DeleteAsync(SqlItem item, DeleteOptions options = null)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -475,7 +520,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (item.Id == Guid.Empty)
                 throw new UnauthorizedAccessException();
 
-            Log("Item : " + item.Id + " '" + item.Name);
+            Log("Item: " + item.Id + " '" + item.Name);
 
             string sql;
             if (!item.IsFolder)
@@ -524,7 +569,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 if (!reader.Read())
                     return null;
 
-                if (await reader.IsDBNullAsync(0))
+                if (await reader.IsDBNullAsync(0).ConfigureAwait(false))
                     return null;
 
                 // it's a pitty GetFieldValueAsync<Stream> doesn't work... https://github.com/dotnet/runtime/issues/28596#issuecomment-484614943
@@ -540,7 +585,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             if (item.Id == Guid.Empty)
                 throw new UnauthorizedAccessException();
 
-            Log("Item : " + item.Id + " '" + item.Name + " stream: " + stream);
+            Log("Item: " + item.Id + " '" + item.Name + " stream: " + stream);
 
             if (stream == null)
             {
@@ -587,7 +632,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 and += " AND (Attributes & " + (int)FileAttributes.Hidden + ") = 0";
             }
 
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @id AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { id = parentItem.Id }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { pid = parentItem.Id }, Logger).ConfigureAwait(false))
             {
                 while (reader.Read())
                 {

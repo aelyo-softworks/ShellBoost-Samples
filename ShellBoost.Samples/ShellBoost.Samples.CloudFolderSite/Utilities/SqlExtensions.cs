@@ -140,10 +140,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
                 await conn.OpenAsync().ConfigureAwait(false);
                 using (var cmd = conn.CreateCommand())
                 {
-#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
                     cmd.CommandText = sql;
-#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
-                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandType = CommandType.Text;
                     AddParameters(cmd, parameters);
 #if DEBUG
                     logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
@@ -165,10 +163,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             await conn.OpenAsync().ConfigureAwait(false);
             using (var cmd = conn.CreateCommand())
             {
-#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
                 cmd.CommandText = sql;
-#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
-                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandType = CommandType.Text;
                 AddParameters(cmd, parameters);
 #if DEBUG
                 logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
@@ -189,10 +185,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             await conn.OpenAsync().ConfigureAwait(false);
             using (var cmd = conn.CreateCommand())
             {
-#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
                 cmd.CommandText = sql;
-#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
-                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandType = CommandType.Text;
                 AddParameters(cmd, parameters);
 #if DEBUG
                 logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");

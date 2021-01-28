@@ -109,7 +109,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 if (item != null)
                     return item;
 
-                Logger?.Log(TraceLevel.Warning, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
+                Logger?.Log(TraceLevel.Info, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
                 if (!options.CanCreate)
                     return null;
 
@@ -246,10 +246,11 @@ namespace ShellBoost.Samples.CloudFolderSync
         public async Task UpdateEntryAsync(SyncContext context, StateSyncEntry entry, SyncUpdateEntryOptions options = null)
         {
             WebItem item;
+            var pid = ToId(entry.ParentId);
             if (string.IsNullOrEmpty(entry.Id))
             {
                 // no id, it's a temporary file, so get it by its name and parent
-                item = await WebApi.GetChildAsync(ToId(entry.ParentId), entry.Name).ConfigureAwait(false);
+                item = await WebApi.GetChildAsync(pid, entry.Name).ConfigureAwait(false);
             }
             else
             {
@@ -272,7 +273,20 @@ namespace ShellBoost.Samples.CloudFolderSync
                 // is this the rename/move case?
                 if (!entry.Name.EqualsIgnoreCase(item.Name))
                 {
-                    item = await WebApi.RenameAsync(item, entry.Name).ConfigureAwait(false);
+                    // avoids looping trying to upload files that already exist
+                    var renameOptions = new RenameOptions();
+                    if (EndPointSynchronizer.MultiPointSynchronizer.ContentMover.IsTemporaryFile(item.Name))
+                    {
+                        renameOptions.Overwrite = true;
+                    }
+
+                    // move case
+                    if (pid != item.ParentId)
+                    {
+                        renameOptions.NewParentId = pid;
+                    }
+
+                    item = await WebApi.RenameAsync(item, entry.Name, renameOptions).ConfigureAwait(false);
                 }
             }
 

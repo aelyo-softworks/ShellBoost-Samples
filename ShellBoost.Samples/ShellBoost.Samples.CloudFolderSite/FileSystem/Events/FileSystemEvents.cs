@@ -21,7 +21,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Events
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));
 
-            Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ": Change id " + @event.Id + " + itemId: " + @event.ItemId + " parentId: " + @event.ParentId + " type: " + @event.Type + " oldName: " + @event.OldName);
+            Logger.LogDebug(Thread.CurrentThread.ManagedThreadId + ": Change id " + @event.Id + " itemId: " + @event.ItemId + " parentId: " + @event.ParentId + " type: " + @event.Type + " oldName: " + @event.OldName);
             Hub.Clients.All.SendAsync(nameof(Change), @event.Id, @event.ItemId, @event.ParentId, @event.Type, @event.CreationTimeUtc, @event.OldName);
         }
     }

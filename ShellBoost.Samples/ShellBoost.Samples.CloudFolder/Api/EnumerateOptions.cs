@@ -3,16 +3,16 @@ using ShellBoost.Core.Utilities;
 
 namespace ShellBoost.Samples.CloudFolder.Api
 {
-    public class MoveOptions
+    public class EnumerateOptions
     {
-        public bool Copy { get; set; } // default is move only
+        public bool IncludeHidden { get; set; }
 
         public override string ToString()
         {
             var op = new Dictionary<string, object>();
-            if (Copy)
+            if (IncludeHidden)
             {
-                op["copy"] = Copy;
+                op["includehidden"] = IncludeHidden;
             }
 
             return DictionarySerializer<object>.Serialize((IDictionary<string, object>)op, separator: '|', assignment: ':');

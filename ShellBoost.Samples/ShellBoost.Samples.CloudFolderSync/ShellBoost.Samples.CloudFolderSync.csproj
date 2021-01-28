@@ -10,7 +10,9 @@
 
   <ItemGroup>
     <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\DeleteOptions.cs" Link="Api\DeleteOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\EnumerateOptions.cs" Link="Api\EnumerateOptions.cs" />
     <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\MoveOptions.cs" Link="Api\MoveOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\RenameOptions.cs" Link="Api\RenameOptions.cs" />
     <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\ServerInfo.cs" Link="Api\ServerInfo.cs" />
     <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\UpdateRequest.cs" Link="Api\UpdateRequest.cs" />
     <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebChange.cs" Link="Api\WebChange.cs" />
