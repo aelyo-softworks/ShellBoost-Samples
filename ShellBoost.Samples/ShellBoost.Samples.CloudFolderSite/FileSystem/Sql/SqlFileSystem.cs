@@ -372,6 +372,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             if (!IsTempFile(item.Name))
             {
+                AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed, null, oldParent?.Id);
                 if (oldParent != null)
                 {
                     AddEvent(oldParent.Id, oldParent.ParentId, WatcherChangeTypes.Changed);
@@ -403,8 +404,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             string newName = null;
             var changed = false;
             var renamed = false;
+            Guid? oldParentId = null;
 
-            if (options.Name != null && options.Name != item.Name)
+            if ((options.Name != null && options.Name != item.Name) || options.ParentId.HasValue)
             {
                 renamed = true;
                 newName = options.Name;
@@ -420,6 +422,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                     parent = await GetSqlItemAsync(pid).ConfigureAwait(false);
                     parameters["pid"] = pid;
                     sets.Add("ParentId = @pid");
+                    oldParentId = item.Id;
                 }
 
                 if (options.RenameOverwrite)
@@ -510,12 +513,12 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             {
                 if (renamed)
                 {
-                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName);
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName, oldParentId);
                 }
 
                 if (changed)
                 {
-                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed);
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed, null, oldParentId);
                 }
 
                 AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
