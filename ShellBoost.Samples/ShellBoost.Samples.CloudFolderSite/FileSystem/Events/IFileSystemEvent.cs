@@ -15,5 +15,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Events
 
         // old name (rename type)
         string OldName { get; }
+        Guid? OldParentId { get; }
     }
 }

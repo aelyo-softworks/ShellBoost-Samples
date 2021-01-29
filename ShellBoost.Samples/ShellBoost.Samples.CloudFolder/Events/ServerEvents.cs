@@ -34,11 +34,11 @@ namespace ShellBoost.Samples.CloudFolder.Events
 
             // must match server's IFileSystemEvents method signature
             // Change(Guid id, Guid itemId, Guid parentId, WatcherChangeTypes types, DateTime creationTimeUtc, string oldName);
-            _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string>("Change", (id, itemId, parentId, type, creationTimeUtc, oldName) =>
+            _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string, Guid?>("Change", (id, itemId, parentId, type, creationTimeUtc, oldName, oldParentId) =>
             {
                 // invalidate the cache using server information
                 // note we don't force files update. this will be done when the use opens it
-                server.Log(System.Diagnostics.TraceLevel.Warning, "UpdateCache id: " + id + " itemId: " + itemId + " parentId: " + parentId + " type: " + type + " oldName: " + oldName);
+                server.Log(System.Diagnostics.TraceLevel.Warning, "UpdateCache id: " + id + " itemId: " + itemId + " parentId: " + parentId + " type: " + type + " oldName: " + oldName + " oldParentId: " + oldParentId);
                 WebApi.UpdateCache(itemId, parentId, type);
 
                 // tell the Shell that this pidl has changed

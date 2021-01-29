@@ -49,7 +49,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             {
                 // create tables
                 await SqlExtensions.CreateTableAsync(ConnectionString, "Item", "Id uniqueidentifier NOT NULL, ParentId uniqueidentifier NOT NULL, Name nvarchar(260) NOT NULL, LastAccessTimeUtc datetime2 NOT NULL, CreationTimeUtc datetime2 NOT NULL, LastWriteTimeUtc datetime2 NOT NULL, Attributes int NOT NULL, Data varbinary(max) CONSTRAINT PK_Item PRIMARY KEY NONCLUSTERED (Id)").ConfigureAwait(false);
-                await SqlExtensions.CreateTableAsync(ConnectionString, "Change", "Id uniqueidentifier NOT NULL, ItemId uniqueidentifier NOT NULL, ParentId uniqueidentifier NOT NULL, Type int NOT NULL, CreationTimeUtc datetime2 NOT NULL, OldName nvarchar(260) CONSTRAINT PK_Change PRIMARY KEY NONCLUSTERED (Id)").ConfigureAwait(false);
+                await SqlExtensions.CreateTableAsync(ConnectionString, "Change", "Id uniqueidentifier NOT NULL, ItemId uniqueidentifier NOT NULL, ParentId uniqueidentifier NOT NULL, Type int NOT NULL, CreationTimeUtc datetime2 NOT NULL, OldName nvarchar(260), OldParentId uniqueidentifier CONSTRAINT PK_Change PRIMARY KEY NONCLUSTERED (Id)").ConfigureAwait(false);
 
                 // add indices
                 await SqlExtensions.CreateIndexAsync(ConnectionString, "IX_Parent", "CREATE NONCLUSTERED INDEX IX_Parent ON Item(ParentId)").ConfigureAwait(false);
@@ -97,6 +97,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 {
                     OldName = (string)name;
                 }
+
+                var oldPid = reader["OldParentId"];
+                if (!Convert.IsDBNull(oldPid))
+                {
+                    OldParentId = (Guid)oldPid;
+                }
+
                 CreationTimeUtc = DateTime.SpecifyKind((DateTime)reader["CreationTimeUtc"], DateTimeKind.Utc);
             }
 
@@ -105,6 +112,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             public Guid ParentId { get; set; }
             public WatcherChangeTypes Type { get; set; }
             public string OldName { get; set; }
+            public Guid? OldParentId { get; set; }
             public DateTime CreationTimeUtc { get; set; }
 
             public override string ToString()
@@ -113,6 +121,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 if (OldName != null)
                 {
                     s += ":" + OldName;
+                }
+
+                if (OldParentId != null)
+                {
+                    s += ":" + OldParentId;
                 }
                 return s;
             }
@@ -140,7 +153,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         public async IAsyncEnumerable<IFileSystemEvent> EnumerateChangesAsync(DateTime startTime)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ItemId, ParentId, Type, CreationTimeUtc, OldName FROM Change WHERE CreationTimeUtc > @startTime", new { startTime = startTime.ToUniversalTime() }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ItemId, ParentId, Type, CreationTimeUtc, OldName, OldParentId FROM Change WHERE CreationTimeUtc > @startTime", new { startTime = startTime.ToUniversalTime() }, Logger).ConfigureAwait(false))
             {
                 while (reader.Read())
                 {
@@ -162,7 +175,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                     }
                     else
                     {
-                        await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc, OldName) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc, @oldName)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc, oldName = evt.OldName }).ConfigureAwait(false);
+                        await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc, OldName) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc, @oldName, @oldParentId)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc, oldName = evt.OldName, oldParentId = evt.OldParentId }).ConfigureAwait(false);
                     }
 
                     Events?.Change(evt);
@@ -170,9 +183,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             });
         }
 
-        private void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null)
+        private void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null, Guid? oldParentId = null)
         {
-            var evt = new Event { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName };
+            var evt = new Event { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName, OldParentId = oldParentId };
             _events[evt.ToString()] = evt;
         }
 

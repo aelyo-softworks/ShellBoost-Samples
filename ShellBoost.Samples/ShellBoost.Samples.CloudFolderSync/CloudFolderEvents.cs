@@ -43,9 +43,9 @@ namespace ShellBoost.Samples.CloudFolderSync
 
             // must match server's IFileSystemEvents method signature
             // Change(Guid id, Guid itemId, Guid parentId, WatcherChangeTypes types, DateTime creationTimeUtc, string oldName);
-            _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string>("Change", (id, itemId, parentId, type, dt, oldName) =>
+            _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string, Guid?>("Change", (id, itemId, parentId, type, dt, oldName, oldParentId) =>
             {
-                _fileSystem.Logger?.Log(TraceLevel.Verbose, "id: " + id + " itemid: " + itemId + " parentId: " + parentId + " type: " + type + " oldName:" + oldName);
+                _fileSystem.Logger?.Log(TraceLevel.Verbose, "id: " + id + " itemid: " + itemId + " parentId: " + parentId + " type: " + type + " oldName:" + oldName + " oldParentId: " + oldParentId, nameof(CloudFolderEvents));
 
                 StateSyncEntry entry;
                 switch (type)
@@ -70,6 +70,7 @@ namespace ShellBoost.Samples.CloudFolderSync
 
                         var oldEntry = ToEntry(itemId, parentId);
                         oldEntry.FileName = oldName;
+                        oldEntry.ParentId = CloudFolderFileSystem.ToId(oldParentId.Value);
                         _fileSystem.OnEvent(new SyncFileSystemEventArgs(SyncFileSystemEventType.Moved, dt, entry, oldEntry));
                         break;
                 }
