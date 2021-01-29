@@ -632,6 +632,11 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 and += " AND (Attributes & " + (int)FileAttributes.Hidden + ") = 0";
             }
 
+            if (options.FoldersFirst)
+            {
+                and += " ORDER BY (Attributes & " + (int)FileAttributes.Directory + ") DESC";
+            }
+
             using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { pid = parentItem.Id }, Logger).ConfigureAwait(false))
             {
                 while (reader.Read())

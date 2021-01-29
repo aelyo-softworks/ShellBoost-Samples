@@ -29,7 +29,7 @@ namespace ShellBoost.Samples.CloudFolderSite
                     typeName = typeof(SqlFileSystem).AssemblyQualifiedName;
                 }
 
-                if (!(Activator.CreateInstance(Type.GetType(typeName, true)) is IFileSystem fs))
+                if (Activator.CreateInstance(Type.GetType(typeName, true)) is not IFileSystem fs)
                     throw new WebFolderException("0002: Type '" + typeName + "' is not an " + nameof(IFileSystem) + ".");
 
                 var fse = sp.GetService<IFileSystemEvents>();

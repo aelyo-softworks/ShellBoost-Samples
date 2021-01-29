@@ -1,0 +1,94 @@
+﻿@page
+@model ShellBoost.Samples.CloudFolderSite.Pages.IndexModel
+@{
+}
+
+<h2>
+    @{
+        var i = 0;
+        foreach (var item in Model.Folder.GetThisAndParents().Reverse())
+        {
+            if (i > 0)
+            {
+                Output.Write("\\");
+            }
+            else
+            {
+                i++;
+            }
+            <a href="?id=@item.Id">@item.GetDisplayName()</a>
+        }
+    }
+</h2>
+<p></p>
+<table class="table" border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Last Write Time</th>
+            <th>Creation Time</th>
+            <th>Size</th>
+            <th>Attributes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Children)
+        {
+            var file = item as IFileInfo;
+            var isFile = !item.IsFolder();
+            <tr>
+                <td>
+                    @if (isFile)
+                    {
+                        <a href="@Url.Page("Index", "Download", new { id = item.Id })">
+                            @item.Id
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="?id=@item.Id">
+                            @item.Id
+                        </a>
+                    }
+                </td>
+                <td>
+                    @if (isFile)
+                    {
+                        <a href="@Url.Page("Index", "Download", new { id = item.Id })" style="text-decoration:none">
+                            @item.GetDisplayName()
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="?id=@item.Id" style="text-decoration:none">
+                            @item.GetDisplayName()
+                        </a>
+                    }
+                </td>
+                <td>
+                    @item.LastWriteTimeUtc.ToLocalTime()
+                </td>
+                <td>
+                    @item.CreationTimeUtc.ToLocalTime()
+                </td>
+                @if (isFile)
+                {
+                    <td>
+                        @file.Length
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        &nbsp;
+                    </td>
+
+                }
+                <td>
+                    @item.Attributes
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

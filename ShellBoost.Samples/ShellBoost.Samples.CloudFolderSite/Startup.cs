@@ -48,6 +48,8 @@ namespace ShellBoost.Samples.CloudFolderSite
                 options.EnableDetailedErrors = true;
 #endif
             });
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +73,7 @@ namespace ShellBoost.Samples.CloudFolderSite
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<FileSystemHub>("/events");
+                endpoints.MapRazorPages();
             });
         }
     }
