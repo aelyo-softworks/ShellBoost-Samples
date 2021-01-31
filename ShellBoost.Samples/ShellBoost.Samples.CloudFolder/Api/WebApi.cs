@@ -375,7 +375,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return true;
         }
 
-        public static async Task<bool> DeleteAsync(this WebItem item, string path, DeleteOptions options)
+        public static async Task<bool> DeleteAsync(this WebItem item, string path, DeleteOptions options = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -490,15 +490,15 @@ namespace ShellBoost.Samples.CloudFolder.Api
             });
         }
 
-        public static IEnumerable<WebItem> EnumerateChildren(this WebItem parent, SHCONTF options = SHCONTF.SHCONTF_NONFOLDERS | SHCONTF.SHCONTF_FOLDERS)
+        public static IEnumerable<WebItem> EnumerateChildren(this WebItem parent, EnumerateOptions options = null)
         {
             if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
             string apiSuffix;
-            if (options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
+            if (options.IncludeFolders)
             {
-                if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
+                if (options.IncludeFiles)
                 {
                     apiSuffix = "all";
                 }
@@ -509,7 +509,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             }
             else
             {
-                if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
+                if (options.IncludeFiles)
                 {
                     apiSuffix = "files";
                 }
@@ -517,13 +517,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
                     return Enumerable.Empty<WebItem>();
             }
 
-            var enumOptions = new EnumerateOptions();
-            if (options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN))
-            {
-                enumOptions.IncludeHidden = true;
-            }
-
-            var key = "get/" + parent.Id + "/" + apiSuffix + "/" + enumOptions;
+            var key = "get/" + parent.Id + "/" + apiSuffix + "/" + options;
             if (TryGetFromCache(parent.Id, key, out var items))
                 return items.Select(i => i.Value);
 

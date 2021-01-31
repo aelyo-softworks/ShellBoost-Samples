@@ -12,5 +12,6 @@
         public bool IncludeFiles { get; set; }
         public bool IncludeHidden { get; set; }
         public bool FoldersFirst { get; set; }
+        public bool SortByName { get; set; }
     }
 }

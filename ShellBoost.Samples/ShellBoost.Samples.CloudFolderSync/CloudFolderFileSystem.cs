@@ -211,7 +211,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         public IEnumerable<StateSyncEntry> EnumerateEntries(SyncContext context, StateSyncEntry parentEntry, SyncEnumerateEntriesOptions options = null)
         {
             var item = new WebItem { Id = ToId(parentEntry.Id) };
-            foreach (var child in WebApi.EnumerateChildren(item))
+            foreach (var child in WebApi.EnumerateChildren(item, new EnumerateOptions { IncludeHidden = true }))
             {
                 // never send back temp (being uploaded) files
                 if (EndPointSynchronizer.MultiPointSynchronizer.ContentMover.IsTemporaryFile(child.Name))

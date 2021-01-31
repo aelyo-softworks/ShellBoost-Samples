@@ -126,7 +126,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiPostAsync<WebItem>("upload", (Stream)null, json);
         }
 
-        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context)
+        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -197,11 +197,11 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiGetAsync<WebItem>("getchild/" + parentId + "/" + name, false);
         }
 
-        public static WebItem GetChild(WebItem parent, string name) => EnumerateChildren(parent).FirstOrDefault(i => i.Name.EqualsIgnoreCase(name));
+        public static WebItem GetChild(WebItem parent, string name) => EnumerateChildren(parent, new EnumerateOptions { IncludeHidden = true }).FirstOrDefault(i => i.Name.EqualsIgnoreCase(name));
 
         public static Task<WebItem> GetAsync(Guid id) => ApiGetAsync<WebItem>("get/" + id, false);
 
-        public static Task<bool> DeleteAsync(this WebItem item, DeleteOptions options)
+        public static Task<bool> DeleteAsync(this WebItem item, DeleteOptions options = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -234,15 +234,15 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiGetAsync<WebChange[]>(url).Result;
         }
 
-        public static IEnumerable<WebItem> EnumerateChildren(this WebItem parent, SHCONTF options = SHCONTF.SHCONTF_NONFOLDERS | SHCONTF.SHCONTF_FOLDERS | SHCONTF.SHCONTF_INCLUDEHIDDEN)
+        public static IReadOnlyList<WebItem> EnumerateChildren(this WebItem parent, EnumerateOptions options = null)
         {
             if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
             string apiSuffix;
-            if (options.HasFlag(SHCONTF.SHCONTF_FOLDERS))
+            if (options.IncludeFolders)
             {
-                if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
+                if (options.IncludeFiles)
                 {
                     apiSuffix = "all";
                 }
@@ -253,21 +253,15 @@ namespace ShellBoost.Samples.CloudFolder.Api
             }
             else
             {
-                if (options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS))
+                if (options.IncludeFiles)
                 {
                     apiSuffix = "files";
                 }
                 else
-                    return Enumerable.Empty<WebItem>();
+                    return Array.Empty<WebItem>();
             }
 
-            var enumOptions = new EnumerateOptions();
-            if (options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN))
-            {
-                enumOptions.IncludeHidden = true;
-            }
-
-            var url = "get/" + parent.Id + "/" + apiSuffix + "/" + enumOptions;
+            var url = "get/" + parent.Id + "/" + apiSuffix + "/" + options;
             return ApiGetAsync<WebItem[]>(url).Result;
         }
     }

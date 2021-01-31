@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>ShellBoost.Samples.CloudFolderClient.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ShellBoost.Samples.CloudFolderClient.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.xml" Link="ShellBoost.Core.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll" Link="ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll" Link="ShellBoost.Core.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShellBoost.Samples.CloudFolderSite\ShellBoost.Samples.CloudFolderSite.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="ShellBoost.Samples.CloudFolderClient.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ShellBoost.Core">
+      <HintPath>..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

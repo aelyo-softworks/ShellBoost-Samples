@@ -6,5 +6,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
     {
         public FileAttributes Attributes { get; set; }
         public Stream InputStream { get; set; }
+        public bool EnsureUniqueName { get; set; }
+        public bool Overwrite { get; set; }
     }
 }

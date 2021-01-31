@@ -15,9 +15,9 @@ using ShellBoost.Samples.CloudFolderSite.Utilities;
 namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 {
     // the implementation of a file system for an SQL Server database
-    public class SqlFileSystem : IFileSystem
+    public sealed class SqlFileSystem : IFileSystem
     {
-        private ConcurrentDictionary<string, Event> _events = new ConcurrentDictionary<string, Event>();
+        private ConcurrentDictionary<string, EventImpl> _events = new ConcurrentDictionary<string, EventImpl>();
 
         public SqlFileSystem()
         {
@@ -77,15 +77,15 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }).Wait();
         }
 
-        private class Event : IFileSystemEvent
+        private class EventImpl : IFileSystemEvent
         {
-            public Event()
+            public EventImpl()
             {
                 CreationTimeUtc = DateTime.UtcNow;
                 Id = Guid.NewGuid();
             }
 
-            public Event(SqlDataReader reader)
+            public EventImpl(SqlDataReader reader)
             {
                 Id = (Guid)reader["Id"];
                 ItemId = (Guid)reader["ItemId"];
@@ -157,14 +157,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             {
                 while (reader.Read())
                 {
-                    yield return new Event(reader);
+                    yield return new EventImpl(reader);
                 }
             }
         }
 
         public void SendEvents()
         {
-            var events = Interlocked.Exchange(ref _events, new ConcurrentDictionary<string, Event>());
+            var events = Interlocked.Exchange(ref _events, new ConcurrentDictionary<string, EventImpl>());
             Task.Run(async () =>
             {
                 foreach (var evt in events.Values.OrderBy(v => v.CreationTimeUtc))
@@ -185,7 +185,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null, Guid? oldParentId = null)
         {
-            var evt = new Event { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName, OldParentId = oldParentId };
+            var evt = new EventImpl { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName, OldParentId = oldParentId };
             _events[evt.ToString()] = evt;
         }
 
@@ -234,8 +234,13 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             Log("Parent: " + parentItem.Id + " '" + parentItem.Name + "' name: '" + name + "'");
             options ??= new CreateOptions();
 
-            // if a race condition occurred, it may already exists
             var item = await GetSqlItemAsync(parentItem.Id, name).ConfigureAwait(false);
+            if (item != null && options.EnsureUniqueName)
+            {
+                name = await GetNewChildNameAsync(parentItem, name).ConfigureAwait(false);
+                item = null;
+            }
+
             if (item == null)
             {
                 var id = Guid.NewGuid();
@@ -251,6 +256,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Item (Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes) VALUES (@id, @parentId, @name, @now, @now, @now, @attributes)", parameters, Logger).ConfigureAwait(false);
                 item = await GetSqlItemAsync(id).ConfigureAwait(false);
             }
+            else if (!options.Overwrite)
+                return null;
 
             if (!item.IsFolder && options.InputStream != null)
             {
@@ -287,8 +294,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }
         }
 
+        // come up with some unique name but that still looks like the original name
         private async Task<string> GetNewChildNameAsync(SqlItem parentItem, string tentativeName) =>
-            // come up with some unique name but that still looks like the original name
             await Conversions.GetNewFileNameAsync(tentativeName, async (s) =>
             {
                 return await ExistsNameAsync(parentItem.Id, s).ConfigureAwait(false);
@@ -425,7 +432,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                     oldParentId = item.Id;
                 }
 
-                if (options.RenameOverwrite)
+                if (options.Overwrite)
                 {
                     var existingItem = await GetSqlItemAsync(pid, newName).ConfigureAwait(false);
                     if (existingItem != null)
@@ -648,9 +655,20 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 and += " AND (Attributes & " + (int)FileAttributes.Hidden + ") = 0";
             }
 
+            string orderBy = null;
             if (options.FoldersFirst)
             {
-                and += " ORDER BY (Attributes & " + (int)FileAttributes.Directory + ") DESC";
+                orderBy += "(Attributes & " + (int)FileAttributes.Directory + ") DESC";
+            }
+
+            if (options.SortByName)
+            {
+                orderBy += "Name";
+            }
+
+            if (orderBy != null)
+            {
+                and += " ORDER BY " + string.Join(", ", orderBy);
             }
 
             using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { pid = parentItem.Id }, Logger).ConfigureAwait(false))

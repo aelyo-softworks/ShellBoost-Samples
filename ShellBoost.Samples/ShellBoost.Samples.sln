@@ -40,6 +40,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.Mirror",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.CloudFolderSync", "ShellBoost.Samples.CloudFolderSync\ShellBoost.Samples.CloudFolderSync.csproj", "{444607EE-7633-4AEF-B725-02F8E02FD64D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellBoost.Samples.CloudFolderClient", "ShellBoost.Samples.CloudFolderClient\ShellBoost.Samples.CloudFolderClient.csproj", "{3A964E94-8242-4571-B259-C40F15414189}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{444607EE-7633-4AEF-B725-02F8E02FD64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{444607EE-7633-4AEF-B725-02F8E02FD64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{444607EE-7633-4AEF-B725-02F8E02FD64D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A964E94-8242-4571-B259-C40F15414189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A964E94-8242-4571-B259-C40F15414189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A964E94-8242-4571-B259-C40F15414189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A964E94-8242-4571-B259-C40F15414189}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

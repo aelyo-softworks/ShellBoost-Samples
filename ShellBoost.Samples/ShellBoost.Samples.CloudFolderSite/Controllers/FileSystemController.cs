@@ -43,7 +43,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
         private async IAsyncEnumerable<object> Enumerate(Guid id, EnumerateOptions options = null)
         {
-            Log("id: " + id + " includeFiles: " + options?.IncludeFiles + " includeFolders: " + options?.IncludeFolders + " includeHidden: " + options?.IncludeHidden);
+            Log("id: " + id + " includeFiles: " + options?.IncludeFiles + " includeFolders: " + options?.IncludeFolders + " includeHidden: " + options?.IncludeHidden + " foldersFirst: " + options?.FoldersFirst + " sortByName: " + options?.SortByName);
             var item = await FileSystem.GetItemAsync(id).ConfigureAwait(false);
             if (item == null)
                 yield break;
@@ -62,9 +62,11 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
         private static EnumerateOptions GetEnumerateOptions(string options, bool folders, bool files)
         {
             var enumOptions = new EnumerateOptions();
-            enumOptions.IncludeHidden = ParseOptions(options).GetValue("includehidden", false);
             enumOptions.IncludeFolders = folders;
             enumOptions.IncludeFiles = files;
+            enumOptions.IncludeHidden = ParseOptions(options).GetValue(nameof(EnumerateOptions.IncludeHidden), false);
+            enumOptions.FoldersFirst = ParseOptions(options).GetValue(nameof(EnumerateOptions.FoldersFirst), false);
+            enumOptions.SortByName = ParseOptions(options).GetValue(nameof(EnumerateOptions.SortByName), false);
             return enumOptions;
         }
 
@@ -228,7 +230,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 {
                     updateOptions.ParentId = parentId;
                 }
-                updateOptions.RenameOverwrite = op.GetValue("overwrite", false);
+                updateOptions.Overwrite = op.GetValue("overwrite", false);
                 return await item.UpdateAsync(updateOptions).ConfigureAwait(false);
             }
             catch (UnauthorizedAccessException)
@@ -365,8 +367,12 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                         createOptions.InputStream = dataSection.Body;
                     }
 
+                    createOptions.Overwrite = updateOptions?.Overwrite == true;
+                    createOptions.EnsureUniqueName = true;
                     createOptions.Attributes = updateRequest.Attributes ?? FileAttributes.Normal;
                     var created = await ((IFolderInfo)parent).CreateAsync(updateRequest.Name, createOptions).ConfigureAwait(false);
+                    if (created == null)
+                        return Conflict(); // already exists
 
                     if (updateOptions != null)
                     {

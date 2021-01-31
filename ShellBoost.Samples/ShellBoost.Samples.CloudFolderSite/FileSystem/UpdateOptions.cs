@@ -7,7 +7,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
     public class UpdateOptions
     {
         public bool EnsureUniqueName { get; set; }
-        public bool RenameOverwrite { get; set; }
+        public bool Overwrite { get; set; }
         public string Name { get; set; }
         public Guid? ParentId { get; set; }
         public DateTime? LastAccessTimeUtc { get; set; }

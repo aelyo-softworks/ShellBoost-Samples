@@ -174,7 +174,12 @@ namespace ShellBoost.Samples.CloudFolder
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
         {
-            var items = ApiItem.EnumerateChildren(options);
+            var enumOptions = new EnumerateOptions();
+            enumOptions.IncludeHidden = options.HasFlag(SHCONTF.SHCONTF_INCLUDEHIDDEN);
+            enumOptions.IncludeFolders = options.HasFlag(SHCONTF.SHCONTF_FOLDERS);
+            enumOptions.IncludeFiles = options.HasFlag(SHCONTF.SHCONTF_NONFOLDERS);
+
+            var items = ApiItem.EnumerateChildren(enumOptions);
             foreach (var item in items)
             {
                 var shellItem = ShellItemFromApi(item);
