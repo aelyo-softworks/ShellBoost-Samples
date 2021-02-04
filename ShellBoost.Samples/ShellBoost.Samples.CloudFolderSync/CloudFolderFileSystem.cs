@@ -10,7 +10,6 @@ using ShellBoost.Samples.CloudFolder.Api;
 
 namespace ShellBoost.Samples.CloudFolderSync
 {
-    // implements what ShellBoost expects for synchronization with other file systems
     public sealed class CloudFolderFileSystem : ISyncFileSystem, ISyncFileSystemEvents, ISyncFileSystemRead, ISyncFileSystemWriteAsync, IDisposable
     {
         private CloudFolderEvents _serverEvents;
@@ -24,13 +23,9 @@ namespace ShellBoost.Samples.CloudFolderSync
 
         public ILogger Logger { get; }
 
-        // raise an event to ShellBoost synchronization
         internal void OnEvent(SyncFileSystemEventArgs e) => ((EventHandler<SyncFileSystemEventArgs>)_events[_eventEvent])?.Invoke(this, e);
 
-        // various conversion routines
-        internal static string ToId(Guid id) => id.ToString();
-        private static Guid ToId(string id) => string.IsNullOrWhiteSpace(id) ? Guid.Empty : Guid.Parse(id);
-
+        // conversion routines from fs to web
         private static SyncEntryAttributes ToAttributes(WebItem item)
         {
             var atts = SyncEntryAttributes.None;
@@ -61,6 +56,9 @@ namespace ShellBoost.Samples.CloudFolderSync
             return atts;
         }
 
+        internal static string ToId(Guid id) => id.ToString();
+        private static Guid ToId(string id) => string.IsNullOrWhiteSpace(id) ? Guid.Empty : Guid.Parse(id);
+
         private static StateSyncEntry ToEntry(WebItem item)
         {
             var entry = new StateSyncEntry();
@@ -85,7 +83,6 @@ namespace ShellBoost.Samples.CloudFolderSync
             WebItem item;
             if (entry.Id == null)
             {
-                // temporary files are used to move content
                 if (!options.IsTemporary)
                     return null;
 
@@ -213,12 +210,11 @@ namespace ShellBoost.Samples.CloudFolderSync
             var item = new WebItem { Id = ToId(parentEntry.Id) };
             foreach (var child in WebApi.EnumerateChildren(item, new EnumerateOptions { IncludeHidden = true }))
             {
-                // never send back temp (being uploaded) files
+                // don't send back temp (being uploaded) files (note the backend should not send them anyway)
                 if (EndPointSynchronizer.MultiPointSynchronizer.ContentMover.IsTemporaryFile(child.Name))
                     continue;
 
                 var entry = ToEntry(child);
-                Logger?.Log(TraceLevel.Info, "entry '" + entry.Name + "'");
                 yield return entry;
             }
         }
@@ -249,7 +245,6 @@ namespace ShellBoost.Samples.CloudFolderSync
             var pid = ToId(entry.ParentId);
             if (string.IsNullOrEmpty(entry.Id))
             {
-                // no id, it's a temporary file, so get it by its name and parent
                 item = await WebApi.GetChildAsync(pid, entry.Name).ConfigureAwait(false);
             }
             else
@@ -271,7 +266,7 @@ namespace ShellBoost.Samples.CloudFolderSync
             else
             {
                 // is this the rename/move case?
-                if (!entry.Name.EqualsIgnoreCase(item.Name))
+                if (!entry.Name.EqualsIgnoreCase(item.Name) || pid != item.ParentId)
                 {
                     // avoids looping trying to upload files that already exist
                     var renameOptions = new RenameOptions();
@@ -287,10 +282,20 @@ namespace ShellBoost.Samples.CloudFolderSync
                     }
 
                     item = await WebApi.RenameAsync(item, entry.Name, renameOptions).ConfigureAwait(false);
+                    if (item != null)
+                    {
+                        if (pid != item.ParentId)
+                        {
+                            Logger?.Log(TraceLevel.Info, "Moved entry '" + item.Id + "' from old name '" + item.Name + "' old parent '" + item.ParentId + "' to new name '" + entry.Name + "' new parent '" + pid + "'  => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
+                        }
+                        else
+                        {
+                            Logger?.Log(TraceLevel.Info, "Renamed entry '" + item.Id + "' from old name '" + item.Name + "' to new name '" + entry.Name + "' => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
+                        }
+                    }
                 }
             }
 
-            // should we update some metadata?
             if (context.MultiPointSynchronizer.NormalizeDateTime(entry.LastWriteTime) != context.MultiPointSynchronizer.NormalizeDateTime(item.LastWriteTimeUtc.ToLocalTime()) ||
                 context.MultiPointSynchronizer.NormalizeDateTime(entry.CreationTime) != context.MultiPointSynchronizer.NormalizeDateTime(item.CreationTimeUtc.ToLocalTime()) ||
                 entry.Attributes != ToAttributes(item))

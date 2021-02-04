@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyDescription("ShellBoost Samples - Cloud Folder Client")]
 [assembly: AssemblyCompany("Aelyo Softworks")]
-[assembly: AssemblyProduct("Shell Namespace Extension Booster")]
+[assembly: AssemblyProduct("ShellBoost Samples - Cloud Folder Client")]
 [assembly: AssemblyCopyright("Copyright (C) 2017-2021 Aelyo Softworks. All rights reserved.")]
 [assembly: AssemblyTrademark("ShellBoost (TM) is a trademark of Aelyo Softworks.")]
 [assembly: AssemblyCulture("")]

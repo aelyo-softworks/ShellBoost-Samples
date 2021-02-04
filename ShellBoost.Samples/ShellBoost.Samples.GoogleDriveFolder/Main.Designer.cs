@@ -43,6 +43,8 @@
             this.startSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.synchronizeNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetSyncrhonizationDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDataDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -150,7 +152,9 @@
             this.synchronizationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startSynchronizerToolStripMenuItem,
             this.stopSynchronizerToolStripMenuItem,
-            this.synchronizeNowToolStripMenuItem});
+            this.synchronizeNowToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.resetSyncrhonizationDataToolStripMenuItem});
             this.synchronizationToolStripMenuItem.Name = "synchronizationToolStripMenuItem";
             this.synchronizationToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.synchronizationToolStripMenuItem.Text = "Synchronization";
@@ -159,14 +163,14 @@
             // startSynchronizerToolStripMenuItem
             // 
             this.startSynchronizerToolStripMenuItem.Name = "startSynchronizerToolStripMenuItem";
-            this.startSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.startSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.startSynchronizerToolStripMenuItem.Text = "Start Synchronizer";
             this.startSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.StartSynchronizerToolStripMenuItem_Click);
             // 
             // stopSynchronizerToolStripMenuItem
             // 
             this.stopSynchronizerToolStripMenuItem.Name = "stopSynchronizerToolStripMenuItem";
-            this.stopSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.stopSynchronizerToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.stopSynchronizerToolStripMenuItem.Text = "Stop Synchronizer";
             this.stopSynchronizerToolStripMenuItem.Click += new System.EventHandler(this.StopSynchronizerToolStripMenuItem_Click);
             // 
@@ -174,9 +178,21 @@
             // 
             this.synchronizeNowToolStripMenuItem.Name = "synchronizeNowToolStripMenuItem";
             this.synchronizeNowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.synchronizeNowToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.synchronizeNowToolStripMenuItem.Text = "Synchronize Now";
+            this.synchronizeNowToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
+            this.synchronizeNowToolStripMenuItem.Text = "Synchronize From Google Drive Now";
             this.synchronizeNowToolStripMenuItem.Click += new System.EventHandler(this.SynchronizeNowToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(308, 6);
+            // 
+            // resetSyncrhonizationDataToolStripMenuItem
+            // 
+            this.resetSyncrhonizationDataToolStripMenuItem.Name = "resetSyncrhonizationDataToolStripMenuItem";
+            this.resetSyncrhonizationDataToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
+            this.resetSyncrhonizationDataToolStripMenuItem.Text = "Reset Synchronization Data";
+            this.resetSyncrhonizationDataToolStripMenuItem.Click += new System.EventHandler(this.resetSynchronizationDataToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -235,7 +251,7 @@
             // 
             this.resetGoogleDriveStateToolStripMenuItem.Name = "resetGoogleDriveStateToolStripMenuItem";
             this.resetGoogleDriveStateToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.resetGoogleDriveStateToolStripMenuItem.Text = "Reset Google Drive State";
+            this.resetGoogleDriveStateToolStripMenuItem.Text = "Reset Google Drive Local State";
             this.resetGoogleDriveStateToolStripMenuItem.Click += new System.EventHandler(this.ResetGoogleDriveStateToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
@@ -348,6 +364,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeAConfiguredAccountToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem resetSyncrhonizationDataToolStripMenuItem;
     }
 }
 

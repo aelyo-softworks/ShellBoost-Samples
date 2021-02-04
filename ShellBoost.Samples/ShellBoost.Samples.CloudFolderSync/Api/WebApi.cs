@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
-using ShellBoost.Core.WindowsShell;
 
 namespace ShellBoost.Samples.CloudFolder.Api
 {
@@ -123,7 +123,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             item.Attributes = attributes;
 
             var json = JsonSerializer.Serialize(item);
-            return ApiPostAsync<WebItem>("upload", (Stream)null, json);
+            return ApiPostAsync<WebItem>("upload", null, json);
         }
 
         public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context = null)
@@ -194,7 +194,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            return ApiGetAsync<WebItem>("getchild/" + parentId + "/" + name, false);
+            return ApiGetAsync<WebItem>("getchild/" + parentId + "?name=" + WebUtility.UrlEncode(name), false);
         }
 
         public static WebItem GetChild(WebItem parent, string name) => EnumerateChildren(parent, new EnumerateOptions { IncludeHidden = true }).FirstOrDefault(i => i.Name.EqualsIgnoreCase(name));
@@ -206,7 +206,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            return ApiGetAsync<bool>("delete/" + item.Id + "/" + options, false);
+            return ApiGetAsync<bool>("delete/" + item.Id + "?options=" + WebUtility.UrlEncode(options?.ToString()), false);
         }
 
         public static Task<WebItem> MoveAsync(this WebItem item, Guid newParentId, MoveOptions options = null)
@@ -214,7 +214,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            return ApiGetAsync<WebItem>("move/" + item.Id + "/" + newParentId + "/" + options);
+            return ApiGetAsync<WebItem>("move/" + item.Id + "/" + newParentId + "?options=" + WebUtility.UrlEncode(options?.ToString()));
         }
 
         public static Task<WebItem> RenameAsync(this WebItem item, string newName, RenameOptions options = null)
@@ -225,7 +225,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (string.IsNullOrWhiteSpace(newName))
                 return Task.FromResult<WebItem>(null);
 
-            return ApiGetAsync<WebItem>("rename/" + item.Id + "/" + newName + "/" + options);
+            return ApiGetAsync<WebItem>("rename/" + item.Id + "?newName=" + WebUtility.UrlEncode(newName) + "&options=" + WebUtility.UrlEncode(options?.ToString()));
         }
 
         public static IEnumerable<WebChange> EnumerateChanges(DateTime startTime)
@@ -239,6 +239,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
+            options ??= new EnumerateOptions();
             string apiSuffix;
             if (options.IncludeFolders)
             {
@@ -261,7 +262,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
                     return Array.Empty<WebItem>();
             }
 
-            var url = "get/" + parent.Id + "/" + apiSuffix + "/" + options;
+            var url = "get/" + parent.Id + "/" + apiSuffix + "?options=" + WebUtility.UrlEncode(options?.ToString());
             return ApiGetAsync<WebItem[]>(url).Result;
         }
     }

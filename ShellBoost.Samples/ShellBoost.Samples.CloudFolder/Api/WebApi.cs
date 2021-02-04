@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ShellBoost.Core.Utilities;
-using ShellBoost.Core.WindowsShell;
 
 namespace ShellBoost.Samples.CloudFolder.Api
 {
@@ -128,7 +128,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
                 {
                     return await ApiPostAsync<T>(url, stream, json, throwOnError).ConfigureAwait(false);
                 }
-            }, (IOException e, int r, int m, int w, out Task<T> i) =>
+            }, (Exception e, int r, int m, int w, out Task<T> i) =>
             {
                 i = ApiPostAsync<T>(url, (Stream)null, json, throwOnError);
                 return Task.FromResult(true);
@@ -383,7 +383,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
-            var result = await ApiGetAsync<bool>("delete/" + item.Id + "/" + options, false);
+            var result = await ApiGetAsync<bool>("delete/" + item.Id + "?options=" + WebUtility.UrlEncode(options?.ToString()), false);
             if (result)
             {
                 IOUtilities.PathDelete(path, true, false);
@@ -412,7 +412,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            return ApiGetAsync<WebItem>("move/" + item.Id + "/" + newParentId + "/" + options);
+            return ApiGetAsync<WebItem>("move/" + item.Id + "/" + newParentId + "?options=" + WebUtility.UrlEncode(options?.ToString()));
         }
 
         public static async Task<WebItem> RenameAsync(this WebItem item, string newName, string oldPath, RenameOptions options = null)
@@ -426,7 +426,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (string.IsNullOrWhiteSpace(newName))
                 return null;
 
-            var newItem = await ApiGetAsync<WebItem>("rename/" + item.Id + "/" + newName + "/" + options);
+            var newItem = await ApiGetAsync<WebItem>("rename/" + item.Id + "?newName=" + WebUtility.UrlEncode(newName) + "&options=" + WebUtility.UrlEncode(options?.ToString()));
             if (newItem != null)
             {
                 // delete old path
@@ -495,6 +495,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
+            options ??= new EnumerateOptions();
             string apiSuffix;
             if (options.IncludeFolders)
             {
@@ -517,7 +518,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
                     return Enumerable.Empty<WebItem>();
             }
 
-            var key = "get/" + parent.Id + "/" + apiSuffix + "/" + options;
+            var key = "get/" + parent.Id + "/" + apiSuffix + "?options=" + WebUtility.UrlEncode(options.ToString());
             if (TryGetFromCache(parent.Id, key, out var items))
                 return items.Select(i => i.Value);
 

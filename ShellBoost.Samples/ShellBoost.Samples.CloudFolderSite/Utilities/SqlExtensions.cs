@@ -46,7 +46,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
         private static object CoalesceValue(object value)
         {
             if (value == null)
-                return null;
+                return Convert.DBNull;
 
             if (value is DateTime dt)
             {

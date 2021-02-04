@@ -14,6 +14,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
         public bool IncludeHidden { get; set; }
         public bool IncludeFolders { get; set; }
         public bool IncludeFiles { get; set; }
+        public bool IncludeTemps { get; set; }
         public bool FoldersFirst { get; set; }
         public bool SortByName { get; set; }
 
@@ -23,6 +24,11 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (IncludeHidden)
             {
                 op[nameof(IncludeHidden)] = true;
+            }
+
+            if (IncludeTemps)
+            {
+                op[nameof(IncludeTemps)] = true;
             }
 
             if (!IncludeFiles)

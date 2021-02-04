@@ -1,1 +1,0 @@
-robocopy D:\SimonMourier\Tfs\ShellBoost\ShellBoost\ShellBoost.Core\bin\Debug . ShellBoost.Core.*

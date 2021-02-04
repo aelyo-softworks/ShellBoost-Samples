@@ -79,7 +79,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             foreach (var file in Account.GetFolderFiles(parentEntry.Id, options.Level == EnumerationLevel.AllChildren))
             {
                 var entry = ToEntry(file);
-                Account.Log(TraceLevel.Verbose, "entry " + entry.Id + " '" + entry.Name + "'");
                 yield return entry;
             }
         }
@@ -210,7 +209,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             else
             {
                 // is this the rename/move case?
-                if (!entry.Name.EqualsIgnoreCase(file.Name))
+                if (!entry.Name.EqualsIgnoreCase(file.Name) || entry.ParentId != file.Parents.FirstOrDefault())
                 {
                     file = Account.MoveFile(file.Id, entry.Name, file.Parents.FirstOrDefault(), entry.ParentId);
                 }

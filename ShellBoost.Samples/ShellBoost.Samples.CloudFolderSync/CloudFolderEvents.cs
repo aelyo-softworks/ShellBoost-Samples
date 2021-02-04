@@ -32,20 +32,19 @@ namespace ShellBoost.Samples.CloudFolderSync
 
             _connection.Closed += async (error) =>
             {
-                _fileSystem.Logger?.Log(TraceLevel.Warning, "Server events closed. Error: " + error?.Message + " Restart: " + _started);
-                // restart?
                 if (_started)
                 {
+                    _fileSystem.Logger?.Log(TraceLevel.Warning, "Server events closed. Error: " + error?.Message + " Restart: " + _started);
                     await Task.Delay(new Random().Next(0, 5) * 1000).ConfigureAwait(false);
                     await _connection.StartAsync().ConfigureAwait(false);
                 }
             };
 
             // must match server's IFileSystemEvents method signature
-            // Change(Guid id, Guid itemId, Guid parentId, WatcherChangeTypes types, DateTime creationTimeUtc, string oldName);
+            // Change(Guid id, Guid parentId, WatcherChangeTypes types, string oldName);
             _connection.On<Guid, Guid, Guid, WatcherChangeTypes, DateTime, string, Guid?>("Change", (id, itemId, parentId, type, dt, oldName, oldParentId) =>
             {
-                _fileSystem.Logger?.Log(TraceLevel.Verbose, "id: " + id + " itemid: " + itemId + " parentId: " + parentId + " type: " + type + " oldName:" + oldName + " oldParentId: " + oldParentId, nameof(CloudFolderEvents));
+                _fileSystem.Logger?.Log(TraceLevel.Verbose, "Type:" + type + " EventId: " + id + " Id:" + itemId + " ParentId:" + parentId + " oldName:" + oldName + " oldParentId: " + oldParentId, nameof(CloudFolderEvents));
 
                 StateSyncEntry entry;
                 switch (type)
@@ -70,7 +69,10 @@ namespace ShellBoost.Samples.CloudFolderSync
 
                         var oldEntry = ToEntry(itemId, parentId);
                         oldEntry.FileName = oldName;
-                        oldEntry.ParentId = CloudFolderFileSystem.ToId(oldParentId.Value);
+                        if (oldParentId.HasValue)
+                        {
+                            oldEntry.ParentId = CloudFolderFileSystem.ToId(oldParentId.Value);
+                        }
                         _fileSystem.OnEvent(new SyncFileSystemEventArgs(SyncFileSystemEventType.Moved, dt, entry, oldEntry));
                         break;
                 }
@@ -126,8 +128,8 @@ namespace ShellBoost.Samples.CloudFolderSync
             if (_started)
                 return;
 
-            _connection.StartAsync().Wait();
             _started = true;
+            _connection.StartAsync().Wait();
             _fileSystem.Logger?.Log(TraceLevel.Info, "Server events started.");
         }
 
@@ -136,8 +138,8 @@ namespace ShellBoost.Samples.CloudFolderSync
             if (!_started)
                 return;
 
-            _connection.StopAsync().Wait();
             _started = false;
+            _connection.StopAsync().Wait();
             _fileSystem.Logger?.Log(TraceLevel.Info, "Server events stopped.");
         }
 

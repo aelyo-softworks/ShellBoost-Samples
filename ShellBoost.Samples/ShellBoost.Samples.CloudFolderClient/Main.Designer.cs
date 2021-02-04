@@ -20,13 +20,30 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eventsLogStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.showHiddenStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showTempStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.refreshStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.treeViewFolders = new System.Windows.Forms.TreeView();
+            this.contextMenuStripTree = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.uploadTreeStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cutStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteTreeStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.newFolderStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewList = new System.Windows.Forms.ListView();
-            this.columnId = new System.Windows.Forms.ColumnHeader();
             this.columnName = new System.Windows.Forms.ColumnHeader();
+            this.columnId = new System.Windows.Forms.ColumnHeader();
             this.columnSize = new System.Windows.Forms.ColumnHeader();
             this.columnAttributes = new System.Windows.Forms.ColumnHeader();
             this.columnLastWriteTime = new System.Windows.Forms.ColumnHeader();
@@ -35,16 +52,21 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.contextMenuStripList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
+            this.contextMenuStripTree.SuspendLayout();
             this.contextMenuStripList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +74,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             // 
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.viewStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
@@ -72,6 +95,56 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
+            // 
+            // viewStripMenuItem
+            // 
+            this.viewStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eventsLogStripMenuItem,
+            this.toolStripSeparator4,
+            this.showHiddenStripMenuItem,
+            this.showTempStripMenuItem,
+            this.toolStripSeparator5,
+            this.refreshStripMenuItem});
+            this.viewStripMenuItem.Name = "viewStripMenuItem";
+            this.viewStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewStripMenuItem.Text = "View";
+            // 
+            // eventsLogStripMenuItem
+            // 
+            this.eventsLogStripMenuItem.CheckOnClick = true;
+            this.eventsLogStripMenuItem.Name = "eventsLogStripMenuItem";
+            this.eventsLogStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.eventsLogStripMenuItem.Text = "Events log";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(164, 6);
+            // 
+            // showHiddenStripMenuItem
+            // 
+            this.showHiddenStripMenuItem.CheckOnClick = true;
+            this.showHiddenStripMenuItem.Name = "showHiddenStripMenuItem";
+            this.showHiddenStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.showHiddenStripMenuItem.Text = "Show hidden files";
+            // 
+            // showTempStripMenuItem
+            // 
+            this.showTempStripMenuItem.CheckOnClick = true;
+            this.showTempStripMenuItem.Name = "showTempStripMenuItem";
+            this.showTempStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.showTempStripMenuItem.Text = "Show temp files";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(164, 6);
+            // 
+            // refreshStripMenuItem
+            // 
+            this.refreshStripMenuItem.Name = "refreshStripMenuItem";
+            this.refreshStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.refreshStripMenuItem.Text = "Refresh";
             // 
             // helpToolStripMenuItem
             // 
@@ -107,6 +180,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             // treeViewFolders
             // 
             this.treeViewFolders.AllowDrop = true;
+            this.treeViewFolders.ContextMenuStrip = this.contextMenuStripTree;
             this.treeViewFolders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewFolders.HideSelection = false;
             this.treeViewFolders.Location = new System.Drawing.Point(0, 0);
@@ -114,12 +188,81 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.treeViewFolders.Size = new System.Drawing.Size(212, 646);
             this.treeViewFolders.TabIndex = 0;
             // 
+            // contextMenuStripTree
+            // 
+            this.contextMenuStripTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uploadTreeStripMenuItem,
+            this.toolSeparator1,
+            this.cutStripMenuItem,
+            this.copyStripMenuItem,
+            this.pasteStripMenuItem,
+            this.toolSeparator2,
+            this.deleteTreeStripMenuItem,
+            this.toolSeparator3,
+            this.newFolderStripMenuItem});
+            this.contextMenuStripTree.Name = "contextMenuStripTree";
+            this.contextMenuStripTree.Size = new System.Drawing.Size(190, 154);
+            // 
+            // uploadTreeStripMenuItem
+            // 
+            this.uploadTreeStripMenuItem.Name = "uploadTreeStripMenuItem";
+            this.uploadTreeStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.uploadTreeStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.uploadTreeStripMenuItem.Text = "Upload here...";
+            // 
+            // toolSeparator1
+            // 
+            this.toolSeparator1.Name = "toolSeparator1";
+            this.toolSeparator1.Size = new System.Drawing.Size(186, 6);
+            // 
+            // cutStripMenuItem
+            // 
+            this.cutStripMenuItem.Name = "cutStripMenuItem";
+            this.cutStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.cutStripMenuItem.Text = "Cut";
+            // 
+            // copyStripMenuItem
+            // 
+            this.copyStripMenuItem.Name = "copyStripMenuItem";
+            this.copyStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.copyStripMenuItem.Text = "Copy";
+            // 
+            // pasteStripMenuItem
+            // 
+            this.pasteStripMenuItem.Name = "pasteStripMenuItem";
+            this.pasteStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.pasteStripMenuItem.Text = "Paste";
+            // 
+            // toolSeparator2
+            // 
+            this.toolSeparator2.Name = "toolSeparator2";
+            this.toolSeparator2.Size = new System.Drawing.Size(186, 6);
+            // 
+            // deleteTreeStripMenuItem
+            // 
+            this.deleteTreeStripMenuItem.Name = "deleteTreeStripMenuItem";
+            this.deleteTreeStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteTreeStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.deleteTreeStripMenuItem.Text = "Delete";
+            // 
+            // toolSeparator3
+            // 
+            this.toolSeparator3.Name = "toolSeparator3";
+            this.toolSeparator3.Size = new System.Drawing.Size(186, 6);
+            // 
+            // newFolderStripMenuItem
+            // 
+            this.newFolderStripMenuItem.Name = "newFolderStripMenuItem";
+            this.newFolderStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newFolderStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.newFolderStripMenuItem.Text = "New folder";
+            // 
             // listViewList
             // 
             this.listViewList.AllowDrop = true;
             this.listViewList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnId,
             this.columnName,
+            this.columnId,
             this.columnSize,
             this.columnAttributes,
             this.columnLastWriteTime,
@@ -128,26 +271,27 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.listViewList.ContextMenuStrip = this.contextMenuStripList;
             this.listViewList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewList.FullRowSelect = true;
+            this.listViewList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewList.HideSelection = false;
+            this.listViewList.LabelEdit = true;
             this.listViewList.Location = new System.Drawing.Point(0, 0);
-            this.listViewList.MultiSelect = false;
             this.listViewList.Name = "listViewList";
             this.listViewList.Size = new System.Drawing.Size(1034, 646);
             this.listViewList.TabIndex = 0;
             this.listViewList.UseCompatibleStateImageBehavior = false;
             this.listViewList.View = System.Windows.Forms.View.Details;
             // 
-            // columnId
-            // 
-            this.columnId.Name = "columnId";
-            this.columnId.Text = "Id";
-            this.columnId.Width = 250;
-            // 
             // columnName
             // 
             this.columnName.Name = "columnName";
             this.columnName.Text = "Name";
             this.columnName.Width = 200;
+            // 
+            // columnId
+            // 
+            this.columnId.Name = "columnId";
+            this.columnId.Text = "Id";
+            this.columnId.Width = 250;
             // 
             // columnSize
             // 
@@ -184,53 +328,84 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.contextMenuStripList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.uploadToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.cutToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
             this.toolStripSeparator2,
             this.deleteToolStripMenuItem,
             this.renameToolStripMenuItem,
-            this.toolStripSeparator1,
+            this.toolStripSeparator3,
             this.newFolderToolStripMenuItem});
             this.contextMenuStripList.Name = "contextMenuStripList";
-            this.contextMenuStripList.Size = new System.Drawing.Size(133, 126);
+            this.contextMenuStripList.Size = new System.Drawing.Size(190, 198);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // uploadToolStripMenuItem
             // 
             this.uploadToolStripMenuItem.Name = "uploadToolStripMenuItem";
-            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.uploadToolStripMenuItem.Text = "Upload";
+            this.uploadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.uploadToolStripMenuItem.Text = "Upload here...";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            // 
+            // cutToolStripMenuItem
+            // 
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.cutToolStripMenuItem.Text = "Cut";
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(129, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(186, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.DoubleClickEnabled = true;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // renameToolStripMenuItem
             // 
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.renameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.renameToolStripMenuItem.Text = "Rename";
             // 
-            // toolStripSeparator1
+            // toolStripSeparator3
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(186, 6);
             // 
             // newFolderToolStripMenuItem
             // 
             this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
-            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.newFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.newFolderToolStripMenuItem.Text = "New folder";
             // 
             // Main
@@ -240,6 +415,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.ClientSize = new System.Drawing.Size(1250, 670);
             this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.menuStripMain);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -250,6 +426,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
+            this.contextMenuStripTree.ResumeLayout(false);
             this.contextMenuStripList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -277,10 +454,31 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uploadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem newFolderToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTree;
+        private System.Windows.Forms.ToolStripMenuItem deleteTreeStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uploadTreeStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem newFolderStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem cutStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eventsLogStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem showHiddenStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem refreshStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showTempStripMenuItem;
     }
 }
 

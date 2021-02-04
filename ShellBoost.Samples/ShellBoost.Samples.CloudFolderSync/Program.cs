@@ -18,11 +18,16 @@ namespace ShellBoost.Samples.CloudFolderSync
         {
             Console.WriteLine("ShellBoost Samples - Cloud Folder Sync - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
+            Console.WriteLine("Windows Version " + Environment.OSVersion.VersionString);
+            Console.WriteLine("Windows Kernel Version " + WindowsUtilities.KernelVersion);
+            Console.WriteLine("Windows Filter Driver Version " + OnDemandLocalFileSystem.FilterDriverVersion);
             Console.WriteLine();
 
-            WebApi.Logger = new FileLogger();
+            var fl = new FileLogger();
+            WebApi.Logger = fl;
 
             var id = WebApi.ServerInfo.Id; // this will connect to server, if it fails here, check connections, server, etc.
+            WebApi.Logger.Log(TraceLevel.Info, "Log file path: " + fl.FilePath);
             WebApi.Logger.Log(TraceLevel.Info, "Server root url: " + WebApi.RootUrl);
             WebApi.Logger.Log(TraceLevel.Info, "Server id: " + WebApi.ServerInfo.Id);
             WebApi.Logger.Log(TraceLevel.Info, "Server time diff: " + WebApi.ServerInfo.TimeDifference);
@@ -41,7 +46,13 @@ namespace ShellBoost.Samples.CloudFolderSync
             WebApi.Logger.Log(TraceLevel.Info, "Local folder path: " + folderPath);
             options.BackupState = true; // we want to backup the state (state is by default an sqlite database)
 
-            var reg = new OnDemandLocalFileSystemRegistration { ProviderDisplayName = DisplayName };
+            var reg = new OnDemandLocalFileSystemRegistration
+            {
+                ProviderDisplayName = DisplayName,
+                HydrationPolicy = OnDemandHydrationPolicy.Full,
+                HydrationPolicyModifier = OnDemandHydrationPolicyModifier.ValidationRequired | OnDemandHydrationPolicyModifier.AutoDehydrationAllowed,
+                PopulationPolicy = OnDemandPopulationPolicy.AlwaysFull,
+            };
 
             Console.WriteLine();
             Console.WriteLine("Press a key:");
@@ -69,7 +80,10 @@ namespace ShellBoost.Samples.CloudFolderSync
                         var fs = new CloudFolderFileSystem(options.Logger);
 
                         // this is Windows 10+ files on-demand local file system (ShellBoost provided)
-                        var local = new OnDemandLocalFileSystem(folderPath, new OnDemandLocalFileSystemOptions { UpdateAllEntriesStatesAtInitialization = false });
+                        var local = new OnDemandLocalFileSystem(folderPath, new OnDemandLocalFileSystemOptions
+                        {
+                            SynchronizationStateEndPointSynchronizerIdentifiers = { "*" }, // make sure a local file is in-sync only when the corresponding file is in-sync on Cloud server (* means all other endpoints)
+                        });
 
                         // add sync endpoints
                         mp.AddEndPoint("Local", local);

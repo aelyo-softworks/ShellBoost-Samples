@@ -4,12 +4,25 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ShellBoost.Samples.CloudFolderClient.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="ShellBoost.Samples.CloudFolderClient.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ShellBoost.Samples.CloudFolderSync\Api\WebApi.cs" Link="Api\WebApi.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolderSync\Api\WebItem.cs" Link="Api\WebItem.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\DeleteOptions.cs" Link="Api\DeleteOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\EnumerateOptions.cs" Link="Api\EnumerateOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\IObjectWithApiItem.cs" Link="Api\IObjectWithApiItem.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\MoveOptions.cs" Link="Api\MoveOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\RenameOptions.cs" Link="Api\RenameOptions.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\ServerInfo.cs" Link="Api\ServerInfo.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\UpdateRequest.cs" Link="Api\UpdateRequest.cs" />
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebChange.cs" Link="Api\WebChange.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,12 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShellBoost.Samples.CloudFolderSite\ShellBoost.Samples.CloudFolderSite.csproj" />
+    <Reference Include="ShellBoost.Core">
+      <HintPath>..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -43,9 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ShellBoost.Core">
-      <HintPath>..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll</HintPath>
-    </Reference>
+    <Folder Include="Api\" />
   </ItemGroup>
 
 </Project>

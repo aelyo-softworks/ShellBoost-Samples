@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShellBoost.Core;
 using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
 
@@ -24,7 +22,9 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Icon = Program.AppIcon;
 
             AddLog("ShellBoost Samples - Drive Local Folder - V" + AssemblyUtilities.GetInformationalVersion() + " Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
-            AddLog("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
+            AddLog("Windows Version " + Environment.OSVersion.VersionString);
+            AddLog("Windows Kernel Version " + WindowsUtilities.KernelVersion);
+            AddLog("Windows Filter Driver Version " + OnDemandLocalFileSystem.FilterDriverVersion);
 
             if (!Settings.HasSecretsFile)
             {
@@ -340,8 +340,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     t.Name = string.Format("_gd_logger{0}", Environment.TickCount);
                     return true;
                 });
-
-                var name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
+                string name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
                 _logPath = Path.Combine(Settings.LogsDirectoryPath, name);
                 IOUtilities.FileCreateDirectory(_logPath);
             }
@@ -406,6 +405,27 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     IOUtilities.DirectoryDelete(account.DataDirectoryPath, true, false);
                     Settings.Current.ResetAccounts();
                     this.ShowMessage("Account '" + account.UserEmailAddress + "' was removed successfully.");
+                }
+            }
+        }
+
+        private void resetSynchronizationDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new ChooseAccount())
+            {
+                dlg.ShowDialog(this);
+                var account = dlg.SelectedAccount;
+                if (account != null)
+                {
+                    if (this.ShowConfirm("Are you sure you want to reset account '" + account.UserEmailAddress + "' data?") != DialogResult.Yes)
+                        return;
+
+                    account.Synchronizer.Stop();
+                    account.Synchronizer.StateProvider.Reset();
+                    account.UnregisterOnDemandSynchronizer();
+                    IOUtilities.DirectoryDelete(account.DataDirectoryPath, true, false);
+                    account.RegisterOnDemandSynchronizer();
+                    this.ShowMessage("Account '" + account.UserEmailAddress + "' data was removed successfully.");
                 }
             }
         }

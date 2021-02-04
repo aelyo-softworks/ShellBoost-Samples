@@ -162,28 +162,32 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }
         }
 
-        public void SendEvents()
+        public void SendEvents(bool inline = false)
         {
             var events = Interlocked.Exchange(ref _events, new ConcurrentDictionary<string, EventImpl>());
-            Task.Run(async () =>
+            if (events.Count == 0)
+                return;
+
+            if (inline)
+            {
+                sendAsync().Wait();
+            }
+            else
+            {
+                Task.Run(async () => await sendAsync());
+            }
+
+            async Task sendAsync()
             {
                 foreach (var evt in events.Values.OrderBy(v => v.CreationTimeUtc))
                 {
-                    if (evt.OldName == null)
-                    {
-                        await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc }).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc, OldName) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc, @oldName, @oldParentId)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc, oldName = evt.OldName, oldParentId = evt.OldParentId }).ConfigureAwait(false);
-                    }
-
+                    await SqlExtensions.ExecuteNonQueryAsync(ConnectionString, "INSERT INTO Change (Id, ItemId, ParentId, Type, CreationTimeUtc, OldName, OldParentId) VALUES (@id, @itemId, @parentId, @type, @creationTimeUtc, @oldName, @oldParentId)", new { id = evt.Id, itemId = evt.ItemId, parentId = evt.ParentId, type = evt.Type, creationTimeUtc = evt.CreationTimeUtc, oldName = evt.OldName, oldParentId = evt.OldParentId }).ConfigureAwait(false);
                     Events?.Change(evt);
                 }
-            });
+            }
         }
 
-        private void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null, Guid? oldParentId = null)
+        public void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null, Guid? oldParentId = null)
         {
             var evt = new EventImpl { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName, OldParentId = oldParentId };
             _events[evt.ToString()] = evt;
@@ -655,27 +659,30 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 and += " AND (Attributes & " + (int)FileAttributes.Hidden + ") = 0";
             }
 
-            string orderBy = null;
+            var orderBy = new List<string>();
             if (options.FoldersFirst)
             {
-                orderBy += "(Attributes & " + (int)FileAttributes.Directory + ") DESC";
+                orderBy.Add("(Attributes & " + (int)FileAttributes.Directory + ") DESC");
             }
 
             if (options.SortByName)
             {
-                orderBy += "Name";
+                orderBy.Add("Name");
             }
 
-            if (orderBy != null)
+            if (orderBy.Count > 0)
             {
                 and += " ORDER BY " + string.Join(", ", orderBy);
             }
 
+            var includeTemps = options.IncludeTemps;
             using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Id <> '00000000-0000-0000-0000-000000000000'" + and, new { pid = parentItem.Id }, Logger).ConfigureAwait(false))
             {
                 while (reader.Read())
                 {
-                    yield return NewItem(reader);
+                    var item = NewItem(reader);
+                    if (includeTemps || !IsTempFile(item.Name))
+                        yield return NewItem(reader);
                 }
             }
         }

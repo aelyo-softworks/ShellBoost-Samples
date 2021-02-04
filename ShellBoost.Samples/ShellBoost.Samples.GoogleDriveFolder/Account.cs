@@ -66,7 +66,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             UserCredential credential;
             using (var stream = File.OpenRead(Settings.SecretsFilePath))
             {
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath)).Result;
+                var receiver = noReceiver ? new NullReceiver() : AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies);
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath), receiver).Result;
             }
 
             Service = GetService(credential);
@@ -76,16 +77,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             DataDirectoryPath = GetDataDirectoryPath(UserEmailAddress);
 
             // each GDrive account has its own synchronizer (cloud provider) instance
-            IOUtilities.DirectoryCreate(DataDirectoryPath);
-            OnDemandLocalFileSystem.EnsureRegistered(DataDirectoryPath, GetRegistration());
-            FileSystem = new FileSystem(this);
-
-            // note the mpsync identifier must be *globally unique*, so you can choose a guid, or something like a .NET namespace
-            Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true, StateProviderTraceLevel = Settings.Current.StateProviderLogLevel });
-            Synchronizer.AddEndPoint("Local", new OnDemandLocalFileSystem(DataDirectoryPath));
-            Synchronizer.AddEndPoint("GDrive", FileSystem);
-
-            Log(TraceLevel.Info, "State file path: " + Synchronizer.StateProvider.ExecuteCommand(new Dictionary<string, object> { ["command"] = "filepath" }));
+            RegisterOnDemandSynchronizer();
         }
 
         // a receive that doesn't to anything on purpose
@@ -103,8 +95,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         public string DataDirectoryPath { get; }
         public string RootId { get; private set; }
         public string TempFolderId { get; private set; }
-        public MultiPointSynchronizer Synchronizer { get; }
-        public FileSystem FileSystem { get; }
+        public MultiPointSynchronizer Synchronizer { get; private set; }
+        public FileSystem FileSystem { get; private set; }
 
         public override string ToString() => UserEmailAddress;
 
@@ -125,7 +117,30 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         {
             var reg = new OnDemandLocalFileSystemRegistration();
             reg.ProviderName = AssemblyUtilities.GetDescription();
+            reg.HydrationPolicy = OnDemandHydrationPolicy.Full;
+            reg.HydrationPolicyModifier = OnDemandHydrationPolicyModifier.ValidationRequired | OnDemandHydrationPolicyModifier.AutoDehydrationAllowed;
+            reg.PopulationPolicy = OnDemandPopulationPolicy.AlwaysFull;
             return reg;
+        }
+
+        public void RegisterOnDemandSynchronizer()
+        {
+            Synchronizer?.Dispose();
+            IOUtilities.DirectoryCreate(DataDirectoryPath);
+            OnDemandLocalFileSystem.EnsureRegistered(DataDirectoryPath, GetRegistration());
+
+            FileSystem = new FileSystem(this);
+
+            // note the mpsync identifier must be *globally unique*, so you can choose a guid, or something like a .NET namespace
+            Synchronizer = new MultiPointSynchronizer(typeof(Settings).Namespace, options: new MultiPointSynchronizerOptions { Logger = Settings.SynchronizerLogger, BackupState = true, StateProviderTraceLevel = Settings.Current.StateProviderLogLevel });
+
+            var options = new OnDemandLocalFileSystemOptions();
+
+            // link the in-sync state with the GDrive synchronization result
+            options.SynchronizationStateEndPointSynchronizerIdentifiers.Add("*");
+
+            Synchronizer.AddEndPoint("Local", new OnDemandLocalFileSystem(DataDirectoryPath, options));
+            Synchronizer.AddEndPoint("GDrive", FileSystem);
         }
 
         public void UnregisterOnDemandSynchronizer()
@@ -339,7 +354,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             // Note: it looks like originalFileName can not be changed, at least not like this
             // For some reason, Google Drive keeps using the original extension (the one with originalFilename), even once the file has been renamed, when we download it using Google Drive UI.
-            // So, the whole thing works with Google Drive because the file name we used for temporary uploads has the same extension than the the final name
+            // So, the whole thing works with Google Drive because the file name we used for temporary uploads has the same extension than the final name
             var request = Service.Files.Update(file, id);
 
             if (oldParentId != newParentId)
@@ -677,7 +692,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             {
                 IOUtilities.FileCreateDirectory(tempPath);
                 var store = new FileStore(tempPath);
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store, AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies)).Result;
             }
 
             using (var service = GetService(credential))
@@ -768,7 +783,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                         break;
 
                     case LogLevel.Warning:
-                        // hack: remove this bogus warning
+                        // hack remove this bogus warning
                         if (formattedMessage != null && formattedMessage.IndexOf("Add parameter should not get null values. type=Query, name=key", StringComparison.OrdinalIgnoreCase) >= 0)
                             return;
 

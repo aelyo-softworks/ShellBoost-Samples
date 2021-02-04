@@ -65,6 +65,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             enumOptions.IncludeFolders = folders;
             enumOptions.IncludeFiles = files;
             enumOptions.IncludeHidden = ParseOptions(options).GetValue(nameof(EnumerateOptions.IncludeHidden), false);
+            enumOptions.IncludeTemps = ParseOptions(options).GetValue(nameof(EnumerateOptions.IncludeTemps), false);
             enumOptions.FoldersFirst = ParseOptions(options).GetValue(nameof(EnumerateOptions.FoldersFirst), false);
             enumOptions.SortByName = ParseOptions(options).GetValue(nameof(EnumerateOptions.SortByName), false);
             return enumOptions;
@@ -102,14 +103,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
         }
 
         [HttpGet]
-        [Route("api/getchild/{parentId}/{name}")]
-        public async Task<object> GetChild(Guid parentId, string name)
+        [Route("api/getchild/{parentId}")]
+        public async Task<object> GetChild(Guid parentId, [FromQuery] string name)
         {
             if (name == null)
                 return BadRequest();
 
             var item = await FileSystem.GetItemAsync(parentId).ConfigureAwait(false);
-            Log("parentId: " + parentId + " item: " + item);
+            Log("parentId: " + parentId + " item: " + item + " name:" + name);
             if (item == null)
             {
                 LogWarning("Item " + parentId + " was not found.");
@@ -127,14 +128,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             return Json(child); // if item is null, this will return the null json, instead of a null string which will cause client's JsonSerializer to fail
         }
 
-        [Route("api/get/{id}/all/{options?}")]
-        public IAsyncEnumerable<object> GetAll(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, true, true));
+        [Route("api/get/{id}/all")]
+        public IAsyncEnumerable<object> GetAll(Guid id, [FromQuery] string options) => Enumerate(id, GetEnumerateOptions(options, true, true));
 
-        [Route("api/get/{id}/folders/{options?}")]
-        public IAsyncEnumerable<object> GetFolders(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, true, false));
+        [Route("api/get/{id}/folders")]
+        public IAsyncEnumerable<object> GetFolders(Guid id, [FromQuery] string options) => Enumerate(id, GetEnumerateOptions(options, true, false));
 
-        [Route("api/get/{id}/files/{options?}")]
-        public IAsyncEnumerable<object> GetFiles(Guid id, string options) => Enumerate(id, GetEnumerateOptions(options, false, true));
+        [Route("api/get/{id}/files")]
+        public IAsyncEnumerable<object> GetFiles(Guid id, [FromQuery] string options) => Enumerate(id, GetEnumerateOptions(options, false, true));
 
         private string GetContentType(string path)
         {
@@ -182,8 +183,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        [Route("api/move/{id}/{newParentId}/{options?}")]
-        public async Task<object> Move(Guid id, Guid newParentId, string options)
+        [Route("api/move/{id}/{newParentId}")]
+        public async Task<object> Move(Guid id, Guid newParentId, [FromQuery] string options)
         {
             try
             {
@@ -205,8 +206,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        [Route("api/rename/{id}/{newName}/{options?}")]
-        public async Task<object> Rename(Guid id, string newName, string options)
+        [Route("api/rename/{id}")]
+        public async Task<object> Rename(Guid id, [FromQuery] string newName, [FromQuery] string options)
         {
             try
             {
@@ -226,7 +227,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 updateOptions.EnsureUniqueName = true; // this is currently not an option
 
                 // move?
-                if (op.TryGetValue("pid", out var pid) & Conversions.TryChangeType(pid, out Guid parentId) && parentId != Guid.Empty)
+                if (op.TryGetValue("pid", out var pid) & Conversions.TryChangeType(pid, out Guid parentId))
                 {
                     updateOptions.ParentId = parentId;
                 }
@@ -239,8 +240,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
         }
 
-        [Route("api/delete/{id}/{options?}")]
-        public async Task<object> Delete(Guid id, string options)
+        [Route("api/delete/{id}")]
+        public async Task<object> Delete(Guid id, [FromQuery] string options)
         {
             try
             {
@@ -376,6 +377,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                     if (updateOptions != null)
                     {
+                        updateOptions.Name = created.Name;
                         await created.UpdateAsync(updateOptions).ConfigureAwait(false);
                     }
                     return Ok(created);
