@@ -60,6 +60,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             deleteTreeStripMenuItem.Click += (s, e) => Delete(new WebItem[] { treeViewFolders.GetSelectedTag<WebItem>() });
             uploadToolStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>());
             uploadTreeStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>());
+            replaceContentStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>(), listViewList.GetSelectedTag<WebItem>());
             cutStripMenuItem.Click += CutStripMenuItem_Click;
             cutToolStripMenuItem.Click += CutToolStripMenuItem_Click;
             copyStripMenuItem.Click += CopyStripMenuItem_Click;
@@ -279,6 +280,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             toolStripSeparator2.Visible = openToolStripMenuItem.Visible;
             cutToolStripMenuItem.Visible = openToolStripMenuItem.Visible;
             copyToolStripMenuItem.Visible = openToolStripMenuItem.Visible;
+            replaceContentStripMenuItem.Visible = openToolStripMenuItem.Visible;
             pasteToolStripMenuItem.Enabled = IsPasteEnabled();
         }
 
@@ -572,7 +574,7 @@ namespace ShellBoost.Samples.CloudFolderClient
                 IOUtilities.FileCreateDirectory(temp);
 
                 // write fs stream to it
-                using var fileStream = File.OpenWrite(temp);
+                using var fileStream = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 await WebApi.DownloadAsync(item, fileStream).ConfigureAwait(false);
 
                 // open it using whatever shell is configured for
@@ -603,7 +605,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             });
         }
 
-        private void UploadTo(WebItem folder)
+        private void UploadTo(WebItem folder, WebItem replaceContentItem = null)
         {
             if (folder == null)
                 return;
@@ -611,18 +613,41 @@ namespace ShellBoost.Samples.CloudFolderClient
             var ofd = new OpenFileDialog();
             ofd.Multiselect = true;
             ofd.RestoreDirectory = true;
+            if (replaceContentItem != null)
+            {
+                var ext = replaceContentItem.Extension.ToLowerInvariant();
+                ofd.Filter = ext + " files (*." + ext + ")|*" + ext + "|All files (*.*)|*.*";
+                ofd.Multiselect = false;
+            }
+
             if (ofd.ShowDialog(this) != DialogResult.OK)
                 return;
 
             var fileNames = ofd.FileNames;
             _ = Task.Run(async () =>
                 {
-                    foreach (var fileName in fileNames)
+                    if (replaceContentItem != null)
                     {
-                        using var file = File.OpenRead(fileName);
-                        await UploadAsync(folder, Path.GetFileName(fileName), file).ConfigureAwait(false);
+                        using var file = File.OpenRead(ofd.FileName);
+                        await ReplaceContentAsync(replaceContentItem, file).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        foreach (var fileName in fileNames)
+                        {
+                            using var file = File.OpenRead(fileName);
+                            await UploadAsync(folder, Path.GetFileName(fileName), file).ConfigureAwait(false);
+                        }
                     }
                 });
+        }
+
+        private static async Task<WebItem> ReplaceContentAsync(WebItem item, Stream inputStream)
+        {
+            if (item == null)
+                return null;
+
+            return await WebApi.UploadAsync(item, inputStream).ConfigureAwait(false);
         }
 
         private static async Task<WebItem> UploadAsync(WebItem folder, string name, Stream inputStream)

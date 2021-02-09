@@ -52,6 +52,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.contextMenuStripList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceContentStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,6 +329,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.contextMenuStripList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.uploadToolStripMenuItem,
+            this.replaceContentStripMenuItem,
             this.toolStripSeparator1,
             this.cutToolStripMenuItem,
             this.copyToolStripMenuItem,
@@ -338,7 +340,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.toolStripSeparator3,
             this.newFolderToolStripMenuItem});
             this.contextMenuStripList.Name = "contextMenuStripList";
-            this.contextMenuStripList.Size = new System.Drawing.Size(190, 198);
+            this.contextMenuStripList.Size = new System.Drawing.Size(190, 220);
             // 
             // openToolStripMenuItem
             // 
@@ -352,6 +354,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.uploadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.uploadToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.uploadToolStripMenuItem.Text = "Upload here...";
+            // 
+            // replaceContentStripMenuItem
+            // 
+            this.replaceContentStripMenuItem.Name = "replaceContentStripMenuItem";
+            this.replaceContentStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.replaceContentStripMenuItem.Text = "Replace content...";
             // 
             // toolStripSeparator1
             // 
@@ -479,6 +487,7 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem refreshStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showTempStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem replaceContentStripMenuItem;
     }
 }
 
