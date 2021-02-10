@@ -399,13 +399,16 @@ namespace ShellBoost.Samples.CloudFolderClient
                     {
                         if (parentNode.IsExpanded)
                         {
-                            var existingNode = parentNode.Nodes.Find(item.Id.ToString(), true).FirstOrDefault();
-                            if (existingNode == null)
+                            if (item.IsFolder)
                             {
-                                var newNode = LoadTreeFolder(parentNode.Nodes, item);
-                                if (newNode != null)
+                                var existingNode = parentNode.Nodes.Find(item.Id.ToString(), true).FirstOrDefault();
+                                if (existingNode == null)
                                 {
-                                    newNode.EnsureVisible();
+                                    var newNode = LoadTreeFolder(parentNode.Nodes, item);
+                                    if (newNode != null)
+                                    {
+                                        newNode.EnsureVisible();
+                                    }
                                 }
                             }
                         }
