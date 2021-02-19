@@ -4,6 +4,10 @@ This repository contains [ShellBoost](https://www.shellboost.com) official sampl
 ShellBoost comes with the following samples:
 *	**Overview**: A very simple Console application shell folder that contains a fixed set of virtual shell items and folders.
 
+*	**Core Overview**: A very simple Console .NET Core application shell folder that contains a fixed set of virtual shell items and folders.
+
+*	**VB Overview**: A very simple Console .NET Core VB.NET application shell folder that contains a fixed set of virtual shell items and folders.
+
 *	**Local Folder**: A Console application shell folder that supports a combination of virtual shell items and physical shell items.
 
 *	**Registry Folder**: A Console application shell folder that mimics the official Windows Registry Editor (“regedit.exe”) with only virtual shell items and custom UI using WinForms. Also supports the "Send To" context menu.
