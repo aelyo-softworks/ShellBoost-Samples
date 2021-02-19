@@ -1,9 +1,8 @@
-﻿Imports System
+﻿Imports System.Runtime.InteropServices
 Imports ShellBoost.Core
 Imports ShellBoost.Core.Client
 Imports ShellBoost.Core.Utilities
 Imports ShellBoost.Core.WindowsPropertySystem
-Imports System.Runtime.InteropServices
 
 Namespace ShellBoost.Samples.Overview
     Public Class SimpleItem
@@ -25,7 +24,7 @@ Namespace ShellBoost.Samples.Overview
         End Function
 
         Public Overrides Function GetContent() As ShellContent
-            Return New MemoryShellContent(DisplayName & " - this is dynamic content created from .NET " & (If(Installer.IsNetCore, "Core", "Framework")) & " at " + DateTime.Now)
+            Return New MemoryShellContent(DisplayName & " - this is dynamic content created from VB.NET " & (If(Installer.IsNetCore, "Core", "Framework")) & " at " + DateTime.Now)
         End Function
     End Class
 End Namespace

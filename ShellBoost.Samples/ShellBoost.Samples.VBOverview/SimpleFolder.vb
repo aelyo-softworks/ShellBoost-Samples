@@ -1,5 +1,4 @@
-﻿Imports System.Collections.Generic
-Imports ShellBoost.Core
+﻿Imports ShellBoost.Core
 Imports ShellBoost.Core.WindowsShell
 
 Namespace ShellBoost.Samples.Overview
