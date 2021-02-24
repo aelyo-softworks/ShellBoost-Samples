@@ -42,7 +42,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             if (!message.StartsWith(Prefix, StringComparison.Ordinal))
                 return -1;
 
-            int pos = message.IndexOf(':', Prefix.Length);
+            var pos = message.IndexOf(':', Prefix.Length);
             if (pos < 0)
                 return -1;
 

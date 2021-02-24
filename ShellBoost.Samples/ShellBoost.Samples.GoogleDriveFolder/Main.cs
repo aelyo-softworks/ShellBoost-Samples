@@ -391,13 +391,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         {
             using (var dlg = new ChooseAccount())
             {
-                dlg.ShowDialog(this);
+                var res = dlg.ShowDialog(this);
                 var account = dlg.SelectedAccount;
-                if (account != null)
+                if (account != null && res == DialogResult.OK)
                 {
                     if (this.ShowConfirm("Are you sure you want to remove account '" + account.UserEmailAddress + "'?") != DialogResult.Yes)
                         return;
 
+                    account.FileSystem.StopEventMonitoring();
                     account.Synchronizer.Stop();
                     account.Synchronizer.StateProvider.Reset();
                     account.Remove();
@@ -413,13 +414,14 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         {
             using (var dlg = new ChooseAccount())
             {
-                dlg.ShowDialog(this);
+                var res = dlg.ShowDialog(this);
                 var account = dlg.SelectedAccount;
-                if (account != null)
+                if (account != null && res == DialogResult.OK)
                 {
                     if (this.ShowConfirm("Are you sure you want to reset account '" + account.UserEmailAddress + "' data?") != DialogResult.Yes)
                         return;
 
+                    account.FileSystem.StopEventMonitoring();
                     account.Synchronizer.Stop();
                     account.Synchronizer.StateProvider.Reset();
                     account.UnregisterOnDemandSynchronizer();

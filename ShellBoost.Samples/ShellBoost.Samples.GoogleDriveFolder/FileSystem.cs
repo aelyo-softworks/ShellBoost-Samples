@@ -61,8 +61,29 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         #region ISyncFileSystemEvents
         public event EventHandler<SyncFileSystemEventArgs> Event;
 
-        public void StartEventMonitoring() => _timer.Change(0, Settings.Current.SyncPeriod * 1000);
-        public void StopEventMonitoring() => _timer.Change(0, Timeout.Infinite);
+        public void StartEventMonitoring()
+        {
+            try
+            {
+                _timer.Change(0, Settings.Current.SyncPeriod * 1000);
+            }
+            catch (ObjectDisposedException)
+            {
+                // race condition
+            }
+        }
+
+        public void StopEventMonitoring()
+        {
+            try
+            {
+                _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            }
+            catch (ObjectDisposedException)
+            {
+                // race condition
+            }
+        }
 
         #endregion ISyncFileSystemEvents
 

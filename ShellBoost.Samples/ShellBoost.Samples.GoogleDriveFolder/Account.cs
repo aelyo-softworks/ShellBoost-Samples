@@ -52,7 +52,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             ApplicationContext.RegisterLogger(new GoogleLogger());
         }
 
-        private Account(string tokenFilePath, bool noReceiver)
+        private Account(string tokenFilePath)
         {
             if (!Settings.HasSecretsFile)
                 throw new InvalidOperationException();
@@ -66,8 +66,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             UserCredential credential;
             using (var stream = File.OpenRead(Settings.SecretsFilePath))
             {
-                var receiver = noReceiver ? new NullReceiver() : AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies);
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath), receiver).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, new FileStore(tokenFilePath)).Result;
             }
 
             Service = GetService(credential);
@@ -632,11 +631,11 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             ApplicationName = "ShellBoost Drive Sample",
         });
 
-        private static Account FromFile(string filePath, bool noReceiver)
+        private static Account FromFile(string filePath)
         {
             try
             {
-                return new Account(filePath, noReceiver);
+                return new Account(filePath);
             }
             catch (Exception e)
             {
@@ -659,11 +658,11 @@ namespace ShellBoost.Samples.GoogleDriveFolder
         public static bool IsGoogleDoc(GDriveData.File file) => file != null && file.MimeType != null && GoogleDocMimeTypes.Contains(file.MimeType);
 
         // get all accounts stored in the app local data directory
-        public static IEnumerable<Account> GetAllAccounts(bool noReceiver)
+        public static IEnumerable<Account> GetAllAccounts()
         {
             foreach (var file in Directory.EnumerateFiles(Settings.ConfigurationDirectoryPath, "*" + _tokenJsonExt))
             {
-                var account = FromFile(file, noReceiver);
+                var account = FromFile(file);
                 if (account != null)
                     yield return account;
             }
@@ -692,7 +691,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             {
                 IOUtilities.FileCreateDirectory(tempPath);
                 var store = new FileStore(tempPath);
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store, AddAccountBox.GetNewCodeReceiver(Settings.Current.AddAccountClearCookies)).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes, "user", CancellationToken.None, store).Result;
             }
 
             using (var service = GetService(credential))

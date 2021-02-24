@@ -61,7 +61,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             _accounts = new Lazy<IReadOnlyList<Account>>(LoadAccounts);
         }
 
-        private IReadOnlyList<Account> LoadAccounts() => Account.GetAllAccounts(true).ToList();
+        private IReadOnlyList<Account> LoadAccounts() => Account.GetAllAccounts().ToList();
 
         public static bool HasSecretsFile => IOUtilities.FileExists(SecretsFilePath);
 
