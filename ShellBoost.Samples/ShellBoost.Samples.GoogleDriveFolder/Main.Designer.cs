@@ -44,7 +44,7 @@
             this.stopSynchronizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.synchronizeNowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.resetSyncrhonizationDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetSynchronizationDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDataDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -154,7 +154,7 @@
             this.stopSynchronizerToolStripMenuItem,
             this.synchronizeNowToolStripMenuItem,
             this.toolStripSeparator1,
-            this.resetSyncrhonizationDataToolStripMenuItem});
+            this.resetSynchronizationDataToolStripMenuItem});
             this.synchronizationToolStripMenuItem.Name = "synchronizationToolStripMenuItem";
             this.synchronizationToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.synchronizationToolStripMenuItem.Text = "Synchronization";
@@ -189,10 +189,10 @@
             // 
             // resetSyncrhonizationDataToolStripMenuItem
             // 
-            this.resetSyncrhonizationDataToolStripMenuItem.Name = "resetSyncrhonizationDataToolStripMenuItem";
-            this.resetSyncrhonizationDataToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
-            this.resetSyncrhonizationDataToolStripMenuItem.Text = "Reset Synchronization Data";
-            this.resetSyncrhonizationDataToolStripMenuItem.Click += new System.EventHandler(this.resetSynchronizationDataToolStripMenuItem_Click);
+            this.resetSynchronizationDataToolStripMenuItem.Name = "resetSynchronizationDataToolStripMenuItem";
+            this.resetSynchronizationDataToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
+            this.resetSynchronizationDataToolStripMenuItem.Text = "Reset Synchronization Data";
+            this.resetSynchronizationDataToolStripMenuItem.Click += new System.EventHandler(this.resetSynchronizationDataToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -365,7 +365,7 @@
         private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeAConfiguredAccountToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem resetSyncrhonizationDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetSynchronizationDataToolStripMenuItem;
     }
 }
 

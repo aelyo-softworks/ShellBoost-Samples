@@ -130,6 +130,11 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             return Account.DownloadFileAsync(entry.Id, options.Offset, options.Count, output, options.CancellationToken, (p) =>
             {
+                if (entry.Size > 0)
+                {
+                    var ratio = p.BytesDownloaded * 100 / entry.Size;
+                    Account.Log(TraceLevel.Verbose, "Progress: " + p.BytesDownloaded + "/" + entry.Size + " (" + ratio + "%)");
+                }
                 sink.Progress(context, entry.Size, p.BytesDownloaded);
             });
         }

@@ -280,16 +280,38 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 throw new ArgumentNullException(nameof(output));
 
             Log(TraceLevel.Info, "id:" + id + " offset:" + offset + " count:" + count);
-            var request = Service.Files.Get(id);
+            var request = new BetterGetRequest(Service, id);
             if (downloadProgress != null)
             {
-                request.MediaDownloader.ProgressChanged += (progress) =>
+                request.ProgressChanged += (progress) =>
                 {
                     downloadProgress(progress);
                 };
             }
 
             return request.DownloadRangeAsync(output, new RangeHeaderValue(offset, (offset + count) - 1), cancellationToken);
+        }
+
+        // the current implementation of GetRequest's DownloadRangeAsync creates a new MediaDownloader that we don't have access to
+        private class BetterGetRequest : FilesResource.GetRequest
+        {
+            public event Action<IDownloadProgress> ProgressChanged;
+
+            public BetterGetRequest(IClientService service, string fileId)
+                : base(service, fileId)
+            {
+            }
+
+            public override Task<IDownloadProgress> DownloadRangeAsync(Stream stream, RangeHeaderValue range, CancellationToken cancellationToken = default)
+            {
+                var downloader = new MediaDownloader(Service);
+
+                // adapt to your needs. By default Google Drive is configured for 10M.
+                //downloader.ChunkSize = 0x10000;
+                downloader.Range = range;
+                downloader.ProgressChanged += (a) => ProgressChanged?.Invoke(a);
+                return downloader.DownloadAsync(GenerateRequestUri(), stream, cancellationToken);
+            }
         }
 
         public GDriveData.File CreateFolder(string name, string parentId, DateTime? createdTime = null, DateTime? modifiedTime = null) => CreateFile(name, parentId, createdTime, modifiedTime, FolderMimeType);

@@ -111,7 +111,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        public void InvokeAddLog(string text = null, bool addDate = false) => BeginInvoke(new Action(() => AddLog(text, addDate)));
+        public void InvokeAddLog(string text = null, bool addDate = false) => Task.Run(() => { try { BeginInvoke(new Action(() => AddLog(text, addDate))); } catch { /* late logs, nothing to do */ } });
         public void AddLog(string text = null, bool addDate = false)
         {
             try
