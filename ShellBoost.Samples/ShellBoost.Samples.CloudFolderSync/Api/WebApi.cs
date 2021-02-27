@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
@@ -126,7 +127,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiPostAsync<WebItem>("upload", null, json);
         }
 
-        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context = null)
+        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context = null, SyncGetEntryContentOptions options = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -138,6 +139,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             var resp = await _client.GetAsync(_baseUrl + "download/" + item.Id).ConfigureAwait(false);
             if (resp != null)
             {
+                var cancellationToken = options != null ? options.CancellationToken : CancellationToken.None;
                 if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
                 {
                     using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))
@@ -154,13 +156,20 @@ namespace ShellBoost.Samples.CloudFolder.Api
                             completed += read;
                             await outputStream.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
                             context.ProgressSink.Progress(context, resp.Content.Headers.ContentLength.Value, completed);
+
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                Logger?.Log(TraceLevel.Verbose, "GetStreamAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
+                                return;
+                            }
+
                         }
                         while (true);
                     }
                 }
                 else
                 {
-                    await resp.Content.CopyToAsync(outputStream).ConfigureAwait(false);
+                    await resp.Content.CopyToAsync(outputStream, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
