@@ -46,6 +46,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
         private const string _tokenJsonExt = ".token.json";
         public static Core.Utilities.ILogger Logger { get; set; }
+        private readonly HashSet<string> _forciblyDeletedFiles = new HashSet<string>();
 
         static Account()
         {
@@ -77,13 +78,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
 
             // each GDrive account has its own synchronizer (cloud provider) instance
             RegisterOnDemandSynchronizer();
-        }
-
-        // a receive that doesn't to anything on purpose
-        private class NullReceiver : ICodeReceiver
-        {
-            public string RedirectUri => "whatever";
-            public Task<AuthorizationCodeResponseUrl> ReceiveCodeAsync(AuthorizationCodeRequestUrl url, CancellationToken taskCancellationToken) => Task.FromResult(new AuthorizationCodeResponseUrl());
         }
 
         public DriveService Service { get; }
@@ -197,13 +191,24 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             } while (pageToken != null);
         }
 
-        public void DeleteFilesByName(string parentId, string name)
+        public IList<GDriveData.File> ForciblyDeleteFilesByName(string parentId, string name)
+        {
+            var files = DeleteFilesByName(parentId, name);
+            foreach (var file in files)
+            {
+                _forciblyDeletedFiles.Add(file.Id);
+            }
+            return files;
+        }
+
+        public IList<GDriveData.File> DeleteFilesByName(string parentId, string name)
         {
             var files = GetFilesByName(parentId, name);
             foreach (var file in files)
             {
                 DeleteFile(file.Id);
             }
+            return files;
         }
 
         public IList<GDriveData.File> GetFilesByName(string parentId, string name)
@@ -280,6 +285,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 throw new ArgumentNullException(nameof(output));
 
             Log(TraceLevel.Info, "id:" + id + " offset:" + offset + " count:" + count);
+            //var request = Service.Files.Get(id);
             var request = new BetterGetRequest(Service, id);
             if (downloadProgress != null)
             {
@@ -326,7 +332,7 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Log(TraceLevel.Info, "name:'" + name + "' parentId:" + parentId + " createdTime:" + createdTime + " modifiedTime:" + modifiedTime + " mimeType:" + mimeType);
 
             // note google drive allows multiple files with the same name, so we must delete conflicting targets
-            DeleteFilesByName(parentId, name);
+            ForciblyDeleteFilesByName(parentId, name);
 
             var file = new GDriveData.File();
             var request = Service.Files.Create(file);
@@ -368,7 +374,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             Log(TraceLevel.Info, "id:" + id + " newName:" + newName + " oldParentId:" + oldParentId + " newParentId:" + newParentId);
 
             // note google drive allows multiple files with the same name, so we must delete conflicting targets
-            DeleteFilesByName(newParentId, newName);
+            // in a better implementation we should replace a file content (as in the Clould Folder Sync sample)
+            ForciblyDeleteFilesByName(newParentId, newName);
 
             var file = new GDriveData.File();
             file.Name = newName;
@@ -561,6 +568,15 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 Log(TraceLevel.Info, "Change " + Trace(change));
                 if ((change.File == null && change.Removed == true) || change.File?.Trashed == true)
                 {
+                    if (_forciblyDeletedFiles.Contains(change.FileId))
+                    {
+                        // we don't want to build events for files we deleted because of our inner working
+                        // otherwise this could create unexpected delete files
+                        Log(TraceLevel.Info, "File with id '" + change.FileId + "' was deleted by us.");
+                        _forciblyDeletedFiles.Remove(change.FileId);
+                        return;
+                    }
+
                     eventHandler.Invoke(FileSystem, new SyncFileSystemEventArgs(SyncFileSystemEventType.Deleted, change.Time.Value, new StateSyncEntry { Id = change.FileId }));
                     Log(TraceLevel.Info, "File with id '" + change.FileId + "' was deleted.");
                     return;

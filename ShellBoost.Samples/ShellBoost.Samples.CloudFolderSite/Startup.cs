@@ -65,7 +65,8 @@ namespace ShellBoost.Samples.CloudFolderSite
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // see https://github.com/dotnet/aspnetcore/issues/30545
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();

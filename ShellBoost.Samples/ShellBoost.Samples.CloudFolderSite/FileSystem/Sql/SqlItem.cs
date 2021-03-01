@@ -121,12 +121,12 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         // IFileInfo
         public long Length { get; set; }
 
-        public Task<Stream> OpenReadAsync()
+        public Task<Stream> OpenReadAsync(long? offset, long? count)
         {
             if (IsFolder)
                 throw new InvalidOperationException();
 
-            return System.OpenReadAsync(this);
+            return System.OpenReadAsync(this, offset, count);
         }
 
         public async Task WriteAsync(Stream stream)

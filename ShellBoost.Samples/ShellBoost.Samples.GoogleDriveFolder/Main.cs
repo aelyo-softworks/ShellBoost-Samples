@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShellBoost.Core;
 using ShellBoost.Core.Synchronization;
 using ShellBoost.Core.Utilities;
 
@@ -104,6 +105,13 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             _syncLogger = new MainLogger(this, "MPSync", Settings.Current.SynchronizerLogLevel);
             Settings.SynchronizerLogger = _syncLogger;
             Account.Logger = _apisLogger;
+
+            _syncLogger.Log(TraceLevel.Info, "ShellBoost Samples - Drive Local Folder - V" + AssemblyUtilities.GetInformationalVersion() + " Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            _syncLogger.Log(TraceLevel.Info, "ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
+            _syncLogger.Log(TraceLevel.Info, "Windows Version " + Environment.OSVersion.VersionString);
+            _syncLogger.Log(TraceLevel.Info, "Windows Kernel Version " + WindowsUtilities.KernelVersion);
+            _syncLogger.Log(TraceLevel.Info, "Windows Filter Driver Version " + OnDemandLocalFileSystem.FilterDriverVersion);
+
             ListAccounts();
             if (Settings.Current.SyncAutoStart)
             {
@@ -111,7 +119,15 @@ namespace ShellBoost.Samples.GoogleDriveFolder
             }
         }
 
-        public void InvokeAddLog(string text = null, bool addDate = false) => Task.Run(() => { try { BeginInvoke(new Action(() => AddLog(text, addDate))); } catch { /* late logs, nothing to do */ } });
+        public void InvokeAddLog(string text = null, bool addDate = false)
+        {
+            try
+            {
+                BeginInvoke(new Action(() => AddLog(text, addDate)));
+            }
+            catch { /* late logs, nothing to do */ }
+        }
+
         public void AddLog(string text = null, bool addDate = false)
         {
             try
@@ -340,7 +356,8 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                     t.Name = string.Format("_gd_logger{0}", Environment.TickCount);
                     return true;
                 });
-                string name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
+
+                var name = string.Format("{1}_{0:yyyy}_{0:MM}_{0:dd}_{0:HHmmss}.log", DateTime.Now, Environment.MachineName);
                 _logPath = Path.Combine(Settings.LogsDirectoryPath, name);
                 IOUtilities.FileCreateDirectory(_logPath);
             }

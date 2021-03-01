@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -136,10 +137,21 @@ namespace ShellBoost.Samples.CloudFolder.Api
                 throw new ArgumentNullException(nameof(outputStream));
 
             Logger?.Log(TraceLevel.Verbose, "GetStreamAsync " + _baseUrl + "download/" + item.Id);
-            var resp = await _client.GetAsync(_baseUrl + "download/" + item.Id).ConfigureAwait(false);
+            options ??= new SyncGetEntryContentOptions();
+            var req = new HttpRequestMessage(HttpMethod.Get, _baseUrl + "download/" + item.Id)
+            {
+                VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher // allow HTTP/2
+            };
+
+            if (options.Offset > 0 && options.Count > 0)
+            {
+                req.Headers.Range = new RangeHeaderValue(options.Offset, options.Offset + (options.Count - 1));
+            }
+
+            var resp = await _client.SendAsync(req, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             if (resp != null)
             {
-                var cancellationToken = options != null ? options.CancellationToken : CancellationToken.None;
+                var cancellationToken = options.CancellationToken;
                 if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
                 {
                     using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))

@@ -10,7 +10,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
         long Length { get; }
 
         // open the content for reading
-        Task<Stream> OpenReadAsync();
+        Task<Stream> OpenReadAsync(long? offset, long? count);
 
         // write the stream content
         Task WriteAsync(Stream stream);

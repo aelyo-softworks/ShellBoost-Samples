@@ -341,7 +341,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             Log("Parent: " + parentItem.Id + " '" + parentItem.Name + "' item: " + item.Id + " '" + item.Name + "'");
             SqlItem newItem;
-            using (var stream = await OpenReadAsync(item).ConfigureAwait(false))
+
+            // note: this could be improved if coded on SQLServer side
+            using (var stream = await OpenReadAsync(item, null, null).ConfigureAwait(false))
             {
                 newItem = await CreateSqlItemAsync(parentItem, item.Name, new CreateOptions { InputStream = stream, Attributes = item.Attributes }).ConfigureAwait(false);
             }
@@ -583,7 +585,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             return deleted;
         }
 
-        public async Task<Stream> OpenReadAsync(SqlItem item)
+        public async Task<Stream> OpenReadAsync(SqlItem item, long? offset, long? count)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -591,16 +593,75 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             if (item.Id == Guid.Empty)
                 throw new UnauthorizedAccessException();
 
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Data FROM Item WHERE Id = @id", new { id = item.Id }, Logger).ConfigureAwait(false))
+            SqlDataReader reader;
+            if (offset.HasValue || count.HasValue)
             {
-                if (!reader.Read())
-                    return null;
+                if (!count.HasValue)
+                {
+                    count = long.MaxValue;
+                }
 
-                if (await reader.IsDBNullAsync(0).ConfigureAwait(false))
-                    return null;
+                // offset is 1-based
+                if (!offset.HasValue)
+                {
+                    offset = 1;
+                }
+                else
+                {
+                    offset++;
+                }
 
-                // it's a pitty GetFieldValueAsync<Stream> doesn't work... https://github.com/dotnet/runtime/issues/28596#issuecomment-484614943
-                return reader.GetSqlBytes(0).Stream;
+                reader = await SqlExtensions.ExecuteReaderSequentialAccessAsync(ConnectionString, "SELECT SUBSTRING(Data, @offset, @count) FROM Item WHERE Id = @id", new { id = item.Id, offset = offset.Value, count = count.Value }, Logger).ConfigureAwait(false);
+            }
+            else
+            {
+                reader = await SqlExtensions.ExecuteReaderSequentialAccessAsync(ConnectionString, "SELECT Data FROM Item WHERE Id = @id", new { id = item.Id }, Logger).ConfigureAwait(false);
+            }
+            if (!reader.Read())
+                return null;
+
+            if (await reader.IsDBNullAsync(0).ConfigureAwait(false))
+                return null;
+
+            // it's a pitty GetFieldValueAsync<Stream> doesn't work... https://github.com/dotnet/runtime/issues/28596#issuecomment-484614943
+            // also reader.GetSqlBytes(0).Stream in fact reads the whole data (big LOH alloc) and builds a stream on it, which is fairly dumb
+            return new SqlBytesStream(reader, 0);
+        }
+
+        private class SqlBytesStream : Stream
+        {
+            private readonly SqlDataReader _reader;
+            private readonly int _index;
+            private long _position;
+
+            public SqlBytesStream(SqlDataReader reader, int index)
+            {
+                _reader = reader;
+                _index = index;
+            }
+
+            public override bool CanRead => true;
+            public override bool CanSeek => false;
+            public override bool CanWrite => false;
+            public override long Length => throw new NotSupportedException();
+            public override long Position { get => _position; set => throw new NotSupportedException(); }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                var read = _reader.GetBytes(_index, Position, buffer, offset, count);
+                _position += read;
+                return (int)read;
+            }
+
+            public override void Flush() { }
+            public override void SetLength(long value) => throw new NotSupportedException();
+            public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+            public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+                _reader.CloseAsync();
             }
         }
 

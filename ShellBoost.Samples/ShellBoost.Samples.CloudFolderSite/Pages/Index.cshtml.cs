@@ -71,7 +71,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Pages
 
             var file = (IFileInfo)item;
             var ct = GetContentType(Path.GetExtension(item.Name));
-            var stream = await file.OpenReadAsync().ConfigureAwait(false);
+            var stream = await file.OpenReadAsync(null, null).ConfigureAwait(false);
             if (stream == null)
             {
                 // send a 0 size file

@@ -188,7 +188,19 @@ namespace ShellBoost.Samples.CloudFolderSync
         #region ISyncFileSystem
         public string RootId => ToId(Guid.Empty); // for this server, root is id = empty
         public EndPointSynchronizer EndPointSynchronizer { get; set; } // set by MultiPointSynchronizer
-        public bool HasCapability(SyncFileSystemCapability capability) => false; // we have no advanced (get/set partial content, full children enum) capability
+
+        public bool HasCapability(SyncFileSystemCapability capability)
+        {
+            switch (capability)
+            {
+                case SyncFileSystemCapability.GetPartialContent:
+                    // WebApi supports range
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
         #endregion
 
         #region ISyncFileSystemEvents

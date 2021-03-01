@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.WebUtilities;
@@ -165,10 +167,33 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                     return BadRequest();
                 }
 
+                // support range requests
+                long? offset = null;
+                long? count = null;
+                var rangeHeader = Request.GetTypedHeaders().Range;
+                if (rangeHeader != null)
+                {
+                    if (rangeHeader.Ranges.Count > 1)
+                        return BadRequest();
+
+                    if (rangeHeader.Ranges.Count == 1)
+                    {
+                        var range = rangeHeader.Ranges.First();
+                        if (range.From.HasValue)
+                        {
+                            offset = range.From;
+                            if (range.To.HasValue)
+                            {
+                                count = range.To - offset + 1;
+                            }
+                        }
+                    }
+                }
+
                 var file = (IFileInfo)item;
                 var ct = GetContentType(Path.GetExtension(item.Name));
-                Log("ct: " + ct + " length: " + file.Length);
-                var stream = await file.OpenReadAsync().ConfigureAwait(false);
+                Log("ct: " + ct + " length: " + file.Length + " offset: " + offset + " count: " + count);
+                var stream = await file.OpenReadAsync(offset, count).ConfigureAwait(false);
                 if (stream == null)
                 {
                     LogWarning("Item " + item.Id + " has no content/stream.");

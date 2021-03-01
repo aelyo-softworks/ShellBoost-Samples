@@ -173,6 +173,28 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             }
         }
 
+        public static async Task<SqlDataReader> ExecuteReaderSequentialAccessAsync(string connectionString, string sql, object parameters = null, ILogger logger = null)
+        {
+            if (connectionString == null)
+                throw new ArgumentNullException(nameof(connectionString));
+
+            if (sql == null)
+                throw new ArgumentNullException(nameof(sql));
+
+            var conn = new SqlConnection(connectionString);
+            await conn.OpenAsync().ConfigureAwait(false);
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = sql;
+                cmd.CommandType = CommandType.Text;
+                AddParameters(cmd, parameters);
+#if DEBUG
+                logger?.LogTrace(sql + " [" + GetParametersLog(parameters) + "]");
+#endif
+                return await cmd.ExecuteReaderAsync(CommandBehavior.SequentialAccess).ConfigureAwait(false);
+            }
+        }
+
         public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string sql, object parameters = null, ILogger logger = null)
         {
             if (connectionString == null)
