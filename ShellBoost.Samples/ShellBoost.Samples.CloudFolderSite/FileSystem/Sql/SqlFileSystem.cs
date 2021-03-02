@@ -165,7 +165,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         public void SendEvents(bool inline = false)
         {
             var events = Interlocked.Exchange(ref _events, new ConcurrentDictionary<string, EventImpl>());
-            if (events.Count == 0)
+            if (events.IsEmpty)
                 return;
 
             if (inline)
