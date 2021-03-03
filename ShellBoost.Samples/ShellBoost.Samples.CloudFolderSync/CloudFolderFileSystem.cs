@@ -106,7 +106,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 if (item != null)
                     return item;
 
-                Logger?.Log(TraceLevel.Info, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
+                Logger?.Log(TraceLevel.Warning, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
                 if (!options.CanCreate)
                     return null;
 
@@ -132,7 +132,7 @@ namespace ShellBoost.Samples.CloudFolderSync
             if (dt == DateTime.MaxValue)
                 return;
 
-            Logger?.Log(TraceLevel.Info, "Processing events from " + dt);
+            Logger?.Log(TraceLevel.Verbose, "Processing events from " + dt);
 
             DateTime? last = null;
             var count = 0;
@@ -180,7 +180,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 CloudFolderEvents.SetLastEventTime(last.Value);
             }
 
-            Logger?.Log(TraceLevel.Info, "Events processed. " + count + " event(s) created.");
+            Logger?.Log(TraceLevel.Verbose, "Events processed. " + count + " event(s) created.");
         }
 
         public void Dispose() => _serverEvents?.Dispose();
@@ -188,7 +188,6 @@ namespace ShellBoost.Samples.CloudFolderSync
         #region ISyncFileSystem
         public string RootId => ToId(Guid.Empty); // for this server, root is id = empty
         public EndPointSynchronizer EndPointSynchronizer { get; set; } // set by MultiPointSynchronizer
-
         public bool HasCapability(SyncFileSystemCapability capability)
         {
             switch (capability)
@@ -293,16 +292,17 @@ namespace ShellBoost.Samples.CloudFolderSync
                         renameOptions.NewParentId = pid;
                     }
 
+                    var oldName = item.Name;
                     item = await WebApi.RenameAsync(item, entry.Name, renameOptions).ConfigureAwait(false);
                     if (item != null)
                     {
                         if (pid != item.ParentId)
                         {
-                            Logger?.Log(TraceLevel.Info, "Moved entry '" + item.Id + "' from old name '" + item.Name + "' old parent '" + item.ParentId + "' to new name '" + entry.Name + "' new parent '" + pid + "'  => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
+                            Logger?.Log(TraceLevel.Verbose, "Moved entry '" + item.Id + "' from old name '" + oldName + "' old parent '" + item.ParentId + "' to new name '" + entry.Name + "' new parent '" + pid + "'  => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
                         }
                         else
                         {
-                            Logger?.Log(TraceLevel.Info, "Renamed entry '" + item.Id + "' from old name '" + item.Name + "' to new name '" + entry.Name + "' => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
+                            Logger?.Log(TraceLevel.Verbose, "Renamed entry '" + item.Id + "' from old name '" + oldName + "' to new name '" + entry.Name + "' => final name '" + item.Name + "' overwrite: " + renameOptions.Overwrite);
                         }
                     }
                 }
