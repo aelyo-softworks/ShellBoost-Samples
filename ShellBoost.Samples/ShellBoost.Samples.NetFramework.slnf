@@ -1,0 +1,17 @@
+{
+  "solution": {
+    "path": "ShellBoost.Samples.sln",
+    "projects": [
+      "ShellBoost.Samples.FolderService\\ShellBoost.Samples.FolderService.csproj",
+      "ShellBoost.Samples.GoogleDriveFolder\\ShellBoost.Samples.GoogleDriveFolder.csproj",
+      "ShellBoost.Samples.LocalFolder\\ShellBoost.Samples.LocalFolder.csproj",
+      "ShellBoost.Samples.MultiHost\\ShellBoost.Samples.MultiHost.csproj",
+      "ShellBoost.Samples.Overview\\ShellBoost.Samples.Overview.csproj",
+      "ShellBoost.Samples.PhysicalOverview\\ShellBoost.Samples.PhysicalOverview.csproj",
+      "ShellBoost.Samples.RegistryFolder\\ShellBoost.Samples.RegistryFolder.csproj",
+      "ShellBoost.Samples.SevenZipFolder\\ShellBoost.Samples.SevenZipFolder.csproj",
+      "ShellBoost.Samples.WebFolderSite\\ShellBoost.Samples.WebFolderSite.csproj",
+      "ShellBoost.Samples.WebFolder\\ShellBoost.Samples.WebFolder.csproj"
+    ]
+  }
+}
