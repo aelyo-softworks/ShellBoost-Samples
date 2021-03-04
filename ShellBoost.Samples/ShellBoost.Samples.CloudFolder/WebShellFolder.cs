@@ -300,7 +300,7 @@ namespace ShellBoost.Samples.CloudFolder
                     var options = new CreateNewItemOptions();
                     options.ExistingFileNames = files;
                     options.ExistingFolderNames = folders;
-                    var path = Menu.CreateNewItem(e.Verb, options, false);
+                    var path = Core.WindowsShell.Menu.CreateNewItem(e.Verb, options, false);
                     if (path != null)
                     {
                         var name = ApiItem.GetNewName(Path.GetFileName(path));
@@ -327,7 +327,7 @@ namespace ShellBoost.Samples.CloudFolder
                 // note if the past action is too fast, items may not be here yet (user will have to press "Retry")
                 foreach (var si in e.Items)
                 {
-                    if (si is not IObjectWithApiItem apiItem)
+                    if (!(si is IObjectWithApiItem apiItem))
                         continue;
 
                     Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath));
@@ -455,7 +455,7 @@ namespace ShellBoost.Samples.CloudFolder
                     if (si == null || si.FileSystemPath == null)
                         continue;
 
-                    if (si is not IObjectWithApiItem apiItem)
+                    if (!(si is IObjectWithApiItem apiItem))
                         continue;
 
                     // this is a callback event, no need to wait
@@ -570,7 +570,7 @@ namespace ShellBoost.Samples.CloudFolder
         {
             foreach (var si in e.Items)
             {
-                if (si.FileSystemPath == null || si is not IObjectWithApiItem apiItem)
+                if (si.FileSystemPath == null || !(si is IObjectWithApiItem apiItem))
                     continue;
 
                 // already only on server,
@@ -586,7 +586,7 @@ namespace ShellBoost.Samples.CloudFolder
         {
             foreach (var si in e.Items)
             {
-                if (si.FileSystemPath == null || si is not IObjectWithApiItem apiItem)
+                if (si.FileSystemPath == null || !(si is IObjectWithApiItem apiItem))
                     continue;
 
                 Task.Run(() => apiItem.ApiItem.EnsureLocalAsync(si.FileSystemPath));

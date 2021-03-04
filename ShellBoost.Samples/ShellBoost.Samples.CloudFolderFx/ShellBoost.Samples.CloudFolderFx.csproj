@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A233FBEF-2B34-4212-BF47-B023E29F8765}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ShellBoost.Samples.CloudFolder</RootNamespace>
+    <AssemblyName>ShellBoost.Samples.CloudFolder</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ShellBoost.Core">
+      <HintPath>..\ShellBoost.Samples.CloudFolder\ShellBoost.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\DeleteOptions.cs">
+      <Link>Api\DeleteOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\EnumerateOptions.cs">
+      <Link>Api\EnumerateOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\IObjectWithApiItem.cs">
+      <Link>Api\IObjectWithApiItem.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\MoveOptions.cs">
+      <Link>Api\MoveOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\RenameOptions.cs">
+      <Link>Api\RenameOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\ServerInfo.cs">
+      <Link>Api\ServerInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\UpdateRequest.cs">
+      <Link>Api\UpdateRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebApi.cs">
+      <Link>Api\WebApi.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebChange.cs">
+      <Link>Api\WebChange.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Api\WebItem.cs">
+      <Link>Api\WebItem.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Events\LocalEvents.cs">
+      <Link>Events\LocalEvents.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Events\ServerEvents.cs">
+      <Link>Events\ServerEvents.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\UI\RootProperties.cs">
+      <Link>UI\RootProperties.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\WebShellFolder.cs">
+      <Link>WebShellFolder.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\WebShellFolderServer.cs">
+      <Link>WebShellFolderServer.cs</Link>
+    </Compile>
+    <Compile Include="..\ShellBoost.Samples.CloudFolder\WebShellItem.cs">
+      <Link>WebShellItem.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll">
+      <Link>ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.ARM64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll">
+      <Link>ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ShellBoost.Samples.CloudFolder\ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll">
+      <Link>ShellBoost.c85bbb400d8e4618b3d16a73d3c5bae3.x86.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="..\ShellBoost.Samples.CloudFolder\UI\CloudFolder.ico">
+      <Link>UI\CloudFolder.ico</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
+      <Version>5.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>5.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

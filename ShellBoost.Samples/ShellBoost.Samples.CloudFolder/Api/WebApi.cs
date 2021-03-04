@@ -276,7 +276,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
         public static Task<WebItem> CreateAsync(Guid parentId, string filePath = null, string name = null, FileAttributes attributes = FileAttributes.Normal)
         {
-            name ??= Path.GetFileName(filePath);
+            name = name ?? Path.GetFileName(filePath);
             var item = new UpdateRequest();
             item.ParentId = parentId;
             item.Name = name;
@@ -495,7 +495,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
-            options ??= new EnumerateOptions();
+            options = options ?? new EnumerateOptions();
             string apiSuffix;
             if (options.IncludeFolders)
             {

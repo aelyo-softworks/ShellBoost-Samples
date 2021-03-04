@@ -9,7 +9,7 @@ namespace ShellBoost.Samples.CloudFolder
     {
         static void Main()
         {
-            Console.WriteLine("ShellBoost Samples - CloudFolder - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
+            Console.WriteLine("ShellBoost Samples - CloudFolder" + (Core.Client.Installer.IsNetCore ? null : "Fx") + " - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("Press a key:");
             Console.WriteLine();
             Console.WriteLine("   '1' Register the native proxy, run this sample, and unregister on exit.");
@@ -51,7 +51,9 @@ namespace ShellBoost.Samples.CloudFolder
 
         static void Run(bool register)
         {
+#if NET
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
+#endif
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
