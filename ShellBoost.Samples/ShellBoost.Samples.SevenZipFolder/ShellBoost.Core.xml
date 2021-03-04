@@ -531,6 +531,12 @@
             The server start parameters.
             </value>
         </member>
+        <member name="M:ShellBoost.Core.Client.NativeProxy.GetDiagnostics">
+            <summary>
+            Gets internal diagnostics.
+            </summary>
+            <returns>A dictionary containing diagnostics information.</returns>
+        </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.IpcFormat">
             <summary>
             Gets the RPC protocol endpoint format.
@@ -8200,6 +8206,7 @@
         <member name="P:ShellBoost.Core.ShellFolderServer.NotFoundParameters.IdList">
             <summary>
             Gets the identifier list that was not found.
+            May be null.
             </summary>
             <value>
             The identifier list.
@@ -8688,16 +8695,31 @@
             Defines a file system that can be notified of changes.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
+        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnSavingChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
             <summary>
-            Called when a new change has been written.
+            Called before a change is written.
+            </summary>
+            <param name="change">The change.</param>
+            <param name="event">The event.</param>
+            <returns>true to allow saving the change; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnSavedChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
+            <summary>
+            Called when a change has been written.
             </summary>
             <param name="change">The change.</param>
             <param name="event">The event.</param>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnJob(ShellBoost.Core.Synchronization.StateSyncJob)">
+        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnSavingJob(ShellBoost.Core.Synchronization.StateSyncJob)">
             <summary>
-            Called when a new job has been written.
+            Called before a job is written.
+            </summary>
+            <param name="job">The job.</param>
+            <returns>true to allow saving the job; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.ISyncFileSystemSynchronizationEventsSink.OnSavedJob(ShellBoost.Core.Synchronization.StateSyncJob)">
+            <summary>
+            Called when a job has been written.
             </summary>
             <param name="job">The job.</param>
         </member>
@@ -8837,6 +8859,74 @@
             <value>
             The the calling process application identifier.
             </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.FullPath">
+            <summary>
+            Gets the file or directory full path.
+            </summary>
+            <value>
+            The file or directory full path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.CancellationToken">
+            <summary>
+            Gets the cancellation token.
+            </summary>
+            <value>
+            The cancellation token.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.Offset">
+            <summary>
+            Gets the offset.
+            Will be valid in HydrateData, CancelHydrateData and ValidateData context.
+            </summary>
+            <value>
+            The offset.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.Count">
+            <summary>
+            Gets the count.
+            Will be valid in HydrateData, CancelHydrateData and ValidateData context.
+            </summary>
+            <value>
+            The count.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandCallbackContext.Equals(ShellBoost.Core.Synchronization.OnDemandCallbackContext)">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandCallbackContext.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object" />, is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandCallbackContext.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandCallbackContext.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemStatus">
             <summary>
@@ -9675,6 +9765,14 @@
             A job maximum error count.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizerOptions.OrphanedEntriesMaximumLifetime">
+            <summary>
+            Gets or sets the orphaned entries maximum lifetime after the last job creation time.
+            </summary>
+            <value>
+            The orphaned entries maximum lifetime.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.EndPointSynchronizerOptions.EnableDirectContentAccess">
             <summary>
             Gets or sets a value indicating whether direct content access is enabled.
@@ -10044,12 +10142,28 @@
             The old path.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.MaximumCount">
+            <summary>
+            Gets or sets the maximum count.
+            </summary>
+            <value>
+            The maximum count.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.IsExpired">
             <summary>
             Gets a value indicating whether this filter has expired.
             </summary>
             <value>
               <c>true</c> if this filter has expired; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Count">
+            <summary>
+            Gets or sets the effective matches count.
+            </summary>
+            <value>
+            The count.
             </value>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Matches(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
@@ -10194,12 +10308,19 @@
             <summary>
             Determines whether this instance's entries are always synchronized.
             </summary>
-            <param name="endPoints">The endpoints that must be checked for syncrhonization. Only returned if the return value is false.</param>
+            <param name="endPoints">The endpoints that must be checked for synchronization. Only returned if the return value is false.</param>
             <returns>
               <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnSavingChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
+            <summary>
+            Called when a change has been written.
+            </summary>
+            <param name="change">The change.</param>
+            <param name="event">The event.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnSavedChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
             <summary>
             Called when a change has been written.
             </summary>
@@ -10274,7 +10395,22 @@
             <summary>
             Handles a file system event.
             </summary>
+            <returns>true if the event was propagated; false if it was filtered.</returns>
             <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateFileSystemEntry(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Utilities.FileSystemEntry,ShellBoost.Core.Synchronization.SyncUpdateEntryOptions)">
+            <summary>
+            Called after a sync state entry has been updated.
+            </summary>
+            <param name="context">A sync context.</param>
+            <param name="entry">The entry.</param>
+            <param name="fileSystemEntry">The file system entry.</param>
+            <param name="options">The options.</param>
+            <exception cref="T:System.ArgumentNullException">context is null
+            or
+            entry is null
+            or
+            fileSystemEntry is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.SetBasicInformation(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry)">
             <summary>
@@ -10282,13 +10418,9 @@
             </summary>
             <param name="context">A sync context.</param>
             <param name="entry">The entry.</param>
-        </member>
-        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.SetSize(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry)">
-            <summary>
-            Sets an entry size.
-            </summary>
-            <param name="context">A sync context.</param>
-            <param name="entry">The entry.</param>
+            <returns>
+            true if something was changed.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateAllEntriesStates(System.Boolean)">
             <summary>
@@ -10333,7 +10465,7 @@
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.ReportProgress(ShellBoost.Core.Synchronization.OnDemandCallbackContext,System.Int64,System.Int64)">
             <summary>
-            Report progress to the system.
+            Report progress to the file system.
             </summary>
             <param name="callbackContext">The callback context.</param>
             <param name="total">The total number of bytes.</param>
@@ -10342,6 +10474,28 @@
             0 if operation was successful; otherwise an error code.
             </returns>
             <exception cref="T:System.ArgumentException">callbackContext is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.ReportErrorToShell(ShellBoost.Core.Synchronization.OnDemandCallbackContext)">
+            <summary>
+            Report error to the Shell.
+            </summary>
+            <param name="callbackContext">The callback context.</param>
+            <returns>
+            0 if operation was successful; otherwise an error code.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">callbackContext is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.ReportProgressToShell(ShellBoost.Core.Synchronization.OnDemandCallbackContext,System.Int64,System.Int64)">
+            <summary>
+            Report progress to the Shell.
+            </summary>
+            <param name="callbackContext">The callback context.</param>
+            <param name="total">The total number of bytes.</param>
+            <param name="completed">The current number of bytes.</param>
+            <returns>
+            0 if operation was successful; otherwise an error code.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">callbackContext is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.AcknowledgeData(ShellBoost.Core.Synchronization.OnDemandCallbackContext,System.String,System.Int64,System.Int64,System.Int32,ShellBoost.Core.Synchronization.OnDemandAcknowledgeDataFlags)">
             <summary>
@@ -10430,6 +10584,17 @@
             <param name="localRelativePath">The local relative path.</param>
             <returns>
             true if the file or folder is in-sync; null if the state cannot be read.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
+            <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.IsOnDemandEntryNotInSync(System.String)">
+            <summary>
+            Determines if an On-Demand file or folder is not in-sync.
+            </summary>
+            <param name="localRelativePath">The local relative path.</param>
+            <returns>
+            true if the file or folder is not in-sync; null if the state cannot be read.
             </returns>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
@@ -10835,6 +11000,24 @@
               <c>true</c> if cloud file retries must deferred in another thread; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.ReportProgressToShell">
+            <summary>
+            Gets or sets a value indicating whether to report progress to the Windows Shell.
+            </summary>
+            <value>
+              <c>true</c> if progress must be reported to Windows Shell; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.HydrationChunkSize">
+            <summary>
+            Gets or sets the size of a hydration chunk.
+            If the value is 0 or negative, a default value will be used.
+            Note the final buffer size will always be aligned on a 4096 boundary.
+            </summary>
+            <value>
+            The size of a hydration chunk.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.SynchronizationStateEndPointSynchronizerIdentifiers">
             <summary>
             Gets a list of endpoint synchronizers that give synchronization state for files and folders.
@@ -10968,6 +11151,22 @@
             Gets or sets a value indicating whether to hide the show as group context menu from the Windows Shell.
             </summary>
             <value><c>true</c> if the show as group context menu must be hidden; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration.EnableFolderIndexing">
+            <summary>
+            Gets or sets a value indicating whether to explicitly enable the root folder for indexing.
+            Indexing is required for progress reporting to the Windows Shell.
+            If the root folder is not under a directory that's already enabled and report progress to Windows Shell is desired, this property must be set to true.
+            </summary>
+            <value><c>true</c> if explicitly enable the root folder for indexing, <c>false</c>.</value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration.Force">
+            <summary>
+            Gets or sets a value indicating whether to force registration, even if the folder is already registered.
+            </summary>
+            <value>
+              <c>true</c> if registration must be forced; otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration.ProtectionMode">
             <summary>
@@ -11615,6 +11814,11 @@
             The error change status.
             </value>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.SyncContext.Throw">
+            <summary>
+            Throws errors if any.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.SyncContext.AddError(System.Exception,System.String)">
             <summary>
             Adds an error to the context.
@@ -12212,11 +12416,28 @@
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEntryIncludeEventArgs" /> instance containing the event data.</param>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.SendEvent(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
+            <summary>
+            Sends and event as a file system implementer.
+            </summary>
+            <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs"/> instance containing the event data.</param>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.OnWatcherEvent(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
             <summary>
             Handles a file system event.
             </summary>
-            <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs"/> instance containing the event data.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs" /> instance containing the event data.</param>
+            <returns>true if the event was propagated; false if it was filtered.</returns>
+            <exception cref="T:System.ArgumentNullException">e</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.AddSelfEventFilter(System.IO.WatcherChangeTypes,System.String)">
+            <summary>
+            Adds an event filter on a path using defalt filter maximum duration.
+            </summary>
+            <param name="action">The action.</param>
+            <param name="path">The path.</param>
+            <returns>An instance of the LocalFileSystemEventFilter class.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.AddSelfEventFilter(ShellBoost.Core.Synchronization.LocalFileSystemEventFilter)">
             <summary>
@@ -12224,6 +12445,38 @@
             </summary>
             <param name="filter">The filter to add.</param>
             <exception cref="T:System.ArgumentNullException">filter is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.RemoveSelfEventFilter(ShellBoost.Core.Synchronization.LocalFileSystemEventFilter)">
+            <summary>
+            Removes an event filter.
+            </summary>
+            <param name="filter">The filter to remove.</param>
+            <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the list.</returns>
+            <exception cref="T:System.ArgumentNullException">filter is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.WithSelfEventFilter(ShellBoost.Core.Synchronization.LocalFileSystemEventFilter,System.Action)">
+            <summary>
+            Runs an action with an event filter applied.
+            </summary>
+            <param name="filter">The filter.</param>
+            <param name="action">The action.</param>
+            <exception cref="T:System.ArgumentNullException">
+            filter is null
+            or
+            action is null.
+            </exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.WithSelfEventFilter``1(ShellBoost.Core.Synchronization.LocalFileSystemEventFilter,System.Func{``0})">
+            <summary>
+            Runs a function with an event filter applied.
+            </summary>
+            <typeparam name="T">The expected return type.</typeparam>
+            <param name="filter">The filter.</param>
+            <param name="func">The function.</param>
+            <returns>The result of the function call.</returns>
+            <exception cref="T:System.ArgumentNullException">filter is null
+            or
+            action is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.IsFiltered(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
             <summary>
@@ -12256,7 +12509,7 @@
             <summary>
             Determines whether this instance's entries are always synchronized.
             </summary>
-            <param name="endPoints">The endpoints that must be checked for syncrhonization. Only returned if the return value is false.</param>
+            <param name="endPoints">The endpoints that must be checked for synchronization. Only returned if the return value is false.</param>
             <returns>
               <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
             </returns>
@@ -12510,12 +12763,29 @@
             entry is null.
             </exception>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.SetSize(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry)">
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.UpdateFileSystemEntry(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Utilities.FileSystemEntry,ShellBoost.Core.Synchronization.SyncUpdateEntryOptions)">
             <summary>
-            Sets an entry size.
+            Called after an entry has been updated.
+            This implementation does nothing
             </summary>
             <param name="context">A sync context.</param>
             <param name="entry">The entry.</param>
+            <param name="fileSystemEntry">The file system entry.</param>
+            <param name="options">The options.</param>
+            <exception cref="T:System.ArgumentNullException">context is null
+            or
+            entry is null
+            or
+            fileSystemEntry is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.SetSize(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry)">
+            <summary>
+            Sets an entry size.
+            This implementation always returns true.
+            </summary>
+            <param name="context">A sync context.</param>
+            <param name="entry">The entry.</param>
+            <returns>true if something was changed.</returns>
             <exception cref="T:System.ArgumentNullException">
             context is null
             or
@@ -12525,14 +12795,14 @@
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.SetBasicInformation(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry)">
             <summary>
             Sets an entry basic information.
+            This implementation always returns true.
             </summary>
             <param name="context">A sync context.</param>
             <param name="entry">The entry.</param>
-            <exception cref="T:System.ArgumentNullException">
-            context is null
+            <returns>true if something was changed.</returns>
+            <exception cref="T:System.ArgumentNullException">context is null
             or
-            entry is null.
-            </exception>
+            entry is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.SetEntryContentAsync(ShellBoost.Core.Synchronization.SyncContext,ShellBoost.Core.Synchronization.StateSyncEntry,System.IO.Stream,ShellBoost.Core.Synchronization.SyncSetEntryContentOptions)">
             <summary>
@@ -13004,7 +13274,7 @@
             The deleted entries.
             </value>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.AddSyncChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.SyncFileSystemEvent)">
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.AddSyncChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.StateSyncEntry,ShellBoost.Core.Synchronization.SyncFileSystemEvent,System.String)">
             <summary>
             Add a sync change manually.
             </summary>
@@ -13012,19 +13282,30 @@
             <param name="entry">The entry related to the change.</param>
             <param name="oldEntry">The optional old entry related to the change.</param>
             <param name="event">The optional related file system event.</param>
-            <returns>The change instance or null if because the entry parent path could not be computed.</returns>
+            <param name="filePath">The optional file path.</param>
+            <returns>
+            The change instance or null if because the entry parent path could not be computed.
+            </returns>
             <exception cref="T:System.ArgumentNullException">entry is null.</exception>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.ToChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.StateEvent)">
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.ToChange(ShellBoost.Core.Synchronization.SyncFileSystemEventType,ShellBoost.Core.Synchronization.StateEvent,System.String)">
             <summary>
             Converts an event to a sync change.
             </summary>
             <param name="type">The even ttype.</param>
             <param name="stateEvent">The event.</param>
+            <param name="filePath">The related state entry file path.</param>
             <returns>
             A new instance of the StateSyncChange class or null.
             </returns>
             <exception cref="T:System.ArgumentNullException">stateEvent is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.DeleteOrphanedEntry(System.String)">
+            <summary>
+            Deletes an orphaned entry.
+            </summary>
+            <param name="entryId">The entry identifier.</param>
+            <exception cref="T:System.ArgumentNullException">id is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.SaveStateDiff(ShellBoost.Core.Synchronization.ISyncEventsSink,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateDiff)">
             <summary>
@@ -13354,6 +13635,14 @@
             </summary>
             <value>
             The endpoints.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizer.LastJobCreationDate">
+            <summary>
+            Gets or sets the last job creation date.
+            </summary>
+            <value>
+            The last job creation date.
             </value>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
@@ -15158,6 +15447,82 @@
             The the time the file was last changed.
             </value>
         </member>
+        <member name="T:ShellBoost.Core.Utilities.FolderPicker">
+            <summary>
+            Represents a common dialog box that allows a user to specify a folder to pick.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.ResultPath">
+            <summary>
+            Gets the result path.
+            </summary>
+            <value>
+            The result path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.ResultName">
+            <summary>
+            Gets the result name.
+            </summary>
+            <value>
+            The result name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.InputPath">
+            <summary>
+            Gets or sets the input path.
+            </summary>
+            <value>
+            The input path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.ForceFileSystem">
+            <summary>
+            Gets or sets a value indicating whether to include only file system folders.
+            </summary>
+            <value>
+              <c>true</c> if only file system folders are included; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.OkButtonLabel">
+            <summary>
+            Gets or sets the OK button label.
+            </summary>
+            <value>
+            The OK button label.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.FileNameLabel">
+            <summary>
+            Gets or sets the file name label.
+            </summary>
+            <value>
+            The file name label.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FolderPicker.SetOptions(System.Int32)">
+            <summary>
+            Sets the options.
+            </summary>
+            <param name="options">The default options.</param>
+            <returns>The options to use.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FolderPicker.ShowDialog(System.IntPtr,System.Boolean)">
+            <summary>
+            Displays the dialog.
+            </summary>
+            <param name="owner">Handle to the window that owns the dialog.</param>
+            <param name="throwOnError">if set to <c>true</c> errors can be thrown.</param>
+            <returns>If the user clicks the OK button of the dialog that is displayed true is returned; otherwise, false.</returns>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherSynthetizeOptions">
             <summary>
             Defines options to synthetize some LocalFileSystemWatcher events.
@@ -16631,14 +16996,38 @@
             Note events can arrive from any thread.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.#ctor(ShellBoost.Core.ShellItemIdList,System.Boolean,ShellBoost.Core.WindowsShell.SHCNE)">
+        <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.#ctor(ShellBoost.Core.IWithIdList,System.Boolean,ShellBoost.Core.WindowsShell.SHCNE,System.Int32,ShellBoost.Core.WindowsShell.SHCNRF)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ChangeNotifier" /> class.
             </summary>
-            <param name="idList">The PIDL for which to receive notifications.</param>
+            <param name="idList">The PIDL for which to receive notifications. Pass null to monitor all children.</param>
             <param name="recursive">Indicates whether to post notifications for children of this PIDL. For example, if the PIDL points to a folder, then file notifications would come from the folder's children if this flag was true.</param>
             <param name="events">A combination of values that indicate the type of events for which to receive notifications.</param>
-            <exception cref="T:System.ArgumentNullException">idList</exception>
+            <param name="waitForErrorTimeout">The timeout in milliseconds to wait for an error.</param>
+            <param name="registerFlags">Flags that indicate the type of events for which to receive notifications. Note SHCNRF_NewDelivery is always set implicitly.</param>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifier.IdList">
+            <summary>
+            Gets the monitored PIDL.
+            May be null.
+            </summary>
+            <value>
+            The monitored PIDL.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifier.RegisterFlags">
+            <summary>
+            Gets or sets the register flags.
+            </summary>
+            <value>
+            The register flags.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ChangeNotifier.Tag">
+            <summary>
+            Gets or sets the tag, a custom arbitrary value that can be used to store anything.
+            </summary>
+            <value>The tag value.</value>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ChangeNotifier.OnNotify(System.Object,ShellBoost.Core.Utilities.ChangeNotifyEventArgs)">
             <summary>
@@ -19392,6 +19781,21 @@
             <param name="throwOnError">true to throw errors; otherwise false.</param>
             <returns>true if the operation succeeded; otherwise false.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.SetBasicInformationByPath(System.String,ShellBoost.Core.Utilities.FileSystemBasicInfo,System.Boolean)">
+            <summary>
+            Sets basic information of an entry using its path.
+            If a DateTime parameter is set to DateTime.MinValue, the corresponding entry value will not be changed.
+            DateTime parameters kind must be either Utc or Local, but not Unspecified.
+            If the attributes parameter is set to 0, the corresponding entry value will not be changed. Note that some attributes (such as ReadOnly) should be changed using the SetAttributes method.
+            </summary>
+            <param name="path">The path to use.</param>
+            <param name="basicInfo">The basic information.</param>
+            <param name="throwOnError">true to throw errors; otherwise false.</param>
+            <returns>
+            true if the operation succeeded; otherwise false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path or basicInfo is null</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.SetBasicInformationByPath(System.String,System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.IO.FileAttributes,System.Boolean)">
             <summary>
             Sets basic information of an entry using its path.
@@ -19400,13 +19804,16 @@
             If the attributes parameter is set to 0, the corresponding entry value will not be changed. Note that some attributes (such as ReadOnly) should be changed using the SetAttributes method.
             </summary>
             <param name="path">The path to use.</param>
-            <param name="attributes">Specifies a combination of zero or more FileAttributes flags.</param>
-            <param name="changeTime">Specifies the last time the entry was changed.</param>
             <param name="creationTime">Specifies the time that the entry was created.</param>
             <param name="lastAccessTime">Specifies the time that the entry was last accessed.</param>
             <param name="lastWriteTime">Specifies the time that the entry was last written to.</param>
+            <param name="changeTime">Specifies the last time the entry was changed.</param>
+            <param name="attributes">Specifies a combination of zero or more FileAttributes flags.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
-            <returns>true if the operation succeeded; otherwise false.</returns>
+            <returns>
+            true if the operation succeeded; otherwise false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">path is null</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.RenameByPath(System.String,System.String,System.Boolean)">
             <summary>
@@ -19428,6 +19835,19 @@
             <param name="volumeGuid">The volume Guid.</param>
             <param name="id">The entry identifier.</param>
             <param name="newName">The new name. It can be a file name, or a full rooted path.</param>
+            <param name="throwOnError">true to throw errors; otherwise false.</param>
+            <returns>true if the operation succeeded; otherwise false.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FileSystemEntry.SetBasicInformationById(System.String,System.Guid,ShellBoost.Core.Utilities.FileSystemBasicInfo,System.Boolean)">
+            <summary>
+            Sets basic information of an entry using its 128-bit identifier.
+            If a DateTime parameter is set to DateTime.MinValue, the corresponding entry value will not be changed.
+            DateTime parameters kind must be either Utc or Local, but not Unspecified.
+            If the attributes parameter is set to 0, the corresponding entry value will not be changed. Note that some attributes (such as ReadOnly) should be changed using the SetAttributes method.
+            </summary>
+            <param name="volumeGuid">The volume Guid.</param>
+            <param name="id">The entry identifier.</param>
+            <param name="basicInfo">The basic information.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
             <returns>true if the operation succeeded; otherwise false.</returns>
         </member>
@@ -22187,6 +22607,11 @@
             The Windows E_ACCESSDENIED error value (0x80070005).
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Utilities.ShellUtilities.STG_E_ACCESSDENIED">
+            <summary>
+            The Windows STG_E_ACCESSDENIED error value (0x80030005).
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.Utilities.ShellUtilities.E_OUTOFMEMORY">
             <summary>
             The Windows E_OUTOFMEMORY  error value (0x8007000E).
@@ -23170,10 +23595,8 @@
             <param name="entries">A list of ChangeNotifyEntry structures that contain the notifications.</param>
             <param name="flags">Flags that indicate the type of events for which to receive notifications. Note SHCNRF_NewDelivery is always set implicitly.</param>
             <returns>
-            A positive integer registration ID. 0 if an error ocrurred.
+            A positive integer registration ID. 0 if an error occurred.
             </returns>
-            <exception cref="T:System.ArgumentNullException">entries is null.</exception>
-            <exception cref="T:System.ArgumentException">entries is empty.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.SetBindOptions(System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.BIND_OPTS3,System.Boolean)">
             <summary>
@@ -35537,6 +35960,15 @@
             <param name="value">The value.</param>
             <returns>true if the value was successfully retrieved; otherwise false.</returns>
         </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.TryGetPropertyValue(ShellBoost.Core.WindowsPropertySystem.PropertyKey,ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS,System.Object@)">
+            <summary>
+            Gets a property value for a given property key.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="flags">The property store flags.</param>
+            <param name="value">The value.</param>
+            <returns>true if the value was successfully retrieved; otherwise false.</returns>
+        </member>
         <member name="P:ShellBoost.Core.WindowsShell.Item.Properties">
             <summary>
             Gets the item's properties.
@@ -35552,6 +35984,22 @@
             <value>
             The properties.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetProperties(ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS,System.Boolean)">
+            <summary>
+            Gets the item's properties.
+            </summary>
+            <param name="flags">The property store flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The properties</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetPropertiesAsDictionary(ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS,System.Boolean)">
+            <summary>
+            Gets the item's properties as a dictionary.
+            </summary>
+            <param name="flags">The property store flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The properties</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetIconAsImageSource(ShellBoost.Core.WindowsShell.SHIL)">
             <summary>
@@ -35775,6 +36223,33 @@
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentException">pidl is IntPtr.Zero.</exception>
         </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.FromItemInKnownFolderNoFolder(System.Guid,System.String,ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
+            <summary>
+            Gets an Item instance from a name and a known folder identifier.
+            If name is null, an item representing the known folder will be returned.
+            Never returns a Folder instance to avoid IShellFolder bindings and possible loops or hangs.
+            </summary>
+            <param name="knownFolderId">The known folder identifier.</param>
+            <param name="name">The name.</param>
+            <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An Item instance or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.FromItemInKnownFolder(System.Guid,System.String,ShellBoost.Core.WindowsShell.KNOWN_FOLDER_FLAG,System.Boolean)">
+            <summary>
+            Gets an Item instance from a name and a known folder identifier.
+            If name is null, an item representing the known folder will be returned.
+            </summary>
+            <param name="knownFolderId">The known folder identifier.</param>
+            <param name="name">The name.</param>
+            <param name="flags">The flags.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An Item instance or null.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.FromParsingNameNoFolder(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
             Gets an Item instance from a parsing name.
@@ -35816,6 +36291,13 @@
             <param name="bindContextConfig">A bind context function.</param>
             <returns>An instance of the Item class or null if an error occurred.</returns>
             <exception cref="T:System.ArgumentNullException">name is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetStorageItem(System.Boolean)">
+            <summary>
+            Gets an IStorageItem (WinRT) instance from this item.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An instance of the IStorageItem class or null if an error occurred.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.FromNativeObject(System.Object,System.Boolean)">
             <summary>
@@ -39604,7 +40086,8 @@
         </member>
         <member name="P:ShellBoost.Core.ShellMenuItem.Verb">
             <summary>
-            Gets or sets the verb.
+            Gets or sets the verb. May be null.
+            The verb can also be used as a unique key to ensure a ShellMenuItem is only present once in a menu.
             </summary>
             <value>The verb.</value>
         </member>
@@ -55546,23 +56029,6 @@
             <param name="throwOnError">if set to <c>true</c> Windows error may be thrown.</param>
             <returns>An instance of the PropertyDescription class or null if an error occurred.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.GetPathProperties(System.String)">
-            <summary>
-            Gets all properties for a given path.
-            </summary>
-            <param name="path">The path.</param>
-            <returns>A dictionary of property keys and their values</returns>
-            <exception cref="T:System.ArgumentNullException">path is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.GetPathProperties(System.String,System.Boolean)">
-            <summary>
-            Gets all properties for a given path.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="throwOnError">if set to <c>true</c> Windows error may be thrown.</param>
-            <returns>A dictionary of property keys and their values</returns>
-            <exception cref="T:System.ArgumentNullException">path is null.</exception>
-        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.GetPathProperty``1(System.String,ShellBoost.Core.WindowsPropertySystem.PropertyKey,``0)">
             <summary>
             Gets a typed property value for a given path.
@@ -55572,26 +56038,6 @@
             <param name="property">The property to retrieve.</param>
             <param name="defaultValue">The default value to use if the property is not found.</param>
             <returns>The property typed value or the default value.</returns>
-            <exception cref="T:System.ArgumentNullException">path is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.GetPathProperty(System.String,ShellBoost.Core.WindowsPropertySystem.PropertyKey)">
-            <summary>
-            Gets a property value for a given path.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="property">The property to retrieve.</param>
-            <returns>An instance of the PropVariant class or null if the property was not found.</returns>
-            <exception cref="T:System.ArgumentNullException">path is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.TryGetPathProperty(System.String,System.Boolean,ShellBoost.Core.WindowsPropertySystem.PropertyKey,ShellBoost.Core.WindowsPropertySystem.PropVariant@)">
-            <summary>
-            Gets a property value for a given path.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="throwOnError">if set to <c>true</c> Windows error may be thrown.</param>
-            <param name="property">The property to retrieve.</param>
-            <param name="value">The value.</param>
-            <returns><c>true</c> if the property was read, <c>false</c> otherwise.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertySystem.TryGetPathProperty(System.String,ShellBoost.Core.WindowsPropertySystem.PropertyKey,System.Object@)">
@@ -55880,10 +56326,39 @@
             Defines a utility class that wraps Windows' <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380072.aspx">PROPVARIANT structure</see>.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.PropVariant.SizeOfVariant">
+            <summary>
+            Gets the native size of a VARIANT.
+            </summary>
+            <value>
+            The native size of VARIANT.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropVariant"/> class.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.GetObjectForNative(System.IntPtr)">
+            <summary>
+            Converts a COM PROPVARIANT to an object.
+            </summary>
+            <param name="ptr">A pointer to a COM PROPVARIANT.</param>
+            <returns>An object that corresponds to the ptr parameter.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.ToLPSTR(System.String)">
+            <summary>
+            Creates a VT_LPSTR PropVariant, as the default constructor used with a string creates a VT_LPWSTR PropVariant.
+            </summary>
+            <param name="text">The text.</param>
+            <returns>An instance of the PropVariant class.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropVariant.ToBSTR(System.String)">
+            <summary>
+            Creates a VT_BSTR PropVariant, as the default constructor used with a string creates a VT_LPWSTR PropVariant.
+            </summary>
+            <param name="text">The text.</param>
+            <returns>An instance of the PropVariant class.</returns>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PropVariant.Empty">
             <summary>

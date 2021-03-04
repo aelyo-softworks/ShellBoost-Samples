@@ -63,7 +63,7 @@ namespace ShellBoost.Samples.Overview
 
                 server.Start(config);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
-                Console.WriteLine("If you open Windows Explorer and have registered, you should now see the extension.");
+                Console.WriteLine("If you open Windows Explorer, you should now see the extension under the ShellBoost.Overview folder.");
                 while (Console.ReadKey(true).Key != ConsoleKey.Escape)
                 {
                 }

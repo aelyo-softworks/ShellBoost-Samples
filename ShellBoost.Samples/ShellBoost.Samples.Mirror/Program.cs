@@ -70,7 +70,7 @@ namespace ShellBoost.Samples.Mirror
                 Console.WriteLine("Folder id " + ShellFolderServer.FolderId);
                 Console.WriteLine("Trace id " + ShellFolderServer.TraceId);
                 Console.WriteLine("Started listening on proxy id " + ShellFolderServer.ProxyId + ". Press ESC key to stop serving folders.");
-                Console.WriteLine("If you open Windows Explorer, you should now see the extension.");
+                Console.WriteLine("If you open Windows Explorer, you should now see the extension under the ShellBoost.PhysicalOverview folder.");
                 ConsoleKeyInfo key;
                 do
                 {
