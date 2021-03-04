@@ -2,6 +2,7 @@
   "solution": {
     "path": "ShellBoost.Samples.sln",
     "projects": [
+      "ShellBoost.Samples.CloudFolderFx\\ShellBoost.Samples.CloudFolderFx.csproj",
       "ShellBoost.Samples.FolderService\\ShellBoost.Samples.FolderService.csproj",
       "ShellBoost.Samples.GoogleDriveFolder\\ShellBoost.Samples.GoogleDriveFolder.csproj",
       "ShellBoost.Samples.LocalFolder\\ShellBoost.Samples.LocalFolder.csproj",
