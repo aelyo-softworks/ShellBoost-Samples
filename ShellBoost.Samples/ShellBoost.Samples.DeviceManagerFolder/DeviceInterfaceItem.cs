@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ShellBoost.Core;
 using ShellBoost.Core.Utilities;
 using Windows.Devices.Enumeration;

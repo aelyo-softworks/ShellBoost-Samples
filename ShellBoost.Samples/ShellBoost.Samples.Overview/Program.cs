@@ -11,8 +11,17 @@ namespace ShellBoost.Samples.Overview
             // this source is used by two projects: Overview (.NET Framework) and CoreOverview (.NET Core 3+)
             Console.WriteLine("ShellBoost Samples - " + (Core.Client.Installer.IsNetCore? "Core" : null) + "Overview - " + (IntPtr.Size == 4 ? "32" : "64") + "-bit - Copyright (C) 2017-" + DateTime.Now.Year + " Aelyo Softworks. All rights reserved.");
             Console.WriteLine("ShellBoost Runtime Version " + typeof(ShellContext).Assembly.GetInformationalVersion());
-            Console.WriteLine();
 
+            Console.WriteLine();
+            // use "ShellBoost.Samples.Overview.exe /mode:machine" to switch to machine registration.
+            var regMode = CommandLine.GetArgument<RegistrationMode>("mode");
+            if (regMode == RegistrationMode.None)
+            {
+                regMode = RegistrationMode.User;
+            }
+
+            Console.WriteLine("RegistrationMode: " + regMode);
+            Console.WriteLine();
             Console.WriteLine("Press a key:");
             Console.WriteLine();
             Console.WriteLine("   '1' Register the native proxy, run this sample, and unregister on exit.");
@@ -26,34 +35,34 @@ namespace ShellBoost.Samples.Overview
             switch (key.KeyChar)
             {
                 case '1':
-                    Run(true);
-                    ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
+                    Run(true, regMode);
+                    ShellFolderServer.UnregisterNativeDll(regMode);
                     break;
 
                 case '2':
-                    ShellFolderServer.RegisterNativeDll(RegistrationMode.User);
+                    ShellFolderServer.RegisterNativeDll(regMode);
                     Console.WriteLine("Registered");
                     break;
 
                 case '3':
-                    Run(false);
+                    Run(false, regMode);
                     break;
 
                 case '4':
-                    ShellFolderServer.UnregisterNativeDll(RegistrationMode.User);
+                    ShellFolderServer.UnregisterNativeDll(regMode);
                     Console.WriteLine("Unregistered");
                     break;
             }
         }
 
-        static void Run(bool register)
+        static void Run(bool register, RegistrationMode regMode)
         {
             using (var server = new OverviewShellFolderServer())
             {
                 var config = new ShellFolderConfiguration();
                 if (register)
                 {
-                    config.NativeDllRegistration = RegistrationMode.User;
+                    config.NativeDllRegistration = regMode;
                 }
 
 #if DEBUG
