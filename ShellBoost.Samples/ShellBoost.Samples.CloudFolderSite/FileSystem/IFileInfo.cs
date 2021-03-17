@@ -14,5 +14,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
 
         // write the stream content
         Task WriteAsync(Stream stream);
+
+        // open a thumbnail for reading
+        Task<Stream> OpenThumbnailReadAsync(int width, long? offset, long? count);
     }
 }

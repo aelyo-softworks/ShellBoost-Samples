@@ -128,7 +128,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiPostAsync<WebItem>("upload", null, json);
         }
 
-        public static async Task DownloadAsync(this WebItem item, Stream outputStream, SyncContext context = null, SyncGetEntryContentOptions options = null)
+        public static async Task DownloadAsync(this WebItem item, Stream outputStream, int? width = null, SyncContext context = null, SyncGetEntryContentOptions options = null)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -136,9 +136,15 @@ namespace ShellBoost.Samples.CloudFolder.Api
             if (outputStream == null)
                 throw new ArgumentNullException(nameof(outputStream));
 
-            Logger?.Log(TraceLevel.Verbose, "GetStreamAsync " + _baseUrl + "download/" + item.Id);
+            var url = _baseUrl + "download/" + item.Id;
+            if (width.HasValue)
+            {
+                url += "/" + width.Value;
+            }
+
+            Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + url);
             options ??= new SyncGetEntryContentOptions();
-            var req = new HttpRequestMessage(HttpMethod.Get, _baseUrl + "download/" + item.Id)
+            var req = new HttpRequestMessage(HttpMethod.Get, url)
             {
                 VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher // allow HTTP/2
             };
@@ -171,7 +177,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                Logger?.Log(TraceLevel.Verbose, "GetStreamAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
+                                Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
                                 return;
                             }
 

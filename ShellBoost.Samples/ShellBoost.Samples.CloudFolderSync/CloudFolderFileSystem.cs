@@ -236,7 +236,7 @@ namespace ShellBoost.Samples.CloudFolderSync
             if (item.Id == Guid.Empty)
                 return Task.CompletedTask;
 
-            return item.DownloadAsync(output, context, options);
+            return item.DownloadAsync(output, null, context, options);
         }
         #endregion
 

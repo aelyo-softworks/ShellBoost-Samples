@@ -62,6 +62,11 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.th256ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.th48ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.th32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.th16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -338,83 +343,117 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.deleteToolStripMenuItem,
             this.renameToolStripMenuItem,
             this.toolStripSeparator3,
-            this.newFolderToolStripMenuItem});
+            this.newFolderToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.th256ToolStripMenuItem,
+            this.th48ToolStripMenuItem,
+            this.th32ToolStripMenuItem,
+            this.th16ToolStripMenuItem});
             this.contextMenuStripList.Name = "contextMenuStripList";
-            this.contextMenuStripList.Size = new System.Drawing.Size(190, 220);
+            this.contextMenuStripList.Size = new System.Drawing.Size(205, 314);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // uploadToolStripMenuItem
             // 
             this.uploadToolStripMenuItem.Name = "uploadToolStripMenuItem";
             this.uploadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.uploadToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.uploadToolStripMenuItem.Text = "Upload here...";
             // 
             // replaceContentStripMenuItem
             // 
             this.replaceContentStripMenuItem.Name = "replaceContentStripMenuItem";
-            this.replaceContentStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.replaceContentStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.replaceContentStripMenuItem.Text = "Replace content...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(201, 6);
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(201, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.DoubleClickEnabled = true;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // renameToolStripMenuItem
             // 
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
             this.renameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.renameToolStripMenuItem.Text = "Rename";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(201, 6);
             // 
             // newFolderToolStripMenuItem
             // 
             this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
             this.newFolderToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.newFolderToolStripMenuItem.Text = "New folder";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(201, 6);
+            // 
+            // th256ToolStripMenuItem
+            // 
+            this.th256ToolStripMenuItem.Name = "th256ToolStripMenuItem";
+            this.th256ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.th256ToolStripMenuItem.Text = "Show 256px thumbnail...";
+            // 
+            // th48ToolStripMenuItem
+            // 
+            this.th48ToolStripMenuItem.Name = "th48ToolStripMenuItem";
+            this.th48ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.th48ToolStripMenuItem.Text = "Show 48px thumbnail...";
+            // 
+            // th32ToolStripMenuItem
+            // 
+            this.th32ToolStripMenuItem.Name = "th32ToolStripMenuItem";
+            this.th32ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.th32ToolStripMenuItem.Text = "Show 32px thumbnail...";
+            // 
+            // th16ToolStripMenuItem
+            // 
+            this.th16ToolStripMenuItem.Name = "th16ToolStripMenuItem";
+            this.th16ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.th16ToolStripMenuItem.Text = "Show 16px thumbnail...";
             // 
             // Main
             // 
@@ -488,6 +527,11 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripMenuItem refreshStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showTempStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceContentStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem th256ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem th48ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem th32ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem th16ToolStripMenuItem;
     }
 }
 

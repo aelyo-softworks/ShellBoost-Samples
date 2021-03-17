@@ -54,6 +54,10 @@ namespace ShellBoost.Samples.CloudFolderClient
 
             exitToolStripMenuItem.Click += (s, e) => Close();
             openToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>());
+            th16ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 16);
+            th32ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 32);
+            th48ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 48);
+            th256ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 256);
             newFolderToolStripMenuItem.Click += (s, e) => NewFolder();
             renameToolStripMenuItem.Click += (s, e) => listViewList.GetSelectedItem()?.BeginEdit();
             deleteToolStripMenuItem.Click += (s, e) => Delete(listViewList.GetSelectedTags<WebItem>());
@@ -250,6 +254,30 @@ namespace ShellBoost.Samples.CloudFolderClient
                 e.Cancel = true;
                 return;
             }
+
+            var item = listViewList.GetSelectedTag<WebItem>();
+            th16ToolStripMenuItem.Visible = item != null;
+            th32ToolStripMenuItem.Visible = item != null;
+            th48ToolStripMenuItem.Visible = item != null;
+            th256ToolStripMenuItem.Visible = item != null;
+            toolStripSeparator6.Visible = item != null;
+            if (item != null)
+            {
+                var isImage = IsSupportedThumnailFile(Path.GetExtension(item.Name));
+                th16ToolStripMenuItem.Enabled = isImage;
+                th32ToolStripMenuItem.Enabled = isImage;
+                th48ToolStripMenuItem.Enabled = isImage;
+                th256ToolStripMenuItem.Enabled = isImage;
+            }
+        }
+
+        private static bool IsSupportedThumnailFile(string ext)
+        {
+            if (string.IsNullOrWhiteSpace(ext))
+                return false;
+
+            ext = ext.ToLowerInvariant();
+            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
         }
 
         private void ContextMenuStripTree_Opening(object sender, CancelEventArgs e)
@@ -534,7 +562,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             });
         }
 
-        private void Open(WebItem item)
+        private void Open(WebItem item, int? width = null)
         {
             if (item == null)
                 return;
@@ -578,7 +606,7 @@ namespace ShellBoost.Samples.CloudFolderClient
 
                 // write fs stream to it
                 using var fileStream = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                await WebApi.DownloadAsync(item, fileStream).ConfigureAwait(false);
+                await WebApi.DownloadAsync(item, fileStream, width).ConfigureAwait(false);
 
                 // open it using whatever shell is configured for
                 var psi = new ProcessStartInfo(temp);

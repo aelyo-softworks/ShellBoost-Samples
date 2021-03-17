@@ -148,12 +148,12 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             return contentType;
         }
 
-        [Route("api/download/{id}")]
-        public async Task<IActionResult> Download(Guid id)
+        [Route("api/download/{id}/{width}")]
+        public async Task<IActionResult> Download(Guid id, int? width)
         {
             try
             {
-                Log("id: " + id);
+                Log("id: " + id + " width:" + width);
                 var item = await FileSystem.GetItemAsync(id).ConfigureAwait(false);
                 if (item == null)
                 {
@@ -193,7 +193,17 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 var file = (IFileInfo)item;
                 var ct = GetContentType(Path.GetExtension(item.Name));
                 Log("ct: " + ct + " length: " + file.Length + " offset: " + offset + " count: " + count);
-                var stream = await file.OpenReadAsync(offset, count).ConfigureAwait(false);
+
+                Stream stream;
+                if (width.HasValue)
+                {
+                    stream = await file.OpenThumbnailReadAsync(width.Value, offset, count).ConfigureAwait(false);
+                }
+                else
+                {
+                    stream = await file.OpenReadAsync(offset, count).ConfigureAwait(false);
+                }
+
                 if (stream == null)
                 {
                     LogWarning("Item " + item.Id + " has no content/stream.");

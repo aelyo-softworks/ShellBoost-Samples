@@ -142,6 +142,17 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }
         }
 
+        public Task<Stream> OpenThumbnailReadAsync(int width, long? offset, long? count)
+        {
+            if (width <= 0)
+                throw new ArgumentOutOfRangeException(nameof(width));
+
+            if (IsFolder)
+                throw new InvalidOperationException();
+
+            return System.OpenThumbnailReadAsync(this, width, offset, count);
+        }
+
         // IFolderInfo
         public bool IsRoot => Id == Guid.Empty;
 

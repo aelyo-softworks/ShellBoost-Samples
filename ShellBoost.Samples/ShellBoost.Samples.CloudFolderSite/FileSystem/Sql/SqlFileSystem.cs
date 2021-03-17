@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -688,6 +689,56 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             {
                 AddEvent(item.Id, item.ParentId, WatcherChangeTypes.Changed);
             }
+        }
+
+        public async Task<Stream> OpenThumbnailReadAsync(SqlItem item, int width, long? offset, long? count)
+        {
+            if (width <= 0)
+                throw new ArgumentOutOfRangeException(nameof(width));
+
+            if (item.IsFolder)
+                throw new InvalidOperationException();
+
+            var ext = Path.GetExtension(item.Name);
+            if (!IsSupportedThumnailFile(ext))
+                throw new InvalidOperationException();
+
+            // build some unique key & cache path
+            var key = Conversions.ComputeGuidHash(item.Id + "\0" + item.Length + "\0" + item.LastWriteTimeUtc.Ticks + "\0" + item.Name);
+            var file = Path.Combine(Path.GetTempPath(), "CloudFolderImages", key.ToString("N") + "." + width + "." + ext);
+            if (!IOUtilities.FileExists(file))
+            {
+                // thumbnail doesn't exists yet
+                // ensure directory exists
+                IOUtilities.FileCreateDirectory(file);
+                using (var stream = await OpenReadAsync(item, null, null).ConfigureAwait(false))
+                {
+                    using (var input = Image.FromStream(stream))
+                    {
+                        using (var bmp = ImageUtilities.ResizeImageByWidth(input, width))
+                        {
+                            IOUtilities.WrapSharingViolations(() => bmp.Save(file));
+                        }
+                    }
+                }
+            }
+
+            var output = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            if (offset.HasValue)
+            {
+                output.Seek(offset.Value, SeekOrigin.Begin);
+                // note we don't support count
+            }
+            return output;
+        }
+
+        private static bool IsSupportedThumnailFile(string ext)
+        {
+            if (string.IsNullOrWhiteSpace(ext))
+                return false;
+
+            ext = ext.ToLowerInvariant();
+            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
         }
 
         public async IAsyncEnumerable<SqlItem> EnumerateAsync(SqlItem parentItem, EnumerateOptions options = null)
