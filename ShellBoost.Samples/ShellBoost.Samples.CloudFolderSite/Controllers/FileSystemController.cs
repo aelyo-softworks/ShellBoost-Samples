@@ -148,7 +148,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             return contentType;
         }
 
-        [Route("api/download/{id}/{width}")]
+        [Route("api/download/{id}/{width?}")]
         public async Task<IActionResult> Download(Guid id, int? width)
         {
             try
