@@ -1305,6 +1305,104 @@
             The size of the buffer.
             </value>
         </member>
+        <member name="T:ShellBoost.Core.Handlers.Handler">
+            <summary>
+            Defines a generic COM Shell handler that supports IInitializeWithItem, IInitializeWithFile and IInitializeWithStream.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.Handler.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Handlers.Handler"/> class.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.Mode">
+            <summary>
+            Indicate the access mode for the Item, FilePath or Stream.
+            </summary>
+            <value>
+            The access mode.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.Item">
+            <summary>
+            Gets the item. Only valid if IInitializeWithItem was called.
+            </summary>
+            <value>
+            The item.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.FilePath">
+            <summary>
+            Gets the file path. Only valid if IInitializeWithFile was called.
+            </summary>
+            <value>
+            The file path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.Stream">
+            <summary>
+            Gets the stream. Only valid if IInitializeWithStream was called.
+            </summary>
+            <value>
+            The stream.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.NativeStream">
+            <summary>
+            Gets the native stream. Only valid if IInitializeWithStream was called.
+            </summary>
+            <value>
+            The native stream.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.Handler.Trace(System.Diagnostics.TraceLevel,System.String,System.String)">
+            <summary>
+            Sends a text to trace.
+            </summary>
+            <param name="level">The information level.</param>
+            <param name="value">The value.</param>
+            <param name="methodName">The calling method name.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.Handler.RegisterOutOfProcess(ShellBoost.Core.RegistrationMode,System.String)">
+            <summary>
+            Registers this handler in the registry as Out-Of-Process.
+            </summary>
+            <param name="mode">The registration mode.</param>
+            <param name="assemblyPath">The assembly path.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.Handler.RegisterInProcess(ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Registers this handler in the registry as In-Process.
+            </summary>
+            <param name="mode">The registration mode.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.Handler.Unregister(ShellBoost.Core.RegistrationMode)">
+            <summary>
+            Unregisters this handler from the registry.
+            </summary>
+            <param name="mode">The registration mode.</param>
+        </member>
+        <member name="T:ShellBoost.Core.Handlers.ThumbnailProvider">
+            <summary>
+            Defines a Shell Thumbnail Provider, implementing IThumbnailProvider.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.ThumbnailProvider.GetThumbnailBitmapHandle(System.Int32)">
+            <summary>
+            Gets the thumbnail bitmap handle.
+            </summary>
+            <param name="width">The required thumbnail width.</param>
+            <returns>
+            A bitmap handle or zero.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.ThumbnailProvider.GetThumbnailBitmap(System.Int32)">
+            <summary>
+            Gets the thumbnail bitmap.
+            </summary>
+            <param name="width">The required thumbnail width.</param>
+            <returns>A bitmap instance or null.</returns>
+        </member>
         <member name="T:ShellBoost.Core.IconLocation">
             <summary>
             Defines an icon location.
@@ -5487,6 +5585,7 @@
         <member name="F:ShellBoost.Core.RegistrationMode.User">
             <summary>
             Registration is applied for the current user.
+            This is not supported by Windows Server editions.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.RegistrationMode.Machine">
@@ -9051,6 +9150,35 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">other is null.</exception>
         </member>
+        <member name="T:ShellBoost.Core.Synchronization.StateSyncChangeGroup">
+            <summary>
+            Represents a group of StateSyncChange instances used when creating jobs.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateSyncChangeGroup.RootChange">
+            <summary>
+            Gets or sets the root change. May be null.
+            </summary>
+            <value>
+            The root change.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.StateSyncChangeGroup.Changes">
+            <summary>
+            Gets the list of changes in this group.
+            </summary>
+            <value>
+            The changes.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.StateSyncChangeGroup.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
         <member name="T:ShellBoost.Core.Synchronization.SyncJobMovingState">
             <summary>
             Defines the status of a job with regards to its content changes.
@@ -9325,6 +9453,11 @@
         <member name="F:ShellBoost.Core.Synchronization.SyncJobChangedEventType.Deleted">
             <summary>
             The job has been deleted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.SyncJobChangedEventType.Deleting">
+            <summary>
+            The job is being deleted.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.SyncStateProviderEventType">
@@ -10319,6 +10452,20 @@
             </summary>
             <param name="change">The change.</param>
             <param name="event">The event.</param>
+            <returns>
+            true to allow saving the change; otherwise false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            change is null
+            or
+            event is null.
+            </exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnJobChanged(ShellBoost.Core.Synchronization.SyncJobChangedEventArgs)">
+            <summary>
+            Occurs when a job changed.
+            </summary>
+            <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.SyncJobChangedEventArgs" /> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnSavedChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
             <summary>
@@ -10326,12 +10473,6 @@
             </summary>
             <param name="change">The change.</param>
             <param name="event">The event.</param>
-        </member>
-        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnJobChanged(ShellBoost.Core.Synchronization.SyncJobChangedEventArgs)">
-            <summary>
-            Occurs when a job changed.
-            </summary>
-            <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.SyncJobChangedEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.HasCapability(ShellBoost.Core.Synchronization.SyncFileSystemCapability)">
             <summary>
@@ -11166,6 +11307,14 @@
             </summary>
             <value>
               <c>true</c> if registration must be forced; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration.ThumbnailProviderClsid">
+            <summary>
+            Gets or sets a thumbnail provider CLSID.
+            </summary>
+            <value>
+            A thumbnail provider CLSID.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemRegistration.ProtectionMode">
@@ -12394,6 +12543,12 @@
               <c>true</c> if the specified capability is supported; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.OnJobChanged(ShellBoost.Core.Synchronization.SyncJobChangedEventArgs)">
+            <summary>
+            Occurs when a job changed.
+            </summary>
+            <param name="e">The <see cref="T:ShellBoost.Core.Synchronization.SyncJobChangedEventArgs"/> instance containing the event data.</param>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.Log(System.Diagnostics.TraceLevel,System.Object,System.String)">
             <summary>
             Logs the value at the specified trace level.
@@ -13572,6 +13727,14 @@
             The options.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizer.IsStateReadOnly">
+            <summary>
+            Gets a value indicating whether the state is read-only.
+            </summary>
+            <value>
+              <c>true</c> if the state is read-only; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizer.ContentMover">
             <summary>
             Gets the content mover instance.
@@ -13744,6 +13907,14 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">jobState is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.GroupChange(ShellBoost.Core.Synchronization.StateSyncChange,System.Collections.Generic.IDictionary{ShellBoost.Core.Utilities.PathSegmentList,ShellBoost.Core.Synchronization.StateSyncChangeGroup})">
+            <summary>
+            Groups a StateSyncChange change instance before a job is created.
+            </summary>
+            <param name="change">The change.</param>
+            <param name="groupsByPath">A dictionary of groups by path.</param>
+            <exception cref="T:System.ArgumentNullException">change is null or groupsByPath is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.BuildNewJobs">
             <summary>
             Builds new jobs from the list of changes.
@@ -13785,6 +13956,11 @@
             Checks this instance is disposed.
             </summary>
             <exception cref="T:System.ObjectDisposedException">This instance is disposed.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.CheckStateReadOnly">
+            <summary>
+            Checks this instance's state is read-only.
+            </summary>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.Dispose(System.Boolean)">
             <summary>
@@ -14036,6 +14212,16 @@
             </summary>
             <value>
               <c>true</c> if state must be backuped at initialization; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizerOptions.IsStateReadOnly">
+            <summary>
+            Gets or sets a value indicating whether the state is read-only.
+            A read-only state can be used by caller that only need read access to the state.
+            MultiPointSynchronizer's Start method cannot be called with a read-only state.
+            </summary>
+            <value>
+              <c>true</c> if the state is read-only; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizerOptions.StateProviderTraceLevel">
@@ -14535,6 +14721,68 @@
         <member name="F:ShellBoost.Core.Utilities.BitDepth.Bits24">
             <summary>
             24 bits.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ComClassFactory`1">
+            <summary>
+            Defines a COM class factory for a given type.
+            </summary>
+            <typeparam name="T">The COM server type.</typeparam>
+        </member>
+        <member name="E:ShellBoost.Core.Utilities.ComClassFactory`1.CreateInstance">
+            <summary>
+            Occurs when an instance is being created.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComClassFactory`1.OnCreateInstance(System.Object,ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg{`0})">
+            <summary>
+            Called when an instance is being created.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The event arguments.</param>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ComLocalServer">
+            <summary>
+            Defines a COM local server.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.RegisterClassObject``1(ShellBoost.Core.Utilities.REGCLS,System.Object)">
+            <summary>
+            Registers the class object and optionally permits activation requests on it.
+            </summary>
+            <typeparam name="T">The class object type.</typeparam>
+            <param name="options">The options.</param>
+            <param name="factory">The class object whose availability is being published.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Resume">
+            <summary>
+            Permits activation requests on all registered class objects.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Suspend">
+            <summary>
+            Prevents any new activation requests on all registered class objects.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Revoke">
+            <summary>
+            Informs OLE that class objects previously registered are no longer available for use.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and optionally managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:ShellBoost.Core.Utilities.ComLocalServer"/> class.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComLocalServer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ComServer">
@@ -15092,6 +15340,40 @@
             <param name="keyName">The key name.</param>
             <returns>A guid.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ComServer.RegisterOutOfProcessComObject(ShellBoost.Core.RegistrationMode,System.Type,System.String)">
+            <summary>
+            Registers an out-of-process .NET COM object.
+            </summary>
+            <param name="mode">The registration mode.</param>
+            <param name="type">The type.</param>
+            <param name="assemblyPath">The assembly path.</param>
+            <exception cref="T:System.ArgumentNullException">type is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComServer.RegisterNetFrameworkInprocessComObject(ShellBoost.Core.RegistrationMode,System.Type,System.String)">
+            <summary>
+            Registers an in-process .NET Framework COM object.
+            </summary>
+            <param name="mode">The registration mode.</param>
+            <param name="type">The type.</param>
+            <param name="assemblyPath">The assembly path.</param>
+            <exception cref="T:System.ArgumentNullException">type is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComServer.UnregisterComObject(ShellBoost.Core.RegistrationMode,System.Type)">
+            <summary>
+            Unregisters a COM object.
+            </summary>
+            <param name="mode">The registration mode.</param>
+            <param name="type">The type.</param>
+            <exception cref="T:System.ArgumentNullException">type is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ComServer.UnregisterComObject(ShellBoost.Core.RegistrationMode,System.Guid)">
+            <summary>
+            Unregisters a COM object.
+            </summary>
+            <param name="mode">The registration mode.</param>
+            <param name="guid">The COM object's CLSID.</param>
+            <exception cref="T:System.ArgumentNullException">rootKey is null.</exception>
+        </member>
         <member name="T:ShellBoost.Core.Utilities.CircularCollection`1">
             <summary>
             Represents a thread-safe, strongly typed, circular collection of objects.
@@ -15276,6 +15558,34 @@
             <returns>
             An enumerator that can be used to iterate through the collection.
             </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg`1">
+            <summary>
+            Provides data for the CreateInstance event of the ComClassFactory type.
+            </summary>
+            <typeparam name="T">The COM server type.</typeparam>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg`1.#ctor(System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg`1"/> class.
+            </summary>
+            <param name="riid">The riid.</param>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg`1.InterfaceId">
+            <summary>
+            Gets the interface identifier (IID).
+            </summary>
+            <value>
+            The interface identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ClassFactoryCreateInstanceEventArg`1.Instance">
+            <summary>
+            Gets or sets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
         </member>
         <member name="T:ShellBoost.Core.Utilities.DispatcherQueueController">
             <summary>
@@ -15777,6 +16087,41 @@
             <returns>
             The result of the operator.
             </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.REGCLS">
+            <summary>
+            Controls the type of connections to a class object.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_SINGLEUSE">
+            <summary>
+            After an application is connected to a class object with CoGetClassObject, the class object is removed from public view so that no other applications can connect to it.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_MULTIPLEUSE">
+            <summary>
+            Multiple applications can connect to the class object through calls to CoGetClassObject.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_MULTI_SEPARATE">
+            <summary>
+            Useful for registering separate CLSCTX_LOCAL_SERVER and CLSCTX_INPROC_SERVER class factories through calls to CoGetClassObject.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_SUSPENDED">
+            <summary>
+            Suspends registration and activation requests for the specified CLSID until there is a call to CoResumeClassObjects.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_SURROGATE">
+            <summary>
+            The class object is a surrogate process used to run DLL servers.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Utilities.REGCLS.REGCLS_AGILE">
+            <summary>
+            The class object aggregates the free-threaded marshaler and will be made visible to all inproc apartments.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ShellStringComparer">
             <summary>
@@ -35922,6 +36267,13 @@
             <value>
             The parent item or null.
             </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetDisplayName(ShellBoost.Core.WindowsShell.SIGDN)">
+            <summary>
+            Gets the display name.
+            </summary>
+            <param name="type">The type of name to get.</param>
+            <returns>The didplay name or null.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.Compares(System.Object,ShellBoost.Core.WindowsShell.SICHINTF,System.Boolean)">
             <summary>

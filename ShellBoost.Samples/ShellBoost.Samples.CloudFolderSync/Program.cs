@@ -46,12 +46,18 @@ namespace ShellBoost.Samples.CloudFolderSync
             WebApi.Logger.Log(TraceLevel.Info, "Local folder path: " + folderPath);
             options.BackupState = true; // we want to backup the state (state is by default an sqlite database)
 
+            // thumbnails without hydration support
+            var comServer = new ComLocalServer();
+
             var reg = new OnDemandLocalFileSystemRegistration
             {
                 ProviderDisplayName = DisplayName,
                 HydrationPolicy = OnDemandHydrationPolicy.Full,
                 HydrationPolicyModifier = OnDemandHydrationPolicyModifier.ValidationRequired | OnDemandHydrationPolicyModifier.AutoDehydrationAllowed,
                 PopulationPolicy = OnDemandPopulationPolicy.AlwaysFull,
+
+                // indicate the CLSID of the thumbnail provider COM object
+                ThumbnailProviderClsid = typeof(CloudFolderThumbnailProvider).GUID,
             };
 
             Console.WriteLine();
@@ -66,6 +72,14 @@ namespace ShellBoost.Samples.CloudFolderSync
             switch (key.KeyChar)
             {
                 case '1':
+                    // register thumbnail provider COM object in registry
+                    CloudFolderThumbnailProvider.Register();
+
+                    // register thumbnail provider COM object as a service
+                    // we want a custom factory since we want to pass context information to the class
+                    var factory = new ComClassFactory<CloudFolderThumbnailProvider>();
+                    comServer.RegisterClassObject<CloudFolderThumbnailProvider>(factory: factory);
+
                     // register to the Windows file system as a storage provider
                     OnDemandLocalFileSystem.EnsureRegistered(folderPath, reg);
 
@@ -77,7 +91,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                     using (var mp = new MultiPointSynchronizer(Name + "." + id.ToString(), options: options))
                     {
                         // this our file system implementation
-                        var fs = new CloudFolderFileSystem(options.Logger);
+                        var cloud = new CloudFolderFileSystem(options.Logger);
 
                         // this is Windows 10+ files on-demand local file system (ShellBoost provided)
                         var local = new OnDemandLocalFileSystem(folderPath, new OnDemandLocalFileSystemOptions
@@ -85,12 +99,18 @@ namespace ShellBoost.Samples.CloudFolderSync
                             SynchronizationStateEndPointSynchronizerIdentifiers = { "*" }, // make sure a local file is in-sync only when the corresponding file is in-sync on Cloud server (* means all other endpoints)
                         });
 
+                        // pass the OnDemandLocalFileSystem instance to the thumbnail provider
+                        factory.CreateInstance += (s, e) =>
+                        {
+                            e.Instance = new CloudFolderThumbnailProvider(local, cloud);
+                        };
+
                         // add sync endpoints
                         mp.AddEndPoint("Local", local);
 
                         // we prefer to put each temporary (upload) file in the target folder
                         // instead of using a temp folder like with the Google Drive sample
-                        mp.AddEndPoint(Name, fs, new EndPointSynchronizerOptions { UploadsWaitForParents = true });
+                        mp.AddEndPoint(Name, cloud, new EndPointSynchronizerOptions { UploadsWaitForParents = true });
 
                         // start sync loop
                         mp.Start();
@@ -114,6 +134,9 @@ namespace ShellBoost.Samples.CloudFolderSync
                     break;
 
                 case '2':
+                    // unregister thumbnail provider COM object from registry
+                    CloudFolderThumbnailProvider.Unregister();
+
                     // remove ourselves from the explorer treeview
                     ShellRegistration.UnregisterCloudStorageProvider(id);
 
@@ -122,6 +145,8 @@ namespace ShellBoost.Samples.CloudFolderSync
                     Console.WriteLine(" Cloud Storage Provider has been unregistered.");
                     break;
             }
+
+            comServer.Dispose();
         }
     }
 }

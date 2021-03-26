@@ -57,7 +57,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         }
 
         internal static string ToId(Guid id) => id.ToString();
-        private static Guid ToId(string id) => string.IsNullOrWhiteSpace(id) ? Guid.Empty : Guid.Parse(id);
+        internal static Guid ToId(string id) => string.IsNullOrWhiteSpace(id) ? Guid.Empty : Guid.Parse(id);
 
         private static StateSyncEntry ToEntry(WebItem item)
         {
