@@ -217,7 +217,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         public async Task<SqlItem> GetSqlItemAsync(Guid id)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE Id = @id", new { id }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WITH (NOLOCK) WHERE Id = @id", new { id }, Logger).ConfigureAwait(false))
             {
                 if (!reader.Read())
                     return null;
@@ -282,7 +282,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private async Task<SqlItem> GetSqlItemAsync(Guid parentId, string name)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT Id, ParentId, Name, LastAccessTimeUtc, CreationTimeUtc, LastWriteTimeUtc, Attributes, DATALENGTH(Data) AS Length FROM Item WITH (NOLOCK) WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
             {
                 if (reader.Read())
                     return NewItem(reader);
@@ -293,7 +293,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private async Task<bool> ExistsNameAsync(Guid parentId, string name)
         {
-            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT 1 FROM Item WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
+            using (var reader = await SqlExtensions.ExecuteReaderAsync(ConnectionString, "SELECT 1 FROM Item WITH (NOLOCK) WHERE ParentId = @pid AND Name=@name", new { pid = parentId, name }, Logger).ConfigureAwait(false))
             {
                 return await reader.ReadAsync().ConfigureAwait(false);
             }
