@@ -212,6 +212,10 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                 return new FileStreamResult(stream, ct) { FileDownloadName = item.Name, LastModified = item.LastWriteTimeUtc.ToLocalTime(), EnableRangeProcessing = true };
             }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
             catch (UnauthorizedAccessException)
             {
                 return Unauthorized();

@@ -263,21 +263,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             toolStripSeparator6.Visible = item != null;
             if (item != null)
             {
-                var isImage = IsSupportedThumnailFile(Path.GetExtension(item.Name));
+                var isImage = WebApi.IsSupportedThumbnailFile(Path.GetExtension(item.Name));
                 th16ToolStripMenuItem.Enabled = isImage;
                 th32ToolStripMenuItem.Enabled = isImage;
                 th48ToolStripMenuItem.Enabled = isImage;
                 th256ToolStripMenuItem.Enabled = isImage;
             }
-        }
-
-        private static bool IsSupportedThumnailFile(string ext)
-        {
-            if (string.IsNullOrWhiteSpace(ext))
-                return false;
-
-            ext = ext.ToLowerInvariant();
-            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
         }
 
         private void ContextMenuStripTree_Opening(object sender, CancelEventArgs e)

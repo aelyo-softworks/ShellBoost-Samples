@@ -700,8 +700,8 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 throw new InvalidOperationException();
 
             var ext = Path.GetExtension(item.Name);
-            if (!IsSupportedThumnailFile(ext))
-                throw new InvalidOperationException();
+            if (!IsSupportedThumbnailFile(ext))
+                throw new InvalidOperationException("Thumbnail are unsupported for extension '" + ext + "'.");
 
             // build some unique key & cache path
             var key = Conversions.ComputeGuidHash(item.Id + "\0" + item.Length + "\0" + item.LastWriteTimeUtc.Ticks + "\0" + item.Name);
@@ -732,7 +732,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             return output;
         }
 
-        private static bool IsSupportedThumnailFile(string ext)
+        private static bool IsSupportedThumbnailFile(string ext)
         {
             if (string.IsNullOrWhiteSpace(ext))
                 return false;

@@ -128,6 +128,15 @@ namespace ShellBoost.Samples.CloudFolder.Api
             return ApiPostAsync<WebItem>("upload", null, json);
         }
 
+        public static bool IsSupportedThumbnailFile(string ext)
+        {
+            if (string.IsNullOrWhiteSpace(ext))
+                return false;
+
+            ext = ext.ToLowerInvariant();
+            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
+        }
+
         public static async Task DownloadAsync(this WebItem item, Stream outputStream, int? width = null, SyncContext context = null, SyncGetEntryContentOptions options = null)
         {
             if (item == null)
@@ -139,6 +148,9 @@ namespace ShellBoost.Samples.CloudFolder.Api
             var url = _baseUrl + "download/" + item.Id;
             if (width.HasValue)
             {
+                if (!string.IsNullOrWhiteSpace(item.Name) && !IsSupportedThumbnailFile(Path.GetExtension(item.Name)))
+                    throw new ArgumentNullException(nameof(item));
+
                 url += "/" + width.Value;
             }
 
