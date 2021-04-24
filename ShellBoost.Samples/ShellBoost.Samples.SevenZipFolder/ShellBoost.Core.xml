@@ -523,6 +523,22 @@
             The default stream size.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.StreamToBufferThreshold">
+            <summary>
+            Gets the RPC protocol stream to buffer threshold.
+            </summary>
+            <value>
+            The effective stream to buffer threshold.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DefaultStreamToBufferThreshold">
+            <summary>
+            Gets the RPC protocol default stream to buffer threshold.
+            </summary>
+            <value>
+            The default stream to buffer threshold.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.ServerStart">
             <summary>
             Gets the server start parameters.
@@ -834,6 +850,66 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
+        <member name="T:ShellBoost.Core.CommandExecEventArgs">
+            <summary>
+            Provides data for the ShellFolder's CommandExec event.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Folder">
+            <summary>
+            Gets the context folder.
+            </summary>
+            <value>The folder.</value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Group">
+            <summary>
+            Gets the command group.
+            Guid.Empty is a valid value.
+            </summary>
+            <value>
+            The command group.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Id">
+            <summary>
+            Gets the command identifier.
+            This can correspond to the standard OLECMDID values https://docs.microsoft.com/en-us/windows/win32/api/docobj/ne-docobj-olecmdid or any other value.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Options">
+            <summary>
+            Gets the command options.
+            The OLECMDEXECOPT list of values is used by most of the command identifiers, but the underlying Int32 value can be anything.
+            </summary>
+            <value>
+            The options.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Input">
+            <summary>
+            Gets the command input argument. Can be null.
+            </summary>
+            <value>
+            The input.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.Output">
+            <summary>
+            Gets or sets the command output.
+            </summary>
+            <value>
+            The command output.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.HResult">
+            <summary>
+            Gets or sets the Windows HRESULT code for the operation.
+            </summary>
+            <value>The Windows HRESULT code for the operation.</value>
+        </member>
         <member name="T:ShellBoost.Core.CompareIdReturnValue">
             <summary>
             Defines how two Shell Items compare.
@@ -859,6 +935,36 @@
             The left item follows the right item.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.DictionaryEventArgs">
+            <summary>
+            Provides generic data for events.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.DictionaryEventArgs.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.DictionaryEventArgs"/> class.
+            </summary>
+            <param name="dictionary">The dictionary.</param>
+            <param name="isCancelable">if set to <c>true</c> the event is cancelable.</param>
+            <exception cref="T:System.ArgumentNullException">dictionary is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.DictionaryEventArgs.IsCancelable">
+            <summary>
+            Gets a value indicating whether the event is cancelable.
+            </summary>
+            <value>
+              <c>true</c> if the event is cancelable; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.DictionaryEventArgs.Dictionary">
+            <summary>
+            Gets the dictionary of values associated with the event.
+            This dictionary may be read-only.
+            </summary>
+            <value>
+            The dictionary of values associated with the event.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.DragDropTargetEventArgs">
             <summary>
             Provides data for Drag and Drop events.
@@ -881,6 +987,15 @@
             Gets the Data Object that contains the data associated with this event.
             </summary>
             <value>The data object.</value>
+        </member>
+        <member name="P:ShellBoost.Core.DragDropTargetEventArgs.OnDemandDataObject">
+            <summary>
+            Gets the related on OnDemandDataObject instance.
+            Only valid (not null) if a custom OnDemandDataObject instance was provided on OnGetOnDemandDataObjectEvent.
+            </summary>
+            <value>
+            The related OnDemandDataObject instance or null.
+            </value>
         </member>
         <member name="P:ShellBoost.Core.DragDropTargetEventArgs.KeyState">
             <summary>
@@ -1654,6 +1769,39 @@
             </summary>
             <value>The owner window handle.</value>
         </member>
+        <member name="T:ShellBoost.Core.OnDemandDataMediumSetEventArgs">
+            <summary>
+            Provides data for the MediumSet event of the OnDemandDataObject type.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataMediumSetEventArgs.#ctor(ShellBoost.Core.OnDemandDataFormat,ShellBoost.Core.OnDemandDataMedium)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandDataMediumSetEventArgs"/> class.
+            </summary>
+            <param name="format">The format.</param>
+            <param name="medium">The medium.</param>
+            <exception cref="T:System.ArgumentNullException">
+            format
+            or
+            medium is null.
+            </exception>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandDataMediumSetEventArgs.Format">
+            <summary>
+            Gets the format.
+            </summary>
+            <value>
+            The format.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandDataMediumSetEventArgs.Medium">
+            <summary>
+            Gets the medium.
+            </summary>
+            <value>
+            The medium.
+            </value>
+        </member>
         <member name="T:ShellBoost.Core.OnDemandFileDescriptorsDataFormat">
             <summary>
             An on-demand data format for the coupled CFSTR_FILEDESCRIPTORW and CFSTR_FILECONTENTS formats.
@@ -1772,7 +1920,7 @@
         <member name="P:ShellBoost.Core.GetDataObjectEventArgs.DontUseDefaultDataObjects">
             <summary>
             Gets or sets a value indicating whether to use default data objects, event if no object is added to this instance.
-            Setting this to true will prevent any copy or drag operation.
+            Setting this to true will prevent any drag operation.
             </summary>
             <value>
               <c>true</c> if default data objects won't be used; otherwise, <c>false</c>.
@@ -6446,6 +6594,15 @@
             Instead, the data is an enumerable of temporary files that can be moved wherever you want.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.ShellDataObjectFormat.OnDemandDataFormat">
+            <summary>
+            Gets the related OnDemandDataFormat instance.
+            Only valid (not null) if a custom OnDemandDataObject instance was provided on OnGetOnDemandDataObjectEvent.
+            </summary>
+            <value>
+            The related OnDemandDataFormat instance or null.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.ShellDataObjectFormat.Format">
             <summary>
             Gets the format identifier.
@@ -6462,6 +6619,7 @@
             <summary>
             Gets the data associated with this format.
             For array data (such as file contents corresponding to file descriptors), this will be null, use ConvertedData instead.
+            Only supported if OnDemandDataFormat property value is null.
             </summary>
             <value>The data.</value>
         </member>
@@ -6469,6 +6627,7 @@
             <summary>
             Gets the typed data associated with this data.
             For array data (such as file contents corresponding to file descriptors), this will contain array of string (temporary files) or byte[].
+            Only supported if OnDemandDataFormat property value is null.
             </summary>
             <value>The typed data.</value>
         </member>
@@ -6949,6 +7108,16 @@
         <member name="E:ShellBoost.Core.ShellFolder.Refresh">
             <summary>
             Raised when the view is refreshed, for example when the end-user presses the F5 key from the list view.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.CommandQueryStatus">
+            <summary>
+            Occurs when the status of one or more commands, generated by user interface events, is queried for.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.ShellFolder.CommandExec">
+            <summary>
+            Occurs when a specified command is executed.
             </summary>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.#ctor(ShellBoost.Core.ShellFolder,ShellBoost.Core.ShellItemId)">
@@ -7501,6 +7670,20 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnCommandQueryStatus(System.Object,ShellBoost.Core.CommandQueryStatusEventArgs)">
+            <summary>
+            Called when the status of one or more commands, generated by user interface events, is queried for.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.CommandQueryStatusEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.ShellFolder.OnCommandExec(System.Object,ShellBoost.Core.CommandExecEventArgs)">
+            <summary>
+            Called when a specified command is executed.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.CommandExecEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellFolder.OnGetNameValidCharactersEvent(System.Object,ShellBoost.Core.GetNameValidCharactersEventArgs)">
             <summary>
@@ -8398,6 +8581,14 @@
             The medium type.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.OnDemandDataMedium.OriginalMediumType">
+            <summary>
+            Gets the original medium type.
+            </summary>
+            <value>
+            The original medium type.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.OnDemandDataMedium.Stream">
             <summary>
             Gets the stream.
@@ -8422,6 +8613,14 @@
             </summary>
             <value>
             The file path or null.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.OnDemandDataMedium.IsTempFile">
+            <summary>
+            Gets a value indicating if the FilePath points to a temporary file.
+            </summary>
+            <value>
+              <c>true</c> if the FilePath points to a temporary file; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="M:ShellBoost.Core.OnDemandDataMedium.ToString">
@@ -8591,6 +8790,17 @@
             Occurs when a medium is set for this object in a specific format.
             </summary>
         </member>
+        <member name="E:ShellBoost.Core.OnDemandDataObject.MediumGet">
+            <summary>
+            Occurs when a medium is requested.
+            This event also happens at format level if not handled at this instance level.
+            </summary>
+        </member>
+        <member name="E:ShellBoost.Core.OnDemandDataObject.QueryData">
+            <summary>
+            Occurs when a format is queried for.
+            </summary>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandDataObject.#ctor(System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandDataObject" /> class.
@@ -8639,6 +8849,18 @@
             <param name="format">The format.</param>
             <exception cref="T:System.ArgumentNullException">format is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.RemoveAllFormats">
+            <summary>
+            Removes all formats.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.RemoveFormat(System.String)">
+            <summary>
+            Removes a format.
+            </summary>
+            <param name="format">The format name.</param>
+            <exception cref="T:System.ArgumentNullException">format is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.OnDemandDataObject.RemoveFormat(System.Int32)">
             <summary>
             Removes a format.
@@ -8651,6 +8873,20 @@
             </summary>
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:ShellBoost.Core.OnDemandDataMediumSetEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.OnMediumGet(System.Object,ShellBoost.Core.OnDemandDataMediumGetEventArgs)">
+            <summary>
+            Called when a medium is requested.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.OnDemandDataMediumGetEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.OnQueryData(System.Object,ShellBoost.Core.OnDemandDataQueryDataEventArgs)">
+            <summary>
+            Called when a format is queried for.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:ShellBoost.Core.OnDemandDataQueryDataEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.OnDemandDataObject.EnumerateFormats(System.Runtime.InteropServices.ComTypes.DATADIR)">
             <summary>
@@ -8682,6 +8918,17 @@
             <param name="format">The format.</param>
             <param name="medium">The medium.</param>
             <exception cref="T:System.ArgumentNullException">format or medium is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.GetCompatibleMedium(ShellBoost.Core.OnDemandDataFormat,ShellBoost.Core.OnDemandDataMedium)">
+            <summary>
+            Gets a medium compatible with the given format, from an incompatible original medium.
+            </summary>
+            <param name="format">A required format.</param>
+            <param name="originalMedium">The original medium.</param>
+            <returns>
+            An instance of the OnDemandDataMedium class or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">format or originalMedium is null.</exception>
         </member>
         <member name="T:ShellBoost.Core.OnDemandDataMediumGetEventArgs">
             <summary>
@@ -8724,24 +8971,19 @@
             The medium.
             </value>
         </member>
-        <member name="T:ShellBoost.Core.OnDemandDataMediumSetEventArgs">
+        <member name="T:ShellBoost.Core.OnDemandDataQueryDataEventArgs">
             <summary>
-            Provides data for the MediumSet event of the OnDemandDataObject type.
+            Provides data for the QueryData event of the OnDemandDataObject type.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.OnDemandDataMediumSetEventArgs.#ctor(ShellBoost.Core.OnDemandDataFormat,ShellBoost.Core.OnDemandDataMedium)">
+        <member name="M:ShellBoost.Core.OnDemandDataQueryDataEventArgs.#ctor(ShellBoost.Core.OnDemandDataFormat)">
             <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandDataMediumSetEventArgs"/> class.
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.OnDemandDataQueryDataEventArgs"/> class.
             </summary>
             <param name="format">The format.</param>
-            <param name="medium">The medium.</param>
-            <exception cref="T:System.ArgumentNullException">
-            format
-            or
-            medium is null.
-            </exception>
+            <exception cref="T:System.ArgumentNullException">format is null.</exception>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandDataMediumSetEventArgs.Format">
+        <member name="P:ShellBoost.Core.OnDemandDataQueryDataEventArgs.Format">
             <summary>
             Gets the format.
             </summary>
@@ -8749,13 +8991,79 @@
             The format.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.OnDemandDataMediumSetEventArgs.Medium">
+        <member name="T:ShellBoost.Core.CommandQueryStatusEventArgs">
             <summary>
-            Gets the medium.
+            Provides data for the ShellFolder's CommandQueryStatus event.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.Folder">
+            <summary>
+            Gets the context folder.
+            </summary>
+            <value>The folder.</value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.Group">
+            <summary>
+            Gets the command group.
+            Guid.Empty is a valid value.
             </summary>
             <value>
-            The medium.
+            The command group.
             </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.Identifiers">
+            <summary>
+            Gets a list of requested command identifiers.
+            </summary>
+            <value>
+            The command identifiers.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.Flags">
+            <summary>
+            Gets a list of command identifiers flags.
+            </summary>
+            <value>
+            The command identifiers flags.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.RequiredCommandTextType">
+            <summary>
+            Gets the required command text type.
+            </summary>
+            <value>
+            The the required command text type.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.CommandTextType">
+            <summary>
+            Gets or sets the command text type.
+            </summary>
+            <value>
+            The command text type.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.CommandText">
+            <summary>
+            Gets or sets the command text.
+            </summary>
+            <value>
+            The command text.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandQueryStatusEventArgs.HResult">
+            <summary>
+            Gets or sets the Windows HRESULT code for the operation.
+            </summary>
+            <value>The Windows HRESULT code for the operation.</value>
+        </member>
+        <member name="M:ShellBoost.Core.CommandQueryStatusEventArgs.SetFlags(System.Int32,ShellBoost.Core.WindowsShell.OLECMDF)">
+            <summary>
+            Sets the flags for a given identifier.
+            </summary>
+            <param name="identifier">The identifier.</param>
+            <param name="flags">The flags.</param>
+            <exception cref="T:System.ArgumentException">identifier is not present in the Identifiers list.</exception>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.IFileNameEscapeHandler">
             <summary>
@@ -13462,6 +13770,14 @@
             <param name="entryId">The entry identifier.</param>
             <exception cref="T:System.ArgumentNullException">id is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.TransactedSaveStateDiff(ShellBoost.Core.Synchronization.ISyncEventsSink,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateDiff)">
+            <summary>
+            Saves the differential state in a transaction.
+            </summary>
+            <param name="sink">The synchronizer sink.</param>
+            <param name="diff">The differential state.</param>
+            <exception cref="T:System.ArgumentNullException">sink is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.SaveStateDiff(ShellBoost.Core.Synchronization.ISyncEventsSink,ShellBoost.Core.Synchronization.EndPointSynchronizer.StateDiff)">
             <summary>
             Saves the differential state.
@@ -13855,6 +14171,14 @@
             <summary>
             Starts all endpoints event monitoring.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.DoRunJobs(System.Collections.Generic.IReadOnlyList{ShellBoost.Core.Synchronization.StateSyncJob},System.Threading.CancellationToken)">
+            <summary>
+            Runs the jobs.
+            </summary>
+            <param name="jobs">The jobs.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <exception cref="T:System.ArgumentNullException">jobs is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.MultiPointSynchronizer.SynchronizeStates">
             <summary>
@@ -14264,6 +14588,14 @@
             </summary>
             <value>
               <c>true</c> if locking processes are searched for when a sharing violation occurs; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.MultiPointSynchronizerOptions.RunJobsInParallel">
+            <summary>
+            Gets or sets a value indicating whether jobs run in parallel.
+            </summary>
+            <value>
+              <c>true</c> if jobs run in parallel; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.SyncEntryAttributes">
@@ -18024,6 +18356,22 @@
             Sets the foreground color.
             </summary>
             <param name="color">The color.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.WriteLine(System.Object,System.ConsoleColor,System.Nullable{System.ConsoleColor})">
+            <summary>
+            Writes the text representation of the specified object, followed by the current line terminator, to the standard output stream.
+            </summary>
+            <param name="value">The value to write.</param>
+            <param name="foreGround">The foreground color.</param>
+            <param name="backGround">The optional background color.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ConsoleLogger.Write(System.Object,System.ConsoleColor,System.Nullable{System.ConsoleColor})">
+            <summary>
+            Writes the text representation of the specified object.
+            </summary>
+            <param name="value">The value to write.</param>
+            <param name="foreGround">The foreground color.</param>
+            <param name="backGround">The optional background color.</param>
         </member>
         <member name="T:ShellBoost.Core.Utilities.Conversions">
             <summary>
@@ -22385,6 +22733,14 @@
             A utility class that represents a file or directory path, using its segments.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.PathSegmentList.Empty">
+            <summary>
+            Gets the empty PathSegmentList instance.
+            </summary>
+            <value>
+            The empty PathSegmentList instance.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.PathSegmentList.#ctor(System.String,System.StringComparer)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.Utilities.PathSegmentList"/> class.
@@ -23563,6 +23919,11 @@
         <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellBrowserWindow">
             <summary>
             The CLSID_ShellBrowserWindow COM coclass.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellFSFolder">
+            <summary>
+            The CLSID_ShellFSFolder COM coclass.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellWindows">
@@ -28725,6 +29086,114 @@
             <returns>An error number or 0.</returns>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.OLECMD">
+            <summary>
+            Associates command flags from the OLECMDF enumeration with a command identifier.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMD.cmdID">
+            <summary>
+            The command identifier.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMD.cmdf">
+            <summary>
+            Flags associated with command identifier.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.OLECMD.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.OLECMDF">
+            <summary>
+            Specifies the type of support provided by an object for the command specified in an OLECMD structure.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_NOTSUPPORTED">
+            <summary>
+            The command is not supported by this object.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_SUPPORTED">
+            <summary>
+            The command is supported by this object.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_ENABLED">
+            <summary>
+            The command is available and enabled.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_LATCHED">
+            <summary>
+            The command is an on-off toggle and is currently on.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_NINCHED">
+            <summary>
+            Reserved for future use.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_INVISIBLE">
+            <summary>
+            The command is hidden.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDF.OLECMDF_DEFHIDEONCTXTMENU">
+            <summary>
+            	The command is hidden on the context menu.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.OLECMDID_WINDOWSTATE_FLAG">
+            <summary>
+            Specifies the window state.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDID_WINDOWSTATE_FLAG.OLECMDIDF_WINDOWSTATE_USERVISIBLE">
+            <summary>
+            The window is visible.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDID_WINDOWSTATE_FLAG.OLECMDIDF_WINDOWSTATE_ENABLED">
+            <summary>
+            The window has focus.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDID_WINDOWSTATE_FLAG.OLECMDIDF_WINDOWSTATE_USERVISIBLE_VALID">
+            <summary>
+            	The window is visible and valid.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDID_WINDOWSTATE_FLAG.OLECMDIDF_WINDOWSTATE_ENABLED_VALID">
+            <summary>
+            he window has focus and is valid.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.OLECMDTEXTF">
+            <summary>
+            Specifies the type of information that is stored in a CommandQueryStatusEventArgs instance.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDTEXTF.OLECMDTEXTF_NONE">
+            <summary>
+            No extra information is requested.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDTEXTF.OLECMDTEXTF_NAME">
+            <summary>
+            The object should provide the localized name of the command.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsShell.OLECMDTEXTF.OLECMDTEXTF_STATUS">
+            <summary>
+            The object should provide a localized status string for the command.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.SendMenuFile">
             <summary>
             Defines a recipient for the Shell "Send To" menu implemented as a file.
@@ -31196,6 +31665,14 @@
             <summary>
             The direction in which the items are sorted.
             </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.SORTCOLUMN.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.ASSOCCLASS">
             <summary>
@@ -36515,6 +36992,31 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
             <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.QueryCommandStatus(System.Guid,System.Int32,ShellBoost.Core.WindowsShell.OLECMDTEXTF,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Queries the item for the status of one or more commands generated by user interface events.
+            Depends on the item's IOleCommandTarget optional implementation.
+            </summary>
+            <param name="commandGroup">The command group.</param>
+            <param name="commandId">The command identifier.</param>
+            <param name="textType">The optional text type.</param>
+            <param name="bindContext">The bind context.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A tuple containing requested status or null if it cannot be determined.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.ExecCommand(System.Guid,System.Int32,System.Object,ShellBoost.Core.WindowsShell.OLECMDEXECOPT,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Executes the specified command.
+            Depends on the item's IOleCommandTarget optional implementation.
+            </summary>
+            <param name="commandGroup">The command group.</param>
+            <param name="commandId">The command identifier.</param>
+            <param name="input">An optional input argument. Depends on the command group and identifier.</param>
+            <param name="options">The options.</param>
+            <param name="bindContext">The bind context.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>An output argument. Depends on the command group and identifier. Can be null.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(ShellBoost.Core.IWithIdList,System.Boolean)">
             <summary>
