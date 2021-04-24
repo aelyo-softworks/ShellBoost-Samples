@@ -44,6 +44,9 @@ namespace ShellBoost.Samples.CloudFolderSync
             // get relative path from passed item
             var relativePath = _fileSystem.GetRelativePathFromFullPath(Item.SIGDN_FILESYSPATH);
 
+            if (!WebApi.IsSupportedThumbnailFile(Path.GetExtension(relativePath)))
+                return null;
+
             // get cloud id from cloud fs
             var entry = ep.StateProvider.GetEntryByFilePath(ep, relativePath);
             if (entry == null)

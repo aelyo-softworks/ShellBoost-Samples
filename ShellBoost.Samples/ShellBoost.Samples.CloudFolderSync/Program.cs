@@ -51,6 +51,7 @@ namespace ShellBoost.Samples.CloudFolderSync
 
             var reg = new OnDemandLocalFileSystemRegistration
             {
+                ProviderName = "Samples.CloudFolder",
                 ProviderDisplayName = DisplayName,
                 HydrationPolicy = OnDemandHydrationPolicy.Full,
                 HydrationPolicyModifier = OnDemandHydrationPolicyModifier.ValidationRequired | OnDemandHydrationPolicyModifier.AutoDehydrationAllowed,
