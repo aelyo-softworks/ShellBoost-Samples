@@ -70,5 +70,25 @@ namespace ShellBoost.Samples.RegistryFolder
                 await WindowsUtilities.ShowModelessAsync(form, owner);
             }
         }
+
+        // registry is special, a folder can have an item with the same name as a subkey
+        // so we need to distinguish between them to be able to parse as correctly as possible (some level of ambiguity cannot be prevented)
+        // only \ is invalid in registry names
+        public static ShellItemId GetValueItemId(string name) => new StringKeyShellItemId("V\\" + name);
+        public static ShellItemId GetKeyItemId(string name) => new StringKeyShellItemId("K\\" + name);
+        public static Tuple<bool?, string> ParseItemId(ShellItemId id)
+        {
+            var name = (KeyShellItemId.From(id?.Data, false) as StringKeyShellItemId)?.Value;
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            if (name.StartsWith("V\\"))
+                return new Tuple<bool?, string>(false, name.Substring(2));
+
+            if (name.StartsWith("K\\"))
+                return new Tuple<bool?, string>(true, name.Substring(2));
+
+            return new Tuple<bool?, string>(null, name);
+        }
     }
 }

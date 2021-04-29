@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -23,7 +24,7 @@ namespace ShellBoost.Samples.RegistryFolder
         public static readonly PropertyDescription DataProperty = PropertySystem.GetPropertyDescription("ShellBoost.Samples.RegistryFolder.Data", true);
 
         public RegistryKeyFolder(ShellFolder parent, string name)
-            : base(parent, new StringKeyShellItemId(name))
+            : base(parent, RootFolder.GetKeyItemId(name))
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -53,6 +54,68 @@ namespace ShellBoost.Samples.RegistryFolder
 
                 return parent + "\\" + DisplayName;
             }
+        }
+
+        public override ShellItem GetItem(ShellItemId id)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            var tuple = RootFolder.ParseItemId(id);
+            if (tuple == null)
+                return null; // not ours
+
+            using (var key = OpenKey(false))
+            {
+                if (key != null)
+                {
+                    switch (tuple.Item1)
+                    {
+                        case true: // key/folder
+                            using (var subKey = key.OpenSubKey(tuple.Item2, false))
+                            {
+                                if (subKey != null)
+                                    return new RegistryKeyFolder(this, tuple.Item2);
+                            }
+                            break;
+
+                        case false: // value/item
+                            var value = key.GetValue(tuple.Item2);
+                            if (value != null)
+                                return new RegistryValueItem(this, tuple.Item2);
+
+                            break;
+                    }
+
+                    // either the type type (folder vs value) doesn't correspond, or we're parsing some external string so fallback on our parser
+                    return GetItem(tuple.Item2);
+                }
+            }
+            return null;
+        }
+
+        protected override ShellItem GetItem(string displayName)
+        {
+            if (string.IsNullOrEmpty(displayName))
+                return null;
+
+            using (var key = OpenKey(false))
+            {
+                if (key != null)
+                {
+                    // here, we can face some level of ambiguity, we choose to favor folder
+                    using (var subKey = key.OpenSubKey(displayName, false))
+                    {
+                        if (subKey != null)
+                            return new RegistryKeyFolder(this, displayName);
+                    }
+
+                    var value = key.GetValue(displayName);
+                    if (value != null)
+                        return new RegistryValueItem(this, displayName);
+                }
+            }
+            return null;
         }
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
@@ -378,11 +441,21 @@ namespace ShellBoost.Samples.RegistryFolder
                 {
                     if (key != null)
                     {
-                        var path = System.IO.Path.Combine(Path ?? string.Empty, e.Item.DisplayName);
-                        RegRenameKey(key.Handle, path, e.NewName);
-                        e.NewId = new StringKeyShellItemId(e.NewName);
-                        e.Item.NotifyRename(e.NewId);
-                        e.HResult = ShellUtilities.S_OK;
+                        var error = RegRenameKey(key.Handle, e.Item.DisplayName, e.NewName);
+                        if (error != 0)
+                        {
+                            await WindowsUtilities.DoModelessAsync(() =>
+                            {
+                                MessageBox.Show(new Win32Window(e.HwndOwner), "The Registry Folder cannot rename '" + e.Item.DisplayName + "'. " + new Win32Exception(error).Message, "Registry Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                        }
+                        else
+                        {
+                            e.NewId = RootFolder.GetKeyItemId(e.NewName);
+                            e.Item.NotifyRename(e.NewId);
+                            e.Item.Parent?.NotifyUpdate();
+                            e.HResult = ShellUtilities.S_OK;
+                        }
                     }
                 }
                 return;
@@ -414,9 +487,9 @@ namespace ShellBoost.Samples.RegistryFolder
                         {
                             key.SetValue(e.NewName, value);
                             key.DeleteValue(e.Item.DisplayName, false);
-                            e.NewId = new StringKeyShellItemId(e.NewName);
-                            e.HResult = ShellUtilities.S_OK;
+                            e.NewId = RootFolder.GetValueItemId(e.NewName);
                             e.Item.Parent?.NotifyUpdate();
+                            e.HResult = ShellUtilities.S_OK;
                         }
                     }
                 }

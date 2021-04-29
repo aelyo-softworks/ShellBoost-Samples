@@ -9,7 +9,7 @@ namespace ShellBoost.Samples.RegistryFolder
     public class RegistryValueItem : ShellItem
     {
         public RegistryValueItem(RegistryKeyFolder parent, string name)
-            : base(parent, new StringKeyShellItemId(name))
+            : base(parent, RootFolder.GetValueItemId(name))
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
