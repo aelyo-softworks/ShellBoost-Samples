@@ -52,6 +52,8 @@ namespace ShellBoost.Samples.CloudFolderClient
             contextMenuStripList.Opening += ContextMenuStripList_Opening;
             contextMenuStripList.Opened += ContextMenuStripList_Opened;
 
+            aboutToolStripMenuItem.Click += (s, e) => About();
+            aboutToolStripMenuItem.Text = "About " + ProductName + "...";
             exitToolStripMenuItem.Click += (s, e) => Close();
             openToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>());
             th16ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 16);
@@ -69,8 +71,8 @@ namespace ShellBoost.Samples.CloudFolderClient
             cutToolStripMenuItem.Click += CutToolStripMenuItem_Click;
             copyStripMenuItem.Click += CopyStripMenuItem_Click;
             copyToolStripMenuItem.Click += CopyToolStripMenuItem_Click;
-            pasteStripMenuItem.Click += (s, e) => Paste(treeViewFolders.GetSelectedTag<WebItem>());
-            pasteToolStripMenuItem.Click += (s, e) => Paste(treeViewFolders.GetSelectedTag<WebItem>());
+            pasteStripMenuItem.Click += (s, e) => Paste();
+            pasteToolStripMenuItem.Click += (s, e) => Paste();
             eventsLogStripMenuItem.Click += EventsLogStripMenuItem_Click;
             viewStripMenuItem.DropDownOpening += ViewStripMenuItem_DropDownOpening;
             showHiddenStripMenuItem.Click += (s, e) => ShowHiddenFiles = showHiddenStripMenuItem.Checked;
@@ -119,6 +121,16 @@ namespace ShellBoost.Samples.CloudFolderClient
                 _showTempFiles = value;
                 Reload();
             }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                Delete(listViewList.GetSelectedTags<WebItem>());
+                return;
+            }
+            base.OnKeyDown(e);
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)
@@ -440,6 +452,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             });
         }
 
+        private void About()
+        {
+            var dlg = new About();
+            dlg.ShowDialog(this);
+        }
+
         private void Reload()
         {
             treeViewFolders.Nodes.Clear();
@@ -511,6 +529,20 @@ namespace ShellBoost.Samples.CloudFolderClient
                     }
                 }
             });
+        }
+
+        private void Paste()
+        {
+            var folder = treeViewFolders.GetSelectedTag<WebItem>();
+            if (listViewList.Focused)
+            {
+                var item = listViewList.GetSelectedTag<WebItem>();
+                if (item != null && item.IsFolder)
+                {
+                    folder = item;
+                }
+            }
+            Paste(folder);
         }
 
         private void Paste(WebItem folder)

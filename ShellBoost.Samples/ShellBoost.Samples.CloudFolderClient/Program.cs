@@ -26,7 +26,7 @@ namespace ShellBoost.Samples.CloudFolderClient
                     {
                         if (resource.Key.ToString().EqualsIgnoreCase(typeof(Program).Namespace + ".ico"))
                         {
-                            AppIcon = new Icon((Stream)resource.Value);
+                            AppIcon = new Icon((Stream)resource.Value, new Size(48, 48));
                             break;
                         }
                     }

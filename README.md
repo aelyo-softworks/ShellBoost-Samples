@@ -24,9 +24,9 @@ ShellBoost comes with the following samples:
 
 *	**Cloud Folder**: A list of projects based on a common back-end (Cloud Folder Site) representing a cloud storage service hosted somewhere on the internet.
 
-	*	**Cloud Folder**: A .NET Core console application shell folder. Demonstrates file system features (Copy/Paste, Drag/Drop, New menus). The server app is an ASP.NET Core web application using SQL Server as a storage back-end.
+	*	**Cloud Folder**: A .NET Core console application shell folder. Demonstrates file system features (Copy/Paste, Drag/Drop, New menus). The server app is an ASP.NET Core web application using SQL Server or a remote Windows path as a storage back-end.
 
-	*	**Cloud Folder Site**: An ASP.NET Core application companion of the Cloud Folder sample that implements an API-only file system over the web. It's using abstract interfaces, currently implemented with an SQL Database, but other storages can be added.
+	*	**Cloud Folder Site**: An ASP.NET Core application companion of the Cloud Folder sample that implements an API-only file system over the web. It's using abstract interfaces, currently implemented with an SQL Server database or a Windows physical path, but other storages can be added.
 
 	*	**Cloud Folder Client**: A .NET Core Winforms application. Can be used as a front-end to the Cloud Folder Site back-end, independent from the other Cloud Folder and Cloud Folder Sync samples. Useful for tests.
 

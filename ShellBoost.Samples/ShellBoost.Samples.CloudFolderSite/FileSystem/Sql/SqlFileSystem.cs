@@ -20,31 +20,25 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
     {
         private ConcurrentDictionary<string, EventImpl> _events = new ConcurrentDictionary<string, EventImpl>();
 
-        public SqlFileSystem()
+        public SqlFileSystem(IFileSystemEvents events, WebFolderConfigurationFileSystem configuration)
         {
+            if (events == null)
+                throw new ArgumentNullException(nameof(events));
+
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            if (configuration.Type != GetType())
+                throw new ArgumentException(null, nameof(configuration));
+
             Options = new WebFolderOptions();
-        }
-
-        public string ConnectionString { get; private set; }
-        public WebFolderOptions Options { get; }
-        public Guid UniqueId { get; private set; }
-        public IFileSystemEvents Events { get; private set; }
-        public Microsoft.Extensions.Logging.ILogger Logger { get; set; }
-
-        public override string ToString() => ConnectionString;
-
-        private void Log(string text, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
-
-        public void Initialize(Action<WebFolderOptions> setupAction, IFileSystemEvents events, IDictionary<string, string> properties)
-        {
-            var cnx = properties.GetNullifiedValue(nameof(ConnectionString));
+            var cnx = configuration.Properties.GetNullifiedValue(nameof(ConnectionString));
             if (string.IsNullOrWhiteSpace(cnx))
-                throw new WebFolderException("0001: Configuration is missing parameter '" + nameof(ConnectionString) + "'.");
+                throw new WebFolderException("0004: Configuration is missing parameter '" + nameof(ConnectionString) + "'.");
 
             Events = events;
             ConnectionString = cnx;
             UniqueId = Conversions.ComputeGuidHash(ConnectionString);
-            setupAction?.Invoke(Options);
 
             Task.Run(async () =>
             {
@@ -66,7 +60,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 var max = Options.MaxChangesDays;
                 if (max >= 0)
                 {
-                    var deleteStartTime = DateTime.Now.AddDays(-max);
                     await ClearOldChangesAsync(max > 0 ? DateTime.Now.AddDays(-max) : DateTime.MaxValue).ConfigureAwait(false);
                 }
 
@@ -77,6 +70,16 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
                 }
             }).Wait();
         }
+
+        public string ConnectionString { get; private set; }
+        public WebFolderOptions Options { get; }
+        public Guid UniqueId { get; private set; }
+        public IFileSystemEvents Events { get; private set; }
+        public Microsoft.Extensions.Logging.ILogger Logger { get; set; }
+
+        public override string ToString() => ConnectionString;
+
+        private void Log(string text, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
 
         private class EventImpl : IFileSystemEvent
         {
@@ -119,14 +122,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             public override string ToString()
             {
                 var s = Type + ":" + ItemId + ":" + ParentId;
-                if (OldName != null)
-                {
-                    s += ":" + OldName;
-                }
-
                 if (OldParentId != null)
                 {
                     s += ":" + OldParentId;
+                }
+
+                if (OldName != null)
+                {
+                    s += ":" + OldName;
                 }
                 return s;
             }
@@ -372,6 +375,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             if (item.Id == Guid.Empty)
                 throw new UnauthorizedAccessException();
+
+            if (item.ParentId == newParentId)
+                return item;
 
             options ??= new MoveOptions();
             if (options.Copy)
@@ -705,7 +711,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
 
             // build some unique key & cache path
             var key = Conversions.ComputeGuidHash(item.Id + "\0" + item.Length + "\0" + item.LastWriteTimeUtc.Ticks + "\0" + item.Name);
-            var file = Path.Combine(Path.GetTempPath(), "CloudFolderImages", key.ToString("N") + "." + width + "." + ext);
+            var file = Path.Combine(Path.GetTempPath(), "CloudFolderImages", key.ToString("N") + "." + width + ext);
             if (!IOUtilities.FileExists(file))
             {
                 // thumbnail doesn't exists yet

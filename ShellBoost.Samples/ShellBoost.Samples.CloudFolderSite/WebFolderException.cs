@@ -7,10 +7,10 @@ namespace ShellBoost.Samples.CloudFolderSite
     [Serializable]
     public class WebFolderException : Exception
     {
-        public const string Prefix = "SWF";
+        public const string Prefix = "CFS";
 
         public WebFolderException()
-            : base(Prefix + "0001: SQL Web Server exception.")
+            : base(Prefix + "0001: Cloud Folder Site exception.")
         {
         }
 

@@ -149,6 +149,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             // refreshStripMenuItem
             // 
             this.refreshStripMenuItem.Name = "refreshStripMenuItem";
+            this.refreshStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
             this.refreshStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.refreshStripMenuItem.Text = "Refresh";
             // 
@@ -247,7 +248,6 @@ namespace ShellBoost.Samples.CloudFolderClient
             // deleteTreeStripMenuItem
             // 
             this.deleteTreeStripMenuItem.Name = "deleteTreeStripMenuItem";
-            this.deleteTreeStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteTreeStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.deleteTreeStripMenuItem.Text = "Delete";
             // 
@@ -403,7 +403,6 @@ namespace ShellBoost.Samples.CloudFolderClient
             // 
             this.deleteToolStripMenuItem.DoubleClickEnabled = true;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 

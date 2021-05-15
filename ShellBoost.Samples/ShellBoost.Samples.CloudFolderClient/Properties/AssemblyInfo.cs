@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ShellBoost.Samples.CloudFolderClient - Debug")]
 [assembly: AssemblyConfiguration("DEBUG")]
 #else
-[assembly: AssemblyTitle("ShellBoost.Samples.CloudFolderClient - Release")]
+[assembly: AssemblyTitle("ShellBoost.Samples.CloudFolderClient")]
 [assembly: AssemblyConfiguration("RELEASE")]
 #endif
 [assembly: AssemblyDescription("ShellBoost Samples - Cloud Folder Client")]
@@ -19,3 +19,4 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0.0")]
