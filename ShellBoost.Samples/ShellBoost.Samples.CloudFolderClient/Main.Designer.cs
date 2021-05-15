@@ -22,6 +22,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eventsLogStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.serverInfoStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showHiddenStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTempStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,6 +107,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             // 
             this.viewStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.eventsLogStripMenuItem,
+            this.serverInfoStripMenuItem,
             this.toolStripSeparator4,
             this.showHiddenStripMenuItem,
             this.showTempStripMenuItem,
@@ -121,6 +123,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.eventsLogStripMenuItem.Name = "eventsLogStripMenuItem";
             this.eventsLogStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.eventsLogStripMenuItem.Text = "Events log";
+            // 
+            // serverInfoStripMenuItem
+            // 
+            this.serverInfoStripMenuItem.Name = "serverInfoStripMenuItem";
+            this.serverInfoStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.serverInfoStripMenuItem.Text = "Server Info...";
             // 
             // toolStripSeparator4
             // 
@@ -531,6 +539,7 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripMenuItem th48ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem th32ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem th16ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem serverInfoStripMenuItem;
     }
 }
 

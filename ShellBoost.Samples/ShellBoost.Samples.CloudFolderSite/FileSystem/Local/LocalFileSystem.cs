@@ -88,14 +88,15 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             UniqueId = Conversions.ComputeGuidHash(id.Item1 + "\0" + id.Item2);
         }
 
-        public string DirectoryPath { get; private set; }
-        public string ItemsPath { get; private set; }
-        public int SendEventsDelay { get; private set; }
-        public FileSystemEntry ItemsEntry { get; private set; }
-        public string ChangesPath { get; private set; }
+        public string DirectoryPath { get; }
+        public string ItemsPath { get; }
+        public int SendEventsDelay { get; }
+        public FileSystemEntry ItemsEntry { get; }
+        public string ChangesPath { get; }
         public WebFolderOptions Options { get; }
-        public Guid UniqueId { get; private set; }
-        public IFileSystemEvents Events { get; private set; }
+        public Guid UniqueId { get; }
+        public IFileSystemEvents Events { get; }
+        public Guid RootId => ItemsEntry.Id;
         public Microsoft.Extensions.Logging.ILogger Logger { get; set; }
 
         internal void Log(string text, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
@@ -342,8 +343,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
         public async Task<IFileSystemInfo> GetItemAsync(Guid id) => await GetLocalItemAsync(id).ConfigureAwait(false);
         public Task<LocalItem> GetLocalItemAsync(Guid id)
         {
-            if (id == Guid.Empty)
-                return Task.FromResult(new LocalItem(this, ItemsEntry));
+            if (id == Guid.Empty) // quick fail
+                return Task.FromResult<LocalItem>(null);
 
             var entry = FileSystemEntry.FromId(ItemsEntry.Volume.Guid, id, false);
             if (entry == null || !IsChildOfItems(entry))

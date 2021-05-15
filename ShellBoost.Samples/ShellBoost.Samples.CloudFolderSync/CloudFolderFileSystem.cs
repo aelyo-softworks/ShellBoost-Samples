@@ -81,6 +81,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         private async Task<WebItem> GetOrCreateFileAsync(StateSyncEntry entry, SyncGetEntryOptions options)
         {
             WebItem item;
+            options ??= new SyncGetEntryOptions();
             if (entry.Id == null)
             {
                 if (!options.IsTemporary)
@@ -92,7 +93,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 if (parent == null)
                 {
                     // root
-                    parentId = Guid.Empty;
+                    parentId = WebApi.ServerInfo.RootId;
                 }
                 else
                 {
@@ -186,7 +187,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         public void Dispose() => _serverEvents?.Dispose();
 
         #region ISyncFileSystem
-        public string RootId => ToId(Guid.Empty); // for this server, root is id = empty
+        public string RootId => ToId(WebApi.ServerInfo.RootId);
         public EndPointSynchronizer EndPointSynchronizer { get; set; } // set by MultiPointSynchronizer
         public bool HasCapability(SyncFileSystemCapability capability)
         {
@@ -233,9 +234,6 @@ namespace ShellBoost.Samples.CloudFolderSync
         public Task GetEntryContentAsync(SyncContext context, StateSyncEntry entry, Stream output, SyncGetEntryContentOptions options = null)
         {
             var item = new WebItem { Id = ToId(entry.Id) };
-            if (item.Id == Guid.Empty)
-                return Task.CompletedTask;
-
             return item.DownloadAsync(output, null, context, options);
         }
         #endregion
@@ -243,6 +241,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         #region ISyncFileSystemWriteAsync
         public async Task GetOrCreateEntryAsync(SyncContext context, StateSyncEntry entry, SyncGetEntryOptions options = null)
         {
+            options ??= new SyncGetEntryOptions();
             var file = await GetOrCreateFileAsync(entry, options).ConfigureAwait(false);
             if (file == null && !options.CanCreate)
                 return;
@@ -253,6 +252,7 @@ namespace ShellBoost.Samples.CloudFolderSync
         public async Task UpdateEntryAsync(SyncContext context, StateSyncEntry entry, SyncUpdateEntryOptions options = null)
         {
             WebItem item;
+            options ??= new SyncUpdateEntryOptions();
             var pid = ToId(entry.ParentId);
             if (string.IsNullOrEmpty(entry.Id))
             {
@@ -324,18 +324,12 @@ namespace ShellBoost.Samples.CloudFolderSync
         public Task DeleteEntryAsync(SyncContext context, StateSyncEntry entry, SyncDeleteEntryOptions options = null)
         {
             var item = new WebItem { Id = ToId(entry.Id) };
-            if (item.Id == Guid.Empty)
-                return Task.CompletedTask;
-
             return item.DeleteAsync(new DeleteOptions { Recursive = options?.Recursive == true });
         }
 
         public async Task SetEntryContentAsync(SyncContext context, StateSyncEntry entry, Stream input, SyncSetEntryContentOptions options = null)
         {
             var item = new WebItem { Id = ToId(entry.Id) };
-            if (item.Id == Guid.Empty)
-                return;
-
             item.Attributes = ToAttributes(entry);
             item.CreationTimeUtc = entry.CreationTime.ToUniversalTime().UtcDateTime;
             item.LastWriteTimeUtc = entry.LastWriteTime.ToUniversalTime().UtcDateTime;

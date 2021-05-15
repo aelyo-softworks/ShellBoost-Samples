@@ -16,7 +16,10 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
         public Guid Id { get; set; }
         public string Bitness { get; set; }
-       
+
+        [DisplayName("Root Id")]
+        public Guid RootId { get; set; }
+
         public string Configuration { get; set; }
 
         [DisplayName("Stable Version")]

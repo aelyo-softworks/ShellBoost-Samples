@@ -539,9 +539,6 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
         public static async Task<WebItem> GetAsync(Guid id)
         {
-            if (id == Guid.Empty)
-                throw new InvalidOperationException();
-
             if (TryGetFromCache(id, out var item))
                 return item;
 

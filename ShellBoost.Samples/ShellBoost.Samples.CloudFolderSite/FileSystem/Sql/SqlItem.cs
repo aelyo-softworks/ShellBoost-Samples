@@ -13,17 +13,24 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
     {
         private readonly Lazy<SqlItem> _parent;
 
-        public SqlItem()
+        public SqlItem(SqlFileSystem fileSystem)
         {
+            if (fileSystem == null)
+                throw new ArgumentNullException(nameof(fileSystem));
+
+            System = fileSystem;
             _parent = new Lazy<SqlItem>(() => System.GetSqlItemAsync(ParentId).Result);
         }
 
         [JsonIgnore]
-        public SqlFileSystem System { get; set; }
+        public SqlFileSystem System { get; }
         public Guid ParentId { get; set; }
 
         [JsonIgnore]
         public bool IsFolder => Attributes.HasFlag(FileAttributes.Directory);
+
+        [JsonIgnore]
+        public bool IsRoot => Id == System.RootId;
 
         [JsonIgnore]
         public bool IsHidden => Attributes.HasFlag(FileAttributes.Hidden);
@@ -154,8 +161,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
         }
 
         // IFolderInfo
-        public bool IsRoot => Id == Guid.Empty;
-
         public IAsyncEnumerable<IFileSystemInfo> EnumerateAsync(EnumerateOptions options = null)
         {
             if (!IsFolder)

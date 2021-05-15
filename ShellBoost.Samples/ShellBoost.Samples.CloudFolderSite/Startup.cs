@@ -49,10 +49,13 @@ namespace ShellBoost.Samples.CloudFolderSite
                 Console.WriteLine("If you don't press a key within " + maxWait + " ms, the '" + ChoosenFileSystem.DisplayName + "' will be selected automatically.");
 
                 var key = IOExtensions.ConsoleReadKey(maxWait);
-                var index = key.KeyChar - '0';
-                if (index >= 0 && index < conf.FileSystems.Count)
+                if (key.Key != ConsoleKey.Enter) // enter continues with default
                 {
-                    ChoosenFileSystem = conf.FileSystems[index];
+                    var index = key.KeyChar - '0';
+                    if (index >= 0 && index < conf.FileSystems.Count)
+                    {
+                        ChoosenFileSystem = conf.FileSystems[index];
+                    }
                 }
             }
 

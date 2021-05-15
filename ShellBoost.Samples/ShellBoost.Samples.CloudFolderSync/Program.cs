@@ -28,8 +28,10 @@ namespace ShellBoost.Samples.CloudFolderSync
 
             var id = WebApi.ServerInfo.Id; // this will connect to server, if it fails here, check connections, server, etc.
             WebApi.Logger.Log(TraceLevel.Info, "Log file path: " + fl.FilePath);
+            WebApi.Logger.Log(TraceLevel.Info, "Server file system: " + WebApi.ServerInfo.FileSystem);
             WebApi.Logger.Log(TraceLevel.Info, "Server root url: " + WebApi.RootUrl);
             WebApi.Logger.Log(TraceLevel.Info, "Server id: " + WebApi.ServerInfo.Id);
+            WebApi.Logger.Log(TraceLevel.Info, "Server root id: " + WebApi.ServerInfo.RootId);
             WebApi.Logger.Log(TraceLevel.Info, "Server time diff: " + WebApi.ServerInfo.TimeDifference);
             if (WebApi.ServerInfo.TimeDifference.TotalMinutes > 1)
             {

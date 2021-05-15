@@ -54,6 +54,7 @@ namespace ShellBoost.Samples.CloudFolderClient
 
             aboutToolStripMenuItem.Click += (s, e) => About();
             aboutToolStripMenuItem.Text = "About " + ProductName + "...";
+            serverInfoStripMenuItem.Click += (s, e) => ServerInfo();
             exitToolStripMenuItem.Click += (s, e) => Close();
             openToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>());
             th16ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 16);
@@ -298,7 +299,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             if (folder == null)
                 return;
 
-            deleteTreeStripMenuItem.Enabled = folder.Id != Guid.Empty;
+            deleteTreeStripMenuItem.Enabled = folder.Id != WebApi.ServerInfo.RootId;
             cutStripMenuItem.Enabled = deleteTreeStripMenuItem.Enabled;
             pasteStripMenuItem.Enabled = IsPasteEnabled();
         }
@@ -452,6 +453,22 @@ namespace ShellBoost.Samples.CloudFolderClient
             });
         }
 
+        private void ServerInfo()
+        {
+            var si = WebApi.ServerInfo;
+            if (si == null)
+                return;
+            
+            var msg = "File System: " + si.FileSystem  + Environment.NewLine;
+            msg += "Bitness: " + si.Bitness + Environment.NewLine;
+            msg += "Configuration: " + si.Configuration + Environment.NewLine;
+            msg += "File Version: " + si.FileVersion + Environment.NewLine;
+            msg += "Informational Version: " + si.InformationalVersion + Environment.NewLine;
+            msg += "Time Difference: " + si.TimeDifference + Environment.NewLine;
+            msg += "Root Id: " + si.RootId.ToString("N");
+            this.ShowMessage(msg);
+        }
+
         private void About()
         {
             var dlg = new About();
@@ -479,7 +496,7 @@ namespace ShellBoost.Samples.CloudFolderClient
 
                 _server = new ServerEvents();
                 _server.Event += async (s, e) => await OnServerEvent(e).ConfigureAwait(false);
-                var root = await WebApi.GetAsync(Guid.Empty).ConfigureAwait(false);
+                var root = await WebApi.GetAsync(WebApi.ServerInfo.RootId).ConfigureAwait(false);
 
                 // select root node
                 this.BeginInvoke(() =>
@@ -770,7 +787,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             nodes.Add(node);
             Lazyfy(node);
 
-            if (folder.Id == Guid.Empty)
+            if (folder.Id == WebApi.ServerInfo.RootId)
             {
                 node.Expand();
             }

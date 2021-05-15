@@ -43,7 +43,7 @@ namespace ShellBoost.Samples.CloudFolder
 
         public ShellItem GetItem(Guid apiItemId)
         {
-            if (apiItemId == Guid.Empty)
+            if (apiItemId == WebApi.ServerInfo.RootId)
                 return _root;
 
             return _root.GetItem(apiItemId);

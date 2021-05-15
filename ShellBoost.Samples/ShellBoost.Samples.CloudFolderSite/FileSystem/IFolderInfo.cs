@@ -6,8 +6,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
     // defines an abstract folder entry
     public interface IFolderInfo : IFileSystemInfo
     {
-        bool IsRoot { get; }
-
         // list all children of a folder
         IAsyncEnumerable<IFileSystemInfo> EnumerateAsync(EnumerateOptions options = null);
 

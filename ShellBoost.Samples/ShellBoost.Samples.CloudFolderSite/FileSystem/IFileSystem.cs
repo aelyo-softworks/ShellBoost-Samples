@@ -12,6 +12,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem
         // a unique id that can be used as a cache root key by clients
         Guid UniqueId { get; }
 
+        Guid RootId { get; }
+
         // logger for diags
         ILogger Logger { get; set; }
 

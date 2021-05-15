@@ -25,7 +25,8 @@ namespace ShellBoost.Samples.CloudFolder
             CanLink = true;
             IsDropTarget = true;
 
-            ApiItem = new WebItem(); // root's id is guid empty
+            ApiItem = new WebItem();
+            ApiItem.Id = WebApi.ServerInfo.RootId;
             ApiItem.Attributes |= FileAttributes.Directory;
             ApiItem.IsRoot = true;
 
@@ -42,7 +43,7 @@ namespace ShellBoost.Samples.CloudFolder
             : base(parent, new GuidKeyShellItemId(apiItem.Id))
         {
             // this is reserved for non-root folders
-            if (apiItem.Id == Guid.Empty)
+            if (apiItem.Id == WebApi.ServerInfo.RootId)
                 throw new InvalidOperationException();
 
             ApiItem = apiItem;
@@ -145,7 +146,7 @@ namespace ShellBoost.Samples.CloudFolder
             if (guidPidl == null)
                 return null;
 
-            if (guidPidl.Value == Guid.Empty)
+            if (guidPidl.Value == WebApi.ServerInfo.RootId)
                 return Root;
 
             var apiItem = WebApi.GetAsync(guidPidl.Value).Result;
@@ -300,7 +301,7 @@ namespace ShellBoost.Samples.CloudFolder
                     var options = new CreateNewItemOptions();
                     options.ExistingFileNames = files;
                     options.ExistingFolderNames = folders;
-                    var path = Core.WindowsShell.Menu.CreateNewItem(e.Verb, options, false);
+                    var path = Menu.CreateNewItem(e.Verb, options, false);
                     if (path != null)
                     {
                         var name = ApiItem.GetNewName(Path.GetFileName(path));

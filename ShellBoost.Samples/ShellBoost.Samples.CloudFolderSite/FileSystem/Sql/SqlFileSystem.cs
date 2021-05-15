@@ -36,6 +36,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (string.IsNullOrWhiteSpace(cnx))
                 throw new WebFolderException("0004: Configuration is missing parameter '" + nameof(ConnectionString) + "'.");
 
+            RootId = Guid.Empty;
             Events = events;
             ConnectionString = cnx;
             UniqueId = Conversions.ComputeGuidHash(ConnectionString);
@@ -71,10 +72,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             }).Wait();
         }
 
-        public string ConnectionString { get; private set; }
+        public Guid RootId { get; }
+        public string ConnectionString { get; }
         public WebFolderOptions Options { get; }
-        public Guid UniqueId { get; private set; }
-        public IFileSystemEvents Events { get; private set; }
+        public Guid UniqueId { get; }
+        public IFileSystemEvents Events { get; }
         public Microsoft.Extensions.Logging.ILogger Logger { get; set; }
 
         public override string ToString() => ConnectionString;
@@ -199,8 +201,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         private SqlItem NewItem(SqlDataReader reader)
         {
-            var item = new SqlItem();
-            item.System = this;
+            var item = new SqlItem(this);
             item.Id = (Guid)reader["Id"];
             item.ParentId = (Guid)reader["ParentId"];
             item.Name = (string)reader["Name"];

@@ -83,7 +83,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 Id = FileSystem.UniqueId,
                 Bitness = IntPtr.Size == 4 ? "32-bit" : "64-bit",
                 DateTime.UtcNow,
-                RootId = Guid.Empty,
+                RootId = FileSystem.RootId,
                 Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration,
                 FileVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version,
                 Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion

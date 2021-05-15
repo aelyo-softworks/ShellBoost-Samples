@@ -121,8 +121,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 throw new UnauthorizedAccessException();
 
             System.Log("Item: " + Id + " options :" + options);
-            var res = FileSystemEntry.DeleteById(Entry.Volume.Guid, Id);
-            return Task.FromResult(res);
+            IOUtilities.DirectoryDelete(Entry.GetFinalPath(), true);
+            return Task.FromResult(true);
         }
 
         public async Task<IFileSystemInfo> MoveToAsync(Guid newParentId, MoveOptions options = null)
@@ -165,7 +165,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (parentItem == null)
                 throw new InvalidOperationException();
 
-            if (item.Id == Guid.Empty)
+            if (item.IsRoot)
                 throw new UnauthorizedAccessException();
 
             var newPath = Path.Combine(parentItem.Entry.GetFinalPath(), item.EscapedName);
