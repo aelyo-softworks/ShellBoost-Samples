@@ -423,6 +423,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
             var sets = new List<string>();
             string newName = null;
+            var oldName = item.Name;
             var changed = false;
             var renamed = false;
             Guid? oldParentId = null;
@@ -534,7 +535,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             {
                 if (renamed)
                 {
-                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, newName, oldParentId);
+                    AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, oldName, oldParentId);
                 }
 
                 if (changed)

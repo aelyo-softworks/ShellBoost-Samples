@@ -121,7 +121,27 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 throw new UnauthorizedAccessException();
 
             System.Log("Item: " + Id + " options :" + options);
-            IOUtilities.DirectoryDelete(Entry.GetFinalPath(), true);
+            var parent = Parent;
+            System.DoWithoutLocalEvents(() =>
+            {
+                if (IsFolder)
+                {
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.DirectoryDelete(Entry.GetFinalPath(), true));
+                }
+                else
+                {
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.FileDelete(Entry.GetFinalPath(), true));
+                }
+            });
+
+            if (!LocalFileSystem.IsTempFile(Name))
+            {
+                System.AddEvent(Id, ParentId, WatcherChangeTypes.Deleted);
+                if (parent != null)
+                {
+                    System.AddEvent(parent.Id, parent.ParentId, WatcherChangeTypes.Changed);
+                }
+            }
             return Task.FromResult(true);
         }
 
@@ -134,51 +154,66 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (ParentId == newParentId)
                 return this;
 
-            options ??= new MoveOptions();
-            if (options.Copy)
-                return await CopyToAsync(this, newParentId).ConfigureAwait(false);
-
             var parent = await System.GetLocalItemAsync(newParentId).ConfigureAwait(false);
             if (parent == null)
                 throw new InvalidOperationException();
 
-            if (!IOUtilities.PathIsChildOrEqual(System.ItemsPath, parent.Entry.GetFinalPath()))
-                throw new InvalidOperationException();
+            options ??= new MoveOptions();
+            if (options.Copy)
+                return CopyTo(this, parent);
 
+            var oldParent = Parent;
             var finalPath = parent.Entry.GetFinalPath();
             var newPath = Path.Combine(finalPath, EscapedName);
-            if (IsFolder)
-            {
-                IOUtilities.DirectoryMove(Entry.GetFinalPath(), newPath);
-            }
-            else
-            {
-                IOUtilities.FileMove(Entry.GetFinalPath(), newPath, true);
-            }
 
-            return parent.GetLocalItemByName(Name);
+            System.DoWithoutLocalEvents(() =>
+            {
+                if (IsFolder)
+                {
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.DirectoryMove(Entry.GetFinalPath(), newPath));
+                }
+                else
+                {
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.FileMove(Entry.GetFinalPath(), newPath, true));
+                }
+            });
+
+            var newItem = parent.GetLocalItemByName(Name);
+            if (!LocalFileSystem.IsTempFile(Name))
+            {
+                System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed, null, oldParent?.Id);
+                if (oldParent != null)
+                {
+                    System.AddEvent(oldParent.Id, oldParent.ParentId, WatcherChangeTypes.Changed);
+                }
+                System.AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
+            }
+            return newItem;
         }
 
-        private async Task<LocalItem> CopyToAsync(LocalItem item, Guid newParentId)
+        private LocalItem CopyTo(LocalItem item, LocalItem newParent)
         {
-            var parentItem = await System.GetLocalItemAsync(newParentId).ConfigureAwait(false);
-            if (parentItem == null)
-                throw new InvalidOperationException();
-
-            if (item.IsRoot)
-                throw new UnauthorizedAccessException();
-
-            var newPath = Path.Combine(parentItem.Entry.GetFinalPath(), item.EscapedName);
-            if (item.IsFolder)
+            var newPath = Path.Combine(newParent.Entry.GetFinalPath(), item.EscapedName);
+            System.DoWithoutLocalEvents(() =>
             {
-                IOExtensions.DirectoryCopy(item.Entry.GetFinalPath(), newPath);
-            }
-            else
+                if (item.IsFolder)
+                {
+                    IOUtilities.WrapSharingViolations(() => IOExtensions.DirectoryCopy(item.Entry.GetFinalPath(), newPath));
+                }
+                else
+                {
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.FileOverwrite(item.Entry.GetFinalPath(), newPath, true));
+                }
+            });
+
+            var newItem = newParent.GetLocalItemByName(item.Name);
+            if (!LocalFileSystem.IsTempFile(item.Name))
             {
-                IOUtilities.FileOverwrite(item.Entry.GetFinalPath(), newPath, true);
+                System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created);
+                System.AddEvent(newParent.Id, newParent.ParentId, WatcherChangeTypes.Changed);
             }
 
-            return parentItem.GetLocalItemByName(item.Name);
+            return newItem;
         }
 
         public async Task<IFileSystemInfo> UpdateAsync(UpdateOptions options)
@@ -189,68 +224,99 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             System.Log("Item: " + Id + " '" + Name + "' attributes: " + Attributes + " options :" + options);
 
             var newItem = this;
-            string newName;
+            var changed = false;
+            var renamed = false;
+            string newName = null;
+            var oldName = Name;
+            Guid? oldParentId = null;
 
-            // move / rename
-            if ((options.Name != null && options.Name != Name) || options.ParentId.HasValue)
+            await System.DoWithoutLocalEvents(async () =>
             {
-                newName = options.Name; // can in fact be the same (if only parent id has changed)
-                string finalPath;
-
-                // new parent (move)?
-                if (options.ParentId.HasValue)
+                // move / rename
+                if ((options.Name != null && options.Name != Name) || options.ParentId.HasValue)
                 {
-                    var newParent = await System.GetLocalItemAsync(options.ParentId.Value).ConfigureAwait(false);
-                    if (newParent == null)
-                        throw new InvalidOperationException();
+                    renamed = true;
+                    newName = options.Name; // can in fact be the same (if only parent id has changed)
+                    string finalPath;
 
-                    if (options.EnsureUniqueName)
+                    // new parent (move)?
+                    if (options.ParentId.HasValue)
                     {
-                        // from a file named "file.txt", this may create files like "file (2).txt", "file (3).txt", etc.
-                        newName = newParent.GetNewChildName(newName);
-                    } // else overwrite
+                        var newParent = await System.GetLocalItemAsync(options.ParentId.Value).ConfigureAwait(false);
+                        if (newParent == null)
+                            throw new InvalidOperationException();
 
-                    finalPath = newParent.Entry.GetFinalPath();
-                    var newPath = Path.Combine(finalPath, IOExtensions.EscapeNameToFileName(newName));
-                    if (IsFolder)
-                    {
-                        IOUtilities.DirectoryMove(finalPath, newPath);
+                        if (options.Overwrite)
+                        {
+                            var existingPath = Path.Combine(newParent.Entry.FullName, newName);
+                            IOUtilities.WrapSharingViolations(() => FileSystemEntry.DeleteByPath(existingPath, true, false));
+                        }
+
+                        if (options.EnsureUniqueName)
+                        {
+                            // from a file named "file.txt", this may create files like "file (2).txt", "file (3).txt", etc.
+                            newName = newParent.GetNewChildName(newName);
+                        } // else overwrite
+
+                        finalPath = newParent.Entry.GetFinalPath();
+                        var newPath = Path.Combine(finalPath, IOExtensions.EscapeNameToFileName(newName));
+                        if (IsFolder)
+                        {
+                            IOUtilities.WrapSharingViolations(() => IOUtilities.DirectoryMove(finalPath, newPath));
+                        }
+                        else
+                        {
+                            IOUtilities.WrapSharingViolations(() => IOUtilities.FileMove(finalPath, newPath, true));
+                        }
+                        oldParentId = options.ParentId.Value;
                     }
                     else
                     {
-                        IOUtilities.FileMove(finalPath, newPath, true);
+                        // rename only
+                        if (options.EnsureUniqueName)
+                        {
+                            // from a file named "file.txt", this may create files like "file (2).txt", "file (3).txt", etc.
+                            newName = ((LocalItem)Parent).GetNewChildName(newName);
+                        } // else overwrite
+
+                        finalPath = Entry.GetFinalPath();
+                        var escaped = IOExtensions.EscapeNameToFileName(newName);
+                        IOUtilities.WrapSharingViolations(() => FileSystemEntry.RenameByPath(Entry.GetFinalPath(), escaped));
+                        finalPath = Path.Combine(Path.GetDirectoryName(finalPath), escaped);
                     }
+
+                    // reload what we changed
+                    var id = FileSystemEntry.GetIdWithVolumeGuid(finalPath);
+                    newItem = await System.GetLocalItemAsync(id.Item2).ConfigureAwait(false);
                 }
-                else
+
+                var newCreationTime = options.CreationTimeUtc.HasValue ? options.CreationTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
+                var newLastAccessTime = options.LastAccessTimeUtc.HasValue ? options.LastAccessTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
+                var newLastWriteTime = options.LastWriteTimeUtc.HasValue ? options.LastWriteTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
+                var newAttributes = options.Attributes ?? 0;
+                if (newCreationTime != DateTime.MinValue || newLastAccessTime != DateTime.MinValue || newLastWriteTime != DateTime.MinValue || newAttributes != 0)
                 {
-                    // rename only
-                    if (options.EnsureUniqueName)
-                    {
-                        // from a file named "file.txt", this may create files like "file (2).txt", "file (3).txt", etc.
-                        newName = ((LocalItem)Parent).GetNewChildName(newName);
-                    } // else overwrite
+                    IOUtilities.WrapSharingViolations(() => FileSystemEntry.SetBasicInformationById(Entry.Volume.Guid, Entry.Id, newCreationTime, newLastAccessTime, newLastWriteTime, DateTime.MinValue, newAttributes));
 
-                    finalPath = Entry.GetFinalPath();
-                    var escaped = IOExtensions.EscapeNameToFileName(newName);
-                    FileSystemEntry.RenameByPath(Entry.GetFinalPath(), escaped);
-                    finalPath = Path.Combine(Path.GetDirectoryName(finalPath), escaped);
+                    changed = true;
+                    // reload what we changed
+                    newItem = await System.GetLocalItemAsync(Id).ConfigureAwait(false);
+                }
+            }).ConfigureAwait(false);
+
+            if (!LocalFileSystem.IsTempFile(newItem.Name))
+            {
+                if (renamed)
+                {
+                    System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Renamed, oldName, oldParentId);
                 }
 
-                // reload what we changed
-                var id = FileSystemEntry.GetIdWithVolumeGuid(finalPath);
-                newItem = await System.GetLocalItemAsync(id.Item2).ConfigureAwait(false);
-            }
+                if (changed)
+                {
+                    System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed, null, oldParentId);
+                }
 
-            var newCreationTime = options.CreationTimeUtc.HasValue ? options.CreationTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
-            var newLastAccessTime = options.LastAccessTimeUtc.HasValue ? options.LastAccessTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
-            var newLastWriteTime = options.LastWriteTimeUtc.HasValue ? options.LastWriteTimeUtc.Value.ToLocalTime() : DateTime.MinValue;
-            var newAttributes = options.Attributes ?? 0;
-            if (newCreationTime != DateTime.MinValue || newLastAccessTime != DateTime.MinValue || newLastWriteTime != DateTime.MinValue || newAttributes != 0)
-            {
-                FileSystemEntry.SetBasicInformationById(Entry.Volume.Guid, Entry.Id, newCreationTime, newLastAccessTime, newLastWriteTime, DateTime.MinValue, newAttributes);
-
-                // reload what we changed
-                newItem = await System.GetLocalItemAsync(Id).ConfigureAwait(false);
+                System.AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
             }
 
             return newItem;
@@ -289,10 +355,19 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 throw new InvalidOperationException();
 
             System.Log("Item: " + Id + " '");
-            FileSystemEntry.Unprotect(Entry.Volume.Guid, Id);
-            using (var file = new FileStream(Entry.GetFinalPath(), FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+
+            await System.DoWithoutLocalEvents(async () =>
             {
-                await stream.CopyToAsync(file).ConfigureAwait(false);
+                FileSystemEntry.Unprotect(Entry.Volume.Guid, Id);
+                using (var file = new FileStream(Entry.GetFinalPath(), FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    await stream.CopyToAsync(file).ConfigureAwait(false);
+                }
+            });
+
+            if (!LocalFileSystem.IsTempFile(Name))
+            {
+                System.AddEvent(Id, ParentId, WatcherChangeTypes.Changed);
             }
         }
 
@@ -388,11 +463,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             {
                 if (options.Attributes.HasFlag(FileAttributes.Directory))
                 {
-                    IOUtilities.DirectoryCreate(newPath);
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.DirectoryCreate(newPath));
                 }
                 else
                 {
-                    File.WriteAllBytes(newPath, Array.Empty<byte>());
+                    IOUtilities.WrapSharingViolations(() => File.WriteAllBytes(newPath, Array.Empty<byte>()));
                 }
 
                 item = parentItem.GetLocalItemByName(unescapedName);

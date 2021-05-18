@@ -431,7 +431,7 @@ namespace ShellBoost.Samples.CloudFolderClient
                     {
                         if (parentNode.IsExpanded)
                         {
-                            if (item.IsFolder)
+                            if (item != null && item.IsFolder)
                             {
                                 var existingNode = parentNode.Nodes.Find(item.Id.ToString(), true).FirstOrDefault();
                                 if (existingNode == null)

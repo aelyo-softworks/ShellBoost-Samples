@@ -20,6 +20,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
         private ConcurrentDictionary<string, EventImpl> _events = new ConcurrentDictionary<string, EventImpl>();
         private readonly LocalFileSystemWatcher _watcher;
         private readonly Timer _eventsTimer;
+        private bool _suspendLocalEvents;
         private bool _disposedValue;
 
         public LocalFileSystem(IFileSystemEvents events, WebFolderConfigurationFileSystem configuration)
@@ -157,10 +158,38 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
 
         internal static bool IsTempFile(string name) => name?.IndexOf(Core.Synchronization.ContentMover.DefaultTemporaryEntryMarker, StringComparison.OrdinalIgnoreCase) >= 0;
 
-        private void AddLocalEvent(LocalFileSystemWatcherEventArgs e)
+        internal T DoWithoutLocalEvents<T>(Func<T> action)
         {
-            if (IsTempFile(Path.GetFileName(e.Path)))
-                return;
+            var suspended = _suspendLocalEvents;
+            _suspendLocalEvents = true;
+            try
+            {
+                return action();
+            }
+            finally
+            {
+                _suspendLocalEvents = suspended;
+            }
+        }
+
+        internal void DoWithoutLocalEvents(Action action)
+        {
+            var suspended = _suspendLocalEvents;
+            _suspendLocalEvents = true;
+            try
+            {
+                action();
+            }
+            finally
+            {
+                _suspendLocalEvents = suspended;
+            }
+        }
+
+        public void AddEvent(Guid itemId, Guid parentId, WatcherChangeTypes action, string oldName = null, Guid? oldParentId = null)
+        {
+            var evt = new EventImpl(this) { ItemId = itemId, ParentId = parentId, Type = action, OldName = oldName, OldParentId = oldParentId };
+            _events[evt.ToString()] = evt;
 
             try
             {
@@ -170,11 +199,19 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             {
                 // race condition
             }
+        }
+
+        private void AddLocalEvent(LocalFileSystemWatcherEventArgs e)
+        {
+            if (_suspendLocalEvents)
+                return;
+
+            if (IsTempFile(Path.GetFileName(e.Path)))
+                return;
 
             var name = e.OldPath != null ? Path.GetFileName(e.OldPath) : null;
             var oldName = name != null ? IOExtensions.UnescapeFileNameToName(name) : null;
-            var evt = new EventImpl(this) { ItemId = e.Id, ParentId = e.ParentId, Type = e.Action, OldName = oldName, OldParentId = e.OldParentId };
-            _events[evt.ToString()] = evt;
+            AddEvent(e.Id, e.ParentId, e.Action, oldName, e.OldParentId);
         }
 
         private void SendEvents(bool inline = false)
@@ -331,6 +368,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
 
         private bool IsChildOfItems(FileSystemEntry entry)
         {
+            if (entry == null)
+                return false;
+
             if (ItemsEntry.Volume.Guid != entry.Volume.Guid)
                 return false;
 
@@ -347,8 +387,11 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 return Task.FromResult<LocalItem>(null);
 
             var entry = FileSystemEntry.FromId(ItemsEntry.Volume.Guid, id, false);
-            if (entry == null || !IsChildOfItems(entry))
+            if (entry == null)
                 return Task.FromResult<LocalItem>(null);
+
+            if (!IsChildOfItems(entry))
+                throw new WebFolderException("0006: Id '" + entry.GetFinalPath() + "' is not a child or grand child of ItemsEntry '" + ItemsEntry.GetFinalPath() + "'.");
 
             return Task.FromResult(new LocalItem(this, entry));
         }

@@ -301,7 +301,7 @@ namespace ShellBoost.Samples.CloudFolder
                     var options = new CreateNewItemOptions();
                     options.ExistingFileNames = files;
                     options.ExistingFolderNames = folders;
-                    var path = Menu.CreateNewItem(e.Verb, options, false);
+                    var path = Core.WindowsShell.Menu.CreateNewItem(e.Verb, options, false);
                     if (path != null)
                     {
                         var name = ApiItem.GetNewName(Path.GetFileName(path));
