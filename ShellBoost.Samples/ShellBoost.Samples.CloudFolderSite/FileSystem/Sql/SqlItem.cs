@@ -157,7 +157,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (IsFolder)
                 throw new InvalidOperationException();
 
-            return System.OpenThumbnailReadAsync(this, width, offset, count);
+            return System.OpenThumbnailReadAsync(this, width, offset);
         }
 
         // IFolderInfo

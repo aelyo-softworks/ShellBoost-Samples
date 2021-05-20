@@ -391,7 +391,10 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 return Task.FromResult<LocalItem>(null);
 
             if (!IsChildOfItems(entry))
-                throw new WebFolderException("0006: Id '" + entry.GetFinalPath() + "' is not a child or grand child of ItemsEntry '" + ItemsEntry.GetFinalPath() + "'.");
+            {
+                Log("Id '" + entry.GetFinalPath() + "' is not a child or grand child of ItemsEntry '" + ItemsEntry.GetFinalPath() + "'.");
+                return Task.FromResult<LocalItem>(null);
+            }
 
             return Task.FromResult(new LocalItem(this, entry));
         }

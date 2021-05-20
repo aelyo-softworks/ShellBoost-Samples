@@ -237,6 +237,9 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (parentItem == null)
                 throw new ArgumentNullException(nameof(parentItem));
 
+            if (!parentItem.IsFolder)
+                throw new ArgumentNullException(nameof(parentItem));
+
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
@@ -321,12 +324,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             return await GetSqlItemAsync(parentItem.Id, name).ConfigureAwait(false);
         }
 
-        public async Task<IFileSystemInfo> CreateAsync(SqlItem parentItem, string name, CreateOptions options = null)
-        {
-            var item = await CreateSqlItemAsync(parentItem, name, options).ConfigureAwait(false);
-            return item;
-        }
-
+        public async Task<IFileSystemInfo> CreateAsync(SqlItem parentItem, string name, CreateOptions options = null) => await CreateSqlItemAsync(parentItem, name, options).ConfigureAwait(false);
         private async Task<SqlItem> CopyToAsync(SqlItem item, Guid newParentId)
         {
             if (item == null)
@@ -377,12 +375,12 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (item.Id == Guid.Empty)
                 throw new UnauthorizedAccessException();
 
-            if (item.ParentId == newParentId)
-                return item;
-
             options ??= new MoveOptions();
             if (options.Copy)
                 return await CopyToAsync(item, newParentId).ConfigureAwait(false);
+
+            if (item.ParentId == newParentId)
+                return item;
 
             Log("New Parent: " + newParentId + " item: " + item.Id + " '" + item.Name + "'");
 
@@ -414,7 +412,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
-            Log("Item: " + item.Id + " '" + item.Name + "' attributes: " + item.Attributes);
+            Log("Item: " + item.Id + " '" + item.Name + "' attributes: " + item.Attributes + " options: " + options);
 
             var sql = "UPDATE Item SET ";
             var parameters = new Dictionary<string, object>();
@@ -422,7 +420,6 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             var finalId = item.Id;
 
             var sets = new List<string>();
-            string newName = null;
             var oldName = item.Name;
             var changed = false;
             var renamed = false;
@@ -431,7 +428,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
             if ((options.Name != null && options.Name != item.Name) || options.ParentId.HasValue)
             {
                 renamed = true;
-                newName = options.Name;
+                var newName = options.Name;
                 parameters["name"] = newName;
                 sets.Add("Name = @name");
 
@@ -699,7 +696,7 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
             }
         }
 
-        public async Task<Stream> OpenThumbnailReadAsync(SqlItem item, int width, long? offset, long? count)
+        public async Task<Stream> OpenThumbnailReadAsync(SqlItem item, int width, long? offset)
         {
             if (width <= 0)
                 throw new ArgumentOutOfRangeException(nameof(width));

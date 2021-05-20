@@ -315,7 +315,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 item.Attributes = ToAttributes(entry);
                 item.LastWriteTimeUtc = entry.LastWriteTime.UtcDateTime;
                 item.CreationTimeUtc = entry.CreationTime.UtcDateTime;
-                item = await WebApi.UploadAsync(item).ConfigureAwait(false);
+                item = await item.UploadAsync().ConfigureAwait(false);
             }
 
             CopyToEntry(item, entry);

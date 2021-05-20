@@ -237,6 +237,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                 var moveOptions = new MoveOptions();
                 moveOptions.Copy = ParseOptions(options).GetValue("copy", false);
+                moveOptions.Overwrite = ParseOptions(options).GetValue("overwrite", false);
+                moveOptions.EnsureUniqueName = ParseOptions(options).GetValue("ensureUniqueName", true);
                 return await item.MoveToAsync(newParentId, moveOptions).ConfigureAwait(false);
             }
             catch (UnauthorizedAccessException)
@@ -408,7 +410,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                     }
 
                     createOptions.Overwrite = updateOptions?.Overwrite == true;
-                    createOptions.EnsureUniqueName = true;
+                    createOptions.EnsureUniqueName = updateOptions?.EnsureUniqueName ?? true;
                     createOptions.Attributes = updateRequest.Attributes ?? FileAttributes.Normal;
                     var created = await ((IFolderInfo)parent).CreateAsync(updateRequest.Name, createOptions).ConfigureAwait(false);
                     if (created == null)
@@ -417,7 +419,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                     if (updateOptions != null)
                     {
                         updateOptions.Name = created.Name;
-                        await created.UpdateAsync(updateOptions).ConfigureAwait(false);
+                        created = await created.UpdateAsync(updateOptions).ConfigureAwait(false);
                     }
                     return Ok(created);
                 }
@@ -439,7 +441,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                     if (updateOptions != null)
                     {
-                        await item.UpdateAsync(updateOptions).ConfigureAwait(false);
+                        item = await item.UpdateAsync(updateOptions).ConfigureAwait(false);
                     }
                     return Ok(item);
                 }
@@ -452,7 +454,7 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                 if (updateOptions != null)
                 {
-                    await item.UpdateAsync(updateOptions).ConfigureAwait(false);
+                    item = await item.UpdateAsync(updateOptions).ConfigureAwait(false);
                 }
 
                 return Ok(item);
