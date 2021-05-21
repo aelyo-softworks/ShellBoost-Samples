@@ -56,6 +56,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             aboutToolStripMenuItem.Text = "About " + ProductName + "...";
             serverInfoStripMenuItem.Click += (s, e) => ServerInfo();
             exitToolStripMenuItem.Click += (s, e) => Close();
+            downloadStripMenuItem.Click += (s, e) => Download();
             openToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>());
             th16ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 16);
             th32ToolStripMenuItem.Click += (s, e) => Open(listViewList.GetSelectedTag<WebItem>(), 32);
@@ -269,6 +270,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             }
 
             var item = listViewList.GetSelectedTag<WebItem>();
+            downloadStripMenuItem.Enabled = item != null && !item.IsFolder;
             th16ToolStripMenuItem.Visible = item != null;
             th32ToolStripMenuItem.Visible = item != null;
             th48ToolStripMenuItem.Visible = item != null;
@@ -453,13 +455,32 @@ namespace ShellBoost.Samples.CloudFolderClient
             });
         }
 
+        private void Download()
+        {
+            var item = listViewList.GetSelectedTag<WebItem>();
+            if (item == null || item.IsFolder) // we don't support download whole folders
+                return;
+
+            var ofd = new SaveFileDialog();
+            ofd.Title = "Choose";
+            ofd.CheckPathExists = true;
+            ofd.FileName = item.Name;
+            ofd.ValidateNames = true;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            var dlg = new Download(item, ofd.FileName);
+            dlg.ShowDialog(this);
+        }
+
         private void ServerInfo()
         {
             var si = WebApi.ServerInfo;
             if (si == null)
                 return;
-            
-            var msg = "File System: " + si.FileSystem  + Environment.NewLine;
+
+            var msg = "File System: " + si.FileSystem + Environment.NewLine;
             msg += "Bitness: " + si.Bitness + Environment.NewLine;
             msg += "Configuration: " + si.Configuration + Environment.NewLine;
             msg += "File Version: " + si.FileVersion + Environment.NewLine;

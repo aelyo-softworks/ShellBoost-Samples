@@ -54,6 +54,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceContentStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -347,6 +348,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.openToolStripMenuItem,
             this.uploadToolStripMenuItem,
             this.replaceContentStripMenuItem,
+            this.downloadStripMenuItem,
             this.toolStripSeparator1,
             this.cutToolStripMenuItem,
             this.copyToolStripMenuItem,
@@ -362,7 +364,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.th32ToolStripMenuItem,
             this.th16ToolStripMenuItem});
             this.contextMenuStripList.Name = "contextMenuStripList";
-            this.contextMenuStripList.Size = new System.Drawing.Size(205, 314);
+            this.contextMenuStripList.Size = new System.Drawing.Size(205, 336);
             // 
             // openToolStripMenuItem
             // 
@@ -382,6 +384,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.replaceContentStripMenuItem.Name = "replaceContentStripMenuItem";
             this.replaceContentStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.replaceContentStripMenuItem.Text = "Replace content...";
+            // 
+            // downloadStripMenuItem
+            // 
+            this.downloadStripMenuItem.Name = "downloadStripMenuItem";
+            this.downloadStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.downloadStripMenuItem.Text = "Download...";
             // 
             // toolStripSeparator1
             // 
@@ -547,6 +555,7 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripMenuItem th32ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem th16ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serverInfoStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem downloadStripMenuItem;
     }
 }
 
