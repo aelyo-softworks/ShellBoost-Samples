@@ -259,6 +259,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             // deleteTreeStripMenuItem
             // 
             this.deleteTreeStripMenuItem.Name = "deleteTreeStripMenuItem";
+            this.deleteTreeStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.deleteTreeStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.deleteTreeStripMenuItem.Text = "Delete";
             // 
