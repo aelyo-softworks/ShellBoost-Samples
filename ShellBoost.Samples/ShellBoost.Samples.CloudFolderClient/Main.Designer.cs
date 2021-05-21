@@ -233,18 +233,21 @@ namespace ShellBoost.Samples.CloudFolderClient
             // cutStripMenuItem
             // 
             this.cutStripMenuItem.Name = "cutStripMenuItem";
+            this.cutStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.cutStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.cutStripMenuItem.Text = "Cut";
             // 
             // copyStripMenuItem
             // 
             this.copyStripMenuItem.Name = "copyStripMenuItem";
+            this.copyStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.copyStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.copyStripMenuItem.Text = "Copy";
             // 
             // pasteStripMenuItem
             // 
             this.pasteStripMenuItem.Name = "pasteStripMenuItem";
+            this.pasteStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.pasteStripMenuItem.Text = "Paste";
             // 
@@ -387,18 +390,21 @@ namespace ShellBoost.Samples.CloudFolderClient
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.cutToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             // 

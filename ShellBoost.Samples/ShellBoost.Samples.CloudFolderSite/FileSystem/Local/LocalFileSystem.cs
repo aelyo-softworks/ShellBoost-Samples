@@ -100,7 +100,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
         public Guid RootId => ItemsEntry.Id;
         public Microsoft.Extensions.Logging.ILogger Logger { get; set; }
 
-        internal void Log(string text, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
+        internal void Log(string text, [CallerFilePath] string filePath = null, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ":" + Path.GetFileNameWithoutExtension(filePath) + ":" + methodName + ": " + text);
 
         public int ClearOldTempFiles(DateTime startTime)
         {

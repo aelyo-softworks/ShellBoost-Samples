@@ -38,8 +38,8 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
         public IContentTypeProvider ContentTypeProvider { get; }
         public ILogger<FileSystemController> Logger { get; }
 
-        private void Log(string text, [CallerMemberName] string methodName = null) => Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
-        private void LogWarning(string text, [CallerMemberName] string methodName = null) => Logger.LogWarning(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
+        private void Log(string text, [CallerFilePath] string filePath = null, [CallerMemberName] string methodName = null) => Logger.LogInformation(Thread.CurrentThread.ManagedThreadId + ":" + Path.GetFileNameWithoutExtension(filePath) + ":" + methodName + ": " + text);
+        private void LogWarning(string text, [CallerFilePath] string filePath = null, [CallerMemberName] string methodName = null) => Logger.LogWarning(Thread.CurrentThread.ManagedThreadId + ":" + Path.GetFileNameWithoutExtension(filePath) + ":" + methodName + ": " + text);
 
         private static IDictionary<string, string> ParseOptions(string options) => DictionarySerializer<string>.Deserialize(options, separator: '|', assignment: ':');
 
@@ -214,10 +214,12 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
             }
             catch (InvalidOperationException)
             {
+                LogWarning("InvalidOperationException");
                 return BadRequest();
             }
             catch (UnauthorizedAccessException)
             {
+                LogWarning("UnauthorizedAccessException");
                 return Unauthorized();
             }
         }
@@ -241,8 +243,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 moveOptions.EnsureUniqueName = ParseOptions(options).GetValue("ensureUniqueName", true);
                 return await item.MoveToAsync(newParentId, moveOptions).ConfigureAwait(false);
             }
+            catch (InvalidOperationException)
+            {
+                LogWarning("InvalidOperationException");
+                return BadRequest();
+            }
             catch (UnauthorizedAccessException)
             {
+                LogWarning("UnauthorizedAccessException");
                 return Unauthorized();
             }
         }
@@ -275,8 +283,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 updateOptions.Overwrite = op.GetValue("overwrite", false);
                 return await item.UpdateAsync(updateOptions).ConfigureAwait(false);
             }
+            catch (InvalidOperationException)
+            {
+                LogWarning("InvalidOperationException");
+                return BadRequest();
+            }
             catch (UnauthorizedAccessException)
             {
+                LogWarning("UnauthorizedAccessException");
                 return Unauthorized();
             }
         }
@@ -301,8 +315,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
                 Log("Deleted item " + item.Id + " result: " + result);
                 return result;
             }
+            catch (InvalidOperationException)
+            {
+                LogWarning("InvalidOperationException");
+                return BadRequest();
+            }
             catch (UnauthorizedAccessException)
             {
+                LogWarning("UnauthorizedAccessException");
                 return Unauthorized();
             }
         }
@@ -322,7 +342,6 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
         {
             try
             {
-                Log(string.Empty);
                 if (!IsMultipartContentType(Request.ContentType))
                 {
                     LogWarning("Content is not multipart.");
@@ -459,8 +478,14 @@ namespace ShellBoost.Samples.CloudFolderSite.Controllers
 
                 return Ok(item);
             }
+            catch (InvalidOperationException)
+            {
+                LogWarning("InvalidOperationException");
+                return BadRequest();
+            }
             catch (UnauthorizedAccessException)
             {
+                LogWarning("UnauthorizedAccessException");
                 return Unauthorized();
             }
         }

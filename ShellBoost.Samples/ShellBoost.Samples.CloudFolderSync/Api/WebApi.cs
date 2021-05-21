@@ -66,6 +66,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
 
                 Logger?.Log(TraceLevel.Verbose, "PostAsync " + _baseUrl + url + Environment.NewLine + json);
                 var msg = await _client.PostAsync(_baseUrl + url, content).ConfigureAwait(false);
+                msg.EnsureSuccessStatusCode();
                 var responseJson = await msg.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 return await JsonSerializer.DeserializeAsync<T>(responseJson, _serializerOptions).ConfigureAwait(false);
             }
@@ -166,40 +167,38 @@ namespace ShellBoost.Samples.CloudFolder.Api
             }
 
             var resp = await _client.SendAsync(req, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-            if (resp != null)
+            resp.EnsureSuccessStatusCode();
+            var cancellationToken = options.CancellationToken;
+            if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
             {
-                var cancellationToken = options.CancellationToken;
-                if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
+                using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))
                 {
-                    using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    var completed = 0L;
+                    var buffer = new byte[65536]; // below 85K (LOH)
+
+                    do
                     {
-                        var completed = 0L;
-                        var buffer = new byte[65536]; // below 85K (LOH)
+                        var read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length)).ConfigureAwait(false);
+                        if (read == 0)
+                            break;
 
-                        do
+                        completed += read;
+                        await outputStream.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
+                        context.ProgressSink.Progress(context, resp.Content.Headers.ContentLength.Value, completed);
+
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            var read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length)).ConfigureAwait(false);
-                            if (read == 0)
-                                break;
-
-                            completed += read;
-                            await outputStream.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
-                            context.ProgressSink.Progress(context, resp.Content.Headers.ContentLength.Value, completed);
-
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
-                                return;
-                            }
-
+                            Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
+                            return;
                         }
-                        while (true);
+
                     }
+                    while (true);
                 }
-                else
-                {
-                    await resp.Content.CopyToAsync(outputStream, cancellationToken).ConfigureAwait(false);
-                }
+            }
+            else
+            {
+                await resp.Content.CopyToAsync(outputStream, cancellationToken).ConfigureAwait(false);
             }
         }
 

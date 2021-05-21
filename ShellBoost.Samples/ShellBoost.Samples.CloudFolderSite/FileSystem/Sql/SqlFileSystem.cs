@@ -81,7 +81,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Sql
 
         public override string ToString() => ConnectionString;
 
-        private void Log(string text, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ": " + methodName + ": " + text);
+        private void Log(string text, [CallerFilePath] string filePath = null, [CallerMemberName] string methodName = null) => Logger?.LogInformation(Thread.CurrentThread.ManagedThreadId + ":" + Path.GetFileNameWithoutExtension(filePath) + ":" + methodName + ": " + text);
 
         private class EventImpl : IFileSystemEvent
         {

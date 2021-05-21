@@ -100,9 +100,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
 
-            System.Log("Item: " + Id + " name :" + name);
+            if (!IsFolder)
+                throw new InvalidOperationException();
+
+            System.Log("Item: " + Id + " name: " + name);
             var entry = GetLocalItemByName(name);
-            return await Task.FromResult(entry).ConfigureAwait(false);
+            var item = await Task.FromResult(entry).ConfigureAwait(false);
+            System.Log("=> Item: " + item?.Id + " name: '" + item?.Name + "'");
+            return item;
         }
 
         private LocalItem GetLocalItemByName(string unescapedName)
@@ -115,12 +120,54 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             return new LocalItem(System, entry);
         }
 
+        private static T WithAttributesUnset<T>(string filePath, Func<FileAttributes, T> action)
+        {
+            var atts = FileSystemEntry.GetAttributesByPath(filePath);
+            var newAtts = atts;
+            newAtts &= ~FileAttributes.ReadOnly;
+            newAtts &= ~FileAttributes.Hidden;
+            if (newAtts == atts)
+                return action(atts);
+
+            FileSystemEntry.SetAttributesByPath(filePath, newAtts);
+            try
+            {
+                return action(atts);
+            }
+            finally
+            {
+                FileSystemEntry.SetAttributesByPath(filePath, atts);
+            }
+        }
+
+        private static void WithAttributesUnset(string filePath, Action<FileAttributes> action)
+        {
+            var atts = FileSystemEntry.GetAttributesByPath(filePath);
+            var newAtts = atts;
+            newAtts &= ~FileAttributes.ReadOnly;
+            newAtts &= ~FileAttributes.Hidden;
+            if (newAtts == atts)
+            {
+                action(atts);
+                return;
+            }
+
+            try
+            {
+                action(atts);
+            }
+            finally
+            {
+                FileSystemEntry.SetAttributesByPath(filePath, atts);
+            }
+        }
+
         public Task<bool> DeleteAsync(DeleteOptions options = null)
         {
             if (IsRoot)
                 throw new UnauthorizedAccessException();
 
-            System.Log("Item: " + Id + " options :" + options);
+            System.Log("Item: " + Id + " options: " + options);
             var parent = Parent;
             System.DoWithoutLocalEvents(() =>
             {
@@ -150,7 +197,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (IsRoot)
                 throw new UnauthorizedAccessException();
 
-            System.Log("Item: " + Id + " newParentId :" + newParentId + " options :" + options);
+            System.Log("Item: " + Id + " newParentId: " + newParentId + " options: " + options);
             var parent = await System.GetLocalItemAsync(newParentId).ConfigureAwait(false);
             if (parent == null)
                 throw new InvalidOperationException();
@@ -195,7 +242,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 }
             });
 
-            var newItem = parent.GetLocalItemByName(escaped);
+            var newItem = parent.GetLocalItemByName(IOExtensions.UnescapeFileNameToName(escaped));
             if (!LocalFileSystem.IsTempFile(Name) && newItem != null)
             {
                 System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Changed, null, oldParent?.Id);
@@ -205,6 +252,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 }
                 System.AddEvent(parent.Id, parent.ParentId, WatcherChangeTypes.Changed);
             }
+
+            System.Log("=> New Item: " + newItem?.Id + " name: '" + newItem?.Name + "'");
             return newItem;
         }
 
@@ -241,13 +290,14 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 }
             });
 
-            var newItem = newParent.GetLocalItemByName(item.Name);
+            var newItem = newParent.GetLocalItemByName(IOExtensions.UnescapeFileNameToName(escaped));
             if (!LocalFileSystem.IsTempFile(item.Name) && newItem != null)
             {
                 System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created);
                 System.AddEvent(newParent.Id, newParent.ParentId, WatcherChangeTypes.Changed);
             }
 
+            System.Log("=> New Item: " + newItem?.Id + " name: '" + newItem?.Name + "'");
             return newItem;
         }
 
@@ -344,7 +394,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 }
             }).ConfigureAwait(false);
 
-            if (!LocalFileSystem.IsTempFile(newItem.Name))
+            if (newItem != null && !LocalFileSystem.IsTempFile(newItem.Name))
             {
                 if (renamed)
                 {
@@ -359,6 +409,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 System.AddEvent(newItem.ParentId, (newItem.Parent?.ParentId).GetValueOrDefault(), WatcherChangeTypes.Changed);
             }
 
+            System.Log("=> New Item: " + newItem?.Id + " name: '" + newItem?.Name + "' changed: " + changed + " renamed: " + renamed);
             return newItem;
         }
 
@@ -378,7 +429,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (IsFolder)
                 throw new InvalidOperationException();
 
-            System.Log("Item: " + Id + " offset :" + offset + " count :" + count);
+            System.Log("Item: " + Id + " offset: " + offset + " count: " + count);
             var stream = new FileStream(Entry.GetFinalPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             if (offset != null)
             {
@@ -391,23 +442,35 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
 
         public async Task WriteAsync(Stream stream)
         {
+            if (IsRoot)
+                throw new UnauthorizedAccessException();
+
             if (IsFolder)
                 throw new InvalidOperationException();
 
-            System.Log("Item: " + Id + " stream: " + stream?.Length);
+            var path = Entry.GetFinalPath();
+
+            // note: stream lengh = 0 here is normal, length will be updated when read from
+            System.Log("Item: " + Id + " name: '" + Name + "' length: " + stream?.Length + " path: " + path);
 
             await System.DoWithoutLocalEvents(async () =>
             {
-                FileSystemEntry.Unprotect(Entry.Volume.Guid, Id);
-                using (var file = new FileStream(Entry.GetFinalPath(), FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                await IOUtilities.WrapSharingViolationsAsync(async () =>
                 {
-                    if (stream != null)
+                    await WithAttributesUnset(path, async (p) =>
                     {
-                        await stream.CopyToAsync(file).ConfigureAwait(false);
-                    }
-                }
+                        using (var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                        {
+                            if (stream != null)
+                            {
+                                await stream.CopyToAsync(file).ConfigureAwait(false);
+                            }
+                        }
+                    }).ConfigureAwait(false);
+                }).ConfigureAwait(false);
             }).ConfigureAwait(false);
 
+            System.Log("=> length: " + stream?.Length + " position: " + stream?.Position);
             if (!LocalFileSystem.IsTempFile(Name))
             {
                 System.AddEvent(Id, ParentId, WatcherChangeTypes.Changed);
@@ -422,7 +485,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (IsFolder)
                 throw new InvalidOperationException();
 
-            System.Log("Item: " + Id + " width :" + width + " offset :" + offset + " count :" + count);
+            System.Log("Item: " + Id + " width: " + width + " offset: " + offset + " count: " + count);
             var ext = Path.GetExtension(EscapedName);
             if (!IsSupportedThumbnailFile(ext))
                 throw new InvalidOperationException("Thumbnail are unsupported for extension '" + ext + "'.");
@@ -430,30 +493,41 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             // build some unique key & cache path
             var key = Conversions.ComputeGuidHash(Id + "\0" + Length + "\0" + LastWriteTimeUtc.Ticks + "\0" + Name);
             var file = Path.Combine(Path.GetTempPath(), "CloudFolderImages", key.ToString("N") + "." + width + ext);
-            if (!FileSystemEntry.FileExistsByPath(file))
+            var path = Entry.GetFinalPath();
+            if (!FileSystemEntry.FileExistsByPath(file) && FileSystemEntry.ExistsByPath(path))
             {
                 // thumbnail doesn't exists yet
                 // ensure directory exists
                 FileSystemEntry.CreateDirectoryByPath(Path.GetDirectoryName(file), false);
                 using (var stream = new FileStream(Entry.GetFinalPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using (var input = Image.FromStream(stream))
+                    if (stream.Length > 0)
                     {
-                        using (var bmp = ImageUtilities.ResizeImageByWidth(input, width))
+                        using (var input = Image.FromStream(stream))
                         {
-                            IOUtilities.WrapSharingViolations(() => bmp.Save(file));
+                            using (var bmp = ImageUtilities.ResizeImageByWidth(input, width))
+                            {
+                                IOUtilities.WrapSharingViolations(() => bmp.Save(file));
+                            }
                         }
                     }
                 }
             }
 
-            var output = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            if (offset.HasValue)
+            if (FileSystemEntry.ExistsByPath(file))
             {
-                output.Seek(offset.Value, SeekOrigin.Begin);
-                // note we don't support count
+                var output = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                if (output.Length > 0)
+                {
+                    if (offset.HasValue)
+                    {
+                        output.Seek(offset.Value, SeekOrigin.Begin);
+                        // note we don't support count
+                    }
+                    return Task.FromResult<Stream>(output);
+                }
             }
-            return Task.FromResult<Stream>(output);
+            return Task.FromResult<Stream>(null);
         }
 
         private static bool IsSupportedThumbnailFile(string ext)
@@ -512,13 +586,16 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                     {
                         if (options.InputStream != null)
                         {
+                            System.Log("Write length: " + options.InputStream.Length);
                             using (var file = new FileStream(targetPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                             {
                                 await options.InputStream.CopyToAsync(file).ConfigureAwait(false);
                             }
+                            System.Log("Write length: " + options.InputStream.Length + " position: " + options.InputStream.Position);
                         }
                         else
                         {
+                            System.Log("Write zero length");
                             File.WriteAllBytes(targetPath, Array.Empty<byte>());
                         }
                     }).ConfigureAwait(false);
@@ -532,6 +609,8 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 System.AddEvent(newItem.Id, newItem.ParentId, WatcherChangeTypes.Created);
                 System.AddEvent(parent.Id, parent.ParentId, WatcherChangeTypes.Changed);
             }
+
+            System.Log("=> New Item: " + newItem?.Id + " name: '" + newItem?.Name + "'");
             return newItem;
         }
 
@@ -540,7 +619,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
             if (!IsFolder)
                 throw new InvalidOperationException();
 
-            //System.Log("Item: " + Id + " options :" + options);
+            //System.Log("Item: " + Id + " options: " + options);
             options ??= new EnumerateOptions();
             var enumerate = Enumerate(options);
             if (options.FoldersFirst || options.SortByName)
