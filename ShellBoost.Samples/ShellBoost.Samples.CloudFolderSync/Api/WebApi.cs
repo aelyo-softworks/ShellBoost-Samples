@@ -154,51 +154,58 @@ namespace ShellBoost.Samples.CloudFolder.Api
                 url += "/" + width.Value;
             }
 
-            Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + url);
             options ??= new SyncGetEntryContentOptions();
             var req = new HttpRequestMessage(HttpMethod.Get, url)
             {
                 VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher // allow HTTP/2
             };
 
-            if (options.Offset > 0 && options.Count > 0)
+            // requested total len is either the full size or a portion
+            var requestedTotal = item.Length;
+
+            // partial request? (being called this way is only possible if our file system implementation reports GetPartialContent SyncFileSystemCapability)
+            if (options.Offset > 0 || options.Count > 0)
             {
-                req.Headers.Range = new RangeHeaderValue(options.Offset, options.Offset + (options.Count - 1));
+                requestedTotal = options.Count;
+                req.Headers.Range = new RangeHeaderValue(options.Offset, options.Offset + options.Count - 1);
             }
+
+            Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + url + " offset:" + options.Offset + " requestedTotal:" + requestedTotal);
 
             var resp = await _client.SendAsync(req, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             resp.EnsureSuccessStatusCode();
             var cancellationToken = options.CancellationToken;
-            if (context?.ProgressSink != null && resp.Content.Headers.ContentLength.HasValue)
+
+            using (var stream = await resp.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
             {
-                using (var stream = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                var completed = 0L;
+                var buffer = new byte[65536]; // below 85K (LOH)
+                do
                 {
-                    var completed = 0L;
-                    var buffer = new byte[65536]; // below 85K (LOH)
+                    // server doesn't necessary honor count/to range so we have to max stream out ourselves
+                    var left = (int)Math.Min(buffer.Length, requestedTotal - completed);
+                    if (left == 0)
+                        break;
 
-                    do
+                    var read = await stream.ReadAsync(buffer.AsMemory(0, left), cancellationToken).ConfigureAwait(false);
+                    if (read == 0)
+                        break;
+
+                    completed += read;
+                    await outputStream.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
+
+                    // note: Starting with ShellBoost 1.8.0.0, we don't need to report progress here any more it's reported automatically
+                    // however, in this case, it's used by CloudFolderClient for the progress dialog box so we keep it
+                    context?.ProgressSink?.Progress(context, item.Length, completed + options.Offset);
+
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        var read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length)).ConfigureAwait(false);
-                        if (read == 0)
-                            break;
-
-                        completed += read;
-                        await outputStream.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
-                        context.ProgressSink.Progress(context, resp.Content.Headers.ContentLength.Value, completed);
-
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
-                            return;
-                        }
-
+                        Logger?.Log(TraceLevel.Verbose, "DownloadAsync " + _baseUrl + "download/" + item.Id + " Cancellation was requested.");
+                        return;
                     }
-                    while (true);
+
                 }
-            }
-            else
-            {
-                await resp.Content.CopyToAsync(outputStream, cancellationToken).ConfigureAwait(false);
+                while (true);
             }
         }
 

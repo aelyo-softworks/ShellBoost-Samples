@@ -9230,6 +9230,109 @@
             Occurs when a file system event occurs.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef">
+            <summary>
+            Defines an event filter set.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.#ctor(System.Nullable{System.IO.WatcherChangeTypes},System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef"/> class.
+            </summary>
+            <param name="action">The optional action to match.</param>
+            <param name="path">The optional path to match.</param>
+            <param name="oldPath">The optional old path to match.</param>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Action">
+            <summary>
+            Gets or sets the optional action to match.
+            </summary>
+            <value>
+            The action.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Path">
+            <summary>
+            Gets or sets the optional path to match.
+            </summary>
+            <value>
+            The path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.OldPath">
+            <summary>
+            Gets or sets the optional old path to match.
+            </summary>
+            <value>
+            The old path.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.MaximumCount">
+            <summary>
+            Gets or sets the maximum count.
+            </summary>
+            <value>
+            The maximum count.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Count">
+            <summary>
+            Gets or sets the effective matches count.
+            </summary>
+            <value>
+            The count.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.HasReachedMaximum">
+            <summary>
+            Gets a value indicating whether this instance has reached the maximum count, if MaximumCount is defined.
+            </summary>
+            <value>
+              <c>true</c> if this instance has reached maximum; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Matches(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
+            <summary>
+            Determines if the input event must be filtered.
+            </summary>
+            <param name="e">The <see cref="T:ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs"/> instance containing the event data.</param>
+            <returns>true if the input event must be filtered; otherwise false.</returns>
+            <exception cref="T:System.ArgumentNullException">e is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object" />, is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object" /> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef.Equals(ShellBoost.Core.Synchronization.LocalFileSystemEventFilterDef)">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+        </member>
         <member name="T:ShellBoost.Core.Synchronization.OnDemandCallbackContext">
             <summary>
             Defines a NTFS callback context.
@@ -9249,6 +9352,14 @@
             </summary>
             <value>
             The calling process identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.FileSize">
+            <summary>
+            Gets the file size.
+            </summary>
+            <value>
+            The file size.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.ProcessPackageName">
@@ -9290,6 +9401,24 @@
             </summary>
             <value>
             The offset.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.LastDehydrationReason">
+            <summary>
+            Gets the last dehydration reason.
+            </summary>
+            <value>
+            The last dehydration reason.
+            Will be valid in HydrateData context.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.LastDehydrationTime">
+            <summary>
+            Gets the last dehydration time.
+            </summary>
+            <value>
+            The last dehydration time.
+            Will be valid in HydrateData context.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandCallbackContext.Count">
@@ -9334,6 +9463,36 @@
             <returns>
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
+        </member>
+        <member name="T:ShellBoost.Core.Synchronization.OnDemandDehydrationReason">
+            <summary>
+            Specifies the dehydration reason.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.OnDemandDehydrationReason.None">
+            <summary>
+            There's no reason.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.OnDemandDehydrationReason.UserManual">
+            <summary>
+            Manual user dehydration.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.OnDemandDehydrationReason.SystemLowSpace">
+            <summary>
+            The system is on low space condition.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.OnDemandDehydrationReason.SystemInactivity">
+            <summary>
+            The system is inactive.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.Synchronization.OnDemandDehydrationReason.SystemOSUpgrade">
+            <summary>
+            The system had an OS upgrade.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemStatus">
             <summary>
@@ -10396,6 +10555,7 @@
         <member name="M:ShellBoost.Core.Synchronization.IProgressSink.Progress(ShellBoost.Core.Synchronization.SyncContext,System.Int64,System.Int64)">
             <summary>
             Report a progress change.
+            If OnDemandLocalFileSystemOptions.IsAutomaticReportingEnabled is set to true, this method will do nothing.
             </summary>
             <param name="context">The original context.</param>
             <param name="total">A value representing the state of the completed operation.</param>
@@ -10534,14 +10694,11 @@
             Defines an event filter.
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.#ctor(System.TimeSpan,System.Nullable{System.IO.WatcherChangeTypes},System.String,System.String)">
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.#ctor(System.TimeSpan)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter"/> class.
             </summary>
             <param name="maximumDuration">The maximum duration.</param>
-            <param name="action">The optional action to match.</param>
-            <param name="path">The optional path to match.</param>
-            <param name="oldPath">The optional old path to match.</param>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.CreationTime">
             <summary>
@@ -10559,38 +10716,6 @@
             The filter maximum duration.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Action">
-            <summary>
-            Gets or sets the optional action to match.
-            </summary>
-            <value>
-            The action.
-            </value>
-        </member>
-        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Path">
-            <summary>
-            Gets or sets the optional path to match.
-            </summary>
-            <value>
-            The path.
-            </value>
-        </member>
-        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.OldPath">
-            <summary>
-            Gets or sets the optional old path to match.
-            </summary>
-            <value>
-            The old path.
-            </value>
-        </member>
-        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.MaximumCount">
-            <summary>
-            Gets or sets the maximum count.
-            </summary>
-            <value>
-            The maximum count.
-            </value>
-        </member>
         <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.IsExpired">
             <summary>
             Gets a value indicating whether this filter has expired.
@@ -10599,12 +10724,20 @@
               <c>true</c> if this filter has expired; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Count">
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.LeftDuration">
             <summary>
-            Gets or sets the effective matches count.
+            Gets the filter left duration.
             </summary>
             <value>
-            The count.
+            The filter left duration.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Defs">
+            <summary>
+            Gets the actions to match.
+            </summary>
+            <value>
+            The actions to match.
             </value>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystemEventFilter.Matches(ShellBoost.Core.Utilities.LocalFileSystemWatcherEventArgs)">
@@ -10749,9 +10882,9 @@
             <summary>
             Determines whether this instance's entries are always synchronized.
             </summary>
-            <param name="endPoints">The endpoints that must be checked for synchronization. Only returned if the return value is false.</param>
+            <param name="endPoints">The endpoints that must be checked for synchronization. Only meaningful if the return value is false.</param>
             <returns>
-              <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
+              <c>null</c> if no other endpoints exists, <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.OnSavingChange(ShellBoost.Core.Synchronization.StateSyncChange,ShellBoost.Core.Synchronization.StateEvent)">
@@ -10820,14 +10953,13 @@
             entry is null.
             </exception>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.EntryRename(System.String,System.Guid,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.EntryRename(System.String,System.String,System.Boolean)">
             <summary>
             Renames an entry using its 128-bit identifier.
             It can also be used to move a file if the newName parameter is set to a full file path.
             Note this method cannot move from a volume to another.
             </summary>
-            <param name="volumeGuid">The volume Guid.</param>
-            <param name="id">The entry identifier.</param>
+            <param name="path">The path of the entry to rename.</param>
             <param name="newName">The new name. It can be a file name, or a full rooted path.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
         </member>
@@ -10892,6 +11024,7 @@
             <param name="fullPath">The entry full path.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
             <exception cref="T:System.ArgumentNullException">fullPath is null.</exception>
+            <exception cref="T:System.ArgumentException">fullPath is not rooted.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.AddToWaitingForSynchronization(System.String)">
             <summary>
@@ -10900,6 +11033,16 @@
             <param name="localRelativePath">The local relative path.</param>
             <exception cref="T:System.ArgumentNullException">localRelativePath is null.</exception>
             <exception cref="T:System.ArgumentException">localRelativePath is a rooted path.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.GetHydrationRequiredCount(ShellBoost.Core.Synchronization.OnDemandCallbackContext,System.Int64,System.Int64)">
+            <summary>
+            Computes the hydration required count of bytes.
+            </summary>
+            <param name="callbackContext">The callback context.</param>
+            <param name="requiredOffset">The required file offset.</param>
+            <param name="requiredCount">The required count of bytes to read. This is the original value passed by the Windows file system, but may be less than the file size.</param>
+            <returns>The final required count of bytes to read.</returns>
+            <exception cref="T:System.ArgumentNullException">callbackContext is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.OnDemandLocalFileSystem.UpdateStatus(ShellBoost.Core.Synchronization.OnDemandCallbackContext,ShellBoost.Core.Synchronization.OnDemandLocalFileSystemStatus)">
             <summary>
@@ -11465,6 +11608,23 @@
             </summary>
             <value>
             The size of a hydration chunk.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.IsAutomaticReportingEnabled">
+            <summary>
+            Gets or sets a value indicating whether automatic reporting is enabled.
+            If set to true, the Progress method of the OnDemandLocalFileSystem's IProgressSink implementation will do nothing.
+            </summary>
+            <value>
+              <c>true</c> if automatic reporting is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.ForceFullHydration">
+            <summary>
+            Gets or sets a value indicating whether a file is always hydrated to its size, not only to the Windows file system requested size.
+            </summary>
+            <value>
+              <c>true</c> if a file is always hydrated to its size; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Synchronization.OnDemandLocalFileSystemOptions.SynchronizationStateEndPointSynchronizerIdentifiers">
@@ -12895,7 +13055,7 @@
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.AddSelfEventFilter(System.IO.WatcherChangeTypes,System.String)">
             <summary>
-            Adds an event filter on a path using defalt filter maximum duration.
+            Adds an event filter on a path using default filter maximum duration.
             </summary>
             <param name="action">The action.</param>
             <param name="path">The path.</param>
@@ -12923,11 +13083,9 @@
             </summary>
             <param name="filter">The filter.</param>
             <param name="action">The action.</param>
-            <exception cref="T:System.ArgumentNullException">
-            filter is null
+            <exception cref="T:System.ArgumentNullException">filter is null
             or
-            action is null.
-            </exception>
+            action is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.WithSelfEventFilter``1(ShellBoost.Core.Synchronization.LocalFileSystemEventFilter,System.Func{``0})">
             <summary>
@@ -12972,9 +13130,9 @@
             <summary>
             Determines whether this instance's entries are always synchronized.
             </summary>
-            <param name="endPoints">The endpoints that must be checked for synchronization. Only returned if the return value is false.</param>
+            <param name="endPoints">The endpoints that must be checked for synchronization. Only meaningful if the return value is false.</param>
             <returns>
-              <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
+              <c>null</c> if no other endpoints exists, <c>true</c> if this instance's entries are always synchronized; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.IsSynchronized(System.String)">
@@ -13109,13 +13267,16 @@
             parentEntry is null.</exception>
             <exception cref="T:System.ArgumentException">null - parentEntry</exception>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.NotifyShell(ShellBoost.Core.WindowsShell.SHCNE,System.String)">
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.NotifyShell(ShellBoost.Core.WindowsShell.SHCNE,System.String,System.Boolean,System.Boolean)">
             <summary>
             Notifies the shell of an event.
             </summary>
             <param name="evt">The event.</param>
             <param name="path">The path.</param>
+            <param name="force">if set to <c>true</c> notify the Shell even if NotifyShell is set to false.</param>
+            <param name="ensureSTA">if set to <c>true</c> ensure the call is maded on an STA thread.</param>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
+            <exception cref="T:System.ArgumentException">path is not rooted.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.CreateEntry(ShellBoost.Core.Synchronization.SyncContext,System.String,ShellBoost.Core.Synchronization.StateSyncEntry)">
             <summary>
@@ -13174,32 +13335,55 @@
             fileSystemEntry is null.
             </exception>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.EntryRename(System.String,System.Guid,System.String,System.Boolean)">
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.GetFullPath(ShellBoost.Core.Utilities.FileSystemEntry)">
+            <summary>
+            Gets the full path for a given file system entry.
+            Can be the entry FullName or the result of the GetFinalPath() method.
+            </summary>
+            <param name="entry">The entry.</param>
+            <returns>The full path.</returns>
+            <exception cref="T:System.ArgumentNullException">entry is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.EntryRename(System.String,System.String,System.Boolean)">
             <summary>
             Renames an entry using its 128-bit identifier.
             It can also be used to move a file if the newName parameter is set to a full file path.
             Note this method cannot move from a volume to another.
             </summary>
-            <param name="volumeGuid">The volume Guid.</param>
-            <param name="id">The entry identifier.</param>
+            <param name="fullPath">The path of the entry to rename.</param>
             <param name="newName">The new name. It can be a file name, or a full rooted path.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
         </member>
-        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.EntryDelete(System.String,System.Guid,System.Boolean,System.Boolean)">
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.FileDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
-            Deletes an entry using its 128-bit identifier.
+            Deletes the specified file using its 128-bit identifier.
             </summary>
-            <param name="volumeGuid">The volume Guid.</param>
-            <param name="id">The entry identifier.</param>
-            <param name="unprotect">If set to true and the entry has the ReadOnly attribute, it will be removed before deletion.</param>
+            <param name="fullPath">The path of the file to remove.</param>
+            <param name="unprotect">If set to true and the file has the ReadOnly attribute, it will be removed before deletion.</param>
             <param name="throwOnError">true to throw errors; otherwise false.</param>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.DirectoryDelete(System.String,System.Boolean,System.Boolean)">
             <summary>
             Deletes the specified directory and, if indicated, any subdirectories and files in the directory.
             </summary>
-            <param name="path">The path of the directory to remove.</param>
+            <param name="fullPath">The path of the directory to remove.</param>
             <param name="recursive">true to remove directories, subdirectories, and files in path; otherwise, false.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.DirectoryCreate(System.String,System.Boolean)">
+            <summary>
+            Creates the specified directory.
+            </summary>
+            <param name="fullPath">The path of the directory to create.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.LocalFileSystem.FileCreate(System.String,System.Boolean)">
+            <summary>
+            Creates the specified file.
+            </summary>
+            <param name="fullPath">The path of the directory to create.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
@@ -13207,8 +13391,8 @@
             <summary>
             Overwrites a file.
             </summary>
-            <param name="source">The source.</param>
-            <param name="destination">The destination.</param>
+            <param name="sourceFullPath">The source.</param>
+            <param name="destinationFullPath">The destination.</param>
             <param name="unprotect">if set to <c>true</c> the destination will be unprotected if needed.</param>
             <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
             <exception cref="T:System.ArgumentNullException">source or destination is null.</exception>
@@ -13813,6 +13997,13 @@
             Sends the accumulated events and update the differential state.
             </summary>
             <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.AddFileSystemEvent(ShellBoost.Core.Synchronization.SyncFileSystemEventArgs)">
+            <summary>
+            Adds a file system event manually.
+            </summary>
+            <param name="eventArgs">The event data.</param>
+            <exception cref="T:System.ArgumentNullException">eventArgs is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Synchronization.EndPointSynchronizer.OnFileSystemEvent(ShellBoost.Core.Synchronization.SyncFileSystemEventArgs)">
             <summary>
@@ -16094,6 +16285,14 @@
             Represents a common dialog box that allows a user to specify a folder to pick.
             </summary>
         </member>
+        <member name="P:ShellBoost.Core.Utilities.FolderPicker.Result">
+            <summary>
+            Gets the result item.
+            </summary>
+            <value>
+            The result.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Utilities.FolderPicker.ResultPath">
             <summary>
             Gets the result path.
@@ -16156,6 +16355,13 @@
             </summary>
             <param name="options">The default options.</param>
             <returns>The options to use.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.FolderPicker.ShowDialog(System.Boolean)">
+            <summary>
+            Displays the dialog.
+            </summary>
+            <param name="throwOnError">if set to <c>true</c> errors can be thrown.</param>
+            <returns>If the user clicks the OK button of the dialog that is displayed true is returned; otherwise, false.</returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.FolderPicker.ShowDialog(System.IntPtr,System.Boolean)">
             <summary>
@@ -21504,6 +21710,11 @@
             The default wrap sharing violations wait time value (100).
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.Utilities.IOUtilities.LongFileNamePrefix">
+            <summary>
+            The long file name prefix "\\?\".
+            </summary>
+        </member>
         <member name="F:ShellBoost.Core.Utilities.IOUtilities.MinFileTime">
             <summary>
             The minimum Windows file time value.
@@ -21715,6 +21926,30 @@
             <exception cref="T:System.ArgumentNullException">source is null
             or
             destination is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.DirectoryCopy(System.String,System.String,System.Boolean)">
+            <summary>
+            Copies a directory.
+            </summary>
+            <param name="sourcePath">The source directory path.</param>
+            <param name="targetPath">The target directory path.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <exception cref="T:System.ArgumentNullException">sourcePath is null
+            or
+            targetPath is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.DirectoryCopy(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.Boolean)">
+            <summary>
+            Copies a directory.
+            </summary>
+            <param name="source">The source directory.</param>
+            <param name="target">The target directory.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw in case of errors.</param>
+            <exception cref="T:System.ArgumentNullException">
+            source is null
+            or
+            target is null.
+            </exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.DirectoryMove(System.String,System.String,System.Boolean)">
             <summary>
@@ -21964,6 +22199,24 @@
             </summary>
             <param name="urls">The urls.</param>
             <returns>A string representing the combination of urls.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.NormalizePath(System.String)">
+            <summary>
+            Normalizes a path with the long file name prefix "\\?\".
+            If the path is not rooted, it will be returned as is.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>A normalized path.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.IOUtilities.DenormalizePath(System.String)">
+            <summary>
+            Removes the long file name prefix "\\?\" from a rooted path.
+            If the path is not rooted, it will be returned as is.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>A denormalized path.</returns>
+            <exception cref="T:System.ArgumentNullException">path is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.IOUtilities.PathToValidFilePath(System.String,System.String,System.String)">
             <summary>
@@ -23373,21 +23626,27 @@
             The Windows S_OK value (0).
             </summary>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateInstance``1(System.Guid)">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateInstance``1(System.Guid,ShellBoost.Core.WindowsShell.CLSCTX,System.Boolean)">
             <summary>
             Creates an instance of a COM object.
             </summary>
             <typeparam name="T">The expected type.</typeparam>
             <param name="clsid">The COM object class identifier.</param>
-            <returns>A typed instance of the COM object.</returns>
+            <param name="context">The context.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw.</param>
+            <returns>A typed instance of the COM object or the default value.</returns>
         </member>
-        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateInstance(System.Guid,System.Guid)">
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.CreateInstance(System.Guid,System.Guid,ShellBoost.Core.WindowsShell.CLSCTX,System.Boolean)">
             <summary>
             Creates an instance of a COM object.
             </summary>
             <param name="clsid">The COM object class identifier.</param>
             <param name="iid">The requested COM interface identifier.</param>
-            <returns>A typed instance of the COM object.</returns>
+            <param name="context">The context.</param>
+            <param name="throwOnError">if set to <c>true</c> errors may be throw.</param>
+            <returns>
+            An instance of the COM object or null of an error occurred.
+            </returns>
         </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetKinds(System.String)">
             <summary>

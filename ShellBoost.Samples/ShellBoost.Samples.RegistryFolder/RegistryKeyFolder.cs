@@ -224,6 +224,11 @@ namespace ShellBoost.Samples.RegistryFolder
             Modify,
         }
 
+        /// <summary>
+        /// Called when [shell menu item invoke].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ShellMenuInvokeEventArgs"/> instance containing the event data.</param>
         private async void OnShellMenuItemInvoke(object sender, ShellMenuInvokeEventArgs e)
         {
             // e.MenuItem can be null for standard commands
@@ -238,13 +243,15 @@ namespace ShellBoost.Samples.RegistryFolder
                 case MenuCommand.Modify:
                     if (e.Items.Count == 1) // we only support modification of one value at a time
                     {
-                        using (var form = new EditValue()) // note because of async + await, Dispose will happen in continuing task
+                        // ShellBoost's implicit threads are MTA but we need an STA to show UI (with Winforms, WPF, etc.)
+                        _ = TaskUtilities.EnsureSTAThreadTask(() =>
                         {
-                            var valueItem = (RegistryValueItem)e.Items[0];
-                            form.LoadEditor(BaseParent.Hive, Path, valueItem.KeyName);
-                            await WindowsUtilities.ShowModelessAsync(form, e.HwndOwner).ContinueWith((task) =>
+                            using (var form = new EditValue())
                             {
-                                if (task.Result == DialogResult.OK)
+                                var valueItem = (RegistryValueItem)e.Items[0];
+                                form.LoadEditor(BaseParent.Hive, Path, valueItem.KeyName);
+                                var result = WindowsUtilities.RunForm(form);
+                                if (result == DialogResult.OK)
                                 {
                                     using (var key = OpenKey(true))
                                     {
@@ -252,8 +259,8 @@ namespace ShellBoost.Samples.RegistryFolder
                                         valueItem.Parent?.NotifyUpdate();
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                         return;
                     }
                     break;
@@ -361,6 +368,9 @@ namespace ShellBoost.Samples.RegistryFolder
 
                 case RegistryValueKind.MultiString:
                     return new string[] { string.Empty };
+
+                case RegistryValueKind.Binary:
+                    return System.Text.Encoding.UTF8.GetBytes("Hello World");
 
                 default:
                     return null;

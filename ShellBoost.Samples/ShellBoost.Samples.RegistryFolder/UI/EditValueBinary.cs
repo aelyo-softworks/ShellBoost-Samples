@@ -7,7 +7,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
     // note this control does not support write operations. Well, ok, this is just a sample for ShellBoost ...
     public partial class EditValueBinary : UserControl, IEditValueControl
     {
-        private ByteViewer _editor;
+        private readonly ByteViewer _editor;
         private byte[] _value;
 
         public EditValueBinary()
@@ -23,10 +23,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
 
         public object Value
         {
-            get
-            {
-                return _value;
-            }
+            get => _value;
             set
             {
                 _value = (byte[])value;

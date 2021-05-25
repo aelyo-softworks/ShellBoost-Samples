@@ -6,7 +6,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
 {
     public partial class EditValueDWord : UserControl, IEditValueControl
     {
-        private ValidatingTextBox _vtb;
+        private readonly ValidatingTextBox _vtb;
         private object _value;
 
         public EditValueDWord()
@@ -29,11 +29,11 @@ namespace ShellBoost.Samples.RegistryFolder.UI
             var styles = RadioButtonHexadecimal.Checked ? NumberStyles.HexNumber : NumberStyles.Integer;
             if (_value is long)
             {
-                e.Cancel = !long.TryParse(e.NewText, styles, null, out long l);
+                e.Cancel = !long.TryParse(e.NewText, styles, null, out _);
             }
             else
             {
-                e.Cancel = !int.TryParse(e.NewText, styles, null, out int i);
+                e.Cancel = !int.TryParse(e.NewText, styles, null, out _);
             }
         }
 
@@ -67,13 +67,6 @@ namespace ShellBoost.Samples.RegistryFolder.UI
             return int.Parse(_vtb.Text, styles);
         }
 
-        private void RadioButtonHexadecimal_CheckedChanged(object sender, EventArgs e)
-        {
-            Value = GetValue(!RadioButtonHexadecimal.Checked);
-        }
-
-        private void RadioButtonDecimal_CheckedChanged(object sender, EventArgs e)
-        {
-        }
+        private void RadioButtonHexadecimal_CheckedChanged(object sender, EventArgs e) => Value = GetValue(!RadioButtonHexadecimal.Checked);
     }
 }

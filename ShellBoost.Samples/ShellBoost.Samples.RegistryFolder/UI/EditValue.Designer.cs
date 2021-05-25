@@ -125,7 +125,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EditValue";
-            this.Text = "EditValue";
+            this.Text = "Edit Value";
             this.TablePanel.ResumeLayout(false);
             this.TablePanel.PerformLayout();
             this.HeaderPanel.ResumeLayout(false);

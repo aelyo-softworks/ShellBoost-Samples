@@ -50,7 +50,7 @@
             this.buttonOk.TabIndex = 1;
             this.buttonOk.Text = "Close";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOk_Click);
             // 
             // Properties
             // 

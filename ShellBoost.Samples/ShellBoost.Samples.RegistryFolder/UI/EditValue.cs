@@ -61,20 +61,28 @@ namespace ShellBoost.Samples.RegistryFolder.UI
                             {
                                 case RegistryValueKind.Binary:
                                     _editor = new EditValueBinary();
+                                    Text = "Binary Viewer";
                                     break;
 
                                 case RegistryValueKind.MultiString:
                                     _editor = new EditValueMultiString();
+                                    Text = "Multi String Editor";
                                     break;
 
                                 case RegistryValueKind.ExpandString:
                                 case RegistryValueKind.String:
                                     _editor = new EditValueString();
+                                    Text = "String Editor";
                                     break;
 
                                 case RegistryValueKind.QWord:
+                                    _editor = new EditValueDWord();
+                                    Text = "QWord Editor";
+                                    break;
+
                                 case RegistryValueKind.DWord:
                                     _editor = new EditValueDWord();
+                                    Text = "DWord Editor";
                                     break;
                             }
                         }
@@ -107,14 +115,7 @@ namespace ShellBoost.Samples.RegistryFolder.UI
             }
         }
 
-        private void OK_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void Cancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void OK_Click(object sender, EventArgs e) => Close();
+        private void Cancel_Click(object sender, EventArgs e) => Close();
     }
 }

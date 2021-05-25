@@ -69,6 +69,8 @@ namespace ShellBoost.Samples.CloudFolderClient
             uploadToolStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>());
             uploadTreeStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>());
             replaceContentStripMenuItem.Click += (s, e) => UploadTo(treeViewFolders.GetSelectedTag<WebItem>(), listViewList.GetSelectedTag<WebItem>());
+            copyIdStripMenuItem.Click += (s, e) => CopyId(treeViewFolders.GetSelectedTag<WebItem>());
+            copyId2StripMenuItem.Click += (s, e) => CopyId(listViewList.GetSelectedTag<WebItem>());
             cutStripMenuItem.Click += CutStripMenuItem_Click;
             cutToolStripMenuItem.Click += CutToolStripMenuItem_Click;
             copyStripMenuItem.Click += CopyStripMenuItem_Click;
@@ -621,6 +623,14 @@ namespace ShellBoost.Samples.CloudFolderClient
                 var options = new RenameOptions();
                 await WebApi.RenameAsync(item, newName).ConfigureAwait(false);
             });
+        }
+
+        private void CopyId(WebItem item)
+        {
+            if (item == null)
+                return;
+
+            Clipboard.SetText(item.Id.ToString());
         }
 
         private void Open(WebItem item, int? width = null)

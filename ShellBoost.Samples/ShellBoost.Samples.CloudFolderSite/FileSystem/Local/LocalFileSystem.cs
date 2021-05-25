@@ -43,7 +43,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
                 throw new WebFolderException("0003: Configuration parameter '" + nameof(DirectoryPath) + "' must be a rooted path.");
 
             Events = events;
-            DirectoryPath = IOExtensions.NormalizePath(path);
+            DirectoryPath = IOUtilities.NormalizePath(path);
             ItemsPath = Path.Combine(DirectoryPath, "Items");
             ChangesPath = Path.Combine(DirectoryPath, "Changes");
 

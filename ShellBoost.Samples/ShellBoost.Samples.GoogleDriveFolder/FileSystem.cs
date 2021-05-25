@@ -124,10 +124,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 return output.WriteAsync(content, (int)options.Offset, (int)Math.Min(options.Count, content.Length));
             }
 
-            var sink = context.ProgressSink;
-            if (sink == null)
-                return Account.DownloadFileAsync(entry.Id, options.Offset, options.Count, output, options.CancellationToken);
-
             return Account.DownloadFileAsync(entry.Id, options.Offset, options.Count, output, options.CancellationToken, (p) =>
             {
                 if (p.Exception != null)
@@ -138,7 +134,6 @@ namespace ShellBoost.Samples.GoogleDriveFolder
                 else
                 {
                     Account.Log(TraceLevel.Verbose, "Progress:" + p.BytesDownloaded + " / " + entry.Size);
-                    sink.Progress(context, entry.Size, p.BytesDownloaded);
                 }
             });
         }

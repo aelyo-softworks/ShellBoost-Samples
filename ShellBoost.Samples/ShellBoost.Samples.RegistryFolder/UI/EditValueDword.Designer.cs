@@ -73,7 +73,6 @@
             this.RadioButtonDecimal.TabIndex = 1;
             this.RadioButtonDecimal.Text = "&Decimal";
             this.RadioButtonDecimal.UseVisualStyleBackColor = true;
-            this.RadioButtonDecimal.CheckedChanged += new System.EventHandler(this.RadioButtonDecimal_CheckedChanged);
             // 
             // RadioButtonHexadecimal
             // 

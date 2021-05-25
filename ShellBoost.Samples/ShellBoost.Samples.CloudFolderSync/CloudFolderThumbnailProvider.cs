@@ -54,7 +54,7 @@ namespace ShellBoost.Samples.CloudFolderSync
 
             using (var ms = new MemoryStream())
             {
-                WebApi.DownloadAsync(new WebItem { Id = CloudFolderFileSystem.ToId(entry.Id) }, ms, width).Wait();
+                WebApi.DownloadAsync(new WebItem { Id = CloudFolderFileSystem.ToId(entry.Id), Name = entry.Name, Length = entry.Size }, ms, width).Wait();
                 if (ms.Length == 0) // error?
                     return null;
 

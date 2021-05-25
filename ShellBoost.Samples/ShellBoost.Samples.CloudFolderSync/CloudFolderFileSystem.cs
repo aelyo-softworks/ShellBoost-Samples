@@ -233,7 +233,7 @@ namespace ShellBoost.Samples.CloudFolderSync
 
         public Task GetEntryContentAsync(SyncContext context, StateSyncEntry entry, Stream output, SyncGetEntryContentOptions options = null)
         {
-            var item = new WebItem { Id = ToId(entry.Id) };
+            var item = new WebItem { Id = ToId(entry.Id), Name = entry.Name, Length = entry.Size };
             return item.DownloadAsync(output, null, context, options);
         }
         #endregion

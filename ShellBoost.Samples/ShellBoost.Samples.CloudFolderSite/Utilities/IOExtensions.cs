@@ -107,21 +107,6 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
             return sb.ToString();
         }
 
-        public static string NormalizePath(string path)
-        {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
-
-            if (!Path.IsPathRooted(path))
-                throw new ArgumentException(null, nameof(path));
-
-            const string longFileNamePrefix = @"\\?\";
-            if (!path.StartsWith(longFileNamePrefix))
-                return longFileNamePrefix + path;
-
-            return path;
-        }
-
         public static ConsoleKeyInfo ConsoleReadKey(int timeout, bool intercept = true, int slice = 50)
         {
             var waited = 0;
@@ -135,86 +120,6 @@ namespace ShellBoost.Samples.CloudFolderSite.Utilities
                 waited += slice;
             }
             return new ConsoleKeyInfo((char)0, 0, false, false, false);
-        }
-
-        public static void DirectoryCopy(string sourcePath, string targetPath, bool throwOnError = true)
-        {
-            if (sourcePath == null)
-                throw new ArgumentNullException(nameof(sourcePath));
-
-            if (targetPath == null)
-                throw new ArgumentNullException(nameof(targetPath));
-
-            DirectoryCopy(new DirectoryInfo(sourcePath), new DirectoryInfo(targetPath), throwOnError);
-        }
-
-        public static void DirectoryCopy(DirectoryInfo source, DirectoryInfo target, bool throwOnError = true)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-
-            if (!target.Exists)
-            {
-                if (throwOnError)
-                {
-                    target.Create();
-                }
-                else
-                {
-                    try
-                    {
-                        target.Create();
-                    }
-                    catch
-                    {
-                        return;
-                    }
-                }
-            }
-
-            foreach (var file in source.EnumerateFiles())
-            {
-                if (throwOnError)
-                {
-                    file.CopyTo(Path.Combine(target.FullName, file.Name), true);
-                }
-                else
-                {
-                    try
-                    {
-                        file.CopyTo(Path.Combine(target.FullName, file.Name), true);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                }
-            }
-
-            foreach (var dir in source.EnumerateDirectories())
-            {
-                DirectoryInfo subDir;
-                if (throwOnError)
-                {
-                    subDir = target.CreateSubdirectory(dir.Name);
-                }
-                else
-                {
-                    try
-                    {
-                        subDir = target.CreateSubdirectory(dir.Name);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                }
-
-                DirectoryCopy(dir, subDir, throwOnError);
-            }
         }
     }
 }

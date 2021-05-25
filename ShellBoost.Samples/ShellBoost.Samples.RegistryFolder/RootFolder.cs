@@ -63,13 +63,13 @@ namespace ShellBoost.Samples.RegistryFolder
             appendMenu.Items.Add(propertiesItem);
         }
 
-        private async void ShowProperties(IntPtr owner)
+        private void ShowProperties(IntPtr owner) => TaskUtilities.EnsureSTAThreadTask(() =>
         {
             using (var form = new Properties())
             {
-                await WindowsUtilities.ShowModelessAsync(form, owner);
+                WindowsUtilities.RunForm(form, owner);
             }
-        }
+        });
 
         // registry is special, a folder can have an item with the same name as a subkey
         // so we need to distinguish between them to be able to parse as correctly as possible (some level of ambiguity cannot be prevented)

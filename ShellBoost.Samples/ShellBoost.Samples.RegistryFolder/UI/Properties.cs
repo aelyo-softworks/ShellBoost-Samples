@@ -10,9 +10,6 @@ namespace ShellBoost.Samples.RegistryFolder.UI
             InitializeComponent();
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void ButtonOk_Click(object sender, EventArgs e) => Close();
     }
 }

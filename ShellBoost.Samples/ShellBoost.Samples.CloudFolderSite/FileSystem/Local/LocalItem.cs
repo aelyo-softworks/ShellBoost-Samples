@@ -282,7 +282,7 @@ namespace ShellBoost.Samples.CloudFolderSite.FileSystem.Local
 
                 if (item.IsFolder)
                 {
-                    IOUtilities.WrapSharingViolations(() => IOExtensions.DirectoryCopy(sourcePath, targetPath));
+                    IOUtilities.WrapSharingViolations(() => IOUtilities.DirectoryCopy(sourcePath, targetPath));
                 }
                 else
                 {

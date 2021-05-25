@@ -6,7 +6,7 @@ ShellBoost comes with the following samples:
 
 *	**Core Overview**: A very simple Console .NET Core application shell folder that contains a fixed set of virtual shell items and folders.
 
-*	**VB Overview**: A very simple Console .NET Core VB.NET application shell folder that contains a fixed set of virtual shell items and folders.
+*	**VB Overview**: A very simple Console .NET Core VB.NET application shell folder that contains a fixed set of virtual shell items and folders. This is the only sample in VB.NET.
 
 *	**Local Folder**: A Console application shell folder that supports a combination of virtual shell items and physical shell items.
 
@@ -24,17 +24,17 @@ ShellBoost comes with the following samples:
 
 *	**Cloud Folder**: A list of projects based on a common back-end (Cloud Folder Site) representing a cloud storage service hosted somewhere on the internet.
 
-	*	**Cloud Folder**: A .NET Core console application shell folder. Demonstrates file system features (Copy/Paste, Drag/Drop, New menus). The server app is an ASP.NET Core web application using SQL Server or a remote Windows path as a storage back-end.
+	*	**Cloud Folder**: A .NET 5 console application shell folder. Demonstrates file system features (Copy/Paste, Drag/Drop, New menus). The server app is an ASP.NET 5 web application using SQL Server or a remote Windows NTFS path as a storage back-end.
 
-	*	**Cloud Folder Site**: An ASP.NET Core application companion of the Cloud Folder sample that implements an API-only file system over the web. It's using abstract interfaces, currently implemented with an SQL Server database or a Windows physical path, but other storages can be added.
+	*	**Cloud Folder Site**: An ASP.NET 5 web application companion of the Cloud Folder sample that implements an API-only file system over the web. It's using abstract interfaces, currently implemented with an SQL Server database or a Windows physical path, but other storages can be added.
 
-	*	**Cloud Folder Client**: A .NET Core Winforms application. Can be used as a front-end to the Cloud Folder Site back-end, independent from the other Cloud Folder and Cloud Folder Sync samples. Useful for tests.
+	*	**Cloud Folder Client**: A .NET 5 Winforms application. Can be used as a front-end to the Cloud Folder Site back-end, independent from the other Cloud Folder and Cloud Folder Sync samples. Useful for tests.
 
-	*   **Cloud Folder Sync**: A .NET 5 console application that is an equivalent of One Drive for the Cloud Folder Site sample. It demonstrates the File On-Demand ShellBoost feature over Windows 10 Cloud API. It’s not currently exposing a Shell Namespace Extension, but you can use the Cloud Folder sample as a namespace extension to test synchronization.
+	*   **Cloud Folder Sync**: A .NET 5 Console application that is similar to Microsoft's One Drive for the Cloud Folder Site sample. It demonstrates the File On-Demand ShellBoost feature over Windows 10 Cloud API and supports ShellBoost's synchronization engine. It’s not currently exposing a Shell Namespace Extension, but you can use the Cloud Folder sample as a namespace extension to test synchronization.
 
-	*	**Cloud Folder Fx**: A .NET Framework 4.6.2+ version of the Cloud Folder project.
+	*	**Cloud Folder Fx**: A .NET Framework 4.6.2+ version of the Cloud Folder project. It uses the same exact C# source and satellite files as the Cloud Folder project.
 	
-*	**Device Manager Folder**: A .NET Core console application folder that mimics the official Windows Device Manager application. Demonstrates asynchronous namespace hierarchy building.
+*	**Device Manager Folder**: A .NET Core 3.1 console application folder that mimics the official Windows Device Manager application. Demonstrates asynchronous Shell namespace hierarchy building.
 
 *	**Mirror**: A .NET Core console application that demonstrates a namespace application mirroring a physical folder present on the disk. It’s implemented in only a few lines of code.
 

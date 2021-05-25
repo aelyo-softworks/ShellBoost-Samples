@@ -38,6 +38,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.cutStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyIdStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteTreeStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -59,6 +60,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyId2StripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -212,12 +214,13 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.cutStripMenuItem,
             this.copyStripMenuItem,
             this.pasteStripMenuItem,
+            this.copyIdStripMenuItem,
             this.toolSeparator2,
             this.deleteTreeStripMenuItem,
             this.toolSeparator3,
             this.newFolderStripMenuItem});
             this.contextMenuStripTree.Name = "contextMenuStripTree";
-            this.contextMenuStripTree.Size = new System.Drawing.Size(190, 154);
+            this.contextMenuStripTree.Size = new System.Drawing.Size(190, 176);
             // 
             // uploadTreeStripMenuItem
             // 
@@ -251,6 +254,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.pasteStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.pasteStripMenuItem.Text = "Paste";
+            // 
+            // copyIdStripMenuItem
+            // 
+            this.copyIdStripMenuItem.Name = "copyIdStripMenuItem";
+            this.copyIdStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.copyIdStripMenuItem.Text = "Copy Identifier";
             // 
             // toolSeparator2
             // 
@@ -353,6 +362,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.cutToolStripMenuItem,
             this.copyToolStripMenuItem,
             this.pasteToolStripMenuItem,
+            this.copyId2StripMenuItem,
             this.toolStripSeparator2,
             this.deleteToolStripMenuItem,
             this.renameToolStripMenuItem,
@@ -364,7 +374,7 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.th32ToolStripMenuItem,
             this.th16ToolStripMenuItem});
             this.contextMenuStripList.Name = "contextMenuStripList";
-            this.contextMenuStripList.Size = new System.Drawing.Size(205, 336);
+            this.contextMenuStripList.Size = new System.Drawing.Size(205, 358);
             // 
             // openToolStripMenuItem
             // 
@@ -416,6 +426,12 @@ namespace ShellBoost.Samples.CloudFolderClient
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
+            // 
+            // copyId2StripMenuItem
+            // 
+            this.copyId2StripMenuItem.Name = "copyId2StripMenuItem";
+            this.copyId2StripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.copyId2StripMenuItem.Text = "Copy Identifier";
             // 
             // toolStripSeparator2
             // 
@@ -556,6 +572,8 @@ namespace ShellBoost.Samples.CloudFolderClient
         private System.Windows.Forms.ToolStripMenuItem th16ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serverInfoStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem downloadStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyIdStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyId2StripMenuItem;
     }
 }
 
