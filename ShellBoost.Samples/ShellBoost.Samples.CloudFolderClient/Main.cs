@@ -483,6 +483,7 @@ namespace ShellBoost.Samples.CloudFolderClient
                 return;
 
             var msg = "File System: " + si.FileSystem + Environment.NewLine;
+            msg += "Id: " + si.Id + Environment.NewLine;
             msg += "Bitness: " + si.Bitness + Environment.NewLine;
             msg += "Configuration: " + si.Configuration + Environment.NewLine;
             msg += "File Version: " + si.FileVersion + Environment.NewLine;
