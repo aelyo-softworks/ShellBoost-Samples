@@ -15,7 +15,7 @@
 		<propertyDescription name="ShellBoost.Samples.LocalFolder.Icon" formatID="{d9f69df5-01ef-4838-acb7-055012a678ca}" propID="4">
 			<searchInfo reIndexPatterns="" processReIndexPatternsImmediately="true" inInvertedIndex="false" isColumn="false">
 			</searchInfo>
-			<typeInfo type="UInt32" isInnate="true" groupingRange="Enumerated" isViewable="true">
+			<typeInfo type="UInt32" isInnate="true" groupingRange="Discrete" isViewable="true">
 			</typeInfo>
 			<displayInfo displayType="Enumerated">
 				<enumeratedList>

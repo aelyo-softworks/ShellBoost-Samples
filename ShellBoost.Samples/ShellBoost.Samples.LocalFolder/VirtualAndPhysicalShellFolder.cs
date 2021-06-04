@@ -52,17 +52,7 @@ namespace ShellBoost.Samples.LocalFolder
 
         protected override void OnDragDropTarget(DragDropTargetEventArgs e)
         {
-            Console.WriteLine("OnDragDropTarget " + e.Type);
             e.Effect = DragDropEffects.Copy;
-            foreach (var data in e.DataObject)
-            {
-                Console.WriteLine(" format: " + data.Name + " " + data.ConvertedData);
-            }
-        }
-
-        protected override void OnOperate(ShellOperationEventArgs e)
-        {
-            Console.WriteLine("OnOperate " + e.Operation);
         }
     }
 }
