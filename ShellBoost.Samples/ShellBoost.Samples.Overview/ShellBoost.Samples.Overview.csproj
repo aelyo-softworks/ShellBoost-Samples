@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimplePngItem.cs" />
     <Compile Include="SimpleFolder.cs" />
     <Compile Include="OverviewShellFolderServer.cs" />
     <Compile Include="Program.cs" />
