@@ -494,30 +494,33 @@ namespace ShellBoost.Samples.CloudFolder
                         }
                         else
                         {
-                            using (var stream = item.OpenRead())
+                            using (var stream = item.OpenRead(throwOnError: false))
                             {
-                                requestItem.ParentId = ApiItem.Id;
-                                requestItem.Name = ApiItem.GetNewName(item.SIGDN_NORMALDISPLAY);
-                                requestItem.Attributes = item.IsFileSystemFolder ? FileAttributes.Directory : FileAttributes.Normal;
-                                var date = item.DateAccessed;
-                                if (date.HasValue)
+                                if (stream != null)
                                 {
-                                    requestItem.LastAccessTimeUtc = date.Value.ToUniversalTime();
-                                }
+                                    requestItem.ParentId = ApiItem.Id;
+                                    requestItem.Name = ApiItem.GetNewName(item.SIGDN_NORMALDISPLAY);
+                                    requestItem.Attributes = item.IsFileSystemFolder ? FileAttributes.Directory : FileAttributes.Normal;
+                                    var date = item.DateAccessed;
+                                    if (date.HasValue)
+                                    {
+                                        requestItem.LastAccessTimeUtc = date.Value.ToUniversalTime();
+                                    }
 
-                                date = item.DateCreated;
-                                if (date.HasValue)
-                                {
-                                    requestItem.CreationTimeUtc = date.Value.ToUniversalTime();
-                                }
+                                    date = item.DateCreated;
+                                    if (date.HasValue)
+                                    {
+                                        requestItem.CreationTimeUtc = date.Value.ToUniversalTime();
+                                    }
 
-                                date = item.DateModified;
-                                if (date.HasValue)
-                                {
-                                    requestItem.LastWriteTimeUtc = date.Value.ToUniversalTime();
-                                }
+                                    date = item.DateModified;
+                                    if (date.HasValue)
+                                    {
+                                        requestItem.LastWriteTimeUtc = date.Value.ToUniversalTime();
+                                    }
 
-                                newItem = await requestItem.UploadAsync(stream).ConfigureAwait(false);
+                                    newItem = await requestItem.UploadAsync(stream).ConfigureAwait(false);
+                                }
                             }
                         }
                         NotifyUpdate();
