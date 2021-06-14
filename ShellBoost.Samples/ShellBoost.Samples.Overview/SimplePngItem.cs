@@ -21,7 +21,9 @@ namespace ShellBoost.Samples.Overview
 
         public void ClearCache()
         {
-            var path = Parent.Root.FolderServer.Configuration.GetDefaultWebFileCache();
+            // note this can fail with a sharing violation if the files are accessed (by the Shell itself or something else)
+            Thumbnail.DeleteCache(96, 96);
+            Thumbnail.DeleteCache(256, 256);
         }
 
         public override bool TryGetPropertyValue(PropertyKey key, out object value)
@@ -73,6 +75,13 @@ namespace ShellBoost.Samples.Overview
             // we use a ShellBoost utility class to download (and cache) the file
             var cache = Item.Parent.FolderServer.Configuration.GetDefaultWebFileCache();
             return cache.Download(url, new WebFileCacheRequestOptions { DontForceServerCheck = true });
+        }
+
+        public bool DeleteCache(int width, int height)
+        {
+            var url = GetUrl(width, height, Key);
+            var cache = Item.Parent.FolderServer.Configuration.GetDefaultWebFileCache();
+            return cache.Delete(url);
         }
 
         public override ShellThumbnailAsImage GetAsImage(int width, int height)
