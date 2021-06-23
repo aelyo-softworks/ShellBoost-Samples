@@ -17,7 +17,8 @@ namespace ShellBoost.Samples.CloudFolder.Api
     public static class WebApi
     {
         // TODO: update this if you change ShellBoost.Samples.CloudFolderSite's project url.
-        public const string RootUrl = "https://localhost:5001/";
+        // or pass it as in "CloudFolderClient /RootUrl:http://whatever:2222"
+        public static readonly string RootUrl = CommandLine.GetNullifiedArgument(nameof(RootUrl), "https://localhost:5001/");
 
         public static ILogger Logger { get; set; }
         public static ServerInfo ServerInfo => _serverInfo.Value;
@@ -25,7 +26,7 @@ namespace ShellBoost.Samples.CloudFolder.Api
         private static readonly HttpClient _client = new HttpClient();
         private static readonly Lazy<ServerInfo> _serverInfo = new Lazy<ServerInfo>(() => GetServerInfo().Result, true);
         private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        private const string _baseUrl = RootUrl + "api/";
+        private static readonly string _baseUrl = RootUrl + "api/";
 
         // standard HTTP calls
         // note we don't support any auth here

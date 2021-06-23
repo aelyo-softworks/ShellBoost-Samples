@@ -13,6 +13,7 @@
     <Compile Include="..\ShellBoost.Samples.Overview\Program.cs" Link="Program.cs" />
     <Compile Include="..\ShellBoost.Samples.Overview\SimpleFolder.cs" Link="SimpleFolder.cs" />
     <Compile Include="..\ShellBoost.Samples.Overview\SimpleItem.cs" Link="SimpleItem.cs" />
+    <Compile Include="..\ShellBoost.Samples.Overview\SimplePngItem.cs" Link="SimplePngItem.cs" />
   </ItemGroup>
 
   <ItemGroup>

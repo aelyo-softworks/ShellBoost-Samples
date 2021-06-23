@@ -36,6 +36,13 @@ namespace ShellBoost.Samples.CloudFolderSite
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
+
+                // uncomment this to update HTTP/HTTPS/Ports, etc.
+                //webBuilder.UseKestrel(opts =>
+                //{
+                //    opts.ListenAnyIP(5003);
+                //    opts.ListenLocalhost(5004, opts => opts.UseHttps());
+                //});
             });
     }
 }
