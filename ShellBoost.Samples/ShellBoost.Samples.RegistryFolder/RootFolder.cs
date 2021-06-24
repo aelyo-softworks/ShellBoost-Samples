@@ -24,6 +24,8 @@ namespace ShellBoost.Samples.RegistryFolder
             RemoveColumn(Props.System.DateModified);
             RemoveColumn(Props.System.PerceivedType);
             RemoveColumn(Props.System.Kind);
+
+            InitializeOptions |= ShellFolderInitializationOptions.AddSelfToContextMenu;
         }
 
         public RegistryShellFolderServer Server { get; }
@@ -52,13 +54,17 @@ namespace ShellBoost.Samples.RegistryFolder
             if (items.Count == 0) // 0 means this is called from Explorer's tree view. We don't want to add the menus twice.
                 return;
 
+            // since we added ShellFolderInitializationOptions.AddSelfToContextMenu, we must use some verb (unique to us) to make sure our menu items are not duplicated
+
             var regeditItem = new ShellMenuItem(appendMenu, "Run &Regedit...");
+            regeditItem.Verb = "shellboost.sample.regedit";
             regeditItem.Invoke += (sender, e) => Process.Start("regedit");
             appendMenu.Items.Add(regeditItem);
 
             appendMenu.Items.Add(new ShellMenuSeparatorItem());
 
             var propertiesItem = new ShellMenuItem(appendMenu, "&Properties...");
+            propertiesItem.Verb = "shellboost.sample.properties";
             propertiesItem.Invoke += (sender, e) => ShowProperties(e.HwndOwner);
             appendMenu.Items.Add(propertiesItem);
         }

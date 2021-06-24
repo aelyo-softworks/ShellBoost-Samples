@@ -539,6 +539,46 @@
             The default stream to buffer threshold.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.CachedPidlBaseSize">
+            <summary>
+            Gets the RPC protocol estimated base PIDL size for list allocation.
+            </summary>
+            <value>
+            The estimated base PIDL size for list allocation.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DefaultCachedPidlBaseSize">
+            <summary>
+            Gets the RPC protocol default estimated base PIDL size for list allocation.
+            </summary>
+            <value>
+            The default estimated base PIDL size for list allocation.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.CachedPidlMinCount">
+            <summary>
+            Gets the RPC protocol minimum count for caching PIDL lists.
+            </summary>
+            <value>
+            The minimum count for caching PIDL lists.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.DefaultCachedPidlMinCount">
+            <summary>
+            Gets the RPC protocol default minimum count for caching PIDL lists.
+            </summary>
+            <value>
+            The default minimum count for caching PIDL lists.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Client.NativeProxy.CachedPidlDuration">
+            <summary>
+            Gets or sets the cached PIDL lists duration.
+            </summary>
+            <value>
+            The cached PIDL lists duration.
+            </value>
+        </member>
         <member name="P:ShellBoost.Core.Client.NativeProxy.ServerStart">
             <summary>
             Gets the server start parameters.
@@ -902,6 +942,61 @@
             </summary>
             <value>
             The command output.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.CallerProcessId">
+            <summary>
+            Gets the caller's process identifier.
+            Valid on Windows 8 and higher only.
+            </summary>
+            <value>An integer or 0.</value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.CallerProcess">
+            <summary>
+            Gets the caller's process instance. May be null.
+            Valid on Windows 8 and higher only.
+            </summary>
+            <value>A process instance or null.</value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.IsCallerProcessWindowsExplorer">
+            <summary>
+            Determines whether the caller process corresponds to Windows Explorer.
+            Valid on Windows 8 and higher only.
+            </summary>
+            <value>
+            true if the process is Windows Explorer; false if it's not, null if it cannot be determined (if the process is dead or if its access is denied for example).
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.AuthNSvc">
+            <summary>
+            Gets the RPC authentication service.
+            </summary>
+            <value>
+            The RPC authentication service.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.AuthZSvc">
+            <summary>
+            Gets the RPC authorization service.
+            </summary>
+            <value>
+            The RPC authorization service.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.AuthNLevel">
+            <summary>
+            Gets the RPC authentication level.
+            </summary>
+            <value>
+            The RPC authentication level.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.CommandExecEventArgs.CallerPrincipalName">
+            <summary>
+            Gets the caller principal name.
+            </summary>
+            <value>
+            The caller principal name.
             </value>
         </member>
         <member name="P:ShellBoost.Core.CommandExecEventArgs.HResult">
@@ -1470,6 +1565,14 @@
             The native stream.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.Handlers.Handler.Site">
+            <summary>
+            Gets the site object in the container.
+            </summary>
+            <value>
+            The site object in the container.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.Handlers.Handler.Trace(System.Diagnostics.TraceLevel,System.String,System.String)">
             <summary>
             Sends a text to trace.
@@ -1496,6 +1599,96 @@
             Unregisters this handler from the registry.
             </summary>
             <param name="mode">The registration mode.</param>
+        </member>
+        <member name="T:ShellBoost.Core.Handlers.PreviewHandler">
+            <summary>
+            Defines a Shell Preview Handler, implementing IPreviewHandler.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.PreviewHandler.ParentHandle">
+            <summary>
+            Gets the parent window handle.
+            </summary>
+            <value>
+            The parent window handle.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.PreviewHandler.ParentBounds">
+            <summary>
+            Gets the parent area bounds.
+            </summary>
+            <value>
+            The parent area bounds.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.PreviewHandler.Handle">
+            <summary>
+            Gets or sets the window handle of the previewer.
+            By default its value is Zero.
+            </summary>
+            <value>
+            The previewer window handle.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Handlers.PreviewHandler.EnterHelpMode">
+            <summary>
+            Gets or sets a value indicating whether context-sensitive help mode should be entered during an in-place activation session.
+            </summary>
+            <value>
+              <c>true</c> if context-sensitive help mode should be entered during an in-place activation session; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.DoPreview">
+            <summary>
+            Directs the preview handler to load data from the source specified in an earlier initialization call, and to begin rendering to the previewer window.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.Unload">
+            <summary>
+            Directs the preview handler to cease rendering a preview and to release all resources that have been allocated based on the item passed in during the initialization.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetParentWindow(System.IntPtr,ShellBoost.Core.WindowsShell.RECT)">
+            <summary>
+            Sets the parent window of the previewer window, as well as the area within the parent to be used for the previewer window.
+            </summary>
+            <param name="parentHandle">The parent window handle.</param>
+            <param name="parentBounds">The the area for the previewer.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetParentBounds(ShellBoost.Core.WindowsShell.RECT)">
+            <summary>
+            Directs the preview handler to change the area within the parent window handle that it draws into.
+            </summary>
+            <param name="parentBounds">The parent bounds.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.TranslateAcceleratorW(System.Windows.Interop.MSG)">
+            <summary>
+            Directs the preview handler to handle a keystroke passed up from the message pump of the process in which the preview handler is running.
+            </summary>
+            <param name="msg">The window message.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetTextColor(System.Int32)">
+            <summary>
+            Sets the color of the text within the preview handler.
+            </summary>
+            <param name="color">The color value to use for the preview handler text color.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetBackgroundColor(System.Int32)">
+            <summary>
+            Sets the background color of the preview handler.
+            </summary>
+            <param name="color">The color value to use for the preview handler background.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetFont(ShellBoost.Core.WindowsShell.LOGFONT)">
+            <summary>
+            Sets the font attributes to be used for text within the preview handler.
+            </summary>
+            <param name="font">The font structure containing the necessary attributes for the font to use.</param>
+        </member>
+        <member name="M:ShellBoost.Core.Handlers.PreviewHandler.SetFocus">
+            <summary>
+            Directs the preview handler to set focus to itself.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.Handlers.ThumbnailProvider">
             <summary>
@@ -1869,12 +2062,6 @@
         <member name="F:ShellBoost.Core.ProxyCacheOptions.NoCommonDialogsHook">
             <summary>
             Disable Common Dialogs hook.
-            </summary>
-        </member>
-        <member name="F:ShellBoost.Core.ProxyCacheOptions.NoContextMenuWrapper">
-            <summary>
-            Disable Context Menu wrapper.
-            If this is disabled, the ShellMenu items' verbs will not be extracted.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.GetDataObjectEventArgs">
@@ -7879,6 +8066,23 @@
             Enumerates only the visible columns. Used for the ManageColumns event handling.
             </summary>
         </member>
+        <member name="F:ShellBoost.Core.ShellFolderInitializationOptions.NoCommonDialogsHook">
+            <summary>
+            Disable Common Dialogs hook.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellFolderInitializationOptions.NoContextMenuWrapper">
+            <summary>
+            Disable Context Menu wrapper.
+            If this is disabled, the ShellMenu items' verbs will not be extracted.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.ShellFolderInitializationOptions.AddSelfToContextMenu">
+            <summary>
+            Add this folder as an extra input to the Explorer's tree view context menu.
+            Note this may cause duplicate items if these items don't have an associated verb to disambiguate them.
+            </summary>
+        </member>
         <member name="T:ShellBoost.Core.ShellFolderRegistration">
             <summary>
             Defines options for Shell Folder registration.
@@ -8929,6 +9133,22 @@
             An instance of the OnDemandDataMedium class or null.
             </returns>
             <exception cref="T:System.ArgumentNullException">format or originalMedium is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:ShellBoost.Core.OnDemandDataObject"/> class.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.OnDemandDataObject.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
         </member>
         <member name="T:ShellBoost.Core.OnDemandDataMediumGetEventArgs">
             <summary>
@@ -15328,6 +15548,18 @@
             A COM server instance or null.
             </returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ComServer.FromProgidShellEx(System.String,System.Guid)">
+            <summary>
+            Gets a COM Server from a ProgId and a Shell Extension guid.
+            </summary>
+            <param name="progid">The ProgId.</param>
+            <param name="extensionGuid">The Shell Extension unique identifier.</param>
+            <returns>
+            A COM server instance or null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">progid</exception>
+            <exception cref="T:System.ArgumentNullException">progid is null.</exception>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ComServer.FromProgid(System.String)">
             <summary>
             Gets a COM Server from a ProgId.
@@ -15543,6 +15775,22 @@
             </summary>
             <value>
             The shell link identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ComServer.ThumbnailProvider">
+            <summary>
+            Gets the thumbnail provider identifier.
+            </summary>
+            <value>
+            The thumbnail provider identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.Utilities.ComServer.PreviewHandler">
+            <summary>
+            Gets the preview handler identifier.
+            </summary>
+            <value>
+            The preview handler identifier.
             </value>
         </member>
         <member name="P:ShellBoost.Core.Utilities.ComServer.QueryInfo">
@@ -19110,6 +19358,13 @@
             <returns>The value corresponding to the key or the default value.</returns>
             <exception cref="T:System.ArgumentNullException">key is null.</exception>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.Conversions.ToDictionary(System.Collections.IDictionary)">
+            <summary>
+            Converts a non-generic dictionary to a generic one.
+            </summary>
+            <param name="dictionary">The input dictionary.</param>
+            <returns>A generic dictionary instance.</returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.Conversions.GetValue``1(System.Collections.Generic.IDictionary{System.String,System.String},System.String,``0,System.IFormatProvider)">
             <summary>
             Gets a value from a dictionary by its key/name.
@@ -19705,7 +19960,7 @@
             </summary>
             <param name="idList">The PIDL.</param>
             <param name="action">The action.</param>
-            <exception cref="T:System.ArgumentNullException">idList or action is null.</exception>
+            <exception cref="T:System.ArgumentNullException">action is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.Extensions.WithPointer``1(ShellBoost.Core.IWithIdList,System.Func{System.IntPtr,``0})">
             <summary>
@@ -19715,7 +19970,7 @@
             <param name="idList">The PIDL.</param>
             <param name="func">The function.</param>
             <returns>The result of the function call.</returns>
-            <exception cref="T:System.ArgumentNullException">idList or func is null.</exception>
+            <exception cref="T:System.ArgumentNullException">func is null.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.Extensions.GetCommonRoot(System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList})">
             <summary>
@@ -22465,13 +22720,19 @@
             <summary>
             Gets or sets the type of changes to watch for.
             </summary>
-            <value>The type of changes to watch for.</value>
+            <value>
+            The type of changes to watch for.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">value is 0.</exception>
         </member>
         <member name="P:ShellBoost.Core.Utilities.LocalFileSystemWatcher.BufferSize">
             <summary>
             Gets or sets the size (in bytes) of the events buffer.
             </summary>
-            <value>The size of the events buffer</value>
+            <value>
+            The size of the events buffer
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">value is lesser than 1024 * 64.</exception>
         </member>
         <member name="M:ShellBoost.Core.Utilities.LocalFileSystemWatcher.Restart(System.Action)">
             <summary>
@@ -23671,6 +23932,27 @@
             <param name="flags">The flags.</param>
             <returns>The perceived type.</returns>
         </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetPerceivedType(System.String,System.String@)">
+            <summary>
+            Gets the perceived type for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="typeString">The perceived type string, for instance "text" or "video".</param>
+            <returns>
+            The perceived type.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetPerceivedType(System.String,ShellBoost.Core.WindowsShell.PERCEIVEDFLAG@,System.String@)">
+            <summary>
+            Gets the perceived type for a given file extension.
+            </summary>
+            <param name="extension">The file extension.</param>
+            <param name="flags">The flags.</param>
+            <param name="typeString">The perceived type string, for instance "text" or "video".</param>
+            <returns>
+            The perceived type.
+            </returns>
+        </member>
         <member name="M:ShellBoost.Core.Utilities.ShellUtilities.GetIdList(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
             Gets the PIDL from a path.
@@ -24183,6 +24465,11 @@
         <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellFSFolder">
             <summary>
             The CLSID_ShellFSFolder COM coclass.
+            </summary>
+        </member>
+        <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellItem">
+            <summary>
+            The CLSID_ShellItem COM coclass.
             </summary>
         </member>
         <member name="T:ShellBoost.Core.Utilities.ShellUtilities.ShellWindows">
@@ -29453,6 +29740,74 @@
             The object should provide a localized status string for the command.
             </summary>
         </member>
+        <member name="T:ShellBoost.Core.WindowsShell.NamedProperty">
+            <summary>
+            Exposes properties and methods that present a named property.
+            </summary>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamedProperty.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsShell.NamedProperty" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <exception cref="T:System.ArgumentNullException">name is null.</exception>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.NamedProperty.Name">
+            <summary>
+            Gets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.NamedProperty.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.NamedProperty.ValueTypeName">
+            <summary>
+            Gets the name of the value type.
+            </summary>
+            <value>
+            The name of the value type.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.NamedProperty.IsValueValid">
+            <summary>
+            Gets a value indicating whether this instance's value is valid.
+            </summary>
+            <value>
+              <c>true</c> if this instance's value is valid; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.NamedProperty.TextValue">
+            <summary>
+            Gets the text value. Mostly used for debugging purposes.
+            </summary>
+            <value>
+            The text value.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamedProperty.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.NamedProperty.CompareTo(ShellBoost.Core.WindowsShell.NamedProperty)">
+            <summary>
+            Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+            </summary>
+            <param name="other">An object to compare with this instance.</param>
+            <returns>
+            A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">other is null.</exception>
+        </member>
         <member name="T:ShellBoost.Core.WindowsShell.SendMenuFile">
             <summary>
             Defines a recipient for the Shell "Send To" menu implemented as a file.
@@ -29631,6 +29986,536 @@
             Gets all items in the Send To menu.
             </summary>
             <returns>A list of Send To menu targets.</returns>
+        </member>
+        <member name="T:ShellBoost.Core.WindowsShell.CoreShellFolder">
+            <summary>
+            Exposes properties methods that retrieve information about a Shell folder.
+            The difference with the Folder type is this represents a managed wrapper over the native IShellFolder interface while the Folder type represents a managed wrapper over the native IShellItem interface.
+            The Folder type should generally be preferred over this.
+            </summary>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.NativeObject">
+            <summary>
+            Gets the underlying Shell native object (IShellFolder).
+            </summary>
+            <value>
+            The native object.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.IdList">
+            <summary>
+            Gets this item's absolute PIDL.
+            </summary>
+            <value>
+            The absolute PIDL.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.ClassId">
+            <summary>
+            Gets the class identifier.
+            </summary>
+            <value>
+            The class identifier.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.Parent">
+            <summary>
+            Gets the parent folder.
+            Note the desktop folder's parent is the desktop folder.
+            </summary>
+            <value>
+            The parent folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.SHGDN_NORMAL">
+            <summary>
+            Gets the display name relative to the parent folder. In UI this name is generally ideal for display to the user.
+            </summary>
+            <value>
+            The display name relative to the parent folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.SHGDN_FORADDRESSBAR">
+            <summary>
+            Gets the display name relative to the parent folder. In UI this name is generally ideal for display to the user.
+            </summary>
+            <value>
+            The display name relative to the parent folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.SHGDN_FOREDITING">
+            <summary>
+            Gets the display name relative to the parent folder. In UI this name is generally ideal for display to the user.
+            </summary>
+            <value>
+            The display name relative to the parent folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.SHGDN_FORPARSING">
+            <summary>
+            Gets the display name relative to the parent folder. In UI this name is generally ideal for display to the user.
+            </summary>
+            <value>
+            The display name relative to the parent folder.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.CoreShellFolder.Item">
+            <summary>
+            Gets the corresponding item instance.
+            </summary>
+            <value>
+            The item instance.
+            </value>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetParent(System.Boolean)">
+            <summary>
+            Gets the parent folder.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The parent folder or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetParent(ShellBoost.Core.ShellItemIdList@,System.Boolean)">
+            <summary>
+            Gets the parent folder.
+            </summary>
+            <param name="pidlLast">The last identifier list corresponding to this instance.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The parent folder or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToObject``1(ShellBoost.Core.IWithIdList,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Retrieves a handler, typically the Shell folder object that implements IShellFolder for a particular item.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="idList">The identifier list.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToObject``1(System.IntPtr,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Retrieves a handler, typically the Shell folder object that implements IShellFolder for a particular item.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="pidl">The PIDL.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToObject(ShellBoost.Core.IWithIdList,System.Guid,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Retrieves a handler, typically the Shell folder object that implements IShellFolder for a particular item.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToObject(System.IntPtr,System.Guid,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Retrieves a handler, typically the Shell folder object that implements IShellFolder for a particular item.
+            </summary>
+            <param name="pidl">The PIDL.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToStorage``1(ShellBoost.Core.IWithIdList,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Requests a pointer to an object's storage interface.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="idList">The identifier list.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToStorage``1(System.IntPtr,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Requests a pointer to an object's storage interface.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="pidl">The PIDL.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToStorage(ShellBoost.Core.IWithIdList,System.Guid,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Requests a pointer to an object's storage interface.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.BindToStorage(System.IntPtr,System.Guid,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Requests a pointer to an object's storage interface.
+            </summary>
+            <param name="pidl">The PIDL.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="context">An optional bind context object to be used during this operation.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CreateViewObject``1(System.Boolean)">
+            <summary>
+            Requests an object that can be used to obtain information from or interact with a folder object.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CreateViewObject``1(System.IntPtr,System.Boolean)">
+            <summary>
+            Requests an object that can be used to obtain information from or interact with a folder object.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="hwnd">A handle to the owner window. If you have implemented a custom folder view object, your folder view window should be created as a child of this handle.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CreateViewObject(System.Guid,System.Boolean)">
+            <summary>
+            Requests an object that can be used to obtain information from or interact with a folder object.
+            </summary>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CreateViewObject(System.IntPtr,System.Guid,System.Boolean)">
+            <summary>
+            Requests an object that can be used to obtain information from or interact with a folder object.
+            </summary>
+            <param name="hwnd">A handle to the owner window. If you have implemented a custom folder view object, your folder view window should be created as a child of this handle.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf``1(System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList},System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="idLists">A list of identifier lists.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf``1(System.IntPtr,System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList},System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="hwnd">A handle to the owner window that the client should specify if it displays a dialog box or message box.</param>
+            <param name="idLists">A list of identifier lists.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf``1(System.Collections.Generic.IEnumerable{System.IntPtr},System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="pidls">A list of PIDLs.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf``1(System.IntPtr,System.Collections.Generic.IEnumerable{System.IntPtr},System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <typeparam name="T">The expected type of the returned object.</typeparam>
+            <param name="hwnd">A handle to the owner window that the client should specify if it displays a dialog box or message box.</param>
+            <param name="pidls">A list of PIDLs.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            The object requested or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf(System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList},System.Guid,System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <param name="idLists">A list of identifier lists.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf(System.IntPtr,System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList},System.Guid,System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <param name="hwnd">A handle to the owner window that the client should specify if it displays a dialog box or message box.</param>
+            <param name="idLists">A list of identifier lists.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf(System.Collections.Generic.IEnumerable{System.IntPtr},System.Guid,System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <param name="pidls">A list of PIDLs.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetUIObjectOf(System.IntPtr,System.Collections.Generic.IEnumerable{System.IntPtr},System.Guid,System.Boolean)">
+            <summary>
+            Gets an object that can be used to carry out actions on the specified file objects or folders.
+            </summary>
+            <param name="hwnd">A handle to the owner window that the client should specify if it displays a dialog box or message box.</param>
+            <param name="pidls">A list of PIDLs.</param>
+            <param name="iid">A reference to the IID of the interface to retrieve.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The object requested or null.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.ParseDisplayName(System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Translates the display name of a file object or a folder into an item identifier list.
+            </summary>
+            <param name="displayName">The display name.</param>
+            <param name="context">A pointer to a bind context used to pass parameters as inputs and outputs to the parsing function.</param>
+            <param name="attributesMask">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A tuple representing the number of characters of the display name that was parsed (or 0), the identifier list of the object, and the attributes. The tuple can also be null.</returns>
+            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.ParseDisplayName(System.IntPtr,System.String,System.Runtime.InteropServices.ComTypes.IBindCtx,ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Translates the display name of a file object or a folder into an item identifier list.
+            </summary>
+            <param name="hwnd">A window handle. The client should provide a window handle if it displays a dialog or message box.</param>
+            <param name="displayName">The display name.</param>
+            <param name="context">A pointer to a bind context used to pass parameters as inputs and outputs to the parsing function.</param>
+            <param name="attributesMask">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A tuple representing the number of characters of the display name that was parsed (or 0), the identifier list of the object, and the attributes. The tuple can also be null.</returns>
+            <exception cref="T:System.ArgumentNullException">displayName is null.</exception>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.EnumObjects(ShellBoost.Core.WindowsShell.SHCONTF,System.Boolean)">
+            <summary>
+            Enables a client to determine the contents of a folder by creating an item identifier enumeration object.
+            </summary>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A list of sub objects of this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.EnumObjects(System.IntPtr,ShellBoost.Core.WindowsShell.SHCONTF,System.Boolean)">
+            <summary>
+            Enables a client to determine the contents of a folder by creating an item identifier enumeration object.
+            </summary>
+            <param name="hwnd">If user input is required to perform the enumeration, this window handle should be used by the enumeration object as the parent window to take user input.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A list of sub objects of this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.EnumObjectsPidls(ShellBoost.Core.WindowsShell.SHCONTF,System.Boolean)">
+            <summary>
+            Enables a client to determine the contents of a folder by creating a PIDL enumeration object.
+            </summary>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A list of sub objects of this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.EnumObjectsPidls(System.IntPtr,ShellBoost.Core.WindowsShell.SHCONTF,System.Boolean)">
+            <summary>
+            Enables a client to determine the contents of a folder by creating a PIDL enumeration object.
+            </summary>
+            <param name="hwnd">If user input is required to perform the enumeration, this window handle should be used by the enumeration object as the parent window to take user input.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A list of sub objects of this instance.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetDisplayNameOf(ShellBoost.Core.IWithIdList,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Retrieves the display name for the specified file object or subfolder.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The display name.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetDisplayNameOf(System.IntPtr,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Retrieves the display name for the specified file object or subfolder.
+            </summary>
+            <param name="pidl">The PIDL.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The display name.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetAttributesOf(ShellBoost.Core.IWithIdList,ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Gets the attributes of one file or folder object contained in the object represented by this instance.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <param name="attributes">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The requested attributes for the specified item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetAttributesOf(System.IntPtr,ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Gets the attributes of one file or folder object contained in the object represented by this instance.
+            </summary>
+            <param name="pidl">A PIDL.</param>
+            <param name="attributes">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The requested attributes for the specified item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetAttributesOf(System.Collections.Generic.IEnumerable{ShellBoost.Core.IWithIdList},ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Gets the attributes of one or more file or folder objects contained in the object represented by this instance.
+            </summary>
+            <param name="idLists">The lisf of identifier lists.</param>
+            <param name="attributes">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The requested attributes that are common to all of the specified items.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.GetAttributesOf(System.Collections.Generic.IEnumerable{System.IntPtr},ShellBoost.Core.WindowsShell.SFGAO,System.Boolean)">
+            <summary>
+            Gets the attributes of one or more file or folder objects contained in the object represented by this instance.
+            </summary>
+            <param name="pidls">The PIDLs.</param>
+            <param name="attributes">The attributes mask.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The requested attributes that are common to all of the specified items.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CompareIds(System.Int64,System.IntPtr,System.IntPtr,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders.
+            </summary>
+            <param name="lParam">Specifies how the comparison should be performed.</param>
+            <param name="pidl1">The first PIDL.</param>
+            <param name="pidl2">The second PIDL.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative value indicates that the first item should precede the second, a positive return value indicates that the first item should follow the second and zero indicates that the two items are the same.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.CompareIds(System.Int64,ShellBoost.Core.IWithIdList,ShellBoost.Core.IWithIdList,System.Boolean)">
+            <summary>
+            Determines the relative order of two file objects or folders.
+            </summary>
+            <param name="lParam">Specifies how the comparison should be performed.</param>
+            <param name="idList1">The first identifier list.</param>
+            <param name="idList2">The second identifier list.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>A negative value indicates that the first item should precede the second, a positive return value indicates that the first item should follow the second and zero indicates that the two items are the same.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.SetNameOf(System.IntPtr,System.String,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Sets the display name of a file object or subfolder, changing the item identifier in the process.
+            </summary>
+            <param name="pidl">The pidl.</param>
+            <param name="name">The new display name.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The identifier list of the renamed item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.SetNameOf(System.IntPtr,System.IntPtr,System.String,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Sets the display name of a file object or subfolder, changing the item identifier in the process.
+            </summary>
+            <param name="hwnd">A handle to the owner window of any dialog or message box that the client displays.</param>
+            <param name="pidl">The pidl.</param>
+            <param name="name">The new display name.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The identifier list of the renamed item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.SetNameOf(ShellBoost.Core.IWithIdList,System.String,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Sets the display name of a file object or subfolder, changing the item identifier in the process.
+            </summary>
+            <param name="idList">The identifier list.</param>
+            <param name="name">The new display name.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The identifier list of the renamed item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.SetNameOf(System.IntPtr,ShellBoost.Core.IWithIdList,System.String,ShellBoost.Core.WindowsShell.SHGDNF,System.Boolean)">
+            <summary>
+            Sets the display name of a file object or subfolder, changing the item identifier in the process.
+            </summary>
+            <param name="hwnd">A handle to the owner window of any dialog or message box that the client displays.</param>
+            <param name="idList">The pidl.</param>
+            <param name="name">The new display name.</param>
+            <param name="flags">The options.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The identifier list of the renamed item.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.ExecCommand(ShellBoost.Core.IWithIdList,System.Guid,System.Int32,System.Object,ShellBoost.Core.WindowsShell.OLECMDEXECOPT,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Executes the specified command.
+            Depends on the folder's IOleCommandTarget optional implementation.
+            The list of supported types for Input is limited to integral types (String, Int32, int64, Boolean, Single, Double, Guid, DateTime,Decimal) and IDictionary types.
+            Values for an IDictionary passed as Input can also contain arrays of aforementioned types.
+            </summary>
+            <param name="idList">A shell item id. Can be null.</param>
+            <param name="commandGroup">The command group.</param>
+            <param name="commandId">The command identifier.</param>
+            <param name="input">An optional input argument. Depends on the command group and identifier.</param>
+            <param name="options">The options.</param>
+            <param name="bindContext">The bind context.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An output argument. Depends on the command group and identifier. Can be null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.CoreShellFolder.ExecCommand(System.IntPtr,System.Guid,System.Int32,System.Object,ShellBoost.Core.WindowsShell.OLECMDEXECOPT,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
+            <summary>
+            Executes the specified command.
+            Depends on the folder's IOleCommandTarget optional implementation.
+            The list of supported types for Input is limited to integral types (String, Int32, int64, Boolean, Single, Double, Guid, DateTime,Decimal) and IDictionary types.
+            Values for an IDictionary passed as Input can also contain arrays of aforementioned types.
+            </summary>
+            <param name="pidl">A child pidl. Can be IntPtr.Zero.</param>
+            <param name="commandGroup">The command group.</param>
+            <param name="commandId">The command identifier.</param>
+            <param name="input">An optional input argument. Depends on the command group and identifier.</param>
+            <param name="options">The options.</param>
+            <param name="bindContext">The bind context.</param>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>
+            An output value. Depends on the command group and identifier. Can be null.
+            </returns>
         </member>
         <member name="T:ShellBoost.Core.WindowsShell.TPM">
             <summary>
@@ -31968,7 +32853,7 @@
         </member>
         <member name="F:ShellBoost.Core.WindowsShell.ASSOCCLASS.ASSOCCLASS_APP_KEY">
             <summary>
-            The hkClass member provides the full registry path of an application identifier (APPID)..
+            The hkClass member provides the full registry path of an application identifier (APPID).
             Unused by ShellBoost.
             </summary>
         </member>
@@ -36695,6 +37580,15 @@
             The children.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Folder.CoreShellFolder">
+            <summary>
+            Gets the Shell folder instance.
+            This object is a managed wrapper on a native IShellFolder interface, while this is a wrapper on a native IShellItem interface.
+            </summary>
+            <value>
+            The Shell folder.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.Folder.ParseDisplayName(System.String,ShellBoost.Core.ShellItemIdList@,System.Runtime.InteropServices.ComTypes.IBindCtx,System.Boolean)">
             <summary>
             Translates the display name of a file object or a folder into a PIDL.
@@ -37073,13 +37967,29 @@
             The properties.
             </value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.NamedProperties">
+            <summary>
+            Gets the item's named properties.
+            </summary>
+            <value>
+            The properties.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.Item.NamedPropertiesAsDictionary">
+            <summary>
+            Gets the item's named properties as a dictionary.
+            </summary>
+            <value>
+            The properties.
+            </value>
+        </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetProperties(ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS,System.Boolean)">
             <summary>
             Gets the item's properties.
             </summary>
             <param name="flags">The property store flags.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>The properties</returns>
+            <returns>The properties.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetPropertiesAsDictionary(ShellBoost.Core.WindowsPropertySystem.GETPROPERTYSTOREFLAGS,System.Boolean)">
             <summary>
@@ -37087,7 +37997,21 @@
             </summary>
             <param name="flags">The property store flags.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>The properties</returns>
+            <returns>The properties.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetNamedProperties(System.Boolean)">
+            <summary>
+            Gets the item's named properties.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The properties.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.GetNamedPropertiesAsDictionary(System.Boolean)">
+            <summary>
+            Gets the item's named properties as a dictionary.
+            </summary>
+            <param name="throwOnError">true to throw error; otherwise false.</param>
+            <returns>The properties.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.GetIconAsImageSource(ShellBoost.Core.WindowsShell.SHIL)">
             <summary>
@@ -37268,6 +38192,8 @@
             <summary>
             Executes the specified command.
             Depends on the item's IOleCommandTarget optional implementation.
+            The list of supported types for Input is limited to integral types (String, Int32, int64, Boolean, Single, Double, Guid, DateTime,Decimal) and IDictionary types.
+            Values for an IDictionary passed as Input can also contain arrays of aforementioned types.
             </summary>
             <param name="commandGroup">The command group.</param>
             <param name="commandId">The command identifier.</param>
@@ -37275,7 +38201,7 @@
             <param name="options">The options.</param>
             <param name="bindContext">The bind context.</param>
             <param name="throwOnError">true to throw error; otherwise false.</param>
-            <returns>An output argument. Depends on the command group and identifier. Can be null.</returns>
+            <returns>An output value. Depends on the command group and identifier. Can be null.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsShell.Item.FromIDList(ShellBoost.Core.IWithIdList,System.Boolean)">
             <summary>
@@ -37427,8 +38353,18 @@
             Gets an Item instance from a data object.
             Only supported on Windows 7 and higher.
             </summary>
-            <param name="dataObject">The DataObject.</param>
+            <param name="dataObject">An IDataObject instance.</param>
             <param name="options">The options.</param>
+            <param name="noFolder">if set to <c>true</c> the method will never return a Folder instance.</param>
+            <returns>
+            An Item instance or null.
+            </returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsShell.Item.FromShellFolder(System.Object,System.Boolean)">
+            <summary>
+            Gets an Item instance from a data object.
+            </summary>
+            <param name="shellFolder">An IShellFolder instance.</param>
             <param name="noFolder">if set to <c>true</c> the method will never return a Folder instance.</param>
             <returns>
             An Item instance or null.
@@ -37955,6 +38891,15 @@
             </summary>
             <value>
             The folder.
+            </value>
+        </member>
+        <member name="P:ShellBoost.Core.WindowsShell.View.CoreShellFolder">
+            <summary>
+            Gets the Shell folder instance.
+            Unless you really need to get this object which is a managed wrapper on a native IShellFolder interface, you should instead use the Folder property.
+            </summary>
+            <value>
+            The Shell folder.
             </value>
         </member>
         <member name="P:ShellBoost.Core.WindowsShell.View.FolderView">
@@ -39882,7 +40827,7 @@
         </member>
         <member name="P:ShellBoost.Core.ShellItem.Perceived">
             <summary>
-            Gets or sets the System.PerceivedType property value.
+            Gets the System.PerceivedType property value.
             </summary>
             <value>The System.PerceivedType property value.</value>
         </member>
@@ -40251,13 +41196,6 @@
             <summary>
             Resets the Windows Explorer thumbnail cache.
             </summary>
-        </member>
-        <member name="M:ShellBoost.Core.ShellItem.OnKindListChanged(System.Object,System.EventArgs)">
-            <summary>
-            Called when the KindList changes
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:ShellBoost.Core.ShellItem.OnAssociationElementListChanged(System.Object,System.EventArgs)">
             <summary>
@@ -43005,12 +43943,6 @@
             <param name="flags">The flags.</param>
             <param name="keys">The list of property keys.</param>
         </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.#ctor(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyKey})">
-            <summary>
-            Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList"/> class.
-            </summary>
-            <param name="keys">The list of property keys.</param>
-        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.#ctor(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyKey},ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
             <summary>
             Initializes a new instance of the <see cref="T:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList"/> class.
@@ -43061,24 +43993,12 @@
             </summary>
             <returns>An enumerator that can be used to iterate through the collection.</returns>
         </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(ShellBoost.Core.WindowsPropertySystem.PropertyKey)">
-            <summary>
-            Adds the specified property key.
-            </summary>
-            <param name="key">The property key.</param>
-        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(ShellBoost.Core.WindowsPropertySystem.PropertyKey,ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
             <summary>
             Adds the specified property key.
             </summary>
             <param name="key">The property key.</param>
             <param name="flags">The flags.</param>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(System.String)">
-            <summary>
-            Adds the specified property using its canonical name.
-            </summary>
-            <param name="propertyCanonicalName">The property canonical name.</param>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(System.String,ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
             <summary>
@@ -43087,12 +44007,6 @@
             <param name="propertyCanonicalName">The property canonical name.</param>
             <param name="flags">The flags.</param>
             <exception cref="T:System.ArgumentNullException">propertyCanonicalName is null.</exception>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(ShellBoost.Core.WindowsPropertySystem.PropertyDescription)">
-            <summary>
-            Adds the specified property.
-            </summary>
-            <param name="property">The property.</param>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.Add(ShellBoost.Core.WindowsPropertySystem.PropertyDescription,ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
             <summary>
@@ -43123,12 +44037,6 @@
             <param name="flags">The flags.</param>
             <param name="keys">The list of property keys.</param>
         </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyKey})">
-            <summary>
-            Adds a list of property keys.
-            </summary>
-            <param name="keys">The list of property keys.</param>
-        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyKey},ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
             <summary>
             Adds a list of property keys.
@@ -43147,12 +44055,6 @@
             Adds a list of properties.
             </summary>
             <param name="flags">The flags.</param>
-            <param name="properties">The properties.</param>
-        </member>
-        <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyDescription})">
-            <summary>
-            Adds a list of properties.
-            </summary>
             <param name="properties">The properties.</param>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.PropertyDescriptionList.AddRange(System.Collections.Generic.IEnumerable{ShellBoost.Core.WindowsPropertySystem.PropertyDescription},ShellBoost.Core.WindowsPropertySystem.PROPDESC_VIEW_FLAGS)">
@@ -43245,6 +44147,16 @@
             <summary>
             Specifies the format + id (FMTID/PID) structure that programmatically identifies a property.
             Wraps Windows Property System's <see href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb773381.aspx">PROPERTYKEY structure</see>.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsPropertySystem.PropertyKey.Null">
+            <summary>
+            The null property key.
+            </summary>
+        </member>
+        <member name="F:ShellBoost.Core.WindowsPropertySystem.PropertyKey.PSGUID_FOLDER_COLUMNID">
+            <summary>
+            The Property Key format identifier for accessing a folder column by its index.
             </summary>
         </member>
         <member name="F:ShellBoost.Core.WindowsPropertySystem.PropertyKey.PID_FIRST_USABLE">
@@ -56948,7 +57860,7 @@
         <member name="T:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore">
             <summary>
             A utility class that represents an in-memory Property Store.
-            Serialization methods use the standard IPropertyStore serialization format.
+            Serialization methods use the standard IPropertyStore and INamedPropertyStore serialization format.
             This class cannot be inherited.
             </summary>
         </member>
@@ -56963,9 +57875,24 @@
             </summary>
             <value>The count.</value>
         </member>
+        <member name="P:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.NamedCount">
+            <summary>
+            Gets the count of named properties in the store.
+            </summary>
+            <value>The count.</value>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetValue``1(System.Int32,``0)">
             <summary>
             Gets a typed property value.
+            </summary>
+            <typeparam name="T">The expected type.</typeparam>
+            <param name="index">The property index.</param>
+            <param name="defaultValue">The default value to use if the property is not found in the store.</param>
+            <returns>The property value.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetNamedValue``1(System.Int32,``0)">
+            <summary>
+            Gets a typed named property value.
             </summary>
             <typeparam name="T">The expected type.</typeparam>
             <param name="index">The property index.</param>
@@ -56981,6 +57908,15 @@
             <param name="defaultValue">The default value to use if the property is not found in the store.</param>
             <returns>The property value.</returns>
         </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetNamedValue``1(System.String,``0)">
+            <summary>
+            Gets a typed named property value.
+            </summary>
+            <typeparam name="T">The expected type.</typeparam>
+            <param name="name">The property name.</param>
+            <param name="defaultValue">The default value to use if the property is not found in the store.</param>
+            <returns>The property value.</returns>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetPropertyKey(System.Int32)">
             <summary>
             Gets a property key at the given index.
@@ -56988,11 +57924,32 @@
             <param name="index">The property index.</param>
             <returns>An instance of the PropertyKey struct.</returns>
         </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetPropertyName(System.Int32)">
+            <summary>
+            Gets a named property name at the given index.
+            </summary>
+            <param name="index">The property index.</param>
+            <returns>A property name.</returns>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetValue(System.Int32)">
             <summary>
             Gets a property value.
             </summary>
             <param name="index">The property index.</param>
+            <returns>A value.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetNamedValue(System.Int32)">
+            <summary>
+            Gets a property value.
+            </summary>
+            <param name="index">The property index.</param>
+            <returns>A value.</returns>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetNamedValue(System.String)">
+            <summary>
+            Gets a named property value.
+            </summary>
+            <param name="name">The property name.</param>
             <returns>A value.</returns>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.GetValue(ShellBoost.Core.WindowsPropertySystem.PropertyDescription)">
@@ -57027,6 +57984,14 @@
             <param name="value">The value.</param>
             <returns><c>true</c> if the property was found, <c>false</c> otherwise.</returns>
         </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.TryGetNamedValue(System.String,System.Object@)">
+            <summary>
+            Gets the value of a named property.
+            </summary>
+            <param name="name">The property name.</param>
+            <param name="value">The value.</param>
+            <returns><c>true</c> if the property was found, <c>false</c> otherwise.</returns>
+        </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.SetValue(ShellBoost.Core.WindowsPropertySystem.PropertyDescription,System.Object)">
             <summary>
             Sets a property value.
@@ -57040,6 +58005,13 @@
             Sets a property value.
             </summary>
             <param name="key">The property key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.SetNamedValue(System.String,System.Object)">
+            <summary>
+            Sets a named property value.
+            </summary>
+            <param name="name">The property name.</param>
             <param name="value">The value.</param>
         </member>
         <member name="M:ShellBoost.Core.WindowsPropertySystem.MemoryPropertyStore.Commit">

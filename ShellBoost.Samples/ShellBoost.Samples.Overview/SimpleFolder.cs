@@ -24,7 +24,7 @@ namespace ShellBoost.Samples.Overview
 
         public int Level { get; }
 
-        // set this to true to see images (of cats)
+        // set this to true to see images (of cute cats)
         public bool ShowImages => true;
 
         public override IEnumerable<ShellItem> EnumItems(SHCONTF options)
