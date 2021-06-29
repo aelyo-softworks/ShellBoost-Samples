@@ -18,6 +18,12 @@ namespace ShellBoost.Samples.Overview
 
         public override bool TryGetPropertyValue(PropertyKey key, out object value)
         {
+            if (key == Core.WindowsPropertySystem.System.PropList.InfoTip)
+            {
+                value = null;
+                return false;
+            }
+
             // dynamic infotip (aka: tooltip)
             if (key == Core.WindowsPropertySystem.System.InfoTipText)
             {
