@@ -718,6 +718,9 @@ DELETE Item FROM ItemHierarchy JOIN Item ON Item.Id = ItemHierarchy.Id";
                 IOUtilities.FileCreateDirectory(file);
                 using (var stream = await OpenReadAsync(item, null, null).ConfigureAwait(false))
                 {
+                    if (stream == null)
+                        return null;
+
                     using (var input = Image.FromStream(stream))
                     {
                         using (var bmp = ImageUtilities.ResizeImageByWidth(input, width))
