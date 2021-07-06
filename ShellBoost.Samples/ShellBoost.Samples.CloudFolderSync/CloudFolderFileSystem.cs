@@ -107,7 +107,7 @@ namespace ShellBoost.Samples.CloudFolderSync
                 if (item != null)
                     return item;
 
-                Logger?.Log(TraceLevel.Warning, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
+                Logger?.Log(TraceLevel.Info, "Cannot find temp entry '" + entry.Name + "' with parent id '" + parentId + "'.");
                 if (!options.CanCreate)
                     return null;
 
@@ -119,7 +119,7 @@ namespace ShellBoost.Samples.CloudFolderSync
             if (item != null)
                 return item;
 
-            Logger?.Log(TraceLevel.Warning, "Cannot find entry with id '" + entry.Id + "' name '" + entry.Name + "'.");
+            Logger?.Log(TraceLevel.Info, "Cannot find entry with id '" + entry.Id + "' name '" + entry.Name + "'.");
             if (!options.CanCreate)
                 return null;
 
