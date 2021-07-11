@@ -2,7 +2,7 @@
 This repository contains [ShellBoost](https://www.shellboost.com) official samples.
 
 ShellBoost comes with the following samples:
-*	**Overview**: A very simple Console application shell folder that contains a fixed set of virtual shell items and folders.
+*	**Overview**: A simple .NET Framework C# Console application Shell Folder that contains a fixed set of virtual shell items and folders. This sample also exists for **.NET Core 3.1** (compatible with .NET 5 and higher), **VB.NET** and **C++/CLI**.
 
 *	**Core Overview**: A very simple Console .NET Core application shell folder that contains a fixed set of virtual shell items and folders.
 
